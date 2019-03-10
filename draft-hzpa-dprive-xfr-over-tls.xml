@@ -94,7 +94,6 @@
 </author>
 
 <date year="2019" month="March" day="11"/>
-
 <area>Internet</area>
 <workgroup>dprive</workgroup>
 <keyword>DNS</keyword>
@@ -208,29 +207,82 @@ Subsection - TSIG
 Subsection - Mutual TLS 
 </t>
 </section>
+
 <section anchor="session" title="Session Establishment and Closing">
 <t>
+Subsection - AXFR Sessions
 </t>
+<t>
+The connection flow in AXFR is a NOTIFY from the primary server to the 
+secondary server, and then an AXFR request from the secondary to the 
+primay after which the data flows.  
+</t>
+<t>
+The connection for AXFR SHOULD be established using port 853, as specified in
+<xref target="RFC7858"/>.  
+If there is no response on port 853, 
+If there is no response on port 853, the connection MAY be attempted
+using port 443.
+</t>
+<t>
+NEEDED: diagram of the basic connection flow for AXFR, without and with TLS
+</t>
+<t>
+Subsection - IXFR Sessions (?)
+</t>
+<t>
+<xref target="RFC1995"/> specifies that Incremental Transfer may use UDP
+if the entire IXFR response can be contained in 
+a single DNS packet, otherwise, TCP is used.
+</t>
+<t>
+Given this, how should confidentiality of IXFR be provided?  To discuss: 
+should IXFR have a mode in which TCP is mandatory?  or should there be an
+approach of starting with DNS over DTLS, and switching to DNS over TLS with a
+TCP switch?  In workloads where there are frequent IXFRs, is the persistent mode
+that TCP-Mode would enable (as well as the retries, a benefit?
+</t>
+<t>
+Subsection - Policies for Both AXFR and IXFR
+</t>
+<t>
+In order to assure the confidentiality of the zone information, all the servers
+(primary and secondary) MUST have a consistent confidentiality use.  
+If any do not, this is a weak link for attackers to exploit.  How to do this is TBD. 
+</t>
+<t>
+The entire group (the primary and all secondaries) MUST have a consistent
+policy on Strict or Non-Strict mode of operation.  How to do this is TBD.
+</t>
+<t>
+Subsection - Next Steps
+</t>
+<t>
+Upcoming open hackathon experiments will feed into this Session
+Establishment and Closing section, as much about this needs exploration as well
+as dicussion on the mailing list.
+</t>
+
 </section>
 
 <section anchor="perf" title="Performance Considerations">
 <t>
+The details in <xref target="RFC7858"/> about using persistent connections and TLS Session Resume
+are fully applicable to DNS Transfer over DOT as well.
 </t>
 </section>
 
-<section anchor="compat" title="Backward Compatibility">
-<t>
-</t>
-</section>
 
 <section anchor="impl" title="Implementation Considerations">
 <t>
+TBA
 </t>
 </section>
 
 
 <section anchor="iana" title="IANA Considerations">
 <t>
+TBD
 </t>
 </section>
 
