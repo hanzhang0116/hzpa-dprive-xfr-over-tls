@@ -103,15 +103,12 @@
 
 <abstract>
 <t>
-DNS has a number of privacy vulnerabilities.  Query privacy
-has received the most attention, with DNS-over-TLS and DNS-over-HTTPS
-now standardized, and continuing work on both.  This document
-addresses privacy risks to the holder of the zone, the risk that
-the entire contents of the zone can be acquired in an unauthorized way
-by an adversary.  The DNS action of zone transfer is protected by
-an authentication key but a standard to encrypt the transfer does not
-exist.  This document describes how to use TLS (TCP is already in use) for
-zone transfer (AXFR) and incremental transfer (IXFR).
+DNS zone transfers are often transmitted in clear text, which gives attackers
+the opportunity to collect the content of a zone by eavesdropping on links.
+The DNS Transaction Signature (TSIG) is specified to restrict direct zone transfer
+to authorized clients, but it does not add confidentiality. DNS zone transfers already
+are specified to use TCP.  This document specifies how to use DOT (DNS-over-TLS) to
+prevent zone collection.
 </t>
 </abstract>
 
@@ -122,14 +119,47 @@ zone transfer (AXFR) and incremental transfer (IXFR).
 
 <section anchor="introduction" title="Introduction">
 <t>
+DNS has a number of privacy vulnerabilities, as discussed in detail in <xref target="RFC7626"/>.
+Query privacy has received the most attention. There are now standards for
+three encryption capabilities for queries and more work going on to
+guide deployment <xref target="RFC7858"/> <xref target="RFC8484"/>.
+
+
+RFC 7626 established that the query transactions are not public and 
+needed protection, but on zone transfer it says only:  Privacy risks for the holder of a zone (the
+risk that someone gets the data)are discussed in [RFC5936] and [RFC5155]. 
+
+
+In what way is exposing the full content of a zone a privacy risk?  
+The contents of the zone could include information such as names
+of persons used in names of hosts.  Best practice is not to use personal
+information for domain names, but many such domain names exist.  There
+may also be regulatory or other reasons why the zone content in full must be
+treated as private. 
+
+Neither of the RFCs mentioned by RFC7626 contemplates the risk that someone
+gets the data through link eavesdropping.  
+
+RFC 5155 specifies NSEC3 to prevent zone enumeration, which is when queries for the 
+authenticated denial of existences records of DNSSEC allow a client to 
+walk through the entire zone.   Note that the need for
+this protection also motivates NSEC5; zone walking is now possible with NSEC3
+due to crypto-breaking advances, and NSEC5 is a response to this problem. 
+
+RFC 5155 does not address data obtained outside zone enumeration (nor does NSEC5).  
+Preventing eavesdropping of zone transfers (this draft) is orthogonal to 
+preventing zone enumeration, though they aim to protect the same information. 
+
+RFC5936 specifies using TSIG [REF] for authorization of the clients of a zone transfer and 
+for data integrity, but does not express any need for confidentiality, and TSIG does not
+offer encryption. Some operators use SSH tunneling or IPSEC to encrypt the
+transfer data.  Because zone transfer is carried out over TCP from DNS protocol implementations, 
+encrypting  zone transfers using DNS over TLS [RFC7858] or DOT seems like a simple step
+forward.  This document specifies how to use DOT to prevent zone collection from zone transfers.
+
+Next steps: work on the protocol during Hackathon, expand this draft, the solicit discussion on
+the DPRIVE mailing list.
 </t>
-<t>
-<list style="symbols">
-<t>DNS privacy services.</t>
-<t></t>
-</list>
-</t>
-<t></t>
 </section>
 
 
@@ -141,33 +171,31 @@ when, and only when, they appear in all capitals, as shown here.
 </t>
 <t>Privacy terminology is as described in Section 3 of <xref target="RFC6973"/>.
 </t>
-<t>DNS terminology is as described in <xref target="I-D.ietf-dnsop-terminology-bis"/> with one
-modification: we use the definition of Privacy-enabling DNS
-server taken from <xref target="RFC8310"/>:
+<t>DNS terminology is as described in <xref target="RFC8499"/>:
 </t>
 </section>
 
-<section anchor="overview" title="Overview">
+<section anchor="overview" title="Zone Transfer with DOT Overview">
 <t>
 </t>
 <t>
 </t>
+</section>
 
-
-<section anchor="Authentication" title="Authentication">
+<section anchor="auth" title="Zone Transfer with DOT - Authentication">
 <t>
 Subsection - TSIG
 </t>
 <t>
-Subsection - Beyond TSIG
+Subsection - Mutual TLS 
 </t>
 </section>
-<section anchor="Session Establishment" title="Session Establishment">
+<section anchor="session" title="Session Establishment and Closing">
 <t>
 </t>
 </section>
 
-<section anchor="Performance and Scalability" title="Performance">
+<section anchor="perf" title="Performance Considerations">
 <t>
 </t>
 </section>
@@ -177,14 +205,24 @@ Subsection - Beyond TSIG
 </t>
 </section>
 
-
-<section anchor="iana-considerations" title="IANA considerations">
+<section anchor="impl" title="Implementation Considerations">
 <t>
 </t>
 </section>
 
-<section anchor="security-considerations" title="Security considerations">
+
+<section anchor="iana" title="IANA Considerations">
 <t>
+</t>
+</section>
+
+<section anchor="security-considerations" title="Security Considerations">
+<t>
+This document specifies a security measure against a DNS risk, the risk that
+an attacker collects entire DNS zones through eavesdropping on plaintext DNS
+zone transfers.  It presents a new Security Consideration for DNS. Some questions
+to discuss are: should DOT in this new case be required to use only TLS1.3 and higher to
+avoid residual exposure?  How should padding be used (if it should)?  
 </t>
 </section>
 
