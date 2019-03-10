@@ -123,43 +123,61 @@ DNS has a number of privacy vulnerabilities, as discussed in detail in <xref tar
 Query privacy has received the most attention. There are now standards for
 three encryption capabilities for queries and more work going on to
 guide deployment <xref target="RFC7858"/> <xref target="RFC8484"/>.
+</t>
 
-
-RFC 7626 established that the query transactions are not public and 
+<t>
+<xref target="RFC7626"/>
+established that the query transactions are not public and 
 needed protection, but on zone transfer it says only:  Privacy risks for the holder of a zone (the
-risk that someone gets the data)are discussed in [RFC5936] and [RFC5155]. 
+risk that someone gets the data) are discussed in <xref target="RFC5936"/> 
+and <xref target="RFC5155"/>.
+</t>
 
-
+<t>
 In what way is exposing the full content of a zone a privacy risk?  
 The contents of the zone could include information such as names
 of persons used in names of hosts.  Best practice is not to use personal
 information for domain names, but many such domain names exist.  There
 may also be regulatory or other reasons why the zone content in full must be
 treated as private. 
+</t>
 
+<t>
 Neither of the RFCs mentioned by RFC7626 contemplates the risk that someone
 gets the data through link eavesdropping.  
+</t>
 
-RFC 5155 specifies NSEC3 to prevent zone enumeration, which is when queries for the 
+<t>
+<xref target="RFC5155"/> 
+specifies NSEC3 to prevent zone enumeration, which is when queries for the 
 authenticated denial of existences records of DNSSEC allow a client to 
 walk through the entire zone.   Note that the need for
 this protection also motivates NSEC5; zone walking is now possible with NSEC3
 due to crypto-breaking advances, and NSEC5 is a response to this problem. 
+</t>
 
-RFC 5155 does not address data obtained outside zone enumeration (nor does NSEC5).  
+<t>
+<xref target="RFC5155"/> 
+does not address data obtained outside zone enumeration (nor does NSEC5).  
 Preventing eavesdropping of zone transfers (this draft) is orthogonal to 
 preventing zone enumeration, though they aim to protect the same information. 
+</t>
 
-RFC5936 specifies using TSIG [REF] for authorization of the clients of a zone transfer and 
+<t>
+<xref target="RFC5936"/> 
+specifies using TSIG <xref target="RFC2845"/> for authorization of the clients of a zone transfer and 
 for data integrity, but does not express any need for confidentiality, and TSIG does not
 offer encryption. Some operators use SSH tunneling or IPSEC to encrypt the
 transfer data.  Because zone transfer is carried out over TCP from DNS protocol implementations, 
-encrypting  zone transfers using DNS over TLS [RFC7858] or DOT seems like a simple step
+encrypting  zone transfers using DNS over TLS <xref target="RFC7858"/>, aka DOT, seems like a simple step
 forward.  This document specifies how to use DOT to prevent zone collection from zone transfers.
+</t>
 
+<t>
 Next steps: work on the protocol during Hackathon, expand this draft, the solicit discussion on
 the DPRIVE mailing list.
 </t>
+
 </section>
 
 
@@ -258,6 +276,7 @@ Benno, Shumon, Tim
 <?rfc include="https://xml2rfc.tools.ietf.org/public/rfc/bibxml/reference.RFC.2119.xml"?>
 <?rfc include="https://xml2rfc.tools.ietf.org/public/rfc/bibxml/reference.RFC.2845.xml"?>
 <?rfc include="https://xml2rfc.tools.ietf.org/public/rfc/bibxml/reference.RFC.5077.xml"?>
+<?rfc include="https://xml2rfc.tools.ietf.org/public/rfc/bibxml/reference.RFC.5155.xml"?>
 <?rfc include="https://xml2rfc.tools.ietf.org/public/rfc/bibxml/reference.RFC.5936.xml"?>
 <?rfc include="https://xml2rfc.tools.ietf.org/public/rfc/bibxml/reference.RFC.6973.xml"?>
 <?rfc include="https://xml2rfc.tools.ietf.org/public/rfc/bibxml/reference.RFC.7525.xml"?>
