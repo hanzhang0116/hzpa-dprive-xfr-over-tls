@@ -1,0 +1,272 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE rfc SYSTEM 'rfc2629.dtd' []>
+<rfc ipr="trust200902" category="std" docName="draft-hzpa-dprive-xfr-over-tls-00">
+<?rfc toc="yes"?>
+<?rfc symrefs="yes"?>
+<?rfc sortrefs="yes"?>
+<?rfc compact="yes"?>
+<?rfc subcompact="no"?>
+<?rfc private=""?>
+<?rfc topblock="yes"?>
+<?rfc comments="no"?>
+<front>
+<title abbrev="XFR over TLS">DNS Zone Transfer over TLS</title>
+
+<author initials="H." surname="Zhang" fullname="Han Zhang">
+<organization>Salesforce</organization>
+<address>
+<postal>
+<street></street>
+<street></street>
+<street></street>
+<city>San Francisco, CA</city>
+<code></code>
+<country>United States</country>
+<region></region>
+</postal>
+<phone></phone>
+<email>hzhang@salesforce.com</email>
+<uri></uri>
+</address>
+</author>
+<author initials="P." surname="Aras" fullname="Pallavi Aras">
+<organization>Salesforce</organization>
+<address>
+<postal>
+<street></street>
+<street></street>
+<city>Herndon, VA</city>
+<code></code>
+<country>United States</country>
+<region></region>
+</postal>
+<phone></phone>
+<email>paras@salesforce.com</email>
+<uri></uri>
+</address>
+</author>
+<author initials="W." surname="Toorop" fullname="Willem Toorop">
+<organization>NLnet Labs</organization>
+<address>
+<postal>
+<street>Science Park 400</street>
+<street></street>
+<city>Amsterdam</city>
+<code>Amsterdam   1098 XH</code>
+<country>The Netherlands</country>
+<region></region>
+</postal>
+<phone></phone>
+<email>willem@nlnetlabs.nl</email>
+<uri></uri>
+</address>
+</author>
+<author initials="S." surname="Dickinson" fullname="Sara Dickinson">
+<organization>Sinodun IT</organization>
+<address>
+<postal>
+<street>Magdalen Centre</street>
+<street>Oxford Science Park</street>
+<city>Oxford</city>
+<code>OX4 4GA</code>
+<country>United Kingdom</country>
+<region></region>
+</postal>
+<phone></phone>
+<email>willem@nlnetlabs.nl</email>
+<uri></uri>
+</address>
+</author>
+<author initials="A." surname="Mankin" fullname="Allison Mankin">
+<organization>Salesforce</organization>
+<address>
+<postal>
+<street></street>
+<city>Herndon, VA</city>
+<code></code>
+<country></country>
+<region></region>
+</postal>
+<phone></phone>
+<email>allison.mankin@gmail.com</email>
+<uri></uri>
+</address>
+</author>
+
+<date year="2019" month="March" day="11"/>
+
+<area>Internet</area>
+<workgroup>dprive</workgroup>
+<keyword>DNS</keyword>
+<keyword>operations</keyword>
+<keyword>privacy</keyword>
+
+<abstract>
+<t>
+DNS has a number of privacy vulnerabilities.  Query privacy
+has received the most attention, with DNS-over-TLS and DNS-over-HTTPS
+now standardized, and continuing work on both.  This document
+addresses privacy risks to the holder of the zone, the risk that
+the entire contents of the zone can be acquired in an unauthorized way
+by an adversary.  The DNS action of zone transfer is protected by
+an authentication key but a standard to encrypt the transfer does not
+exist.  This document describes how to use TLS (TCP is already in use) for
+zone transfer (AXFR) and incremental transfer (IXFR).
+</t>
+</abstract>
+
+
+</front>
+
+<middle>
+
+<section anchor="introduction" title="Introduction">
+<t>
+</t>
+<t>
+<list style="symbols">
+<t>DNS privacy services.</t>
+<t></t>
+</list>
+</t>
+<t></t>
+</section>
+
+
+<section anchor="terminology" title="Terminology">
+<t>The key words &quot;MUST&quot;, &quot;MUST NOT&quot;, &quot;REQUIRED&quot;, &quot;SHALL&quot;, &quot;SHALL NOT&quot;, &quot;SHOULD&quot;,
+&quot;SHOULD NOT&quot;, &quot;RECOMMENDED&quot;, &quot;NOT RECOMMENDED&quot;, &quot;MAY&quot;, and &quot;OPTIONAL&quot; in this
+document are to be interpreted as described in BCP 14 <xref target="RFC2119"/> <xref target="RFC8174"/>
+when, and only when, they appear in all capitals, as shown here.
+</t>
+<t>Privacy terminology is as described in Section 3 of <xref target="RFC6973"/>.
+</t>
+<t>DNS terminology is as described in <xref target="I-D.ietf-dnsop-terminology-bis"/> with one
+modification: we use the definition of Privacy-enabling DNS
+server taken from <xref target="RFC8310"/>:
+</t>
+</section>
+
+<section anchor="overview" title="Overview">
+<t>
+</t>
+<t>
+</t>
+
+
+<section anchor="Authentication" title="Authentication">
+<t>
+Subsection - TSIG
+</t>
+<t>
+Subsection - Beyond TSIG
+</t>
+</section>
+<section anchor="Session Establishment" title="Session Establishment">
+<t>
+</t>
+</section>
+
+<section anchor="Performance and Scalability" title="Performance">
+<t>
+</t>
+</section>
+
+<section anchor="compat" title="Backward Compatibility">
+<t>
+</t>
+</section>
+
+
+<section anchor="iana-considerations" title="IANA considerations">
+<t>
+</t>
+</section>
+
+<section anchor="security-considerations" title="Security considerations">
+<t>
+</t>
+</section>
+
+<section anchor="acknowledgements" title="Acknowledgements">
+<t>
+Benno, Shumon, Tim
+</t>
+<t>
+</t>
+</section>
+
+<section anchor="contributors" title="Contributors">
+<t>The following contributed significantly to the document:
+</t>
+</section>
+
+<section anchor="changelog" title="Changelog">
+<t>draft-hzpa-dprive-xfr-over-tls-00
+</t>
+<t>
+<list style="symbols">
+<t>Initial commit</t>
+</list>
+</t>
+<t>
+</t>
+</section>
+
+</middle>
+<back>
+<references title="Normative References">
+<?rfc include="https://xml2rfc.tools.ietf.org/public/rfc/bibxml/reference.RFC.1995.xml"?>
+<?rfc include="https://xml2rfc.tools.ietf.org/public/rfc/bibxml/reference.RFC.2119.xml"?>
+<?rfc include="https://xml2rfc.tools.ietf.org/public/rfc/bibxml/reference.RFC.2845.xml"?>
+<?rfc include="https://xml2rfc.tools.ietf.org/public/rfc/bibxml/reference.RFC.5077.xml"?>
+<?rfc include="https://xml2rfc.tools.ietf.org/public/rfc/bibxml/reference.RFC.5936.xml"?>
+<?rfc include="https://xml2rfc.tools.ietf.org/public/rfc/bibxml/reference.RFC.6973.xml"?>
+<?rfc include="https://xml2rfc.tools.ietf.org/public/rfc/bibxml/reference.RFC.7525.xml"?>
+<?rfc include="https://xml2rfc.tools.ietf.org/public/rfc/bibxml/reference.RFC.7626.xml"?>
+<?rfc include="https://xml2rfc.tools.ietf.org/public/rfc/bibxml/reference.RFC.7766.xml"?>
+<?rfc include="https://xml2rfc.tools.ietf.org/public/rfc/bibxml/reference.RFC.7830.xml"?>
+<?rfc include="https://xml2rfc.tools.ietf.org/public/rfc/bibxml/reference.RFC.7858.xml"?>
+<?rfc include="https://xml2rfc.tools.ietf.org/public/rfc/bibxml/reference.RFC.8174.xml"?>
+<?rfc include="https://xml2rfc.tools.ietf.org/public/rfc/bibxml/reference.RFC.8310.xml"?>
+<?rfc include="https://xml2rfc.tools.ietf.org/public/rfc/bibxml/reference.RFC.8446.xml"?>
+<?rfc include="https://xml2rfc.tools.ietf.org/public/rfc/bibxml/reference.RFC.8467.xml"?>
+<?rfc include="https://xml2rfc.tools.ietf.org/public/rfc/bibxml/reference.RFC.8484.xml"?>
+<?rfc include="https://xml2rfc.tools.ietf.org/public/rfc/bibxml/reference.RFC.8499.xml"?>
+<?rfc include="https://xml2rfc.tools.ietf.org/public/rfc/bibxml3/reference.I-D.dickinson-dprive-bcp-op.xml"?>
+<?rfc include="https://xml2rfc.tools.ietf.org/public/rfc/bibxml3/reference.I-D.bortzmeyer-dprive-rfc7626-bis.xml"?>
+</references>
+<references title="Informative References">
+<?rfc include="https://xml2rfc.tools.ietf.org/public/rfc/bibxml/reference.RFC.7129.xml"?>
+<?rfc include="https://xml2rfc.tools.ietf.org/public/rfc/bibxml/reference.RFC.7816.xml"?>
+<?rfc include="https://xml2rfc.tools.ietf.org/public/rfc/bibxml/reference.RFC.7871.xml"?>
+<?rfc include="https://xml2rfc.tools.ietf.org/public/rfc/bibxml/reference.RFC.7873.xml"?>
+<?rfc include="https://xml2rfc.tools.ietf.org/public/rfc/bibxml/reference.RFC.8094.xml"?>
+<reference anchor='NSEC5Research'
+ target='https://www.ndss-symposium.org/ndss2015/ndss-2015-programme/nsec5-provably-preventing-dnssec-zone-enumeration/'>
+    <front>
+        <title>NSEC5: Provably Preventing DNSSEC Zone Enumeration</title>
+        <author initials='S.' surname='Goldberg' fullname='Sharon Goldberg'>
+            <organization>Boston University</organization>
+        </author>
+        <author initials='M.' surname='Naor' fullname='Moni Naor'>
+            <organization>Weizmann Institute of Science</organization>
+        </author>
+        <author initials='D.' surname='Papadopoulos' fullname='Dimitrios Papadopoulos'>
+            <organization>Boston University</organization>
+        </author>
+        <author initials='L.' surname='Reyzin' fullname='Leonid Reyzin'>
+            <organization>Boston University</organization>
+        </author>
+        <date year='2015'/>
+    </front>
+</reference>
+</references>
+
+
+
+
+
+
+</back>
+</rfc>
