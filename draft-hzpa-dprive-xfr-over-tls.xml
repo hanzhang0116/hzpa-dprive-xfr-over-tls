@@ -102,12 +102,11 @@
 
 <abstract>
 <t>
-DNS zone transfers are often transmitted in clear text, which gives attackers
+DNS zone transfers are transmitted in clear text, which gives attackers
 the opportunity to collect the content of a zone by eavesdropping on links.
 The DNS Transaction Signature (TSIG) is specified to restrict direct zone transfer
-to authorized clients, but it does not add confidentiality. DNS zone transfers already
-are specified to use TCP.  This document specifies how to use DOT (DNS-over-TLS) to
-prevent zone collection.
+to authorized clients, but it does not add confidentiality. This document 
+specifies use of TLS to prevent zone collection
 </t>
 </abstract>
 
@@ -167,13 +166,14 @@ preventing zone enumeration, though they aim to protect the same information.
 specifies using TSIG <xref target="RFC2845"/> for authorization of the clients of a zone transfer and 
 for data integrity, but does not express any need for confidentiality, and TSIG does not
 offer encryption. Some operators use SSH tunneling or IPSEC to encrypt the
-transfer data.  Because zone transfer is carried out over TCP from DNS protocol implementations, 
-encrypting  zone transfers using DNS over TLS <xref target="RFC7858"/>, aka DOT, seems like a simple step
-forward.  This document specifies how to use DOT to prevent zone collection from zone transfers.
+transfer data.  Because the AXFR zone transfer is carried out over TCP from DNS protocol implementations, 
+encrypting AXFR  using DNS over TLS <xref target="RFC7858"/>, aka DOT, seems like a simple step
+forward.  This document specifies how to use DOT to prevent zone collection from zone transfers, 
+including discussion of approaches for IXFR, which uses UDP or TCP.
 </t>
 
 <t>
-Next steps: work on the protocol during Hackathon, expand this draft, the solicit discussion on
+Next steps: work on questions at DNS table during Hackathon, expand this draft, then solicit discussion on
 the DPRIVE mailing list.
 </t>
 
@@ -192,7 +192,7 @@ when, and only when, they appear in all capitals, as shown here.
 </t>
 </section>
 
-<section anchor="overview" title="Zone Transfer with DOT Overview">
+<section anchor="overview" title="Zone Transfer Confidentiality Overview">
 <t>
 </t>
 <t>
@@ -220,12 +220,11 @@ primay after which the data flows.
 <t>
 The connection for AXFR SHOULD be established using port 853, as specified in
 <xref target="RFC7858"/>.  
-If there is no response on port 853, 
 If there is no response on port 853, the connection MAY be attempted
 using port 443.
 </t>
 <t>
-NEEDED: diagram of the basic connection flow for AXFR, without and with TLS
+TODO: diagram of connection flow for AXFR, without and with DOT
 </t>
 <t>
 Subsection - IXFR Sessions (?)
