@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE rfc SYSTEM 'rfc2629.dtd' []>
-<rfc ipr="trust200902" category="std" docName="draft-hzpa-dprive-xfr-over-tls-00">
+<rfc ipr="trust200902" category="std" docName="draft-hzpa-dprive-xfr-over-tls-01">
 <?rfc toc="yes"?>
 <?rfc symrefs="yes"?>
 <?rfc sortrefs="yes"?>
@@ -101,10 +101,11 @@
 
 <abstract>
 <t>DNS zone transfers are transmitted in clear text, which gives attackers the
-opportunity to collect the content of a zone by eavesdropping on links. The DNS
-Transaction Signature (TSIG) is specified to restrict direct zone transfer to
-authorized clients, but it does not add confidentiality. This document specifies
-use of TLS to prevent zone collection
+opportunity to collect the content of a zone by eavesdropping on network
+connections. The DNS Transaction Signature (TSIG) mechanism is specified to
+restrict direct zone transfer to authorized clients only, but it does not add
+confidentiality. This document specifies use of DNS-over-TLS to prevent zone
+contents collection via passive monitoring of zone transfers.
 </t>
 </abstract>
 
@@ -115,48 +116,54 @@ use of TLS to prevent zone collection
 
 <section anchor="introduction" title="Introduction">
 <t>DNS has a number of privacy vulnerabilities, as discussed in detail in
-<xref target="I-D.bortzmeyer-dprive-rfc7626-bis"/>. Query privacy has received the most attention. There are now
-standards for three encryption capabilities for queries and more work going on
-to guide deployment <xref target="RFC7858"/> <xref target="RFC8484"/>.
+<xref target="I-D.bortzmeyer-dprive-rfc7626-bis"/>. Stub client to recursive resolver query
+privacy has received the most attention to date. There are now standards track
+documents for three encryption capabilities for stub to recursive queries and
+more work going on to guide deployment of specifically DNS-over-TLS (DoT)
+<xref target="RFC7858"/> and DNS-over-HTTPS (DoH) <xref target="RFC8484"/>.
 </t>
-<t><xref target="RFC7626"/> established that the query transactions are not public and needed
-protection, but on zone transfer it says only: Privacy risks for the holder of a
-zone (the risk that someone gets the data) are discussed in <xref target="RFC5936"/> and
-<xref target="RFC5155"/>.
+<t><xref target="I-D.bortzmeyer-dprive-rfc7626-bis"/> established that stub client DNS query
+transactions are not public and needed protection, but on zone transfer <xref target="RFC1995"/> <xref target="RFC5936"/> it says
+only:
 </t>
-<t>In what way is exposing the full content of a zone a privacy risk?
-<vspace/>
-The contents of the zone could include information such as names
-of persons used in names of hosts.  Best practice is not to use personal
-information for domain names, but many such domain names exist.  There
-may also be regulatory or other reasons why the zone content in full must be
-treated as private.
+<t>&quot;Privacy risks for the holder of a zone (the risk that someone gets the data)
+are discussed in [RFC5936] and [RFC5155].&quot;
 </t>
-<t>Neither of the RFCs mentioned by RFC7626 contemplates the risk that someone
-gets the data through link eavesdropping.
+<t>In what way is exposing the full contents of a zone a privacy risk? The contents
+of the zone could include information such as names of persons used in names of
+hosts. Best practice is not to use personal information for domain names, but
+many such domain names exist. There may also be regulatory, policy or other
+reasons why the zone contents in full must be treated as private.
 </t>
-<t><xref target="RFC5155"/>
-specifies NSEC3 to prevent zone enumeration, which is when queries for the
-authenticated denial of existences records of DNSSEC allow a client to
-walk through the entire zone.   Note that the need for
-this protection also motivates NSEC5; zone walking is now possible with NSEC3
+<t>Neither of the RFCs mentioned in <xref target="I-D.bortzmeyer-dprive-rfc7626-bis"/>
+contemplates the risk that someone gets the data through eavesdropping on
+network connections, only via enumeration or unauthorised transfer as described
+in the following paragraphs.
+</t>
+<t><xref target="RFC5155"/> specifies NSEC3 to prevent zone enumeration, which is when queries
+for the authenticated denial of existences records of DNSSEC allow a client to
+walk through the entire zone. Note that the need for this protection also
+motivates NSEC5 <xref target="I-D.vcelak-nsec5"/>; zone walking is now possible with NSEC3
 due to crypto-breaking advances, and NSEC5 is a response to this problem.
 </t>
 <t><xref target="RFC5155"/> does not address data obtained outside zone enumeration (nor does
-NSEC5). Preventing eavesdropping of zone transfers (this draft) is orthogonal to
-preventing zone enumeration, though they aim to protect the same information.
+<xref target="I-D.vcelak-nsec5"/>). Preventing eavesdropping of zone transfers (this draft)
+is orthogonal to preventing zone enumeration, though they aim to protect the
+same information.
 </t>
 <t><xref target="RFC5936"/> specifies using TSIG <xref target="RFC2845"/> for authorization of the clients of
 a zone transfer and for data integrity, but does not express any need for
 confidentiality, and TSIG does not offer encryption. Some operators use SSH
-tunneling or IPSEC to encrypt the transfer data. Because the AXFR zone transfer
-is carried out over TCP from DNS protocol implementations, encrypting AXFR using
-DNS over TLS <xref target="RFC7858"/>, aka DOT, seems like a simple step forward. This
-document specifies how to use DOT to prevent zone collection from zone
-transfers, including discussion of approaches for IXFR, which uses UDP or TCP.
+tunnelling or IPSec to encrypt the transfer data.
 </t>
-<t>Next steps: work on questions at DNS table during Hackathon, expand this draft, then solicit discussion on
-the DPRIVE mailing list.
+<t>Because the AXFR zone transfer is typically carried out over TCP from
+authoritative DNS protocol implementations, encrypting AXFR using DNS-over-TLS
+<xref target="RFC7858"/> seems like a simple step forward. This document specifies how to use
+DoT to prevent zone collection from zone transfers, including discussion of
+approaches for IXFR, which uses UDP or TCP.
+</t>
+<t>Next steps: Work on open questions at DNS table during IETF 104 Hackathon,
+expand this draft, then solicit discussion on the DPRIVE mailing list.
 </t>
 </section>
 
@@ -170,12 +177,16 @@ document are to be interpreted as described in BCP 14 <xref target="RFC2119"/> a
 </t>
 <t>DNS terminology is as described in <xref target="RFC8499"/>.
 </t>
+<t>DoT: DNS-over-TLS as specified in <xref target="RFC7858"/>
+</t>
+<t>DoH: DNS-over-HTTPS as specified in <xref target="RFC8484"/>
+</t>
 </section>
 
 <section anchor="zone-transfer-confidentiality-overview" title="Zone Transfer Confidentiality Overview">
 </section>
 
-<section anchor="zone-transfer-with-dot--authentication" title="Zone Transfer with DOT - Authentication">
+<section anchor="zone-transfer-with-dot--authentication" title="Zone Transfer with DoT - Authentication">
 
 <section anchor="tsig" title="TSIG">
 </section>
@@ -189,50 +200,60 @@ document are to be interpreted as described in BCP 14 <xref target="RFC2119"/> a
 <section anchor="axfr-sessions" title="AXFR Sessions">
 <t>The connection flow in AXFR is a NOTIFY from the primary server to the
 secondary server, and then an AXFR request from the secondary to the
-primay after which the data flows.
+primary after which the data flows.
 </t>
-<t>The connection for AXFR SHOULD be established using port 853, as specified in
-<xref target="RFC7858"/>. If there is no response on port 853, the connection MAY be
-attempted using port 443.
+<t>The connection for AXFR via DoT SHOULD be established using port 853, as
+specified in <xref target="RFC7858"/>. If there is no response on port 853, the connection
+MAY be attempted using port 443 in case the server offers DoT service on this
+port.
 </t>
-<t>TODO: diagram of connection flow for AXFR, without and with DOT
+<t>TODO: diagram of connection flow for AXFR, without and with DoT
 </t>
 </section>
 
-<section anchor="ixfr-sessions-" title="IXFR Sessions (?)">
-<t><xref target="RFC1995"/> specifies that Incremental Transfer may use UDP
-if the entire IXFR response can be contained in
-a single DNS packet, otherwise, TCP is used.
+<section anchor="ixfr-sessions" title="IXFR Sessions">
+<t><xref target="RFC1995"/> specifies that Incremental Transfer may use UDP if the entire IXFR
+response can be contained in a single DNS packet, otherwise, TCP is used.
 </t>
-<t>Given this, how should confidentiality of IXFR be provided?  To discuss:
-should IXFR have a mode in which TCP is mandatory?  or should there be an
-approach of starting with DNS over DTLS, and switching to DNS over TLS with a
-TCP switch?  In workloads where there are frequent IXFRs, is the persistent mode
-that TCP-Mode would enable (as well as the retries, a benefit?
+<t>QUESTION: Given this, how should confidentiality of IXFR be provided?
+</t>
+<t>To discuss:
+</t>
+<t>
+<list style="symbols">
+<t>should IXFR have a mode in which TCP is mandatory?
+<vspace/></t>
+<t>should IXFR have a mode in which TLS is mandatory?</t>
+<t>In workloads where there are frequent IXFRs, is the persistent connection mode
+that TCP-Mode would enable (as well as the retries) a benefit?</t>
+</list>
 </t>
 </section>
 
 <section anchor="policies-for-both-axfr-and-ixfr" title="Policies for Both AXFR and IXFR">
-<t>In order to assure the confidentiality of the zone information, all the servers
-(primary and secondary) MUST have a consistent confidentiality use. If any do
-not, this is a weak link for attackers to exploit.  How to do this is TBD.
+<t>In order to assure the confidentiality of the zone information, entire group of
+servers involved in XFR (the primary and all secondaries) MUST have a consistent
+policy of requiring confidentiality. If any do not, this is a weak link for
+attackers to exploit. How to do this is TBD.
 </t>
-<t>The entire group (the primary and all secondaries) MUST have a consistent
-policy on Strict or Non-Strict mode of operation.  How to do this is TBD.
+<t>Additionally, the entire group of servers involved in XFR (the primary and all
+secondaries) MUST have a consistent policy of requiring Strict or Opportunistic
+DoT <xref target="RFC8310"/>. How to do this is TBD.
 </t>
 </section>
 
 <section anchor="next-steps" title="Next Steps">
-<t>Upcoming open hackathon experiments will feed into this Session
-Establishment and Closing section, as much about this needs exploration as well
-as dicussion on the mailing list.
+<t>Upcoming IETF Hackathon experiments will feed into this Session Establishment
+and Closing section, as much about this needs exploration as well as discussion
+on the mailing list.
 </t>
 </section>
 </section>
 
 <section anchor="performance-considerations" title="Performance Considerations">
-<t>The details in <xref target="RFC7858"/> about using persistent connections and TLS Session
-Resume are fully applicable to DNS Transfer over DOT as well.
+<t>The details in <xref target="RFC7858"/> and <xref target="RFC8310"/> about e.g. using persistent
+connections and TLS Session Resumption <xref target="RFC5077"/> are fully applicable to DNS
+Zone Transfer over DoT as well.
 </t>
 </section>
 
@@ -247,16 +268,17 @@ Resume are fully applicable to DNS Transfer over DOT as well.
 </section>
 
 <section anchor="security-considerations" title="Security Considerations">
-<t>This document specifies a security measure against a DNS risk, the risk that an
-attacker collects entire DNS zones through eavesdropping on plaintext DNS zone
+<t>This document specifies a security measure against a DNS risk: the risk that an
+attacker collects entire DNS zones through eavesdropping on clear text DNS zone
 transfers. It presents a new Security Consideration for DNS. Some questions to
-discuss are: should DOT in this new case be required to use only TLS1.3 and
+discuss are: should DoT in this new case be required to use only TLS 1.3 and
 higher to avoid residual exposure? How should padding be used (if it should)?
 </t>
 </section>
 
 <section anchor="acknowledgements" title="Acknowledgements">
-<t>Benno, Shumon, Tim
+<t>The authors thank Benno Overeinder, Shumon Huque and Tim Wicinski for review and
+discussions.
 </t>
 </section>
 
@@ -266,6 +288,13 @@ higher to avoid residual exposure? How should padding be used (if it should)?
 </section>
 
 <section anchor="changelog" title="Changelog">
+<t>draft-hzpa-dprive-xfr-over-tls-01
+</t>
+<t>
+<list style="symbols">
+<t>Editorial changes, updates to references.</t>
+</list>
+</t>
 <t>draft-hzpa-dprive-xfr-over-tls-00
 </t>
 <t>
@@ -279,15 +308,17 @@ higher to avoid residual exposure? How should padding be used (if it should)?
 <back>
 <references title="Normative References">
 <?rfc include="https://xml2rfc.tools.ietf.org/public/rfc/bibxml3/reference.I-D.bortzmeyer-dprive-rfc7626-bis.xml"?>
+<?rfc include="https://xml2rfc.tools.ietf.org/public/rfc/bibxml3/reference.I-D.vcelak-nsec5.xml"?>
 <?rfc include="https://xml2rfc.tools.ietf.org/public/rfc/bibxml/reference.RFC.1995.xml"?>
 <?rfc include="https://xml2rfc.tools.ietf.org/public/rfc/bibxml/reference.RFC.2119.xml"?>
 <?rfc include="https://xml2rfc.tools.ietf.org/public/rfc/bibxml/reference.RFC.2845.xml"?>
+<?rfc include="https://xml2rfc.tools.ietf.org/public/rfc/bibxml/reference.RFC.5077.xml"?>
 <?rfc include="https://xml2rfc.tools.ietf.org/public/rfc/bibxml/reference.RFC.5155.xml"?>
 <?rfc include="https://xml2rfc.tools.ietf.org/public/rfc/bibxml/reference.RFC.5936.xml"?>
 <?rfc include="https://xml2rfc.tools.ietf.org/public/rfc/bibxml/reference.RFC.6973.xml"?>
-<?rfc include="https://xml2rfc.tools.ietf.org/public/rfc/bibxml/reference.RFC.7626.xml"?>
 <?rfc include="https://xml2rfc.tools.ietf.org/public/rfc/bibxml/reference.RFC.7858.xml"?>
 <?rfc include="https://xml2rfc.tools.ietf.org/public/rfc/bibxml/reference.RFC.8174.xml"?>
+<?rfc include="https://xml2rfc.tools.ietf.org/public/rfc/bibxml/reference.RFC.8310.xml"?>
 <?rfc include="https://xml2rfc.tools.ietf.org/public/rfc/bibxml/reference.RFC.8484.xml"?>
 <?rfc include="https://xml2rfc.tools.ietf.org/public/rfc/bibxml/reference.RFC.8499.xml"?>
 </references>
