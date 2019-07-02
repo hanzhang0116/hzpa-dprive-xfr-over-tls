@@ -2,12 +2,12 @@
     Title = "DNS Zone Transfer over TLS"
     abbrev = "XFR over TLS"
     category = "std"
-    docName= "draft-hzpa-dprive-xfr-over-tls-01"
+    docName= "draft-hzpa-dprive-xfr-over-tls-02"
     ipr = "trust200902"
     area = "Internet"
     workgroup = "dprive"
     keyword = ["DNS", "operations", "privacy"]
-    date = 2019-03-11T00:00:00Z
+    date = 2019-07-02T00:00:00Z
     [pi]
     [[author]]
      initials="H."
@@ -130,8 +130,9 @@ authoritative DNS protocol implementations, encrypting AXFR using DNS-over-TLS
 DoT to prevent zone collection from zone transfers, including discussion of
 approaches for IXFR, which uses UDP or TCP.
 
-Next steps: Work on open questions at DNS table during IETF 104 Hackathon,
-expand this draft, then solicit discussion on the DPRIVE mailing list.
+NOTE: At this point some discussion of a DSO based mechanism is included in
+brackets, still to decide whether or not to include this in the -02 version or
+not..
 
 # Terminology
 
@@ -148,7 +149,42 @@ DoT: DNS-over-TLS as specified in [@!RFC7858]
 
 DoH: DNS-over-HTTPS as specified in [@!RFC8484]
 
-# Zone Transfer Confidentiality Overview
+# Use cases for XFR-over-TLS
+
+* Confidentiality. Clearly using an encrypted transport for zone transfers will
+  defeat zone content leakage that can occur via passive surveillance.
+
+* Authentication. Use of single or mutual TLS authentication (in combination 
+  with ACLs) can complement and potentially be an alternative to TSIG.
+  
+* Performance. For high rates of IXFR persistent connections could offer higher
+  throughput rates. (Note this is possible in principle with TCP today. 
+  TODO: Look at the details of the NSD implementation.)
+  
+* (Performance. For the DSO case, a subscribe/publish mechanism could be
+  envisaged greatly reducing the number of messages required to perform one
+  transfer.)
+  
+* (Security. For some network configurations it is not desirable to have port 53
+  on the secondary open to an untrusted network for the sole purpose of
+  receiving NOTIFYs. For the DSO case, new server initiated NOTIFY messages
+  could be sent on a TLS connection to the primary initiated by the secondary
+  allowing the firewall to be restricted to just allowing outgoing connections
+  from secondary to primary.)
+
+* (New command channel. For the DSO case it would be possible to include new
+  'control' commands e.g. 'stop serving this zone', 'delete this zone'.)
+
+# Connection and data flows in XFR
+
+## AXFR
+
+The connection flow in AXFR is a NOTIFY from the primary server to the 
+secondary server, and then an AXFR request from the secondary to the 
+primary after which the data flows.
+
+
+
 
 # Zone Transfer with DoT - Authentication
 
@@ -160,14 +196,9 @@ DoH: DNS-over-HTTPS as specified in [@!RFC8484]
 
 ## AXFR Sessions
 
-The connection flow in AXFR is a NOTIFY from the primary server to the 
-secondary server, and then an AXFR request from the secondary to the 
-primary after which the data flows. 
-
 The connection for AXFR via DoT SHOULD be established using port 853, as
-specified in [@!RFC7858]. If there is no response on port 853, the connection
-MAY be attempted using port 443 in case the server offers DoT service on this
-port.
+specified in [@!RFC7858], unless there is mutual agreement between the secondary
+and primary to use a port other than port 853 for DNS over TLS.
 
 TODO: diagram of connection flow for AXFR, without and with DoT
 
