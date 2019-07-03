@@ -1,0 +1,840 @@
+
+
+
+
+dprive                                                          H. Zhang
+Internet-Draft                                                   P. Aras
+Intended status: Standards Track                              Salesforce
+Expires: January 3, 2020                                       W. Toorop
+                                                              NLnet Labs
+                                                            S. Dickinson
+                                                              Sinodun IT
+                                                               A. Mankin
+                                                              Salesforce
+                                                            July 2, 2019
+
+
+                       DNS Zone Transfer over TLS
+                   draft-hzpa-dprive-xfr-over-tls-02
+
+Abstract
+
+   DNS zone transfers are transmitted in clear text, which gives
+   attackers the opportunity to collect the content of a zone by
+   eavesdropping on network connections.  The DNS Transaction Signature
+   (TSIG) mechanism is specified to restrict direct zone transfer to
+   authorized clients only, but it does not add confidentiality.  This
+   document specifies use of DNS-over-TLS to prevent zone contents
+   collection via passive monitoring of zone transfers.
+
+Status of This Memo
+
+   This Internet-Draft is submitted in full conformance with the
+   provisions of BCP 78 and BCP 79.
+
+   Internet-Drafts are working documents of the Internet Engineering
+   Task Force (IETF).  Note that other groups may also distribute
+   working documents as Internet-Drafts.  The list of current Internet-
+   Drafts is at http://datatracker.ietf.org/drafts/current/.
+
+   Internet-Drafts are draft documents valid for a maximum of six months
+   and may be updated, replaced, or obsoleted by other documents at any
+   time.  It is inappropriate to use Internet-Drafts as reference
+   material or to cite them other than as "work in progress."
+
+   This Internet-Draft will expire on January 3, 2020.
+
+Copyright Notice
+
+   Copyright (c) 2019 IETF Trust and the persons identified as the
+   document authors.  All rights reserved.
+
+
+
+
+
+Zhang, et al.            Expires January 3, 2020                [Page 1]
+
+Internet-Draft                XFR over TLS                     July 2019
+
+
+   This document is subject to BCP 78 and the IETF Trust's Legal
+   Provisions Relating to IETF Documents
+   (http://trustee.ietf.org/license-info) in effect on the date of
+   publication of this document.  Please review these documents
+   carefully, as they describe your rights and restrictions with respect
+   to this document.  Code Components extracted from this document must
+   include Simplified BSD License text as described in Section 4.e of
+   the Trust Legal Provisions and are provided without warranty as
+   described in the Simplified BSD License.
+
+Table of Contents
+
+   1.  Introduction  . . . . . . . . . . . . . . . . . . . . . . . .   3
+   2.  Terminology . . . . . . . . . . . . . . . . . . . . . . . . .   4
+   3.  Use Cases for XFR-over-TLS  . . . . . . . . . . . . . . . . .   4
+   4.  Connection and Data Flows in Existing XFR Mechanisms  . . . .   5
+     4.1.  AXFR Mechanism  . . . . . . . . . . . . . . . . . . . . .   6
+     4.2.  IXFR Mechanism  . . . . . . . . . . . . . . . . . . . . .   7
+     4.3.  Data Leakage of NOTIFY and SOA Message Exchanges  . . . .   7
+       4.3.1.  NOTIFY  . . . . . . . . . . . . . . . . . . . . . . .   7
+       4.3.2.  SOA . . . . . . . . . . . . . . . . . . . . . . . . .   8
+   5.  Zone Transfer with DoT - Authentication . . . . . . . . . . .   8
+     5.1.  TSIG  . . . . . . . . . . . . . . . . . . . . . . . . . .   8
+     5.2.  TLS . . . . . . . . . . . . . . . . . . . . . . . . . . .   8
+       5.2.1.  Opportunistic . . . . . . . . . . . . . . . . . . . .   8
+       5.2.2.  Strict  . . . . . . . . . . . . . . . . . . . . . . .   8
+       5.2.3.  Mutual  . . . . . . . . . . . . . . . . . . . . . . .   8
+     5.3.  IP Based ACL on the Master  . . . . . . . . . . . . . . .   9
+     5.4.  ZONEMD  . . . . . . . . . . . . . . . . . . . . . . . . .   9
+     5.5.  Comparison of Authentication methods  . . . . . . . . . .   9
+   6.  Session Establishment and Closing in XoT  . . . . . . . . . .  10
+     6.1.  AXoT Sessions . . . . . . . . . . . . . . . . . . . . . .  10
+     6.2.  IXoT Sessions . . . . . . . . . . . . . . . . . . . . . .  10
+     6.3.  Policies for Both AXFR and IXFR . . . . . . . . . . . . .  10
+     6.4.  Multi-master configurations . . . . . . . . . . . . . . .  11
+   7.  Performance Considerations  . . . . . . . . . . . . . . . . .  11
+   8.  Implementation Considerations . . . . . . . . . . . . . . . .  11
+   9.  Implementation Status . . . . . . . . . . . . . . . . . . . .  11
+   10. IANA Considerations . . . . . . . . . . . . . . . . . . . . .  11
+   11. Security Considerations . . . . . . . . . . . . . . . . . . .  11
+   12. Acknowledgements  . . . . . . . . . . . . . . . . . . . . . .  11
+   13. Contributors  . . . . . . . . . . . . . . . . . . . . . . . .  12
+   14. Changelog . . . . . . . . . . . . . . . . . . . . . . . . . .  12
+   15. References  . . . . . . . . . . . . . . . . . . . . . . . . .  12
+     15.1.  Normative References . . . . . . . . . . . . . . . . . .  12
+     15.2.  Informative References . . . . . . . . . . . . . . . . .  13
+     15.3.  URIs . . . . . . . . . . . . . . . . . . . . . . . . . .  14
+   Authors' Addresses  . . . . . . . . . . . . . . . . . . . . . . .  14
+
+
+
+Zhang, et al.            Expires January 3, 2020                [Page 2]
+
+Internet-Draft                XFR over TLS                     July 2019
+
+
+1.  Introduction
+
+   DNS has a number of privacy vulnerabilities, as discussed in detail
+   in [I-D.bortzmeyer-dprive-rfc7626-bis].  Stub client to recursive
+   resolver query privacy has received the most attention to date.
+   There are now standards track documents for three encryption
+   capabilities for stub to recursive queries and more work going on to
+   guide deployment of specifically DNS-over-TLS (DoT) [RFC7858] and
+   DNS-over-HTTPS (DoH) [RFC8484].
+
+   [I-D.bortzmeyer-dprive-rfc7626-bis] established that stub client DNS
+   query transactions are not public and needed protection, but on zone
+   transfer [RFC1995] [RFC5936] it says only:
+
+   "Privacy risks for the holder of a zone (the risk that someone gets
+   the data) are discussed in [RFC5936] and [RFC5155]."
+
+   In what way is exposing the full contents of a zone a privacy risk?
+   The contents of the zone could include information such as names of
+   persons used in names of hosts.  Best practice is not to use personal
+   information for domain names, but many such domain names exist.
+   There may also be regulatory, policy or other reasons why the zone
+   contents in full must be treated as private.
+
+   Neither of the RFCs mentioned in [I-D.bortzmeyer-dprive-rfc7626-bis]
+   contemplates the risk that someone gets the data through
+   eavesdropping on network connections, only via enumeration or
+   unauthorised transfer as described in the following paragraphs.
+
+   [RFC5155] specifies NSEC3 to prevent zone enumeration, which is when
+   queries for the authenticated denial of existences records of DNSSEC
+   allow a client to walk through the entire zone.  Note that the need
+   for this protection also motivates NSEC5 [I-D.vcelak-nsec5]; zone
+   walking is now possible with NSEC3 due to crypto-breaking advances,
+   and NSEC5 is a response to this problem.
+
+   [RFC5155] does not address data obtained outside zone enumeration
+   (nor does [I-D.vcelak-nsec5]).  Preventing eavesdropping of zone
+   transfers (this draft) is orthogonal to preventing zone enumeration,
+   though they aim to protect the same information.
+
+   [RFC5936] specifies using TSIG [RFC2845] for authorization of the
+   clients of a zone transfer and for data integrity, but does not
+   express any need for confidentiality, and TSIG does not offer
+   encryption.  Some operators use SSH tunnelling or IPSec to encrypt
+   the transfer data.
+
+
+
+
+
+Zhang, et al.            Expires January 3, 2020                [Page 3]
+
+Internet-Draft                XFR over TLS                     July 2019
+
+
+   Because the AXFR zone transfer is typically carried out over TCP from
+   authoritative DNS protocol implementations, encrypting AXFR using
+   DNS-over-TLS [RFC7858] seems like a simple step forward.  This
+   document specifies how to use DoT to prevent zone collection from
+   zone transfers, including discussion of approaches for IXFR, which
+   uses UDP or TCP.
+
+   NOTE: At this point some discussion of a DSO based mechanism is
+   included in brackets, still to decide whether or not to include this
+   in the -02 version or not..
+
+2.  Terminology
+
+   The key words "MUST", "MUST NOT", "REQUIRED", "SHALL", "SHALL NOT",
+   "SHOULD", "SHOULD NOT", "RECOMMENDED", "NOT RECOMMENDED", "MAY", and
+   "OPTIONAL" in this document are to be interpreted as described in BCP
+   14 [RFC2119] and [RFC8174] when, and only when, they appear in all
+   capitals, as shown here.
+
+   Privacy terminology is as described in Section 3 of [RFC6973].
+
+   DNS terminology is as described in [RFC8499].
+
+   DoT: DNS-over-TLS as specified in [RFC7858]
+
+   DoH: DNS-over-HTTPS as specified in [RFC8484]
+
+   XoT: Generic XFR-over-TLS mechanisms as specified in this document
+
+   AXoT: AXFR-over-TLS
+
+   IXoT: IXFR over-TLS
+
+3.  Use Cases for XFR-over-TLS
+
+   o  Confidentiality.  Clearly using an encrypted transport for zone
+      transfers will defeat zone content leakage that can occur via
+      passive surveillance.
+
+   o  Authentication.  Use of single or mutual TLS authentication (in
+      combination with ACLs) can complement and potentially be an
+      alternative to TSIG.
+
+   o  Performance.  Existing AXFR and IXFR mechanisms have the burden of
+      backwards compatibility with older implementations based on the
+      original specifications in [RFC1034] and [RFC1035].  For example,
+      some older AXFR implementations have restrictions that mean use of
+      sessions for multiple XFRs, or XFRs of different zones on the same
+
+
+
+Zhang, et al.            Expires January 3, 2020                [Page 4]
+
+Internet-Draft                XFR over TLS                     July 2019
+
+
+      connection, are inefficient or not supported.  A specification for
+      XFR-over-TLS could require all implementations to implement
+      optimised transfers e.g. transfer of multiple zones over one
+      connection.  For IXFR, when there are very high rates of transfers
+      opting to use persistent connections could offer higher throughput
+      rates (is this true?).
+
+   o  (Security.  For some network configurations it is not desirable to
+      have port 53 on the secondary open to an untrusted network for the
+      sole purpose of receiving NOTIFYs.  For the DSO case, secondaries
+      could initiate DSO connections to the master and following that
+      server-initiated DSO NOTIFY messages could be sent on that
+      connection which could simultaneously be used for SOA and IXFR
+      requests.  This would allow a firewall to be restricted to just
+      allowing outgoing connections from secondary to primary.  Note
+      that a similar but more constrained mechanism exists for IXFR
+      whereby a short refresh period can be configured which triggers
+      periodic SOA/IXFR requests from the secondary.  TODO: Look at the
+      details of the NSD implementation.)
+
+   o  (Performance.  For the DSO case, a new subscribe/publish mechanism
+      could be envisaged that greatly reducing the number of messages
+      required to perform one transfer.)
+
+   o  (Improved error handling and retries.  In the DSO case new
+      explicit error codes could be defined that allow a server to
+      indicate the reason for a failed XFR request.)
+
+   o  (New command channel.  For the DSO case it would be possible to
+      include new server-initiated 'control' commands e.g. 'stop serving
+      this zone', 'delete this zone'.)
+
+4.  Connection and Data Flows in Existing XFR Mechanisms
+
+   The original specification for zone transfers in [RFC1034] and
+   [RFC1035] was based on a polling mechanism: a secondary performed a
+   periodic SOA query (based on the refresh timer) to determine if an
+   AXFR was required.
+
+   [RFC1995] and [RFC1996] introduced the concepts of IXFR and NOTIFY
+   respectively, to provide for prompt propagation of zone updates.
+   This has largely replaced AXFR where possible, particularly for
+   dynamically updated zones.
+
+   [RFC5936] subsequently refined the specification of AXFR.
+
+   In this document we use the phrase "XFR mechanism" to describe the
+   entire set of message exchanges between a secondary and a master that
+
+
+
+Zhang, et al.            Expires January 3, 2020                [Page 5]
+
+Internet-Draft                XFR over TLS                     July 2019
+
+
+   concludes in a successful AXFR or IXFR request/response.  This set
+   may or may not include
+
+   o  NOTIFY messages
+
+   o  SOA queries
+
+   o  Fallback from IXFR to AXFR
+
+   o  Fallback from IXFR-over-UDP to IXFR-over-TCP
+
+   The term is used to encompasses the range of permutations that are
+   possible and is useful to distinguish the 'XFR mechanism' from a
+   single XFR request/response exchange.
+
+4.1.  AXFR Mechanism
+
+   The figure below provides an outline of the AXFR mechanism including
+   NOTIFYs.
+
+   Figure 1.  AXFR Mechanism [1]
+
+   1.  An AXFR is often (but not always) preceded by a NOTIFY (over UDP)
+       from the primary to the secondary.  A secondary may also initiate
+       an AXFR based on a refresh timer or scheduled/triggered zone
+       maintenance.
+
+   2.  The secondary will normally (but not always) make a SOA query to
+       the master to obtain the serial number of the zone held by the
+       master (since UDP NOTIFY messages can be trivially spoofed).
+
+   3.  If the master serial is higher than the secondaries serial, the
+       secondary makes an AXFR request (over TCP) to the primary after
+       which the AXFR data flows in one or more AXFR responses on the
+       TCP connection.
+
+   [RFC5936] specifies that AXFR must use TCP as the transport protocol
+   but details that there is no restriction in the protocol that a
+   single TCP session must be used only for a single AXFR exchange, or
+   even solely for XFRs.  For example, it outlines that the SOA query
+   can also happen on this connection.  However, this can cause
+   interoperability problems with older implementations that support
+   only the trivial case of one AXFR per connection.
+
+   TODO: Detail the limitations in existing AXFR implementations as
+   outlined in [RFC5936]
+
+
+
+
+
+Zhang, et al.            Expires January 3, 2020                [Page 6]
+
+Internet-Draft                XFR over TLS                     July 2019
+
+
+4.2.  IXFR Mechanism
+
+   The figure below provides an outline of the IXFR mechanism.
+
+   Figure 1.  IXFR Mechanism [2]
+
+   1.  An IXFR is normally (but not always) preceded by a NOTIFY (over
+       UDP) from the primary to the secondary.  A secondary may also
+       initiate an IXFR based on a refresh timer or scheduled/triggered
+       zone maintenance.
+
+   2.  The secondary will normally make a SOA query to the master to
+       obtain the serial number of the zone held by the master (since
+       UDP NOTIFY messages can be trivially spoofed).
+
+   3.  If the master serial is higher than the secondaries serial, the
+       secondary makes an IXFR request (over UDP) to the primary after
+       the master sends an IXFR response.
+
+   [RFC1995] specifies that Incremental Transfer may use UDP if the
+   entire IXFR response can be contained in a single DNS packet,
+   otherwise, TCP is used.  In fact is says in non-normative language:
+
+   "Thus, a client should first make an IXFR query using UDP."
+
+   So there may be a forth step above where the client falls back to
+   IXFR over TCP.  There may also be a forth step where the secondary
+   must fall back to AXFR because the master does not support IXFR.
+
+4.3.  Data Leakage of NOTIFY and SOA Message Exchanges
+
+   This section attempts to presents a rationale for also encrypting the
+   other messages in the XFR mechanism.
+
+   Since the SOA of the zone can be trivially discovered by simply
+   querying the authoritative server leakage RR of this is not discussed
+   in the following sections.
+
+4.3.1.  NOTIFY
+
+   Unencrypted NOTIFY messages identify configured secondaries on the
+   master.
+
+   [RFC1996] also states:
+
+   "If ANCOUNT>0, then the answer section represents an unsecure hint at
+   the new RRset for this .
+
+
+
+
+Zhang, et al.            Expires January 3, 2020                [Page 7]
+
+Internet-Draft                XFR over TLS                     July 2019
+
+
+   But since the only supported QTYPE for NOTIFY is SOA, this does not
+   pose a potential leak.
+
+4.3.2.  SOA
+
+   QUESTION: No real leakage here?
+
+5.  Zone Transfer with DoT - Authentication
+
+5.1.  TSIG
+
+   TSIG [RFC2845] provides a mechanism for two parties to exchange
+   secret keys which can then be used to sign DNS message contents.
+   This allows each party to authenticate that a request or response
+   (and the data in it) came from the other party, even if it was
+   transmitted over an unsecured channel or via a proxy.  It provides
+   party-to-party authentication, but not hop-to-hop channel
+   authentication.
+
+5.2.  TLS
+
+5.2.1.  Opportunistic
+
+   Opportunistic TLS [RFC8310] provides only a defence against passive
+   surveillance, providing on-the-wire confidentiality.
+
+5.2.2.  Strict
+
+   Strict TLS [RFC8310] requires that a client is configured with an
+   authentication domain name (and/or SPKI pinset) that should be used
+   to authenticate the TLS handshake with the server.  This additionally
+   provides a defence for the client against active surveillance,
+   providing client-to-server confidentiality.
+
+5.2.3.  Mutual
+
+   This is an extension to Strict TLS [RFC8310] which requires that a
+   client is configured with an authentication domain name (and/or SPKI
+   pinset) and a client certificate.  The client offers the certificate
+   for authentication by the server and the client can authentic the
+   server the same way as in Strict TLS.  This provides a defence for
+   both parties against active surveillance, providing end-to-end
+   confidentiality.
+
+
+
+
+
+
+
+
+Zhang, et al.            Expires January 3, 2020                [Page 8]
+
+Internet-Draft                XFR over TLS                     July 2019
+
+
+5.3.  IP Based ACL on the Master
+
+   Most DNS server implementations offer an option to configure an IP
+   based Access Control List (ACL), which is often used in combination
+   with TSIG based ACLs to restrict access to zone transfers on master
+   servers.
+
+   This is also possible with XoT but it must be noted that as with TCP
+   the implementation of such and ACL cannot be enforced on the master
+   until a XFR request is received on an established connection.
+
+   If control were to be any more fine-grained than this then a separate
+   port would be required for XoT such that implementations would be
+   able to refuse connections on that port to all clients except those
+   configured as secondaries.
+
+5.4.  ZONEMD
+
+   Zone message digest is a mechanism that can be used to verify the
+   content of an AXFR.  It is complementary the above mechanisms and can
+   be used in conjunction with XFR-over-TLS but is not considered
+   further.  TODO: Add reference
+
+5.5.  Comparison of Authentication methods
+
+   The Table below compares the properties of each of the above methods
+   in terms of what protection they provide to the secondary and master
+   servers during XoT in terms of:
+
+   o  'Data Auth': Authentication that the data is from the party with
+      whom credentials were shared (this might not be the 'master' in a
+      proxy scenario).
+
+   o  'Channel Conf': Confidentiality of the communication channel
+      between the secondary and master.
+
+   o  Channel Auth: Authentication of the identity of party to whom a
+      connection is made.
+
+   SARA: Note sure about this breakdown, need to think about it more,
+   particularly in the case where a proxy may be involved.... Also
+   currently using green for 'definitely provides' property and orange
+   for 'not sure' or 'with limitations'.
+
+   Table 1: Properties of Authentication methods for XoT [3]
+
+   Based on this analysis it can be seen that a combination of Strict
+   TLS and TSIG provides all 3 properties with the minimum overhead.
+
+
+
+Zhang, et al.            Expires January 3, 2020                [Page 9]
+
+Internet-Draft                XFR over TLS                     July 2019
+
+
+6.  Session Establishment and Closing in XoT
+
+6.1.  AXoT Sessions
+
+   The connection for AXFR via DoT SHOULD be established using port 853,
+   as specified in [RFC7858], unless there is mutual agreement between
+   the secondary and primary to use a port other than port 853 for XFR
+   over TLS.
+
+   TODO: Specify usage of connections for SOA queries and for multiple
+   concurrent zone transfers.
+
+   QUESTION: Should we require that the SOA is done on the TLS
+   connection?  For the case when no transfer is required this could be
+   unnecessary overhead.
+
+   TODO: Diagram of connection flow for AXFR over TLS
+
+6.2.  IXoT Sessions
+
+   How should confidentiality of IXFR be provided since it can use UDP
+   or TCP?
+
+   To discuss:
+
+   o  should IXFR have a mode in which TCP is mandatory?  [SARA: I don't
+      see the use case for this here?]
+
+   o  should IXFR have a mode in which TLS is mandatory?
+
+   o  In workloads where there are frequent IXFRs, is the persistent
+      connection mode that TCP-Mode would enable (as well as the
+      retries) a benefit?
+
+6.3.  Policies for Both AXFR and IXFR
+
+   We call the entire group of servers involved in XFR (the primary and
+   all secondaries) the 'transfer group'.
+
+   In order to assure the confidentiality of the zone information, the
+   entire transfer group MUST have a consistent policy of requiring
+   confidentiality.  If any do not, this is a weak link for attackers to
+   exploit.  How to do this is TBD.
+
+   Additionally, the entire transfer group MUST have a consistent policy
+   of requiring Strict or Opportunistic DoT [RFC8310].  How to do this
+   is TBD.
+
+
+
+
+Zhang, et al.            Expires January 3, 2020               [Page 10]
+
+Internet-Draft                XFR over TLS                     July 2019
+
+
+6.4.  Multi-master configurations
+
+   TODO.
+
+7.  Performance Considerations
+
+   The details in [RFC7858] and [RFC8310] about e.g. using persistent
+   connections and TLS Session Resumption [RFC5077] are fully applicable
+   to XFR-over-TLS as well.
+
+8.  Implementation Considerations
+
+   TBA
+
+9.  Implementation Status
+
+   The 1.9.2 version of Unbound [4] includes an option to perform AXFR
+   over TLS (instead of TCP).  This enables the client (secondary) to
+   authenticate the server (master) using PKIX.
+
+10.  IANA Considerations
+
+   TBD
+
+11.  Security Considerations
+
+   This document specifies a security measure against a DNS risk: the
+   risk that an attacker collects entire DNS zones through eavesdropping
+   on clear text DNS zone transfers.  It presents a new Security
+   Consideration for DNS.  Some questions to discuss are:
+
+   o  Should DoT in this new case be required to use only TLS 1.3 and
+      higher to avoid residual exposure?
+
+   o  How should padding be used in IXFR?
+
+   o  Should there be an option to 'pad' an AXFR response (i.e. a set of
+      AXFR responses on a given connection) to hide the zone size?
+
+12.  Acknowledgements
+
+   The authors thank Benno Overeinder, Shumon Huque and Tim Wicinski for
+   review and discussions.
+
+
+
+
+
+
+
+
+Zhang, et al.            Expires January 3, 2020               [Page 11]
+
+Internet-Draft                XFR over TLS                     July 2019
+
+
+13.  Contributors
+
+   The following contributed significantly to the document:
+
+14.  Changelog
+
+   draft-hzpa-dprive-xfr-over-tls-01
+
+   o  Editorial changes, updates to references.
+
+   draft-hzpa-dprive-xfr-over-tls-00
+
+   o  Initial commit
+
+15.  References
+
+15.1.  Normative References
+
+   [I-D.bortzmeyer-dprive-rfc7626-bis]
+              Bortzmeyer, S. and S. Dickinson, "DNS Privacy
+              Considerations", draft-bortzmeyer-dprive-rfc7626-bis-02
+              (work in progress), January 2019.
+
+   [I-D.vcelak-nsec5]
+              Vcelak, J., Goldberg, S., Papadopoulos, D., Huque, S., and
+              D. Lawrence, "NSEC5, DNSSEC Authenticated Denial of
+              Existence", draft-vcelak-nsec5-08 (work in progress),
+              December 2018.
+
+   [RFC1995]  Ohta, M., "Incremental Zone Transfer in DNS", RFC 1995,
+              DOI 10.17487/RFC1995, August 1996, <https://www.rfc-
+              editor.org/info/rfc1995>.
+
+   [RFC2119]  Bradner, S., "Key words for use in RFCs to Indicate
+              Requirement Levels", BCP 14, RFC 2119,
+              DOI 10.17487/RFC2119, March 1997, <https://www.rfc-
+              editor.org/info/rfc2119>.
+
+   [RFC2845]  Vixie, P., Gudmundsson, O., Eastlake 3rd, D., and B.
+              Wellington, "Secret Key Transaction Authentication for DNS
+              (TSIG)", RFC 2845, DOI 10.17487/RFC2845, May 2000,
+              <https://www.rfc-editor.org/info/rfc2845>.
+
+   [RFC5077]  Salowey, J., Zhou, H., Eronen, P., and H. Tschofenig,
+              "Transport Layer Security (TLS) Session Resumption without
+              Server-Side State", RFC 5077, DOI 10.17487/RFC5077,
+              January 2008, <https://www.rfc-editor.org/info/rfc5077>.
+
+
+
+
+Zhang, et al.            Expires January 3, 2020               [Page 12]
+
+Internet-Draft                XFR over TLS                     July 2019
+
+
+   [RFC5155]  Laurie, B., Sisson, G., Arends, R., and D. Blacka, "DNS
+              Security (DNSSEC) Hashed Authenticated Denial of
+              Existence", RFC 5155, DOI 10.17487/RFC5155, March 2008,
+              <https://www.rfc-editor.org/info/rfc5155>.
+
+   [RFC5936]  Lewis, E. and A. Hoenes, Ed., "DNS Zone Transfer Protocol
+              (AXFR)", RFC 5936, DOI 10.17487/RFC5936, June 2010,
+              <https://www.rfc-editor.org/info/rfc5936>.
+
+   [RFC6973]  Cooper, A., Tschofenig, H., Aboba, B., Peterson, J.,
+              Morris, J., Hansen, M., and R. Smith, "Privacy
+              Considerations for Internet Protocols", RFC 6973,
+              DOI 10.17487/RFC6973, July 2013, <https://www.rfc-
+              editor.org/info/rfc6973>.
+
+   [RFC7858]  Hu, Z., Zhu, L., Heidemann, J., Mankin, A., Wessels, D.,
+              and P. Hoffman, "Specification for DNS over Transport
+              Layer Security (TLS)", RFC 7858, DOI 10.17487/RFC7858, May
+              2016, <https://www.rfc-editor.org/info/rfc7858>.
+
+   [RFC8174]  Leiba, B., "Ambiguity of Uppercase vs Lowercase in RFC
+              2119 Key Words", BCP 14, RFC 8174, DOI 10.17487/RFC8174,
+              May 2017, <https://www.rfc-editor.org/info/rfc8174>.
+
+   [RFC8310]  Dickinson, S., Gillmor, D., and T. Reddy, "Usage Profiles
+              for DNS over TLS and DNS over DTLS", RFC 8310,
+              DOI 10.17487/RFC8310, March 2018, <https://www.rfc-
+              editor.org/info/rfc8310>.
+
+   [RFC8484]  Hoffman, P. and P. McManus, "DNS Queries over HTTPS
+              (DoH)", RFC 8484, DOI 10.17487/RFC8484, October 2018,
+              <https://www.rfc-editor.org/info/rfc8484>.
+
+   [RFC8499]  Hoffman, P., Sullivan, A., and K. Fujiwara, "DNS
+              Terminology", BCP 219, RFC 8499, DOI 10.17487/RFC8499,
+              January 2019, <https://www.rfc-editor.org/info/rfc8499>.
+
+15.2.  Informative References
+
+   [RFC1034]  Mockapetris, P., "Domain names - concepts and facilities",
+              STD 13, RFC 1034, DOI 10.17487/RFC1034, November 1987,
+              <https://www.rfc-editor.org/info/rfc1034>.
+
+   [RFC1035]  Mockapetris, P., "Domain names - implementation and
+              specification", STD 13, RFC 1035, DOI 10.17487/RFC1035,
+              November 1987, <https://www.rfc-editor.org/info/rfc1035>.
+
+
+
+
+
+Zhang, et al.            Expires January 3, 2020               [Page 13]
+
+Internet-Draft                XFR over TLS                     July 2019
+
+
+   [RFC1996]  Vixie, P., "A Mechanism for Prompt Notification of Zone
+              Changes (DNS NOTIFY)", RFC 1996, DOI 10.17487/RFC1996,
+              August 1996, <https://www.rfc-editor.org/info/rfc1996>.
+
+15.3.  URIs
+
+   [1] https://docs.google.com/drawings/d/1WQLitlBW5n880f1Uy4mD5BcRHM-
+       RIIWE-z2HD0j-_Ho/edit?usp=sharing
+
+   [2] https://docs.google.com/drawings/
+       d/1j0bzoubZvXXt_NnpUJJRoAxM5VjR6OInWPe_jYEql6Y/edit?usp=sharing
+
+   [3] https://docs.google.com/spreadsheets/
+       d/1cv8X6dmJrPmezdvOKD0YXOAqSNY-6Tp4QkH_BDAs5Pc/edit?usp=sharing
+
+   [4] https://github.com/NLnetLabs/unbound/blob/release-1.9.2/doc/
+       Changelog
+
+Authors' Addresses
+
+   Han Zhang
+   Salesforce
+   San Francisco, CA
+   United States
+
+   Email: hzhang@salesforce.com
+
+
+   Pallavi Aras
+   Salesforce
+   Herndon, VA
+   United States
+
+   Email: paras@salesforce.com
+
+
+   Willem Toorop
+   NLnet Labs
+   Science Park 400
+   Amsterdam  1098 XH
+   The Netherlands
+
+   Email: willem@nlnetlabs.nl
+
+
+
+
+
+
+
+
+Zhang, et al.            Expires January 3, 2020               [Page 14]
+
+Internet-Draft                XFR over TLS                     July 2019
+
+
+   Sara Dickinson
+   Sinodun IT
+   Magdalen Centre
+   Oxford Science Park
+   Oxford  OX4 4GA
+   United Kingdom
+
+   Email: sara@sinodun.com
+
+
+   Allison Mankin
+   Salesforce
+   Herndon, VA
+   United States
+
+   Email: allison.mankin@gmail.com
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Zhang, et al.            Expires January 3, 2020               [Page 15]
