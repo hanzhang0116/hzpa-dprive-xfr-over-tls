@@ -564,8 +564,8 @@
 <ul>
   <li>Confidentiality. Clearly using an encrypted transport for zone transfers will defeat zone content leakage that can occur via passive surveillance.</li>
   <li>Authentication. Use of single or mutual TLS authentication (in combination with ACLs) can complement and potentially be an alternative to TSIG.</li>
-  <li>Performance. Existing AXFR and IXFR mechanisms have the burden of backwards compatibility with older implementations based on the original specifications in <a href="#RFC1034">[RFC1034]</a> and <a href="#RFC1035">[RFC1035]</a>. For example, some older AXFR implementations that have not updated to the guidance in <a href="#RFC5936">[RFC5936]</a> have restrictions that mean use of sessions for multiple XFRs, or XFRs of different zones on the same connection, are inefficient or not supported. Any implementation of XFR-overTLS is required to implement optimized and interoperable transfers as described in <a href="#RFC5936">[RFC5936]</a> e.g. transfer of multiple zones-over-one connection.</li>
-  <li>Performance. For IXFR, when there are very high rates of large packet transfers opting to use persistent connections removes the latency introduced by falling back to TCP. TODO: More work needed on IXFR performance...</li>
+  <li>Performance. Existing AXFR and IXFR mechanisms have the burden of backwards compatibility with older implementations based on the original specifications in <a href="#RFC1034">[RFC1034]</a> and <a href="#RFC1035">[RFC1035]</a>. For example, some older AXFR servers don&#8217;t support using a TCP connection for multiple AXFR sessions or XFRs of different zones because they have not been updated to follow the guidance in [RFC5836]. Any implementation of XFR-overTLS is required to implement optimized and interoperable transfers as described in <a href="#RFC5936">[RFC5936]</a> e.g.  transfer of multiple zones-over-one connection.</li>
+  <li>Performance. Current usage of TCP for IXFR is sub-optimal in some cases i.e.  connections are frequently closed after a single IXFR.</li>
   <li>(Security. For some network configurations it is not desirable to have port 53 on the secondary open to an untrusted network for the sole purpose of receiving NOTIFYs. NOTIFYs can also be trivially spoofed unless secured with TSIG. For the DSO case, secondaries could initiate DSO connections to the primary and following that server-initiated DSO NOTIFY messages could be sent on that connection which could simultaneously be used for SOA and IXFR requests. This would allow a firewall to be restricted to just allowing outgoing connections from secondary to primary. Note that a similar but more constrained mechanism exists for IXFR whereby a short refresh period can be configured which triggers periodic SOA/IXFR requests from the secondary. TODO: Look at the details of the NSD implementation.)</li>
   <li>(Performance. For the DSO case, a new subscribe/publish mechanism could be envisaged that greatly reducing the number of messages required to perform one transfer.)</li>
   <li>(Improved error handling and retries. In the DSO case new explicit error codes could be defined that allow a server to indicate the reason for a failed or aborted XFR request. Also a new client initiated message could be used to gracefully cancel AXFRs.)</li>
@@ -591,13 +591,13 @@
 <p id="rfc.section.4.p.6">The term is used to encompasses the range of permutations that are possible and is useful to distinguish the 'XFR mechanism' from a single XFR request/response exchange.  </p>
 <h1 id="rfc.section.4.1"><a href="#rfc.section.4.1">4.1.</a> <a href="#axfr-mechanism" id="axfr-mechanism">AXFR Mechanism</a></h1>
 <p id="rfc.section.4.1.p.1">The figure below provides an outline of an AXFR mechanism including NOTIFYs.  </p>
-<p><a href="https://docs.google.com/drawings/d/1WQLitlBW5n880f1Uy4mD5BcRHM-RIIWE-z2HD0j-_Ho/edit?usp=sharing">Figure 1. AXFR Mechanism</a> </p>
+<p><a href="https://github.com/hanzhang0116/hzpa-dprive-xfr-over-tls/blob/02_updates/02-draft-svg/AXFR_mechanism.svg">Figure 1. AXFR Mechanism</a> </p>
 <p/>
 
 <ol>
   <li>An AXFR is often (but not always) preceded by a NOTIFY (over UDP) from the primary to the secondary. A secondary may also initiate an AXFR based on a refresh timer or scheduled/triggered zone maintenance.</li>
   <li>The secondary will normally (but not always) make a SOA query to the primary to obtain the serial number of the zone held by the primary.</li>
-  <li>If the primary serial is higher than the secondaries serial, the secondary makes an AXFR request (over TCP) to the primary after which the AXFR data flows in one or more AXFR responses on the TCP connection.</li>
+  <li>If the primary serial is higher than the secondaries serial (using Serial Number Arithmetic <a href="#RFC1982">[RFC1982]</a>), the secondary makes an AXFR request (over TCP) to the primary after which the AXFR data flows in one or more AXFR responses on the TCP connection.</li>
 </ol>
 
 <p> </p>
@@ -605,29 +605,32 @@
 <p id="rfc.section.4.1.p.5">TODO: Detail the limitations in existing AXFR implementations as outlined in <a href="#RFC5936">[RFC5936]</a> </p>
 <h1 id="rfc.section.4.2"><a href="#rfc.section.4.2">4.2.</a> <a href="#ixfr-mechanism" id="ixfr-mechanism">IXFR Mechanism</a></h1>
 <p id="rfc.section.4.2.p.1">The figure below provides an outline of the IXFR mechanism including NOTIFYs.  </p>
-<p><a href="https://docs.google.com/drawings/d/1j0bzoubZvXXt_NnpUJJRoAxM5VjR6OInWPe_jYEql6Y/edit?usp=sharing">Figure 1. IXFR Mechanism</a> </p>
+<p><a href="https://github.com/hanzhang0116/hzpa-dprive-xfr-over-tls/blob/02_updates/02-draft-svg/IXFR%20mechanism.svg">Figure 1. IXFR Mechanism</a> </p>
 <p/>
 
 <ol>
   <li>An IXFR is normally (but not always) preceded by a NOTIFY (over UDP) from the primary to the secondary. A secondary may also initiate an IXFR based on a refresh timer or scheduled/triggered zone maintenance.</li>
   <li>The secondary will normally (but not always) make a SOA query to the primary to obtain the serial number of the zone held by the primary.</li>
-  <li>If the primary serial is higher than the secondaries serial, the secondary makes an IXFR request (over UDP) to the primary after the primary sends an IXFR response.</li>
+  <li>If the primary serial is higher than the secondaries serial (using Serial Number Arithmetic <a href="#RFC1982">[RFC1982]</a>), the secondary makes an IXFR request to the primary after the primary sends an IXFR response.</li>
 </ol>
 
 <p> </p>
 <p><a href="#RFC1995">[RFC1995]</a> specifies that Incremental Transfer may use UDP if the entire IXFR response can be contained in a single DNS packet, otherwise, TCP is used. In fact is says in non-normative language: </p>
 <p id="rfc.section.4.2.p.5">"Thus, a client should first make an IXFR query using UDP." </p>
 <p id="rfc.section.4.2.p.6">So there may be a forth step above where the client falls back to IXFR-over-TCP.  There may also be a forth step where the secondary must fall back to AXFR because e.g. the primary does not support IXFR.  </p>
+<p id="rfc.section.4.2.p.7">However it is noted that at least two widely used open source authoritative nameserver implementations (<a href="https://www.isc.org/bind/">BIND</a> and <a href="https://www.nlnetlabs.nl/projects/nsd/about/">NSD</a>) do IXFR using TCP by default in their latest releases. For BIND TCP connections are sometimes used for SOA queries but in general they are not used persistently and close after an IXFR is completed.  </p>
+<p id="rfc.section.4.2.p.8">TODO: Look at packet captures from NSD and Knot Auth to see what they do.  </p>
+<p id="rfc.section.4.2.p.9">QUESTION: Should we try to update IXFR over TCP to be more efficient in this document? </p>
 <h1 id="rfc.section.4.3"><a href="#rfc.section.4.3">4.3.</a> <a href="#data-leakage-of-notify-and-soa-message-exchanges" id="data-leakage-of-notify-and-soa-message-exchanges">Data Leakage of NOTIFY and SOA Message Exchanges</a></h1>
 <p id="rfc.section.4.3.p.1">This section attempts to presents a rationale for also encrypting the other messages in the XFR mechanism.  </p>
-<p id="rfc.section.4.3.p.2">Since the SOA of the zone can be trivially discovered by simply querying the authoritative server leakage RR of this is not discussed in the following sections.  </p>
+<p id="rfc.section.4.3.p.2">Since the SOA of the published zone can be trivially discovered by simply querying the publicly available authoritative servers leakage RR of this is not discussed in the following sections.  </p>
 <h1 id="rfc.section.4.3.1"><a href="#rfc.section.4.3.1">4.3.1.</a> <a href="#notify" id="notify">NOTIFY</a></h1>
 <p id="rfc.section.4.3.1.p.1">Unencrypted NOTIFY messages identify configured secondaries on the primary.  </p>
 <p><a href="#RFC1996">[RFC1996]</a> also states: </p>
 <p id="rfc.section.4.3.1.p.3">"If ANCOUNT&gt;0, then the answer section represents an unsecure hint at the new RRset for this .  </p>
 <p id="rfc.section.4.3.1.p.4">But since the only supported QTYPE for NOTIFY is SOA, this does not pose a potential leak.  </p>
 <h1 id="rfc.section.4.3.2"><a href="#rfc.section.4.3.2">4.3.2.</a> <a href="#soa" id="soa">SOA</a></h1>
-<p id="rfc.section.4.3.2.p.1">QUESTION: No real leakage here? </p>
+<p id="rfc.section.4.3.2.p.1">For hidden primaries or secondaries the SOA query leaks the degree of lag of the hidden server and any downstream secondary.  </p>
 <h1 id="rfc.section.5"><a href="#rfc.section.5">5.</a> <a href="#zone-transfer-with-dot--authentication" id="zone-transfer-with-dot--authentication">Zone Transfer with DoT - Authentication</a></h1>
 <h1 id="rfc.section.5.1"><a href="#rfc.section.5.1">5.1.</a> <a href="#tsig" id="tsig">TSIG</a></h1>
 <p id="rfc.section.5.1.p.1">TSIG <a href="#RFC2845">[RFC2845]</a> provides a mechanism for two parties to exchange secret keys which can then be used to create a message digest to protect individual DNS messages. This allows each party to authenticate that a request or response (and the data in it) came from the other party, even if it was transmitted-over-an unsecured channel or via a proxy. It provides party-to-party data authentication, but not hop-to-hop channel authentication or confidentiality.  </p>
@@ -644,7 +647,7 @@
 <p id="rfc.section.5.3.p.2">This is also possible with XoT but it must be noted that as with TCP the implementation of such and ACL cannot be enforced on the primary until a XFR request is received on an established connection.  </p>
 <p id="rfc.section.5.3.p.3">If control were to be any more fine-grained than this then a separate port would be required for XoT such that implementations would be able to refuse connections on that port to all clients except those configured as secondaries.  </p>
 <h1 id="rfc.section.5.4"><a href="#rfc.section.5.4">5.4.</a> <a href="#zonemd" id="zonemd">ZONEMD</a></h1>
-<p id="rfc.section.5.4.p.1">Message Digest for DNS Zones (ZONEMD) <a href="#I-D.wessels-dns-zone-digest">[I-D.wessels-dns-zone-digest]</a> digest is a mechanism that can be used to verify the content of a standalone zone. It is designed to be independent of the transmission channel or mechanism. It is complementary the above mechanisms and can be used in conjunction with XFR-over-TLS but is not considered further.  </p>
+<p id="rfc.section.5.4.p.1">Message Digest for DNS Zones (ZONEMD) <a href="#I-D.wessels-dns-zone-digest">[I-D.wessels-dns-zone-digest]</a> digest is a mechanism that can be used to verify the content of a standalone zone. It is designed to be independent of the transmission channel or mechanism, allowing a general consumer of a zone to do origin authentication of the entire zone contents. It is complementary the above mechanisms and can be used in conjunction with XFR-over-TLS but is not considered further.  </p>
 <h1 id="rfc.section.5.5"><a href="#rfc.section.5.5">5.5.</a> <a href="#comparison-of-authentication-methods" id="comparison-of-authentication-methods">Comparison of Authentication Methods</a></h1>
 <p id="rfc.section.5.5.p.1">The Table below compares the properties of each of the above methods in terms of what protection they provide to the secondary and primary servers during XoT in terms of: </p>
 <p/>
@@ -657,7 +660,7 @@
 
 <p> </p>
 <p id="rfc.section.5.5.p.3">SARA: Note sure about this breakdown, need to think about it more, particularly in the case where a proxy may be involved. Primary/secondary set ups can be complex and hierarchical.  </p>
-<p><a href="https://docs.google.com/spreadsheets/d/1cv8X6dmJrPmezdvOKD0YXOAqSNY-6Tp4QkH_BDAs5Pc/edit?usp=sharing">Table 1: Properties of Authentication methods for XoT</a> </p>
+<p><a href="https://github.com/hanzhang0116/hzpa-dprive-xfr-over-tls/blob/02_updates/02-draft-svg/Properties_of_Authentication_methods_for_XoT.svg">Table 1: Properties of Authentication methods for XoT</a> </p>
 <p id="rfc.section.5.5.p.5">Based on this analysis it can be seen that: </p>
 <p/>
 
@@ -674,25 +677,25 @@
 <p id="rfc.section.7.p.2">It is RECOMMENDED that clients and servers that support XoT also implement EDNS0 Keepalive [RFC7828].  </p>
 <h1 id="rfc.section.7.1"><a href="#rfc.section.7.1">7.1.</a> <a href="#axot-sessions" id="axot-sessions">AXoT Sessions</a></h1>
 <p id="rfc.section.7.1.p.1">The figure below provides an outline of the AXoT mechanism including NOTIFYs.  </p>
-<p><a href="https://docs.google.com/drawings/d/1EGNU7nlumBgxu9r-O1aoETmlzuOB4H6VcxrfVl2ffwU/edit?usp=sharing">Figure 3: AXoT mechanism</a> </p>
+<p><a href="https://github.com/hanzhang0116/hzpa-dprive-xfr-over-tls/blob/02_updates/02-draft-svg/AXoT_mechanism_1.svg">Figure 3: AXoT mechanism</a> </p>
 <p id="rfc.section.7.1.p.3">All implementations that support XoT MUST fully implement <a href="#RFC5953">[RFC5953]</a> behavior on TLS connections.  </p>
 <p id="rfc.section.7.1.p.4">Sections 4.1, 4.1.1 and 4.1.2 of <a href="#RFC5936">[RFC5936]</a> describe guidance for AXFR clients and servers with regard to re-use of sessions for multiple AXFRs, AXFRs of different zones and using TCP session for other queries including SOA.  </p>
 <p id="rfc.section.7.1.p.5">The connection for AXFR-over-TLS SHOULD be established using port 853, as specified in <a href="#RFC7858">[RFC7858]</a>, unless there is mutual agreement between the secondary and primary to use a port other than port 853 for XFR-over-TLS.  </p>
 <p id="rfc.section.7.1.p.6">QUESTION: Should we require that the SOA is always done on a TLS connection? For the case when no transfer is required this could be unnecessary overhead.  </p>
 <h1 id="rfc.section.7.2"><a href="#rfc.section.7.2">7.2.</a> <a href="#ixot-requests" id="ixot-requests">IXoT Requests</a></h1>
 <p id="rfc.section.7.2.p.1">The figure below provides an outline of the XoT mechanism including NOTIFYs.  </p>
-<p><a href="https://docs.google.com/drawings/d/1yyDtyqOJogZzlZ6bpf9nx2h_9zeXXG6Q9yla_502jFc/edit?usp=sharing">Figure 4: IXoT mechanism</a> </p>
+<p><a href="https://github.com/hanzhang0116/hzpa-dprive-xfr-over-tls/blob/02_updates/02-draft-svg/IXoT_mechanism_1.svg">Figure 4: IXoT mechanism</a> </p>
 <p id="rfc.section.7.2.p.3">The connection for IXFR-over-TLS SHOULD be established using port 853, as specified in <a href="#RFC7858">[RFC7858]</a>, unless there is mutual agreement between the secondary and primary to use a port other than port 853 for XFR-over-TLS.  </p>
-<p><a href="#RFC1995">[RFC1995]</a> says nothing with respect to optimizing IXFRs over TCP or re-using already open TCP connections to perform IXFRs or other queries. We provide guidance here that aligns with the guideance in <a href="#RFC5936">[RFC5936]</a> for AXFR and with that for performant TCP/TLS usage in <a href="#RFC7766">[RFC7766]</a> and <a href="#RFC7858">[RFC7858]</a>.  </p>
+<p><a href="#RFC1995">[RFC1995]</a> says nothing with respect to optimizing IXFRs over TCP or re-using already open TCP connections to perform IXFRs or other queries. We provide guidance here that aligns with the guidance in <a href="#RFC5936">[RFC5936]</a> for AXFR and with that for performant TCP/TLS usage in <a href="#RFC7766">[RFC7766]</a> and <a href="#RFC7858">[RFC7858]</a>.  </p>
 <p id="rfc.section.7.2.p.5">An IXoT client MAY use an already opened TLS connection to send a IXFR request.  Using an existing open connection is RECOMMENDED over opening a new connection.  (Non-IXoT session traffic can also use an open connection.) </p>
 <p id="rfc.section.7.2.p.6">An IXoT client MAY use an already open TLS connection to send an SOA query.  Using an existing open connection is RECOMMENDED over opening a new connection.  </p>
 <p id="rfc.section.7.2.p.7">An IXoT server MUST be able to handle multiple IXoT requests on a single TLS connection, as well as to handle other query/response transactions over it.  </p>
-<p id="rfc.section.7.2.p.8">An IXoT client MAY keep an existing TLS session open in the expectation it is likely to need to perform an IXFR in the near future. The client may use the frequency of recent IXFRs to calculate an average update rate and then use EDNS0 Keepalive to request an appropriate timeout from the server (if the server supports EDNS0 Keepalive).  </p>
-<p id="rfc.section.7.2.p.9">An IXoT client MAY pipeline IXFR requests for different zones on a single TLS connection. AN XIoT server MAY respond to those requests out of order.  </p>
+<p id="rfc.section.7.2.p.8">An IXoT client MAY keep an existing TLS session open in the expectation it is likely to need to perform an IXFR in the near future. The client may use the frequency of recent IXFRs to calculate an average update rate and then use EDNS0 Keepalive to request an appropriate timeout from the server (if the server supports EDNS0 Keepalive). If the server does not support EDNS0 Keepalive the client MAY keep the connection open for a few seconds (<a href="#RFC7766">[RFC7766]</a> recommends that servers use timeouts of at least a few seconds).  </p>
+<p id="rfc.section.7.2.p.9">An IXoT client MAY pipeline IXFR requests for different zones on a single TLS connection. AN IXoT server MAY respond to those requests out of order.  </p>
 <h1 id="rfc.section.7.2.1"><a href="#rfc.section.7.2.1">7.2.1.</a> <a href="#performance" id="performance">Performance</a></h1>
-<p id="rfc.section.7.2.1.p.1">In workloads where there are frequent IXFRs, is the persistent connection mode that TCP-Mode would enable (as well as the retries) a benefit? </p>
-<p id="rfc.section.7.2.1.p.2">If an IXFR response sent over UDP is lost the client must wait for a timeout to trigger and then re-try the IXFR...  </p>
-<p id="rfc.section.7.2.1.p.3">Once a TLS handshake is established it takes something of the order of 100-200 messages to amortize the handshake cost.  </p>
+<p id="rfc.section.7.2.1.p.1">In workloads where there are frequent IXFRs, a persistent connection mode would provide a latency benefit over the observed use of short-lived TCP connections for IXFRs. It would also reduce the load on the server of managing many short lived TCP connections.  </p>
+<p id="rfc.section.7.2.1.p.2">Once a TLS handshake is established it takes something of the order of 100-200 messages to amortize the handshake cost.  </p>
+<p id="rfc.section.7.2.1.p.3">If an IXFR response sent over UDP is lost the client must wait for a timeout to trigger and then re-try the IXFR...  </p>
 <h1 id="rfc.section.7.2.2"><a href="#rfc.section.7.2.2">7.2.2.</a> <a href="#fallback-to-axfr" id="fallback-to-axfr">Fallback to AXFR</a></h1>
 <p id="rfc.section.7.2.2.p.1">Fallback to AXFR can happen, for example, if the server is not able to provide an IXFR for the requested SOA. Implementations differ in how long they store zone deltas and how many may be stored at any one time.  </p>
 <p id="rfc.section.7.2.2.p.2">After a failed IXFR a IXoT client SHOULD request the AXFR on the already open TLS connection.  </p>
@@ -862,6 +865,12 @@
         <b id="RFC1035">[RFC1035]</b>
       </td>
       <td class="top"><a>Mockapetris, P.</a>, "<a href="http://tools.ietf.org/html/rfc1035">Domain names - implementation and specification</a>", STD 13, RFC 1035, DOI 10.17487/RFC1035, November 1987.</td>
+    </tr>
+    <tr>
+      <td class="reference">
+        <b id="RFC1982">[RFC1982]</b>
+      </td>
+      <td class="top"><a>Elz, R.</a> and <a>R. Bush</a>, "<a href="http://tools.ietf.org/html/rfc1982">Serial Number Arithmetic</a>", RFC 1982, DOI 10.17487/RFC1982, August 1996.</td>
     </tr>
     <tr>
       <td class="reference">

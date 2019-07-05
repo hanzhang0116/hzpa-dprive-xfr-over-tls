@@ -199,16 +199,14 @@ defeat zone content leakage that can occur via passive surveillance.</t>
 with ACLs) can complement and potentially be an alternative to TSIG.</t>
 <t>Performance. Existing AXFR and IXFR mechanisms have the burden of backwards
 compatibility with older implementations based on the original specifications
-in <xref target="RFC1034"/> and <xref target="RFC1035"/>. For example, some older AXFR implementations
-that have not updated to the guidance in <xref target="RFC5936"/> have restrictions that
-mean use of sessions for multiple XFRs, or XFRs of different zones on the
-same connection, are inefficient or not supported. Any implementation of
-XFR-overTLS is required to implement optimized and interoperable
-transfers as described in <xref target="RFC5936"/> e.g. transfer of multiple zones-over-one
-connection.</t>
-<t>Performance. For IXFR, when there are very high rates of large packet
-transfers opting to use persistent connections removes the latency introduced
-by falling back to TCP. TODO: More work needed on IXFR performance...</t>
+in <xref target="RFC1034"/> and <xref target="RFC1035"/>. For example, some older AXFR servers don’t
+support using a TCP connection for multiple AXFR sessions or XFRs of
+different zones because they have not been updated to follow the guidance in
+[RFC5836]. Any implementation of XFR-overTLS is required to implement
+optimized and interoperable transfers as described in <xref target="RFC5936"/> e.g.
+transfer of multiple zones-over-one connection.</t>
+<t>Performance. Current usage of TCP for IXFR is sub-optimal in some cases i.e.
+connections are frequently closed after a single IXFR.</t>
 <t>(Security. For some network configurations it is not desirable to have port 53
 on the secondary open to an untrusted network for the sole purpose of
 receiving NOTIFYs. NOTIFYs can also be trivially spoofed unless secured with
@@ -267,7 +265,7 @@ request/response exchange.
 <section anchor="axfr-mechanism" title="AXFR Mechanism">
 <t>The figure below provides an outline of an AXFR mechanism including NOTIFYs.
 </t>
-<t><eref target="https://docs.google.com/drawings/d/1WQLitlBW5n880f1Uy4mD5BcRHM-RIIWE-z2HD0j-_Ho/edit?usp=sharing">Figure 1. AXFR Mechanism</eref>
+<t><eref target="https://github.com/hanzhang0116/hzpa-dprive-xfr-over-tls/blob/02_updates/02-draft-svg/AXFR_mechanism.svg">Figure 1. AXFR Mechanism</eref>
 </t>
 <t>
 <list style="numbers">
@@ -276,9 +274,10 @@ primary to the secondary. A secondary may also initiate an AXFR based on a
 refresh timer or scheduled/triggered zone maintenance.</t>
 <t>The secondary will normally (but not always) make a SOA query to the primary
 to obtain the serial number of the zone held by the primary.</t>
-<t>If the primary serial is higher than the secondaries serial, the secondary
-makes an AXFR request (over TCP) to the primary after which the AXFR data flows
-in one or more AXFR responses on the TCP connection.</t>
+<t>If the primary serial is higher than the secondaries serial (using Serial
+Number Arithmetic <xref target="RFC1982"/>), the secondary makes an AXFR request (over TCP)
+to the primary after which the AXFR data flows in one or more AXFR responses on
+the TCP connection.</t>
 </list>
 </t>
 <t><xref target="RFC5936"/> specifies that AXFR must use TCP as the transport protocol but
@@ -296,7 +295,7 @@ that support only the trivial case of one AXFR per connection.
 <section anchor="ixfr-mechanism" title="IXFR Mechanism">
 <t>The figure below provides an outline of the IXFR mechanism including NOTIFYs.
 </t>
-<t><eref target="https://docs.google.com/drawings/d/1j0bzoubZvXXt_NnpUJJRoAxM5VjR6OInWPe_jYEql6Y/edit?usp=sharing">Figure 1. IXFR Mechanism</eref>
+<t><eref target="https://github.com/hanzhang0116/hzpa-dprive-xfr-over-tls/blob/02_updates/02-draft-svg/IXFR%20mechanism.svg">Figure 1. IXFR Mechanism</eref>
 </t>
 <t>
 <list style="numbers">
@@ -305,9 +304,9 @@ primary to the secondary. A secondary may also initiate an IXFR based on a
 refresh timer or scheduled/triggered zone maintenance.</t>
 <t>The secondary will normally (but not always) make a SOA query to the primary
 to obtain the serial number of the zone held by the primary.</t>
-<t>If the primary serial is higher than the secondaries serial, the secondary
-makes an IXFR request (over UDP) to the primary after the primary sends an IXFR
-response.</t>
+<t>If the primary serial is higher than the secondaries serial (using Serial
+Number Arithmetic <xref target="RFC1982"/>), the secondary makes an IXFR request to the
+primary after the primary sends an IXFR response.</t>
 </list>
 </t>
 <t><xref target="RFC1995"/> specifies that Incremental Transfer may use UDP if the entire IXFR
@@ -320,15 +319,27 @@ fact is says in non-normative language:
 There may also be a forth step where the secondary must fall back to AXFR
 because e.g. the primary does not support IXFR.
 </t>
+<t>However it is noted that at least two widely used open source authoritative
+nameserver implementations (<eref target="https://www.isc.org/bind/">BIND</eref> and
+<eref target="https://www.nlnetlabs.nl/projects/nsd/about/">NSD</eref>) do IXFR using TCP by
+default in their latest releases. For BIND TCP connections are sometimes used
+for SOA queries but in general they are not used persistently and close after
+an IXFR is completed.
+</t>
+<t>TODO: Look at packet captures from NSD and Knot Auth to see what they do.
+</t>
+<t>QUESTION: Should we try to update IXFR over TCP to be more efficient in this
+document?
+</t>
 </section>
 
 <section anchor="data-leakage-of-notify-and-soa-message-exchanges" title="Data Leakage of NOTIFY and SOA Message Exchanges">
 <t>This section attempts to presents a rationale for also encrypting the other
 messages in the XFR mechanism.
 </t>
-<t>Since the SOA of the zone can be trivially discovered by simply querying the
-authoritative server leakage RR of this is not discussed in the following
-sections.
+<t>Since the SOA of the published zone can be trivially discovered by simply
+querying the publicly available authoritative servers leakage RR of this is not
+discussed in the following sections.
 </t>
 
 <section anchor="notify" title="NOTIFY">
@@ -345,7 +356,7 @@ potential leak.
 </section>
 
 <section anchor="soa" title="SOA">
-<t>QUESTION: No real leakage here?
+<t>For hidden primaries or secondaries the SOA query leaks the degree of lag of the hidden server and any downstream secondary.
 </t>
 </section>
 </section>
@@ -411,9 +422,10 @@ connections on that port to all clients except those configured as secondaries.
 <section anchor="zonemd" title="ZONEMD">
 <t>Message Digest for DNS Zones (ZONEMD) <xref target="I-D.wessels-dns-zone-digest"/> digest is
 a mechanism that can be used to verify the content of a standalone zone. It is
-designed to be independent of the transmission channel or mechanism. It is
-complementary the above mechanisms and can be used in conjunction with
-XFR-over-TLS but is not considered further.
+designed to be independent of the transmission channel or mechanism, allowing a
+general consumer of a zone to do origin authentication of the entire zone
+contents. It is complementary the above mechanisms and can be used in
+conjunction with XFR-over-TLS but is not considered further.
 </t>
 </section>
 
@@ -441,7 +453,7 @@ and secondary in a proxy scenario).</t>
 in the case where a proxy may be involved. Primary/secondary set ups can be
 complex and hierarchical.
 </t>
-<t><eref target="https://docs.google.com/spreadsheets/d/1cv8X6dmJrPmezdvOKD0YXOAqSNY-6Tp4QkH_BDAs5Pc/edit?usp=sharing">Table 1: Properties of Authentication methods for XoT</eref>
+<t><eref target="https://github.com/hanzhang0116/hzpa-dprive-xfr-over-tls/blob/02_updates/02-draft-svg/Properties_of_Authentication_methods_for_XoT.svg">Table 1: Properties of Authentication methods for XoT</eref>
 </t>
 <t>Based on this analysis it can be seen that:
 </t>
@@ -476,7 +488,7 @@ EDNS0 Keepalive [RFC7828].
 <section anchor="axot-sessions" title="AXoT Sessions">
 <t>The figure below provides an outline of the AXoT mechanism including NOTIFYs.
 </t>
-<t><eref target="https://docs.google.com/drawings/d/1EGNU7nlumBgxu9r-O1aoETmlzuOB4H6VcxrfVl2ffwU/edit?usp=sharing">Figure 3: AXoT mechanism</eref>
+<t><eref target="https://github.com/hanzhang0116/hzpa-dprive-xfr-over-tls/blob/02_updates/02-draft-svg/AXoT_mechanism_1.svg">Figure 3: AXoT mechanism</eref>
 </t>
 <t>All implementations that support XoT MUST fully implement <xref target="RFC5953"/> behavior
 on TLS connections.
@@ -497,7 +509,7 @@ For the case when no transfer is required this could be unnecessary overhead.
 <section anchor="ixot-requests" title="IXoT Requests">
 <t>The figure below provides an outline of the XoT mechanism including NOTIFYs.
 </t>
-<t><eref target="https://docs.google.com/drawings/d/1yyDtyqOJogZzlZ6bpf9nx2h_9zeXXG6Q9yla_502jFc/edit?usp=sharing">Figure 4: IXoT mechanism</eref>
+<t><eref target="https://github.com/hanzhang0116/hzpa-dprive-xfr-over-tls/blob/02_updates/02-draft-svg/IXoT_mechanism_1.svg">Figure 4: IXoT mechanism</eref>
 </t>
 <t>The connection for IXFR-over-TLS SHOULD be established using port 853, as
 specified in <xref target="RFC7858"/>, unless there is mutual agreement between the secondary
@@ -505,7 +517,7 @@ and primary to use a port other than port 853 for XFR-over-TLS.
 </t>
 <t><xref target="RFC1995"/> says nothing with respect to optimizing IXFRs over TCP or re-using
 already open TCP connections to perform IXFRs or other queries. We provide
-guidance here that aligns with the guideance in <xref target="RFC5936"/> for AXFR and with
+guidance here that aligns with the guidance in <xref target="RFC5936"/> for AXFR and with
 that for performant TCP/TLS usage in <xref target="RFC7766"/> and <xref target="RFC7858"/>.
 </t>
 <t>An IXoT client MAY use an already opened TLS connection to send a IXFR request.
@@ -522,20 +534,24 @@ connection, as well as to handle other query/response transactions over it.
 likely to need to perform an IXFR in the near future. The client may use the
 frequency of recent IXFRs to calculate an average update rate and then use
 EDNS0 Keepalive to request an appropriate timeout from the server (if the
-server supports EDNS0 Keepalive).
+server supports EDNS0 Keepalive). If the server does not support EDNS0
+Keepalive the client MAY keep the connection open for a few seconds (<xref target="RFC7766"/>
+recommends that servers use timeouts of at least a few seconds).
 </t>
 <t>An IXoT client MAY pipeline IXFR requests for different zones on a single TLS
-connection. AN XIoT server MAY respond to those requests out of order.
+connection. AN IXoT server MAY respond to those requests out of order.
 </t>
 
 <section anchor="performance" title="Performance">
-<t>In workloads where there are frequent IXFRs, is the persistent connection mode
-that TCP-Mode would enable (as well as the retries) a benefit?
+<t>In workloads where there are frequent IXFRs, a persistent connection mode would
+provide a latency benefit over the observed use of short-lived TCP connections
+for IXFRs. It would also reduce the load on the server of managing many short
+lived TCP connections.
+</t>
+<t>Once a TLS handshake is established it takes something of the order of 100-200 messages to amortize the handshake cost.
 </t>
 <t>If an IXFR response sent over UDP is lost the client must wait for a timeout to
 trigger and then re-try the IXFR...
-</t>
-<t>Once a TLS handshake is established it takes something of the order of 100-200 messages to amortize the handshake cost.
 </t>
 </section>
 
@@ -680,6 +696,7 @@ discussions.
 <?rfc include="https://xml2rfc.tools.ietf.org/public/rfc/bibxml3/reference.I-D.wessels-dns-zone-digest.xml"?>
 <?rfc include="https://xml2rfc.tools.ietf.org/public/rfc/bibxml/reference.RFC.1034.xml"?>
 <?rfc include="https://xml2rfc.tools.ietf.org/public/rfc/bibxml/reference.RFC.1035.xml"?>
+<?rfc include="https://xml2rfc.tools.ietf.org/public/rfc/bibxml/reference.RFC.1982.xml"?>
 <?rfc include="https://xml2rfc.tools.ietf.org/public/rfc/bibxml/reference.RFC.1996.xml"?>
 <?rfc include="https://xml2rfc.tools.ietf.org/public/rfc/bibxml/reference.RFC.5953.xml"?>
 <?rfc include="https://xml2rfc.tools.ietf.org/public/rfc/bibxml/reference.RFC.7766.xml"?>

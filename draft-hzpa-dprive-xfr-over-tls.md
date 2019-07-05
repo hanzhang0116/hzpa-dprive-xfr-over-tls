@@ -165,17 +165,15 @@ IXoT: IXFR over-TLS
 
 * Performance. Existing AXFR and IXFR mechanisms have the burden of backwards
   compatibility with older implementations based on the original specifications
-  in [@RFC1034] and [@RFC1035]. For example, some older AXFR implementations
-  that have not updated to the guidance in [@RFC5936] have restrictions that
-  mean use of sessions for multiple XFRs, or XFRs of different zones on the
-  same connection, are inefficient or not supported. Any implementation of
-  XFR-overTLS is required to implement optimized and interoperable
-  transfers as described in [@RFC5936] e.g. transfer of multiple zones-over-one
-  connection.
+  in [@RFC1034] and [@RFC1035]. For example, some older AXFR servers don’t
+  support using a TCP connection for multiple AXFR sessions or XFRs of
+  different zones because they have not been updated to follow the guidance in
+  [RFC5836]. Any implementation of XFR-overTLS is required to implement
+  optimized and interoperable transfers as described in [@RFC5936] e.g.
+  transfer of multiple zones-over-one connection.
   
-* Performance. For IXFR, when there are very high rates of large packet
-  transfers opting to use persistent connections removes the latency introduced
-  by falling back to TCP. TODO: More work needed on IXFR performance...
+* Performance. Current usage of TCP for IXFR is sub-optimal in some cases i.e.
+  connections are frequently closed after a single IXFR.
 
 * (Security. For some network configurations it is not desirable to have port 53
   on the secondary open to an untrusted network for the sole purpose of
@@ -235,7 +233,7 @@ request/response exchange.
 
 The figure below provides an outline of an AXFR mechanism including NOTIFYs.
 
-[Figure 1. AXFR Mechanism](https://docs.google.com/drawings/d/1WQLitlBW5n880f1Uy4mD5BcRHM-RIIWE-z2HD0j-_Ho/edit?usp=sharing)
+[Figure 1. AXFR Mechanism](https://github.com/hanzhang0116/hzpa-dprive-xfr-over-tls/blob/02_updates/02-draft-svg/AXFR_mechanism.svg)
 
 1. An AXFR is often (but not always) preceded by a NOTIFY (over UDP) from the
 primary to the secondary. A secondary may also initiate an AXFR based on a
@@ -244,9 +242,11 @@ refresh timer or scheduled/triggered zone maintenance.
 2. The secondary will normally (but not always) make a SOA query to the primary
 to obtain the serial number of the zone held by the primary.
 
-2. If the primary serial is higher than the secondaries serial, the secondary
-makes an AXFR request (over TCP) to the primary after which the AXFR data flows
-in one or more AXFR responses on the TCP connection.
+3. If the primary serial is higher than the secondaries serial (using Serial
+Number Arithmetic [@RFC1982]), the secondary makes an AXFR request (over TCP)
+to the primary after which the AXFR data flows in one or more AXFR responses on
+the TCP connection.
+
 
 [@RFC5936] specifies that AXFR must use TCP as the transport protocol but
 details that there is no restriction in the protocol that a single TCP session
@@ -262,7 +262,7 @@ TODO: Detail the limitations in existing AXFR implementations as outlined in
 
 The figure below provides an outline of the IXFR mechanism including NOTIFYs.
 
-[Figure 1. IXFR Mechanism](https://docs.google.com/drawings/d/1j0bzoubZvXXt_NnpUJJRoAxM5VjR6OInWPe_jYEql6Y/edit?usp=sharing)
+[Figure 1. IXFR Mechanism](https://github.com/hanzhang0116/hzpa-dprive-xfr-over-tls/blob/02_updates/02-draft-svg/IXFR%20mechanism.svg)
 
 1. An IXFR is normally (but not always) preceded by a NOTIFY (over UDP) from the
 primary to the secondary. A secondary may also initiate an IXFR based on a
@@ -271,9 +271,10 @@ refresh timer or scheduled/triggered zone maintenance.
 2. The secondary will normally (but not always) make a SOA query to the primary
 to obtain the serial number of the zone held by the primary.
 
-3. If the primary serial is higher than the secondaries serial, the secondary
-makes an IXFR request (over UDP) to the primary after the primary sends an IXFR
-response.
+3. If the primary serial is higher than the secondaries serial (using Serial
+Number Arithmetic [@RFC1982]), the secondary makes an IXFR request to the
+primary after the primary sends an IXFR response.
+
 
 [@!RFC1995] specifies that Incremental Transfer may use UDP if the entire IXFR
 response can be contained in a single DNS packet, otherwise, TCP is used. In
@@ -285,14 +286,27 @@ So there may be a forth step above where the client falls back to IXFR-over-TCP.
 There may also be a forth step where the secondary must fall back to AXFR
 because e.g. the primary does not support IXFR.
 
+However it is noted that at least two widely used open source authoritative
+nameserver implementations ([BIND](https://www.isc.org/bind/) and
+[NSD](https://www.nlnetlabs.nl/projects/nsd/about/)) do IXFR using TCP by
+default in their latest releases. For BIND TCP connections are sometimes used
+for SOA queries but in general they are not used persistently and close after
+an IXFR is completed.
+ 
+TODO: Look at packet captures from NSD and Knot Auth to see what they do.
+
+QUESTION: Should we try to update IXFR over TCP to be more efficient in this
+document?
+
+
 ## Data Leakage of NOTIFY and SOA Message Exchanges
 
 This section attempts to presents a rationale for also encrypting the other
 messages in the XFR mechanism.
 
-Since the SOA of the zone can be trivially discovered by simply querying the
-authoritative server leakage RR of this is not discussed in the following
-sections.
+Since the SOA of the published zone can be trivially discovered by simply
+querying the publicly available authoritative servers leakage RR of this is not
+discussed in the following sections.
 
 ### NOTIFY
 
@@ -308,7 +322,7 @@ potential leak.
 
 ### SOA
 
-QUESTION: No real leakage here?
+For hidden primaries or secondaries the SOA query leaks the degree of lag of the hidden server and any downstream secondary. 
 
 # Zone Transfer with DoT - Authentication
 
@@ -365,9 +379,10 @@ connections on that port to all clients except those configured as secondaries.
 
 Message Digest for DNS Zones (ZONEMD) [@?I-D.wessels-dns-zone-digest] digest is
 a mechanism that can be used to verify the content of a standalone zone. It is
-designed to be independent of the transmission channel or mechanism. It is
-complementary the above mechanisms and can be used in conjunction with
-XFR-over-TLS but is not considered further.
+designed to be independent of the transmission channel or mechanism, allowing a
+general consumer of a zone to do origin authentication of the entire zone
+contents. It is complementary the above mechanisms and can be used in
+conjunction with XFR-over-TLS but is not considered further.
 
 ## Comparison of Authentication Methods
 
@@ -393,7 +408,7 @@ SARA: Note sure about this breakdown, need to think about it more, particularly
 in the case where a proxy may be involved. Primary/secondary set ups can be
 complex and hierarchical.
 
-[Table 1: Properties of Authentication methods for XoT](https://docs.google.com/spreadsheets/d/1cv8X6dmJrPmezdvOKD0YXOAqSNY-6Tp4QkH_BDAs5Pc/edit?usp=sharing)
+[Table 1: Properties of Authentication methods for XoT](https://github.com/hanzhang0116/hzpa-dprive-xfr-over-tls/blob/02_updates/02-draft-svg/Properties_of_Authentication_methods_for_XoT.svg)
 
 Based on this analysis it can be seen that:
 
@@ -424,7 +439,7 @@ EDNS0 Keepalive [RFC7828].
 
 The figure below provides an outline of the AXoT mechanism including NOTIFYs.
 
-[Figure 3: AXoT mechanism](https://docs.google.com/drawings/d/1EGNU7nlumBgxu9r-O1aoETmlzuOB4H6VcxrfVl2ffwU/edit?usp=sharing)
+[Figure 3: AXoT mechanism](https://github.com/hanzhang0116/hzpa-dprive-xfr-over-tls/blob/02_updates/02-draft-svg/AXoT_mechanism_1.svg)
 
 All implementations that support XoT MUST fully implement [@RFC5953] behavior
 on TLS connections.
@@ -445,7 +460,7 @@ For the case when no transfer is required this could be unnecessary overhead.
 The figure below provides an outline of the XoT mechanism including NOTIFYs.
 
 [Figure 4: IXoT mechanism]
-(https://docs.google.com/drawings/d/1yyDtyqOJogZzlZ6bpf9nx2h_9zeXXG6Q9yla_502jFc/edit?usp=sharing)
+(https://github.com/hanzhang0116/hzpa-dprive-xfr-over-tls/blob/02_updates/02-draft-svg/IXoT_mechanism_1.svg)
 
 The connection for IXFR-over-TLS SHOULD be established using port 853, as
 specified in [@!RFC7858], unless there is mutual agreement between the secondary
@@ -453,7 +468,7 @@ and primary to use a port other than port 853 for XFR-over-TLS.
 
 [@RFC1995] says nothing with respect to optimizing IXFRs over TCP or re-using
 already open TCP connections to perform IXFRs or other queries. We provide
-guidance here that aligns with the guideance in [@RFC5936] for AXFR and with
+guidance here that aligns with the guidance in [@RFC5936] for AXFR and with
 that for performant TCP/TLS usage in [@RFC7766] and [@RFC7858].
 
 An IXoT client MAY use an already opened TLS connection to send a IXFR request.
@@ -470,20 +485,24 @@ An IXoT client MAY keep an existing TLS session open in the expectation it is
 likely to need to perform an IXFR in the near future. The client may use the
 frequency of recent IXFRs to calculate an average update rate and then use
 EDNS0 Keepalive to request an appropriate timeout from the server (if the
-server supports EDNS0 Keepalive).
+server supports EDNS0 Keepalive). If the server does not support EDNS0
+Keepalive the client MAY keep the connection open for a few seconds ([@RFC7766]
+recommends that servers use timeouts of at least a few seconds).
 
 An IXoT client MAY pipeline IXFR requests for different zones on a single TLS
-connection. AN XIoT server MAY respond to those requests out of order.
+connection. AN IXoT server MAY respond to those requests out of order.
 
 ### Performance
 
-In workloads where there are frequent IXFRs, is the persistent connection mode
-that TCP-Mode would enable (as well as the retries) a benefit?
+In workloads where there are frequent IXFRs, a persistent connection mode would
+provide a latency benefit over the observed use of short-lived TCP connections
+for IXFRs. It would also reduce the load on the server of managing many short
+lived TCP connections.
+
+Once a TLS handshake is established it takes something of the order of 100-200 messages to amortize the handshake cost.
 
 If an IXFR response sent over UDP is lost the client must wait for a timeout to
 trigger and then re-try the IXFR...
-
-Once a TLS handshake is established it takes something of the order of 100-200 messages to amortize the handshake cost.
 
 
 ### Fallback to AXFR
