@@ -662,8 +662,8 @@
 <p/>
 
 <ul>
-  <li>A combination of Opportunistic TLS and TSIG provides both data authentication and channel confidentiality for both parties.</li>
-  <li>Using just mutual TLS can be considered to do the same if the secondary has reason to place equivalent trust in channel authentication as data authentication e.g. the same operator runs both the primary and secondary.</li>
+  <li>A combination of Opportunistic TLS and TSIG provides both data authentication and channel confidentiality for both parties. However this does not stop a MitM attack on the channel which could be used to gather zone data.</li>
+  <li>Using just mutual TLS can be considered a standalone solution if the secondary has reason to place equivalent trust in channel authentication as data authentication e.g. the same operator runs both the primary and secondary.</li>
   <li>Using TSIG, Strict TLS and an ACL on the primary provides all 3 properties for both parties with probably the lowest operational overhead.</li>
 </ul>
 
@@ -692,16 +692,30 @@
 <h1 id="rfc.section.7.2.1"><a href="#rfc.section.7.2.1">7.2.1.</a> <a href="#performance" id="performance">Performance</a></h1>
 <p id="rfc.section.7.2.1.p.1">In workloads where there are frequent IXFRs, is the persistent connection mode that TCP-Mode would enable (as well as the retries) a benefit? </p>
 <p id="rfc.section.7.2.1.p.2">If an IXFR response sent over UDP is lost the client must wait for a timeout to trigger and then re-try the IXFR...  </p>
+<p id="rfc.section.7.2.1.p.3">Once a TLS handshake is established it takes something of the order of 100-200 messages to amortize the handshake cost.  </p>
 <h1 id="rfc.section.7.2.2"><a href="#rfc.section.7.2.2">7.2.2.</a> <a href="#fallback-to-axfr" id="fallback-to-axfr">Fallback to AXFR</a></h1>
 <p id="rfc.section.7.2.2.p.1">Fallback to AXFR can happen, for example, if the server is not able to provide an IXFR for the requested SOA. Implementations differ in how long they store zone deltas and how many may be stored at any one time.  </p>
 <p id="rfc.section.7.2.2.p.2">After a failed IXFR a IXoT client SHOULD request the AXFR on the already open TLS connection.  </p>
 <h1 id="rfc.section.8"><a href="#rfc.section.8">8.</a> <a href="#policies-for-both-axfr-and-ixfr" id="policies-for-both-axfr-and-ixfr">Policies for Both AXFR and IXFR</a></h1>
-<p id="rfc.section.8.p.1">We call the entire group of servers involved in XFR (the primary and all secondaries) the 'transfer group'.  </p>
+<p id="rfc.section.8.p.1">We call the entire group of servers involved in XFR (all the primaries and all the secondaries) the 'transfer group'.  </p>
 <p id="rfc.section.8.p.2">Within any transfer group both AXFRs and IXFRs for a zone SHOULD all use the same policy e.g. if AXFRs use AXoT all IXFRs SHOULD use IXoT.  </p>
-<p id="rfc.section.8.p.3">In order to assure the confidentiality of the zone information, the entire transfer group MUST have a consistent policy of requiring confidentiality. If any do not, this is a weak link for attackers to exploit. How to do this is TBD.  </p>
-<p id="rfc.section.8.p.4">Additionally, the entire transfer group MUST have a consistent policy of requiring Strict or Opportunistic DoT <a href="#RFC8310">[RFC8310]</a>. How to do this is TBD.  </p>
+<p id="rfc.section.8.p.3">In order to assure the confidentiality of the zone information, the entire transfer group MUST have a consistent policy of requiring confidentiality. If any do not, this is a weak link for attackers to exploit.  </p>
+<p id="rfc.section.8.p.4">A XoT policy should specify </p>
+<p/>
+
+<ul>
+  <li>If TSIG is required</li>
+  <li>What kind of TLS is required (Opportunistic, Strict or mTLS)</li>
+  <li>If IP based ACLs should also be used.</li>
+</ul>
+
+<p> </p>
+<p id="rfc.section.8.p.6">Since this may require configuration of a number of servers who may be under the control of different operators the desired consistency could be hard to enforce and audit in practice.  </p>
+<p id="rfc.section.8.p.7">Certain aspects of the Policies can be relatively easily tested independently e.g. by requesting zone transfers without TSIG, from unauthorized IP addresses or over cleartext DNS. Other aspects such as if a secondary will accept data without a TSIG digest or if secondaries are using Strict as opposed to Opportunistic TLS are more challenging.  </p>
+<p id="rfc.section.8.p.8">How to do this is TBD.  </p>
 <h1 id="rfc.section.9"><a href="#rfc.section.9">9.</a> <a href="#multiprimary-configurations" id="multiprimary-configurations">Multi-primary Configurations</a></h1>
-<p id="rfc.section.9.p.1">TBD </p>
+<p id="rfc.section.9.p.1">Also known as multi-master configurations this model can provide flexibility and redundancy particularly for IXFR. A secondary will receive one or more NOTIFY messages and can send an SOA to all of the configured primaries. It can then choose to send an IXFR request to the primary with the highest SOA (or other criteria e.g. RTT).  </p>
+<p id="rfc.section.9.p.2">When using persistent connections the secondary may have a TLS connection already open to one or more primaries. Should a secondary preferentially request an IXFR from a primary to which it already has an open TLS connection or the one with the highest SOA (assuming it doesn't have a connection open to it already)? </p>
 <h1 id="rfc.section.10"><a href="#rfc.section.10">10.</a> <a href="#implementation-considerations" id="implementation-considerations">Implementation Considerations</a></h1>
 <p id="rfc.section.10.p.1">TBD </p>
 <h1 id="rfc.section.11"><a href="#rfc.section.11">11.</a> <a href="#implementation-status" id="implementation-status">Implementation Status</a></h1>

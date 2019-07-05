@@ -398,10 +398,14 @@ complex and hierarchical.
 Based on this analysis it can be seen that:
 
 * A combination of Opportunistic TLS and TSIG provides both data authentication
-  and channel confidentiality for both parties.
-* Using just mutual TLS can be considered to do the same if the secondary has
-  reason to place equivalent trust in channel authentication as data
-  authentication e.g. the same operator runs both the primary and secondary.
+  and channel confidentiality for both parties. However this does not stop a
+  MitM attack on the channel which could be used to gather zone data.
+
+* Using just mutual TLS can be considered a standalone solution if the
+  secondary has reason to place equivalent trust in channel authentication as
+  data authentication e.g. the same operator runs both the primary and
+  secondary.
+  
 * Using TSIG, Strict TLS and an ACL on the primary provides all 3 properties for
   both parties with probably the lowest operational overhead.
 
@@ -479,6 +483,8 @@ that TCP-Mode would enable (as well as the retries) a benefit?
 If an IXFR response sent over UDP is lost the client must wait for a timeout to
 trigger and then re-try the IXFR...
 
+Once a TLS handshake is established it takes something of the order of 100-200 messages to amortize the handshake cost.
+
 
 ### Fallback to AXFR
 
@@ -491,22 +497,46 @@ TLS connection.
 
 # Policies for Both AXFR and IXFR
 
-We call the entire group of servers involved in XFR (the primary and all
-secondaries) the 'transfer group'.
+We call the entire group of servers involved in XFR (all the primaries and all
+the secondaries) the 'transfer group'.
 
 Within any transfer group both AXFRs and IXFRs for a zone SHOULD all use the same policy e.g. if AXFRs use AXoT all IXFRs SHOULD use IXoT.
 
 In order to assure the confidentiality of the zone information, the entire
 transfer group MUST have a consistent policy of requiring confidentiality. If
-any do not, this is a weak link for attackers to exploit. How to do this is TBD.
+any do not, this is a weak link for attackers to exploit. 
 
-Additionally, the entire transfer group MUST have a consistent policy of
-requiring Strict or Opportunistic DoT [@!RFC8310]. How to do this is TBD.
+A XoT policy should specify
+
+* If TSIG is required
+* What kind of TLS is required (Opportunistic, Strict or mTLS)
+* If IP based ACLs should also be used.
+
+Since this may require configuration of a number of servers who may be under
+the control of different operators the desired consistency could be hard to
+enforce and audit in practice.
+
+Certain aspects of the Policies can be relatively easily tested independently
+e.g. by requesting zone transfers without TSIG, from unauthorized IP addresses
+or over cleartext DNS. Other aspects such as if a secondary will accept data
+without a TSIG digest or if secondaries are using Strict as opposed to
+Opportunistic TLS are more challenging.
+
+How to do this is TBD.
 
 # Multi-primary Configurations
 
-TBD
+Also known as multi-master configurations this model can provide flexibility
+and redundancy particularly for IXFR. A secondary will receive one or more
+NOTIFY messages and can send an SOA to all of the configured primaries. It can
+then choose to send an IXFR request to the primary with the highest SOA (or
+other criteria e.g. RTT).
 
+When using persistent connections the secondary may have a TLS connection
+already open to one or more primaries. Should a secondary preferentially
+request an IXFR from a primary to which it already has an open TLS connection
+or the one with the highest SOA (assuming it doesn't have a connection open to
+it already)?
 
 # Implementation Considerations
 
