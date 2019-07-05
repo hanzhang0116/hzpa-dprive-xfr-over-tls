@@ -130,9 +130,9 @@ authoritative DNS protocol implementations, encrypting AXFR using DNS-over-TLS
 DoT to prevent zone collection from zone transfers, including discussion of
 approaches for IXFR, which uses UDP or TCP.
 
-NOTE: At this point some discussion of a DSO based mechanism is included in
-brackets, still to decide whether or not to include this in the -02 version or
-not..
+NOTE: At this point some discussion of a DSO [@RFC8490] based mechanism is
+included in brackets, still to decide whether or not to include this in the -02
+version or not..
 
 # Terminology
 
@@ -165,24 +165,27 @@ IXoT: IXFR over-TLS
   
 * Performance. Existing AXFR and IXFR mechanisms have the burden of backwards
   compatibility with older implementations based on the original specifications
-  in [@RFC1034] and [@RFC1035]. For example, some older AXFR  implementations
+  in [@RFC1034] and [@RFC1035]. For example, some older AXFR implementations
   have restrictions that mean use of sessions for multiple XFRs, or XFRs of
   different zones on the same connection, are inefficient or not supported. A
   specification for XFR-over-TLS could require all implementations to implement
-  optimised transfers e.g. transfer of multiple zones over one connection. For
-  IXFR, when there are very high rates of transfers opting to use persistent
-  connections could offer higher throughput rates (is this true?).
+  optimised transfers e.g. transfer of multiple zones over one connection. 
+  
+* Performance. For IXFR, when there are very high rates of large packet
+  transfers opting to use persistent connections removes the latency introduced
+  by falling back to TCP. TODO: More work needed on IXFR performance...
 
 * (Security. For some network configurations it is not desirable to have port 53
   on the secondary open to an untrusted network for the sole purpose of
-  receiving NOTIFYs. For the DSO case, secondaries could initiate DSO
-  connections to the master and following that server-initiated DSO NOTIFY
-  messages could be sent on that connection which could simultaneously be used
-  for SOA and IXFR requests. This would allow a firewall to be restricted to
-  just allowing outgoing connections from secondary to primary. Note that a
-  similar but more constrained mechanism exists for IXFR whereby a short refresh
-  period can be configured which triggers periodic SOA/IXFR requests from the
-  secondary. TODO: Look at the details of the NSD implementation.)
+  receiving NOTIFYs. NOTIFYs can also be trivially spoofed unless secured with
+  TSIG. For the DSO case, secondaries could initiate DSO connections to the
+  primary and following that server-initiated DSO NOTIFY messages could be sent
+  on that connection which could simultaneously be used for SOA and IXFR
+  requests. This would allow a firewall to be restricted to just allowing
+  outgoing connections from secondary to primary. Note that a similar but more
+  constrained mechanism exists for IXFR whereby a short refresh period can be
+  configured which triggers periodic SOA/IXFR requests from the secondary. TODO:
+  Look at the details of the NSD implementation.)
 
 * (Performance. For the DSO case, a new subscribe/publish mechanism could be
   envisaged that greatly reducing the number of messages required to perform one
@@ -210,7 +213,7 @@ zones.
 [@RFC5936] subsequently refined the specification of AXFR.
 
 In this document we use the phrase "XFR mechanism" to describe the entire set of
-message exchanges between a secondary and a master that concludes in a
+message exchanges between a secondary and a primary that concludes in a
 successful AXFR or IXFR request/response. This set may or may not include
 
 * NOTIFY messages
@@ -224,7 +227,7 @@ request/response exchange.
 
 ## AXFR Mechanism
 
-The figure below provides an outline of the AXFR mechanism including NOTIFYs.
+The figure below provides an outline of an AXFR mechanism including NOTIFYs.
 
 [Figure 1. AXFR Mechanism](https://docs.google.com/drawings/d/1WQLitlBW5n880f1Uy4mD5BcRHM-RIIWE-z2HD0j-_Ho/edit?usp=sharing)
 
@@ -232,11 +235,10 @@ The figure below provides an outline of the AXFR mechanism including NOTIFYs.
 primary to the secondary. A secondary may also initiate an AXFR based on a
 refresh timer or scheduled/triggered zone maintenance.
 
-2. The secondary will normally (but not always) make a SOA query to the master
-to obtain the serial number of the zone held by the master (since UDP NOTIFY
-messages can be trivially spoofed).
+2. The secondary will normally (but not always) make a SOA query to the primary
+to obtain the serial number of the zone held by the primary.
 
-2. If the master serial is higher than the secondaries serial, the secondary
+2. If the primary serial is higher than the secondaries serial, the secondary
 makes an AXFR request (over TCP) to the primary after which the AXFR data flows
 in one or more AXFR responses on the TCP connection.
 
@@ -259,12 +261,11 @@ The figure below provides an outline of the IXFR mechanism.
 primary to the secondary. A secondary may also initiate an IXFR based on a
 refresh timer or scheduled/triggered zone maintenance.
 
-2. The secondary will normally make a SOA query to the master to obtain the
-serial number of the zone held by the master (since UDP NOTIFY messages can be
-trivially spoofed).
+2. The secondary will normally (but not always) make a SOA query to the primary
+to obtain the serial number of the zone held by the primary.
 
-3. If the master serial is higher than the secondaries serial, the secondary
-makes an IXFR request (over UDP) to the primary after the master sends an IXFR
+3. If the primary serial is higher than the secondaries serial, the secondary
+makes an IXFR request (over UDP) to the primary after the primary sends an IXFR
 response.
 
 [@!RFC1995] specifies that Incremental Transfer may use UDP if the entire IXFR
@@ -275,7 +276,7 @@ fact is says in non-normative language:
 
 So there may be a forth step above where the client falls back to IXFR over TCP.
 There may also be a forth step where the secondary must fall back to AXFR
-because the master does not support IXFR.
+because e.g. the primary does not support IXFR.
 
 ## Data Leakage of NOTIFY and SOA Message Exchanges
 
@@ -288,7 +289,7 @@ sections.
 
 ### NOTIFY
 
-Unencrypted NOTIFY messages identify configured secondaries on the master.
+Unencrypted NOTIFY messages identify configured secondaries on the primary.
 
 [@RFC1996] also states: 
 
@@ -307,17 +308,19 @@ QUESTION: No real leakage here?
 ## TSIG
 
 TSIG [@RFC2845] provides a mechanism for two parties to exchange secret keys
-which can then be used to sign DNS message contents. This allows each party to
-authenticate that a request or response (and the data in it) came from the other
-party, even if it was transmitted over an unsecured channel or via a proxy. It
-provides party-to-party authentication, but not hop-to-hop channel
-authentication.
+which can then be used to create a message digest to protect individual DNS
+messages. This allows each party to authenticate that a request or response (and
+the data in it) came from the other party, even if it was transmitted over an
+unsecured channel or via a proxy. It provides party-to-party data
+authentication, but not hop-to-hop channel authentication or confidentiality.
+
+QUESTION: Should we mention SIG(0)?
 
 ## TLS
 
 ### Opportunistic
 
-Opportunistic TLS [@RFC8310] provides only a defence against passive
+Opportunistic TLS [@RFC8310] provides a defence against passive
 surveillance, providing on-the-wire confidentiality.
 
 ### Strict
@@ -326,7 +329,7 @@ Strict TLS [@RFC8310] requires that a client is configured with an
 authentication domain name (and/or SPKI pinset) that should be used to
 authenticate the TLS handshake with the server. This additionally provides a
 defence for the client against active surveillance, providing client-to-server
-confidentiality.
+authentication and end-to-end channel confidentiality.
 
 ### Mutual
 
@@ -335,16 +338,16 @@ configured with an authentication domain name (and/or SPKI pinset) and a client
 certificate. The client offers the certificate for authentication by the server
 and the client can authentic the server the same way as in Strict TLS. This
 provides a defence for both parties against active surveillance, providing
-end-to-end confidentiality.
+bi-directional authentication and end-to-end channel confidentiality.
 
-## IP Based ACL on the Master
+## IP Based ACL on the Primary
 
 Most DNS server implementations offer an option to configure an IP based Access
 Control List (ACL), which is often used in combination with TSIG based ACLs to
-restrict access to zone transfers on master servers.
+restrict access to zone transfers on primary servers.
 
 This is also possible with XoT but it must be noted that as with TCP the
-implementation of such and ACL cannot be enforced on the master until a XFR
+implementation of such and ACL cannot be enforced on the primary until a XFR
 request is received on an established connection.
 
 If control were to be any more fine-grained than this then a separate port would
@@ -353,33 +356,47 @@ connections on that port to all clients except those configured as secondaries.
 
 ## ZONEMD
 
-Zone message digest is a mechanism that can be used to verify the content of an
-AXFR. It is complementary the above mechanisms and can be used in conjunction
-with XFR-over-TLS but is not considered further. TODO: Add reference
+Message Digest for DNS Zones (ZONEMD) [@?I-D.wessels-dns-zone-digest] digest is
+a mechanism that can be used to verify the content of a standalone zone. It is
+designed to be independant of the tramsission channel or mechanism. It is
+complementary the above mechanisms and can be used in conjunction with
+XFR-over-TLS but is not considered further.
 
-## Comparison of Authentication methods
+## Comparison of Authentication Methods
 
 The Table below compares the properties of each of the above methods in terms of
-what protection they provide to the secondary and master servers during XoT in
+what protection they provide to the secondary and primary servers during XoT in
 terms of:
 
-* 'Data Auth': Authentication that the data is from the party with whom
-  credentials were shared (this might not be the 'master' in a proxy scenario).
+* 'Data Auth': Authentication that the DNS message data is signed by the party
+  with whom credentials were shared (the signing party may or may not be party
+  operating the far end of a TCP/TLS connection in a 'proxy' scenario). For the
+  primary the TSIG on the XFR request confirms that the requesting party is
+  authorised to request zone data, for the secondary it authenticates the zone
+  data that is received.
 
 * 'Channel Conf': Confidentiality of the communication channel between the
-  secondary and master.
+  client and server (i.e. the two end points of a TCP/TLS connection).
 
-* Channel Auth: Authentication of the identity of party to whom a connection is
-  made.
+* Channel Auth: Authentication of the identity of party to whom a TCP/TLS
+  connection is made (this might not be a direct connection between the primary
+  and secondary in a proxy scenario).
 
 SARA: Note sure about this breakdown, need to think about it more, particularly
-in the case where a proxy may be involved.... Also currently using green for
-'definitely provides' property and orange for 'not sure' or 'with limitations'.
+in the case where a proxy may be involved. Primary/secondary set ups can be
+complex and hierarchical.
 
 [Table 1: Properties of Authentication methods for XoT](https://docs.google.com/spreadsheets/d/1cv8X6dmJrPmezdvOKD0YXOAqSNY-6Tp4QkH_BDAs5Pc/edit?usp=sharing)
 
-Based on this analysis it can be seen that a combination of Strict TLS and TSIG
-provides all 3 properties with the minimum overhead.
+Based on this analysis it can be seen that:
+
+* A combination of Opportunistic TLS and TSIG provides both data authentication
+  and channel confidentiality for both parties.
+* Using just mutual TLS can be considered to do the same if the secondary has
+  reason to place equivalent trust in channel authentication as data
+  authentication e.g. the same operator runs both the primary and secondary.
+* Using TSIG, Strict TLS and an ACL on the primary provides all 3 properties for
+  both parties with probably the lowest operational overhead.
 
 # Session Establishment and Closing in XoT
 
@@ -421,9 +438,9 @@ any do not, this is a weak link for attackers to exploit. How to do this is TBD.
 Additionally, the entire transfer group MUST have a consistent policy of
 requiring Strict or Opportunistic DoT [@!RFC8310]. How to do this is TBD.
 
-## Multi-master configurations
+## Multi-primary Configurations
 
-TODO.
+TBD
 
 # Performance Considerations
 
@@ -433,14 +450,14 @@ XFR-over-TLS as well.
 
 # Implementation Considerations
 
-TBA
+TBD
 
 # Implementation Status
 
 The 1.9.2 version of
 [Unbound](https://github.com/NLnetLabs/unbound/blob/release-1.9.2/doc/Changelog)
 includes an option to perform AXFR over TLS (instead of TCP). This enables the
-client (secondary) to authenticate the server (master) using PKIX.
+client (secondary) to authenticate the server (primary) using PKIX.
 
 # IANA Considerations
 
@@ -464,8 +481,6 @@ higher to avoid residual exposure?
 The authors thank Benno Overeinder, Shumon Huque and Tim Wicinski for review and
 discussions.
 
-# Contributors
-The following contributed significantly to the document:
 
 # Changelog
 
