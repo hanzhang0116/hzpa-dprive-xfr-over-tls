@@ -324,6 +324,83 @@ potential leak.
 
 For hidden primaries or secondaries the SOA query leaks the degree of lag of the hidden server and any downstream secondary. 
 
+# Connection and Data Flows in XoT
+
+## Performance Considerations
+
+The details in [@RFC7766], [@!RFC7858] and [@!RFC8310] about e.g. using
+persistent connections and TLS Session Resumption [@!RFC5077] are fully
+applicable to XFR-over-TLS as well.
+
+It is RECOMMENDED that clients and servers that support XoT also implement
+EDNS0 Keepalive [RFC7828].
+
+## AXoT mechanism
+
+The figure below provides an outline of the AXoT mechanism including NOTIFYs.
+
+[Figure 3: AXoT mechanism](https://github.com/hanzhang0116/hzpa-dprive-xfr-over-tls/blob/02_updates/02-draft-svg/AXoT_mechanism_1.svg)
+
+All implementations that support XoT MUST fully implement [@RFC5953] behavior
+on TLS connections.
+
+Sections 4.1, 4.1.1 and 4.1.2 of [@RFC5936] describe guidance for AXFR clients
+and servers with regard to re-use of sessions for multiple AXFRs, AXFRs of
+different zones and using TCP session for other queries including SOA. 
+
+The connection for AXFR-over-TLS SHOULD be established using port 853, as
+specified in [@!RFC7858], unless there is mutual agreement between the secondary
+and primary to use a port other than port 853 for XFR-over-TLS.
+
+QUESTION: Should we require that the SOA is always done on a TLS connection?
+For the case when no transfer is required this could be unnecessary overhead.
+
+## IXoT mechanism
+
+The figure below provides an outline of the IXoT mechanism including NOTIFYs.
+
+[Figure 4: IXoT mechanism]
+(https://github.com/hanzhang0116/hzpa-dprive-xfr-over-tls/blob/02_updates/02-draft-svg/IXoT_mechanism_1.svg)
+
+The connection for IXFR-over-TLS SHOULD be established using port 853, as
+specified in [@!RFC7858], unless there is mutual agreement between the secondary
+and primary to use a port other than port 853 for XFR-over-TLS.
+
+[@RFC1995] says nothing with respect to optimizing IXFRs over TCP or re-using
+already open TCP connections to perform IXFRs or other queries. We provide
+guidance here that aligns with the guidance in [@RFC5936] for AXFR and with
+that for performant TCP/TLS usage in [@RFC7766] and [@RFC7858].
+
+An IXoT client MAY use an already opened TLS connection to send a IXFR request.
+Using an existing open connection is RECOMMENDED over opening a new connection.
+(Non-IXoT session traffic can also use an open connection.)
+
+An IXoT client MAY use an already open TLS connection to send an SOA query.
+Using an existing open connection is RECOMMENDED over opening a new connection.
+
+An IXoT server MUST be able to handle multiple IXoT requests on a single TLS
+connection, as well as to handle other query/response transactions over it.
+
+An IXoT client MAY keep an existing TLS session open in the expectation it is
+likely to need to perform an IXFR in the near future. The client may use the
+frequency of recent IXFRs to calculate an average update rate and then use
+EDNS0 Keepalive to request an appropriate timeout from the server (if the
+server supports EDNS0 Keepalive). If the server does not support EDNS0
+Keepalive the client MAY keep the connection open for a few seconds ([@RFC7766]
+recommends that servers use timeouts of at least a few seconds).
+
+An IXoT client MAY pipeline IXFR requests for different zones on a single TLS
+connection. AN IXoT server MAY respond to those requests out of order.
+
+### Fallback to AXFR
+
+Fallback to AXFR can happen, for example, if the server is not able to provide
+an IXFR for the requested SOA. Implementations differ in how long they store
+zone deltas and how many may be stored at any one time.
+
+After a failed IXFR a IXoT client SHOULD request the AXFR on the already open
+TLS connection.
+
 # Zone Transfer with DoT - Authentication
 
 ## TSIG
@@ -423,96 +500,6 @@ Based on this analysis it can be seen that:
   
 * Using TSIG, Strict TLS and an ACL on the primary provides all 3 properties for
   both parties with probably the lowest operational overhead.
-
-# Session Establishment and Closing in XoT
-
-# Performance Considerations
-
-The details in [@RFC7766], [@!RFC7858] and [@!RFC8310] about e.g. using
-persistent connections and TLS Session Resumption [@!RFC5077] are fully
-applicable to XFR-over-TLS as well.
-
-It is RECOMMENDED that clients and servers that support XoT also implement
-EDNS0 Keepalive [RFC7828].
-
-## AXoT Sessions
-
-The figure below provides an outline of the AXoT mechanism including NOTIFYs.
-
-[Figure 3: AXoT mechanism](https://github.com/hanzhang0116/hzpa-dprive-xfr-over-tls/blob/02_updates/02-draft-svg/AXoT_mechanism_1.svg)
-
-All implementations that support XoT MUST fully implement [@RFC5953] behavior
-on TLS connections.
-
-Sections 4.1, 4.1.1 and 4.1.2 of [@RFC5936] describe guidance for AXFR clients
-and servers with regard to re-use of sessions for multiple AXFRs, AXFRs of
-different zones and using TCP session for other queries including SOA. 
-
-The connection for AXFR-over-TLS SHOULD be established using port 853, as
-specified in [@!RFC7858], unless there is mutual agreement between the secondary
-and primary to use a port other than port 853 for XFR-over-TLS.
-
-QUESTION: Should we require that the SOA is always done on a TLS connection?
-For the case when no transfer is required this could be unnecessary overhead.
-
-## IXoT Requests
-
-The figure below provides an outline of the XoT mechanism including NOTIFYs.
-
-[Figure 4: IXoT mechanism]
-(https://github.com/hanzhang0116/hzpa-dprive-xfr-over-tls/blob/02_updates/02-draft-svg/IXoT_mechanism_1.svg)
-
-The connection for IXFR-over-TLS SHOULD be established using port 853, as
-specified in [@!RFC7858], unless there is mutual agreement between the secondary
-and primary to use a port other than port 853 for XFR-over-TLS.
-
-[@RFC1995] says nothing with respect to optimizing IXFRs over TCP or re-using
-already open TCP connections to perform IXFRs or other queries. We provide
-guidance here that aligns with the guidance in [@RFC5936] for AXFR and with
-that for performant TCP/TLS usage in [@RFC7766] and [@RFC7858].
-
-An IXoT client MAY use an already opened TLS connection to send a IXFR request.
-Using an existing open connection is RECOMMENDED over opening a new connection.
-(Non-IXoT session traffic can also use an open connection.)
-
-An IXoT client MAY use an already open TLS connection to send an SOA query.
-Using an existing open connection is RECOMMENDED over opening a new connection.
-
-An IXoT server MUST be able to handle multiple IXoT requests on a single TLS
-connection, as well as to handle other query/response transactions over it.
-
-An IXoT client MAY keep an existing TLS session open in the expectation it is
-likely to need to perform an IXFR in the near future. The client may use the
-frequency of recent IXFRs to calculate an average update rate and then use
-EDNS0 Keepalive to request an appropriate timeout from the server (if the
-server supports EDNS0 Keepalive). If the server does not support EDNS0
-Keepalive the client MAY keep the connection open for a few seconds ([@RFC7766]
-recommends that servers use timeouts of at least a few seconds).
-
-An IXoT client MAY pipeline IXFR requests for different zones on a single TLS
-connection. AN IXoT server MAY respond to those requests out of order.
-
-### Performance
-
-In workloads where there are frequent IXFRs, a persistent connection mode would
-provide a latency benefit over the observed use of short-lived TCP connections
-for IXFRs. It would also reduce the load on the server of managing many short
-lived TCP connections.
-
-Once a TLS handshake is established it takes something of the order of 100-200 messages to amortize the handshake cost.
-
-If an IXFR response sent over UDP is lost the client must wait for a timeout to
-trigger and then re-try the IXFR...
-
-
-### Fallback to AXFR
-
-Fallback to AXFR can happen, for example, if the server is not able to provide
-an IXFR for the requested SOA. Implementations differ in how long they store
-zone deltas and how many may be stored at any one time.
-
-After a failed IXFR a IXoT client SHOULD request the AXFR on the already open
-TLS connection.
 
 # Policies for Both AXFR and IXFR
 
