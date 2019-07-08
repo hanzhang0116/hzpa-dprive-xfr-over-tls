@@ -7,7 +7,8 @@
     area = "Internet"
     workgroup = "dprive"
     keyword = ["DNS", "operations", "privacy"]
-    date = 2019-07-02T00:00:00Z
+    updates = [1995]
+    date = 2019-07-08T00:00:00Z
     [pi]
     [[author]]
      initials="H."
@@ -130,10 +131,6 @@ authoritative DNS protocol implementations, encrypting AXFR using DNS-over-TLS
 DoT to prevent zone collection from zone transfers, including discussion of
 approaches for IXFR, which uses UDP or TCP.
 
-NOTE: At this point some discussion of a DSO [@RFC8490] based mechanism is
-included in brackets, still to decide whether or not to include this in the -02
-version or not..
-
 # Terminology
 
 The key words "MUST", "MUST NOT", "REQUIRED", "SHALL", "SHALL NOT", "SHOULD",
@@ -142,6 +139,9 @@ document are to be interpreted as described in BCP 14 [@!RFC2119] and
 [@!RFC8174] when, and only when, they appear in all capitals, as shown here.
 
 Privacy terminology is as described in Section 3 of [@!RFC6973].
+
+Note that in this document we choose to use the terms 'primary' and 'secondary'
+for two servers engaged in zone transfers.
 
 DNS terminology is as described in [@!RFC8499].
 
@@ -166,40 +166,14 @@ IXoT: IXFR over-TLS
 * Performance. Existing AXFR and IXFR mechanisms have the burden of backwards
   compatibility with older implementations based on the original specifications
   in [@RFC1034] and [@RFC1035]. For example, some older AXFR servers don’t
-  support using a TCP connection for multiple AXFR sessions or XFRs of
-  different zones because they have not been updated to follow the guidance in
-  [RFC5836]. Any implementation of XFR-overTLS is required to implement
-  optimized and interoperable transfers as described in [@RFC5936] e.g.
-  transfer of multiple zones-over-one connection.
+  support using a TCP connection for multiple AXFR sessions or XFRs of different
+  zones because they have not been updated to follow the guidance in [RFC5836].
+  Any implementation of XFR-over-TLS would obviously be required to implement
+  optimized and interoperable transfers as described in [@RFC5936] e.g. transfer
+  of multiple zones-over-one connection.
   
 * Performance. Current usage of TCP for IXFR is sub-optimal in some cases i.e.
   connections are frequently closed after a single IXFR.
-
-* (Security. For some network configurations it is not desirable to have port 53
-  on the secondary open to an untrusted network for the sole purpose of
-  receiving NOTIFYs. NOTIFYs can also be trivially spoofed unless secured with
-  TSIG. For the DSO case, secondaries could initiate DSO connections to the
-  primary and following that server-initiated DSO NOTIFY messages could be sent
-  on that connection which could simultaneously be used for SOA and IXFR
-  requests. This would allow a firewall to be restricted to just allowing
-  outgoing connections from secondary to primary. Note that a similar but more
-  constrained mechanism exists for IXFR whereby a short refresh period can be
-  configured which triggers periodic SOA/IXFR requests from the secondary. TODO:
-  Look at the details of the NSD implementation.)
-
-* (Performance. For the DSO case, a new subscribe/publish mechanism could be
-  envisaged that greatly reducing the number of messages required to perform one
-  transfer.)
-
-* (Improved error handling and retries. In the DSO case new explicit error
-  codes could be defined that allow a server to indicate the reason for a
-  failed or aborted XFR request. Also a new client initiated message could be
-  used to gracefully cancel AXFRs.)
-
-
-* (New command channel. For the DSO case it would be possible to include new
-  server-initiated 'control' commands e.g. 'stop serving this zone', 'delete
-  this zone'.)
 
 # Connection and Data Flows in Existing XFR Mechanisms
 
@@ -255,8 +229,18 @@ example, it outlines that the SOA query can also happen on this connection.
 However, this can cause interoperability problems with older implementations
 that support only the trivial case of one AXFR per connection.
 
-TODO: Detail the limitations in existing AXFR implementations as outlined in
-[@RFC5936]
+Further details of the limitations in existing AXFR implementations are outlined
+in [@RFC5936].
+
+It is noted that unless the NOTIFY is sent over a trusted communication channel
+and/or signed by TSIG is can be spoofed causing unnecessary zone transfer
+attempts.
+
+Similarly unless the SOA query is sent over a trusted communication channel
+and/or signed by TSIG the response can, in principle, be spoofed causing a
+secondary to incorrectly believe its version of the zone is update to date.
+Repeated successful attacks on the SOA could result in a secondary serving stale
+zone data.
 
 ## IXFR Mechanism
 
@@ -293,10 +277,13 @@ default in their latest releases. For BIND TCP connections are sometimes used
 for SOA queries but in general they are not used persistently and close after
 an IXFR is completed.
  
-TODO: Look at packet captures from NSD and Knot Auth to see what they do.
+<!--TODO: Look at packet captures from NSD and Knot Auth to see what they do.-->
 
-QUESTION: Should we try to update IXFR over TCP to be more efficient in this
-document?
+It is noted that the specification for IXFR was published well before TCP was
+considered a first class transport for DNS. This document therefore updates
+[@RFC1995] to state that DNS implementations that support IXFR-over-TCP MUST use
+[@RFC7766] to optimise the use of TCP connections and SHOULD use [@!RFC7858] to
+manage persistent connections.
 
 
 ## Data Leakage of NOTIFY and SOA Message Exchanges
@@ -322,7 +309,8 @@ potential leak.
 
 ### SOA
 
-For hidden primaries or secondaries the SOA query leaks the degree of lag of the hidden server and any downstream secondary. 
+For hidden primaries or secondaries the SOA response leaks the degree of lag of
+any downstream secondary.
 
 # Connection and Data Flows in XoT
 
@@ -346,14 +334,24 @@ on TLS connections.
 
 Sections 4.1, 4.1.1 and 4.1.2 of [@RFC5936] describe guidance for AXFR clients
 and servers with regard to re-use of sessions for multiple AXFRs, AXFRs of
-different zones and using TCP session for other queries including SOA. 
+different zones and using TCP session for other queries including SOA.
+
+For clarity we restate here that an AXoT client MAY use an already opened TLS
+connection to send a AXFR request. Using an existing open connection is
+RECOMMENDED over opening a new connection. (Non-AXoT session traffic can also
+use an open connection.)
+
+For clarity we additionally state here that an AXoT client MAY use an already
+opened TLS connection to send a SOA request. Using an existing open connection
+is RECOMMENDED over opening a new connection.
 
 The connection for AXFR-over-TLS SHOULD be established using port 853, as
 specified in [@!RFC7858], unless there is mutual agreement between the secondary
 and primary to use a port other than port 853 for XFR-over-TLS.
 
-QUESTION: Should we require that the SOA is always done on a TLS connection?
-For the case when no transfer is required this could be unnecessary overhead.
+QUESTION: Should there be a requirement that the SOA is always done on a TLS
+connection if the XFR is? For the case when no transfer is required this could
+be unnecessary overhead.
 
 ## IXoT mechanism
 
@@ -412,8 +410,6 @@ the data in it) came from the other party, even if it was transmitted-over-an
 unsecured channel or via a proxy. It provides party-to-party data
 authentication, but not hop-to-hop channel authentication or confidentiality.
 
-QUESTION: Should we mention SIG(0)?
-
 ## TLS
 
 ### Opportunistic
@@ -454,12 +450,13 @@ connections on that port to all clients except those configured as secondaries.
 
 ## ZONEMD
 
-Message Digest for DNS Zones (ZONEMD) [@?I-D.wessels-dns-zone-digest] digest is
-a mechanism that can be used to verify the content of a standalone zone. It is
-designed to be independent of the transmission channel or mechanism, allowing a
-general consumer of a zone to do origin authentication of the entire zone
-contents. It is complementary the above mechanisms and can be used in
-conjunction with XFR-over-TLS but is not considered further.
+Message Digest for DNS Zones (ZONEMD) [@?I-D.ietf-dnsop-dns-zone-digest] digest
+is a mechanism that can be used to verify the content of a standalone zone. It
+is designed to be independent of the transmission channel or mechanism, allowing
+a general consumer of a zone to do origin authentication of the entire zone
+contents. It is not considered suitable for highly dynamic zones. It is
+complementary the above mechanisms and can be used in conjunction with
+XFR-over-TLS but is not considered further.
 
 ## Comparison of Authentication Methods
 
@@ -481,9 +478,12 @@ terms of:
   connection is made (this might not be a direct connection between the primary
   and secondary in a proxy scenario).
 
-SARA: Note sure about this breakdown, need to think about it more, particularly
-in the case where a proxy may be involved. Primary/secondary set ups can be
-complex and hierarchical.
+It is noted that zone transfer scenarios can vary from a simple single
+primary/secondary relationship where both servers are under the control of a
+single operator to a complex hierarchical structure which includes proxies and
+multiple operators. Each deployment scenario will require specific analysis to
+determine which authentication methods are best suited to the deployment model
+in question.
 
 [Table 1: Properties of Authentication methods for XoT](https://github.com/hanzhang0116/hzpa-dprive-xfr-over-tls/blob/02_updates/02-draft-svg/Properties_of_Authentication_methods_for_XoT.svg)
 
@@ -528,7 +528,8 @@ or over cleartext DNS. Other aspects such as if a secondary will accept data
 without a TSIG digest or if secondaries are using Strict as opposed to
 Opportunistic TLS are more challenging.
 
-How to do this is TBD.
+NOTE: The authors request feedback on this challenge and welcome suggestions of
+how to practically manage this.
 
 # Multi-primary Configurations
 
@@ -544,6 +545,18 @@ request an IXFR from a primary to which it already has an open TLS connection
 or the one with the highest SOA (assuming it doesn't have a connection open to
 it already)?
 
+Two extremes can be envisaged here. In the first case the secondary continues to
+use one persistent connection to a single primary until it has reason not to.
+Reasons not to might include the primary repeatedly closing the connection, long
+RTTs on transfers or the SOA of the primary being an unacceptable lag behind the
+SOA of an alternative primary.
+
+At the other extreme a primary could keep multiple persistent connections open
+to all available primaries and only request IXFRs from the primary with the
+highest serial number. Since normally the number of secondaries and primaries in
+direct contact in a transfer group is reasonably low this might be feasible if
+latency is the most significant concern.
+
 # Implementation Considerations
 
 TBD
@@ -556,7 +569,8 @@ The 1.9.2 version of
 the client (secondary) to authenticate the server (primary) using a configured
 authentication domain name.
 
-
+It is noted that use of a TLS proxy in front of the primary server is a simple
+deployment solution that can enable server side XoT.
 
 # IANA Considerations
 
@@ -582,6 +596,10 @@ discussions.
 
 
 # Changelog
+
+draft-hzpa-dprive-xfr-over-tls-01
+
+* Substantial re-work of the document.
 
 draft-hzpa-dprive-xfr-over-tls-01
 
