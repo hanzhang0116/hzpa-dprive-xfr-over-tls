@@ -3,7 +3,7 @@
 # - xml2rfc (https://xml2rfc.tools.ietf.org/)
 
 DRAFT=draft-hzpa-dprive-xfr-over-tls
-VERSION=01
+VERSION=02
 
 XML=$(DRAFT).xml
 HTML=$(DRAFT)-$(VERSION).html
