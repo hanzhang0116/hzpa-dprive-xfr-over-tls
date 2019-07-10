@@ -410,6 +410,10 @@ the data in it) came from the other party, even if it was transmitted-over-an
 unsecured channel or via a proxy. It provides party-to-party data
 authentication, but not hop-to-hop channel authentication or confidentiality.
 
+## SIG(0)
+
+TBD
+
 ## TLS
 
 ### Opportunistic

@@ -390,13 +390,14 @@
 <link href="#rfc.section.5.3.1" rel="Chapter" title="5.3.1 Fallback to AXFR"/>
 <link href="#rfc.section.6" rel="Chapter" title="6 Zone Transfer with DoT - Authentication"/>
 <link href="#rfc.section.6.1" rel="Chapter" title="6.1 TSIG"/>
-<link href="#rfc.section.6.2" rel="Chapter" title="6.2 TLS"/>
-<link href="#rfc.section.6.2.1" rel="Chapter" title="6.2.1 Opportunistic"/>
-<link href="#rfc.section.6.2.2" rel="Chapter" title="6.2.2 Strict"/>
-<link href="#rfc.section.6.2.3" rel="Chapter" title="6.2.3 Mutual"/>
-<link href="#rfc.section.6.3" rel="Chapter" title="6.3 IP Based ACL on the Primary"/>
-<link href="#rfc.section.6.4" rel="Chapter" title="6.4 ZONEMD"/>
-<link href="#rfc.section.6.5" rel="Chapter" title="6.5 Comparison of Authentication Methods"/>
+<link href="#rfc.section.6.2" rel="Chapter" title="6.2 SIG(0)"/>
+<link href="#rfc.section.6.3" rel="Chapter" title="6.3 TLS"/>
+<link href="#rfc.section.6.3.1" rel="Chapter" title="6.3.1 Opportunistic"/>
+<link href="#rfc.section.6.3.2" rel="Chapter" title="6.3.2 Strict"/>
+<link href="#rfc.section.6.3.3" rel="Chapter" title="6.3.3 Mutual"/>
+<link href="#rfc.section.6.4" rel="Chapter" title="6.4 IP Based ACL on the Primary"/>
+<link href="#rfc.section.6.5" rel="Chapter" title="6.5 ZONEMD"/>
+<link href="#rfc.section.6.6" rel="Chapter" title="6.6 Comparison of Authentication Methods"/>
 <link href="#rfc.section.7" rel="Chapter" title="7 Policies for Both AXFR and IXFR"/>
 <link href="#rfc.section.8" rel="Chapter" title="8 Multi-primary Configurations"/>
 <link href="#rfc.section.9" rel="Chapter" title="9 Implementation Considerations"/>
@@ -513,13 +514,14 @@
 <ul><li>5.3.1.   <a href="#rfc.section.5.3.1">Fallback to AXFR</a></li>
 </ul></ul><li>6.   <a href="#rfc.section.6">Zone Transfer with DoT - Authentication</a></li>
 <ul><li>6.1.   <a href="#rfc.section.6.1">TSIG</a></li>
-<li>6.2.   <a href="#rfc.section.6.2">TLS</a></li>
-<ul><li>6.2.1.   <a href="#rfc.section.6.2.1">Opportunistic</a></li>
-<li>6.2.2.   <a href="#rfc.section.6.2.2">Strict</a></li>
-<li>6.2.3.   <a href="#rfc.section.6.2.3">Mutual</a></li>
-</ul><li>6.3.   <a href="#rfc.section.6.3">IP Based ACL on the Primary</a></li>
-<li>6.4.   <a href="#rfc.section.6.4">ZONEMD</a></li>
-<li>6.5.   <a href="#rfc.section.6.5">Comparison of Authentication Methods</a></li>
+<li>6.2.   <a href="#rfc.section.6.2">SIG(0)</a></li>
+<li>6.3.   <a href="#rfc.section.6.3">TLS</a></li>
+<ul><li>6.3.1.   <a href="#rfc.section.6.3.1">Opportunistic</a></li>
+<li>6.3.2.   <a href="#rfc.section.6.3.2">Strict</a></li>
+<li>6.3.3.   <a href="#rfc.section.6.3.3">Mutual</a></li>
+</ul><li>6.4.   <a href="#rfc.section.6.4">IP Based ACL on the Primary</a></li>
+<li>6.5.   <a href="#rfc.section.6.5">ZONEMD</a></li>
+<li>6.6.   <a href="#rfc.section.6.6">Comparison of Authentication Methods</a></li>
 </ul><li>7.   <a href="#rfc.section.7">Policies for Both AXFR and IXFR</a></li>
 <li>8.   <a href="#rfc.section.8">Multi-primary Configurations</a></li>
 <li>9.   <a href="#rfc.section.9">Implementation Considerations</a></li>
@@ -655,23 +657,25 @@
 <h1 id="rfc.section.6"><a href="#rfc.section.6">6.</a> <a href="#zone-transfer-with-dot--authentication" id="zone-transfer-with-dot--authentication">Zone Transfer with DoT - Authentication</a></h1>
 <h1 id="rfc.section.6.1"><a href="#rfc.section.6.1">6.1.</a> <a href="#tsig" id="tsig">TSIG</a></h1>
 <p id="rfc.section.6.1.p.1">TSIG <a href="#RFC2845">[RFC2845]</a> provides a mechanism for two parties to exchange secret keys which can then be used to create a message digest to protect individual DNS messages. This allows each party to authenticate that a request or response (and the data in it) came from the other party, even if it was transmitted-over-an unsecured channel or via a proxy. It provides party-to-party data authentication, but not hop-to-hop channel authentication or confidentiality.  </p>
-<h1 id="rfc.section.6.2"><a href="#rfc.section.6.2">6.2.</a> <a href="#tls" id="tls">TLS</a></h1>
-<h1 id="rfc.section.6.2.1"><a href="#rfc.section.6.2.1">6.2.1.</a> <a href="#opportunistic" id="opportunistic">Opportunistic</a></h1>
-<p id="rfc.section.6.2.1.p.1">Opportunistic TLS <a href="#RFC8310">[RFC8310]</a> provides a defence against passive surveillance, providing on-the-wire confidentiality.  </p>
-<h1 id="rfc.section.6.2.2"><a href="#rfc.section.6.2.2">6.2.2.</a> <a href="#strict" id="strict">Strict</a></h1>
-<p id="rfc.section.6.2.2.p.1">Strict TLS <a href="#RFC8310">[RFC8310]</a> requires that a client is configured with an authentication domain name (and/or SPKI pinset) that should be used to authenticate the TLS handshake with the server. This additionally provides a defense for the client against active surveillance, providing client-to-server authentication and end-to-end channel confidentiality.  </p>
-<h1 id="rfc.section.6.2.3"><a href="#rfc.section.6.2.3">6.2.3.</a> <a href="#mutual" id="mutual">Mutual</a></h1>
-<p id="rfc.section.6.2.3.p.1">This is an extension to Strict TLS <a href="#RFC8310">[RFC8310]</a> which requires that a client is configured with an authentication domain name (and/or SPKI pinset) and a client certificate. The client offers the certificate for authentication by the server and the client can authentic the server the same way as in Strict TLS. This provides a defense for both parties against active surveillance, providing bi-directional authentication and end-to-end channel confidentiality.  </p>
-<h1 id="rfc.section.6.3"><a href="#rfc.section.6.3">6.3.</a> <a href="#ip-based-acl-on-the-primary" id="ip-based-acl-on-the-primary">IP Based ACL on the Primary</a></h1>
-<p id="rfc.section.6.3.p.1">Most DNS server implementations offer an option to configure an IP based Access Control List (ACL), which is often used in combination with TSIG based ACLs to restrict access to zone transfers on primary servers.  </p>
-<p id="rfc.section.6.3.p.2">This is also possible with XoT but it must be noted that as with TCP the implementation of such and ACL cannot be enforced on the primary until a XFR request is received on an established connection.  </p>
-<p id="rfc.section.6.3.p.3">If control were to be any more fine-grained than this then a separate port would be required for XoT such that implementations would be able to refuse connections on that port to all clients except those configured as secondaries.  </p>
-<h1 id="rfc.section.6.4"><a href="#rfc.section.6.4">6.4.</a> <a href="#zonemd" id="zonemd">ZONEMD</a></h1>
-<p id="rfc.section.6.4.p.1">Message Digest for DNS Zones (ZONEMD) <a href="#I-D.ietf-dnsop-dns-zone-digest">[I-D.ietf-dnsop-dns-zone-digest]</a> digest is a mechanism that can be used to verify the content of a standalone zone. It is designed to be independent of the transmission channel or mechanism, allowing a general consumer of a zone to do origin authentication of the entire zone contents. Note that the current version of <a href="#I-D.ietf-dnsop-dns-zone-digest">[I-D.ietf-dnsop-dns-zone-digest]</a> states: </p>
+<h1 id="rfc.section.6.2"><a href="#rfc.section.6.2">6.2.</a> <a href="#sig0" id="sig0">SIG(0)</a></h1>
+<p id="rfc.section.6.2.p.1">TBD </p>
+<h1 id="rfc.section.6.3"><a href="#rfc.section.6.3">6.3.</a> <a href="#tls" id="tls">TLS</a></h1>
+<h1 id="rfc.section.6.3.1"><a href="#rfc.section.6.3.1">6.3.1.</a> <a href="#opportunistic" id="opportunistic">Opportunistic</a></h1>
+<p id="rfc.section.6.3.1.p.1">Opportunistic TLS <a href="#RFC8310">[RFC8310]</a> provides a defence against passive surveillance, providing on-the-wire confidentiality.  </p>
+<h1 id="rfc.section.6.3.2"><a href="#rfc.section.6.3.2">6.3.2.</a> <a href="#strict" id="strict">Strict</a></h1>
+<p id="rfc.section.6.3.2.p.1">Strict TLS <a href="#RFC8310">[RFC8310]</a> requires that a client is configured with an authentication domain name (and/or SPKI pinset) that should be used to authenticate the TLS handshake with the server. This additionally provides a defense for the client against active surveillance, providing client-to-server authentication and end-to-end channel confidentiality.  </p>
+<h1 id="rfc.section.6.3.3"><a href="#rfc.section.6.3.3">6.3.3.</a> <a href="#mutual" id="mutual">Mutual</a></h1>
+<p id="rfc.section.6.3.3.p.1">This is an extension to Strict TLS <a href="#RFC8310">[RFC8310]</a> which requires that a client is configured with an authentication domain name (and/or SPKI pinset) and a client certificate. The client offers the certificate for authentication by the server and the client can authentic the server the same way as in Strict TLS. This provides a defense for both parties against active surveillance, providing bi-directional authentication and end-to-end channel confidentiality.  </p>
+<h1 id="rfc.section.6.4"><a href="#rfc.section.6.4">6.4.</a> <a href="#ip-based-acl-on-the-primary" id="ip-based-acl-on-the-primary">IP Based ACL on the Primary</a></h1>
+<p id="rfc.section.6.4.p.1">Most DNS server implementations offer an option to configure an IP based Access Control List (ACL), which is often used in combination with TSIG based ACLs to restrict access to zone transfers on primary servers.  </p>
+<p id="rfc.section.6.4.p.2">This is also possible with XoT but it must be noted that as with TCP the implementation of such and ACL cannot be enforced on the primary until a XFR request is received on an established connection.  </p>
+<p id="rfc.section.6.4.p.3">If control were to be any more fine-grained than this then a separate port would be required for XoT such that implementations would be able to refuse connections on that port to all clients except those configured as secondaries.  </p>
+<h1 id="rfc.section.6.5"><a href="#rfc.section.6.5">6.5.</a> <a href="#zonemd" id="zonemd">ZONEMD</a></h1>
+<p id="rfc.section.6.5.p.1">Message Digest for DNS Zones (ZONEMD) <a href="#I-D.ietf-dnsop-dns-zone-digest">[I-D.ietf-dnsop-dns-zone-digest]</a> digest is a mechanism that can be used to verify the content of a standalone zone. It is designed to be independent of the transmission channel or mechanism, allowing a general consumer of a zone to do origin authentication of the entire zone contents. Note that the current version of <a href="#I-D.ietf-dnsop-dns-zone-digest">[I-D.ietf-dnsop-dns-zone-digest]</a> states: </p>
 <p><samp>As specified at this time, ZONEMD is not designed for use in large, dynamic zones due to the time and resources required for digest calculation. The ZONEMD record described in this document includes fields reserved for future work to support large, dynamic zones.</samp> </p>
-<p id="rfc.section.6.4.p.3">It is complementary the above mechanisms and can be used in conjunction with XFR-over-TLS but is not considered further.  </p>
-<h1 id="rfc.section.6.5"><a href="#rfc.section.6.5">6.5.</a> <a href="#comparison-of-authentication-methods" id="comparison-of-authentication-methods">Comparison of Authentication Methods</a></h1>
-<p id="rfc.section.6.5.p.1">The Table below compares the properties of each of the above methods in terms of what protection they provide to the secondary and primary servers during XoT in terms of: </p>
+<p id="rfc.section.6.5.p.3">It is complementary the above mechanisms and can be used in conjunction with XFR-over-TLS but is not considered further.  </p>
+<h1 id="rfc.section.6.6"><a href="#rfc.section.6.6">6.6.</a> <a href="#comparison-of-authentication-methods" id="comparison-of-authentication-methods">Comparison of Authentication Methods</a></h1>
+<p id="rfc.section.6.6.p.1">The Table below compares the properties of each of the above methods in terms of what protection they provide to the secondary and primary servers during XoT in terms of: </p>
 <p/>
 
 <ul>
@@ -681,9 +685,9 @@
 </ul>
 
 <p> </p>
-<p id="rfc.section.6.5.p.3">It is noted that zone transfer scenarios can vary from a simple single primary/secondary relationship where both servers are under the control of a single operator to a complex hierarchical structure which includes proxies and multiple operators. Each deployment scenario will require specific analysis to determine which authentication methods are best suited to the deployment model in question.  </p>
+<p id="rfc.section.6.6.p.3">It is noted that zone transfer scenarios can vary from a simple single primary/secondary relationship where both servers are under the control of a single operator to a complex hierarchical structure which includes proxies and multiple operators. Each deployment scenario will require specific analysis to determine which authentication methods are best suited to the deployment model in question.  </p>
 <p><a href="https://github.com/hanzhang0116/hzpa-dprive-xfr-over-tls/blob/02_updates/02-draft-svg/Properties_of_Authentication_methods_for_XoT.svg">Table 1: Properties of Authentication methods for XoT</a> </p>
-<p id="rfc.section.6.5.p.5">Based on this analysis it can be seen that: </p>
+<p id="rfc.section.6.6.p.5">Based on this analysis it can be seen that: </p>
 <p/>
 
 <ul>

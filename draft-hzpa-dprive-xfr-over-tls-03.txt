@@ -86,13 +86,14 @@ Table of Contents
        5.3.1.  Fallback to AXFR  . . . . . . . . . . . . . . . . . .  10
    6.  Zone Transfer with DoT - Authentication . . . . . . . . . . .  10
      6.1.  TSIG  . . . . . . . . . . . . . . . . . . . . . . . . . .  10
-     6.2.  TLS . . . . . . . . . . . . . . . . . . . . . . . . . . .  10
-       6.2.1.  Opportunistic . . . . . . . . . . . . . . . . . . . .  10
-       6.2.2.  Strict  . . . . . . . . . . . . . . . . . . . . . . .  10
-       6.2.3.  Mutual  . . . . . . . . . . . . . . . . . . . . . . .  10
-     6.3.  IP Based ACL on the Primary . . . . . . . . . . . . . . .  11
-     6.4.  ZONEMD  . . . . . . . . . . . . . . . . . . . . . . . . .  11
-     6.5.  Comparison of Authentication Methods  . . . . . . . . . .  11
+     6.2.  SIG(0)  . . . . . . . . . . . . . . . . . . . . . . . . .  10
+     6.3.  TLS . . . . . . . . . . . . . . . . . . . . . . . . . . .  10
+       6.3.1.  Opportunistic . . . . . . . . . . . . . . . . . . . .  10
+       6.3.2.  Strict  . . . . . . . . . . . . . . . . . . . . . . .  10
+       6.3.3.  Mutual  . . . . . . . . . . . . . . . . . . . . . . .  10
+     6.4.  IP Based ACL on the Primary . . . . . . . . . . . . . . .  11
+     6.5.  ZONEMD  . . . . . . . . . . . . . . . . . . . . . . . . .  11
+     6.6.  Comparison of Authentication Methods  . . . . . . . . . .  11
    7.  Policies for Both AXFR and IXFR . . . . . . . . . . . . . . .  12
    8.  Multi-primary Configurations  . . . . . . . . . . . . . . . .  13
    9.  Implementation Considerations . . . . . . . . . . . . . . . .  14
@@ -100,12 +101,11 @@ Table of Contents
    11. IANA Considerations . . . . . . . . . . . . . . . . . . . . .  14
    12. Security Considerations . . . . . . . . . . . . . . . . . . .  14
    13. Acknowledgements  . . . . . . . . . . . . . . . . . . . . . .  14
-   14. Changelog . . . . . . . . . . . . . . . . . . . . . . . . . .  14
+   14. Changelog . . . . . . . . . . . . . . . . . . . . . . . . . .  15
    15. References  . . . . . . . . . . . . . . . . . . . . . . . . .  15
      15.1.  Normative References . . . . . . . . . . . . . . . . . .  15
      15.2.  Informative References . . . . . . . . . . . . . . . . .  16
      15.3.  URIs . . . . . . . . . . . . . . . . . . . . . . . . . .  17
-   Authors' Addresses  . . . . . . . . . . . . . . . . . . . . . . .  17
 
 
 
@@ -113,6 +113,8 @@ Zhang, et al.            Expires January 9, 2020                [Page 2]
 
 Internet-Draft                XFR-over-TLS                     July 2019
 
+
+   Authors' Addresses  . . . . . . . . . . . . . . . . . . . . . . .  18
 
 1.  Introduction
 
@@ -160,8 +162,6 @@ Internet-Draft                XFR-over-TLS                     July 2019
    express any need for confidentiality, and TSIG does not offer
    encryption.  Some operators use SSH tunneling or IPSec to encrypt the
    transfer data.
-
-
 
 
 
@@ -529,14 +529,18 @@ Internet-Draft                XFR-over-TLS                     July 2019
    authentication, but not hop-to-hop channel authentication or
    confidentiality.
 
-6.2.  TLS
+6.2.  SIG(0)
 
-6.2.1.  Opportunistic
+   TBD
+
+6.3.  TLS
+
+6.3.1.  Opportunistic
 
    Opportunistic TLS [RFC8310] provides a defence against passive
    surveillance, providing on-the-wire confidentiality.
 
-6.2.2.  Strict
+6.3.2.  Strict
 
    Strict TLS [RFC8310] requires that a client is configured with an
    authentication domain name (and/or SPKI pinset) that should be used
@@ -545,15 +549,11 @@ Internet-Draft                XFR-over-TLS                     July 2019
    providing client-to-server authentication and end-to-end channel
    confidentiality.
 
-6.2.3.  Mutual
+6.3.3.  Mutual
 
    This is an extension to Strict TLS [RFC8310] which requires that a
    client is configured with an authentication domain name (and/or SPKI
    pinset) and a client certificate.  The client offers the certificate
-   for authentication by the server and the client can authentic the
-   server the same way as in Strict TLS.  This provides a defense for
-   both parties against active surveillance, providing bi-directional
-   authentication and end-to-end channel confidentiality.
 
 
 
@@ -562,7 +562,12 @@ Zhang, et al.            Expires January 9, 2020               [Page 10]
 Internet-Draft                XFR-over-TLS                     July 2019
 
 
-6.3.  IP Based ACL on the Primary
+   for authentication by the server and the client can authentic the
+   server the same way as in Strict TLS.  This provides a defense for
+   both parties against active surveillance, providing bi-directional
+   authentication and end-to-end channel confidentiality.
+
+6.4.  IP Based ACL on the Primary
 
    Most DNS server implementations offer an option to configure an IP
    based Access Control List (ACL), which is often used in combination
@@ -578,7 +583,7 @@ Internet-Draft                XFR-over-TLS                     July 2019
    able to refuse connections on that port to all clients except those
    configured as secondaries.
 
-6.4.  ZONEMD
+6.5.  ZONEMD
 
    Message Digest for DNS Zones (ZONEMD)
    [I-D.ietf-dnsop-dns-zone-digest] digest is a mechanism that can be
@@ -596,7 +601,7 @@ Internet-Draft                XFR-over-TLS                     July 2019
    It is complementary the above mechanisms and can be used in
    conjunction with XFR-over-TLS but is not considered further.
 
-6.5.  Comparison of Authentication Methods
+6.6.  Comparison of Authentication Methods
 
    The Table below compares the properties of each of the above methods
    in terms of what protection they provide to the secondary and primary
@@ -605,11 +610,6 @@ Internet-Draft                XFR-over-TLS                     July 2019
    o  'Data Auth': Authentication that the DNS message data is signed by
       the party with whom credentials were shared (the signing party may
       or may not be party operating the far end of a TCP/TLS connection
-      in a 'proxy' scenario).  For the primary the TSIG on the XFR
-      request confirms that the requesting party is authorized to
-      request zone data, for the secondary it authenticates the zone
-      data that is received.
-
 
 
 
@@ -617,6 +617,11 @@ Zhang, et al.            Expires January 9, 2020               [Page 11]
 
 Internet-Draft                XFR-over-TLS                     July 2019
 
+
+      in a 'proxy' scenario).  For the primary the TSIG on the XFR
+      request confirms that the requesting party is authorized to
+      request zone data, for the secondary it authenticates the zone
+      data that is received.
 
    o  'Channel Conf': Confidentiality of the communication channel
       between the client and server (i.e. the two end points of a TCP/
@@ -660,12 +665,7 @@ Internet-Draft                XFR-over-TLS                     July 2019
    Within any transfer group both AXFRs and IXFRs for a zone SHOULD all
    use the same policy e.g. if AXFRs use AXoT all IXFRs SHOULD use IXoT.
 
-   In order to assure the confidentiality of the zone information, the
-   entire transfer group MUST have a consistent policy of requiring
-   confidentiality.  If any do not, this is a weak link for attackers to
-   exploit.
 
-   A XoT policy should specify
 
 
 
@@ -673,6 +673,13 @@ Zhang, et al.            Expires January 9, 2020               [Page 12]
 
 Internet-Draft                XFR-over-TLS                     July 2019
 
+
+   In order to assure the confidentiality of the zone information, the
+   entire transfer group MUST have a consistent policy of requiring
+   confidentiality.  If any do not, this is a weak link for attackers to
+   exploit.
+
+   A XoT policy should specify
 
    o  If TSIG is required
 
@@ -715,13 +722,6 @@ Internet-Draft                XFR-over-TLS                     July 2019
    of the primary being an unacceptable lag behind the SOA of an
    alternative primary.
 
-   At the other extreme a primary could keep multiple persistent
-   connections open to all available primaries and only request IXFRs
-   from the primary with the highest serial number.  Since normally the
-   number of secondaries and primaries in direct contact in a transfer
-   group is reasonably low this might be feasible if latency is the most
-   significant concern.
-
 
 
 
@@ -729,6 +729,13 @@ Zhang, et al.            Expires January 9, 2020               [Page 13]
 
 Internet-Draft                XFR-over-TLS                     July 2019
 
+
+   At the other extreme a primary could keep multiple persistent
+   connections open to all available primaries and only request IXFRs
+   from the primary with the highest serial number.  Since normally the
+   number of secondaries and primaries in direct contact in a transfer
+   group is reasonably low this might be feasible if latency is the most
+   significant concern.
 
 9.  Implementation Considerations
 
@@ -768,6 +775,17 @@ Internet-Draft                XFR-over-TLS                     July 2019
    The authors thank Benno Overeinder, Shumon Huque and Tim Wicinski for
    review and discussions.
 
+
+
+
+
+
+
+Zhang, et al.            Expires January 9, 2020               [Page 14]
+
+Internet-Draft                XFR-over-TLS                     July 2019
+
+
 14.  Changelog
 
    draft-hzpa-dprive-xfr-over-tls-01
@@ -777,14 +795,6 @@ Internet-Draft                XFR-over-TLS                     July 2019
    draft-hzpa-dprive-xfr-over-tls-01
 
    o  Editorial changes, updates to references.
-
-
-
-
-Zhang, et al.            Expires January 9, 2020               [Page 14]
-
-Internet-Draft                XFR-over-TLS                     July 2019
-
 
    draft-hzpa-dprive-xfr-over-tls-00
 
@@ -824,6 +834,14 @@ Internet-Draft                XFR-over-TLS                     July 2019
               Server-Side State", RFC 5077, DOI 10.17487/RFC5077,
               January 2008, <https://www.rfc-editor.org/info/rfc5077>.
 
+
+
+
+Zhang, et al.            Expires January 9, 2020               [Page 15]
+
+Internet-Draft                XFR-over-TLS                     July 2019
+
+
    [RFC5155]  Laurie, B., Sisson, G., Arends, R., and D. Blacka, "DNS
               Security (DNSSEC) Hashed Authenticated Denial of
               Existence", RFC 5155, DOI 10.17487/RFC5155, March 2008,
@@ -832,15 +850,6 @@ Internet-Draft                XFR-over-TLS                     July 2019
    [RFC5936]  Lewis, E. and A. Hoenes, Ed., "DNS Zone Transfer Protocol
               (AXFR)", RFC 5936, DOI 10.17487/RFC5936, June 2010,
               <https://www.rfc-editor.org/info/rfc5936>.
-
-
-
-
-
-Zhang, et al.            Expires January 9, 2020               [Page 15]
-
-Internet-Draft                XFR-over-TLS                     July 2019
-
 
    [RFC6973]  Cooper, A., Tschofenig, H., Aboba, B., Peterson, J.,
               Morris, J., Hansen, M., and R. Smith, "Privacy
@@ -881,15 +890,6 @@ Internet-Draft                XFR-over-TLS                     July 2019
               STD 13, RFC 1034, DOI 10.17487/RFC1034, November 1987,
               <https://www.rfc-editor.org/info/rfc1034>.
 
-   [RFC1035]  Mockapetris, P., "Domain names - implementation and
-              specification", STD 13, RFC 1035, DOI 10.17487/RFC1035,
-              November 1987, <https://www.rfc-editor.org/info/rfc1035>.
-
-   [RFC1982]  Elz, R. and R. Bush, "Serial Number Arithmetic", RFC 1982,
-              DOI 10.17487/RFC1982, August 1996, <https://www.rfc-
-              editor.org/info/rfc1982>.
-
-
 
 
 
@@ -897,6 +897,14 @@ Zhang, et al.            Expires January 9, 2020               [Page 16]
 
 Internet-Draft                XFR-over-TLS                     July 2019
 
+
+   [RFC1035]  Mockapetris, P., "Domain names - implementation and
+              specification", STD 13, RFC 1035, DOI 10.17487/RFC1035,
+              November 1987, <https://www.rfc-editor.org/info/rfc1035>.
+
+   [RFC1982]  Elz, R. and R. Bush, "Serial Number Arithmetic", RFC 1982,
+              DOI 10.17487/RFC1982, August 1996, <https://www.rfc-
+              editor.org/info/rfc1982>.
 
    [RFC1996]  Vixie, P., "A Mechanism for Prompt Notification of Zone
               Changes (DNS NOTIFY)", RFC 1996, DOI 10.17487/RFC1996,
@@ -937,6 +945,15 @@ Internet-Draft                XFR-over-TLS                     July 2019
    [8] https://github.com/NLnetLabs/unbound/blob/release-1.9.2/doc/
        Changelog
 
+
+
+
+
+Zhang, et al.            Expires January 9, 2020               [Page 17]
+
+Internet-Draft                XFR-over-TLS                     July 2019
+
+
 Authors' Addresses
 
    Han Zhang
@@ -945,13 +962,6 @@ Authors' Addresses
    United States
 
    Email: hzhang@salesforce.com
-
-
-
-
-Zhang, et al.            Expires January 9, 2020               [Page 17]
-
-Internet-Draft                XFR-over-TLS                     July 2019
 
 
    Pallavi Aras
@@ -987,16 +997,6 @@ Internet-Draft                XFR-over-TLS                     July 2019
    United States
 
    Email: allison.mankin@gmail.com
-
-
-
-
-
-
-
-
-
-
 
 
 
