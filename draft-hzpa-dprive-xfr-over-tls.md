@@ -2,7 +2,7 @@
     Title = "DNS Zone Transfer-over-TLS"
     abbrev = "XFR-over-TLS"
     category = "std"
-    docName= "draft-hzpa-dprive-xfr-over-tls-02"
+    docName= "draft-hzpa-dprive-xfr-over-tls-03"
     ipr = "trust200902"
     area = "Internet"
     workgroup = "dprive"
@@ -454,8 +454,15 @@ Message Digest for DNS Zones (ZONEMD) [@?I-D.ietf-dnsop-dns-zone-digest] digest
 is a mechanism that can be used to verify the content of a standalone zone. It
 is designed to be independent of the transmission channel or mechanism, allowing
 a general consumer of a zone to do origin authentication of the entire zone
-contents. It is not considered suitable for highly dynamic zones. It is
-complementary the above mechanisms and can be used in conjunction with
+contents. Note that the current version of [@?I-D.ietf-dnsop-dns-zone-digest]
+states:
+
+`As specified at this time, ZONEMD is not designed for use in large, dynamic
+zones due to the time and resources required for digest calculation. The ZONEMD
+record described in this document includes fields reserved for future work to
+support large, dynamic zones.`
+
+It is complementary the above mechanisms and can be used in conjunction with
 XFR-over-TLS but is not considered further.
 
 ## Comparison of Authentication Methods

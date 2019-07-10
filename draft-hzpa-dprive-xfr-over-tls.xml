@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE rfc SYSTEM 'rfc2629.dtd' []>
-<rfc ipr="trust200902" category="std" docName="draft-hzpa-dprive-xfr-over-tls-02" updates="1995">
+<rfc ipr="trust200902" category="std" docName="draft-hzpa-dprive-xfr-over-tls-03" updates="1995">
 <?rfc toc="yes"?>
 <?rfc symrefs="yes"?>
 <?rfc sortrefs="yes"?>
@@ -503,8 +503,15 @@ connections on that port to all clients except those configured as secondaries.
 is a mechanism that can be used to verify the content of a standalone zone. It
 is designed to be independent of the transmission channel or mechanism, allowing
 a general consumer of a zone to do origin authentication of the entire zone
-contents. It is not considered suitable for highly dynamic zones. It is
-complementary the above mechanisms and can be used in conjunction with
+contents. Note that the current version of <xref target="I-D.ietf-dnsop-dns-zone-digest"/>
+states:
+</t>
+<t><spanx style="verb">As specified at this time, ZONEMD is not designed for use in large, dynamic
+zones due to the time and resources required for digest calculation. The ZONEMD
+record described in this document includes fields reserved for future work to
+support large, dynamic zones.</spanx>
+</t>
+<t>It is complementary the above mechanisms and can be used in conjunction with
 XFR-over-TLS but is not considered further.
 </t>
 </section>
