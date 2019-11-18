@@ -2,8 +2,8 @@
 # - mmark (https://github.com/miekg/mmark)
 # - xml2rfc (https://xml2rfc.tools.ietf.org/)
 
-DRAFT=draft-hzpa-dprive-xfr-over-tls
-VERSION=03
+DRAFT=draft-ietf-dprive-xfr-over-tls
+VERSION=00
 
 XML=$(DRAFT).xml
 HTML=$(DRAFT)-$(VERSION).html
