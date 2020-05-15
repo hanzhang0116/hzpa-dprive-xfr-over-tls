@@ -167,7 +167,7 @@ IXoT: IXFR over-TLS
   compatibility with older implementations based on the original specifications
   in [@RFC1034] and [@RFC1035]. For example, some older AXFR servers don’t
   support using a TCP connection for multiple AXFR sessions or XFRs of different
-  zones because they have not been updated to follow the guidance in [RFC5836].
+  zones because they have not been updated to follow the guidance in [@RFC5936].
   Any implementation of XFR-over-TLS would obviously be required to implement
   optimized and interoperable transfers as described in [@RFC5936] e.g. transfer
   of multiple zones-over-one connection.
