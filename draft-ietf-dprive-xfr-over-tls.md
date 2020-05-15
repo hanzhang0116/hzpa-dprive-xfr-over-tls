@@ -292,7 +292,7 @@ This section attempts to presents a rationale for also encrypting the other
 messages in the XFR mechanism.
 
 Since the SOA of the published zone can be trivially discovered by simply
-querying the publicly available authoritative servers leakage RR of this is not
+querying the publicly available authoritative servers leakage of this RR is not
 discussed in the following sections.
 
 ### NOTIFY
@@ -445,7 +445,7 @@ Control List (ACL), which is often used in combination with TSIG based ACLs to
 restrict access to zone transfers on primary servers.
 
 This is also possible with XoT but it must be noted that as with TCP the
-implementation of such and ACL cannot be enforced on the primary until a XFR
+implementation of such an ACL cannot be enforced on the primary until a XFR
 request is received on an established connection.
 
 If control were to be any more fine-grained than this then a separate port would
