@@ -167,7 +167,7 @@ IXoT: IXFR over-TLS
   compatibility with older implementations based on the original specifications
   in [@RFC1034] and [@RFC1035]. For example, some older AXFR servers don’t
   support using a TCP connection for multiple AXFR sessions or XFRs of different
-  zones because they have not been updated to follow the guidance in [RFC5836].
+  zones because they have not been updated to follow the guidance in [@RFC5936].
   Any implementation of XFR-over-TLS would obviously be required to implement
   optimized and interoperable transfers as described in [@RFC5936] e.g. transfer
   of multiple zones-over-one connection.
@@ -292,7 +292,7 @@ This section attempts to presents a rationale for also encrypting the other
 messages in the XFR mechanism.
 
 Since the SOA of the published zone can be trivially discovered by simply
-querying the publicly available authoritative servers leakage RR of this is not
+querying the publicly available authoritative servers leakage of this RR is not
 discussed in the following sections.
 
 ### NOTIFY
@@ -445,7 +445,7 @@ Control List (ACL), which is often used in combination with TSIG based ACLs to
 restrict access to zone transfers on primary servers.
 
 This is also possible with XoT but it must be noted that as with TCP the
-implementation of such and ACL cannot be enforced on the primary until a XFR
+implementation of such an ACL cannot be enforced on the primary until a XFR
 request is received on an established connection.
 
 If control were to be any more fine-grained than this then a separate port would
