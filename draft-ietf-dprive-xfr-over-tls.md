@@ -2,13 +2,13 @@
     Title = "DNS Zone Transfer-over-TLS"
     abbrev = "XFR-over-TLS"
     category = "std"
-    docName= "draft-ietf-dprive-xfr-over-tls-00"
+    docName= "draft-ietf-dprive-xfr-over-tls-01"
     ipr = "trust200902"
     area = "Internet"
     workgroup = "dprive"
     keyword = ["DNS", "operations", "privacy"]
     updates = [1995]
-    date = 2019-11-18T00:00:00Z
+    date = 2020-05-19T00:00:00Z
     [pi]
     [[author]]
      initials="H."
@@ -147,8 +147,6 @@ DNS terminology is as described in [@!RFC8499].
 
 DoT: DNS-over-TLS as specified in [@!RFC7858]
 
-DoH: DNS-over-HTTPS as specified in [@!RFC8484]
-
 XoT: Generic XFR-over-TLS mechanisms as specified in this document
 
 AXoT: AXFR-over-TLS
@@ -170,7 +168,7 @@ IXoT: IXFR over-TLS
   zones because they have not been updated to follow the guidance in [@RFC5936].
   Any implementation of XFR-over-TLS would obviously be required to implement
   optimized and interoperable transfers as described in [@RFC5936] e.g. transfer
-  of multiple zones-over-one connection.
+  of multiple zones over one connection.
   
 * Performance. Current usage of TCP for IXFR is sub-optimal in some cases i.e.
   connections are frequently closed after a single IXFR.
@@ -323,11 +321,17 @@ applicable to XFR-over-TLS as well.
 It is RECOMMENDED that clients and servers that support XoT also implement
 EDNS0 Keepalive [RFC7828].
 
+It is useful to note that in these mechanisms is it the secondary that initiates the TLS connection to the primary for a XFR request, so that in terms of connectivity the secondary is the TLS client and the primary the TLS server.
+
 ## AXoT mechanism
 
 The figure below provides an outline of the AXoT mechanism including NOTIFYs.
 
 [Figure 3: AXoT mechanism](https://github.com/hanzhang0116/hzpa-dprive-xfr-over-tls/blob/02_updates/02-draft-svg/AXoT_mechanism_1.svg)
+
+The connection for AXFR-over-TLS SHOULD be established using port 853, as
+specified in [@!RFC7858], unless there is mutual agreement between the secondary
+and primary to use a port other than port 853 for XFR-over-TLS.
 
 All implementations that support XoT MUST fully implement [@RFC5953] behavior
 on TLS connections.
@@ -344,10 +348,6 @@ use an open connection.)
 For clarity we additionally state here that an AXoT client MAY use an already
 opened TLS connection to send a SOA request. Using an existing open connection
 is RECOMMENDED over opening a new connection.
-
-The connection for AXFR-over-TLS SHOULD be established using port 853, as
-specified in [@!RFC7858], unless there is mutual agreement between the secondary
-and primary to use a port other than port 853 for XFR-over-TLS.
 
 QUESTION: Should there be a requirement that the SOA is always done on a TLS
 connection if the XFR is? For the case when no transfer is required this could
@@ -389,6 +389,8 @@ recommends that servers use timeouts of at least a few seconds).
 
 An IXoT client MAY pipeline IXFR requests for different zones on a single TLS
 connection. AN IXoT server MAY respond to those requests out of order.
+
+QUESTION: Since this is a new specification should there be a requirement that IXoT servers are RECOMMENDED to condense responses as described in Section 6 of [RFC1995]. [RFC1995] document says this is optional and MAY be done but it can significantly reduce the size of responses and may have implications for padding?
 
 ### Fallback to AXFR
 
@@ -448,9 +450,10 @@ This is also possible with XoT but it must be noted that as with TCP the
 implementation of such an ACL cannot be enforced on the primary until a XFR
 request is received on an established connection.
 
-If control were to be any more fine-grained than this then a separate port would
-be required for XoT such that implementations would be able to refuse
-connections on that port to all clients except those configured as secondaries.
+If control were to be any more fine-grained than this then a separate, dedicated
+port would need to be agreed between primary and secondary for XoT such that
+implementations would be able to refuse connections on that port to all clients
+except those configured as secondaries.
 
 ## ZONEMD
 
