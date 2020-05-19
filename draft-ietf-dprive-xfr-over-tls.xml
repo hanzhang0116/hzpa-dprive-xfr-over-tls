@@ -364,6 +364,11 @@ EDNS0 Keepalive [RFC7828].
 </t>
 </section>
 
+<section anchor="tls-versions" title="TLS versions">
+<t>For improved security all implementations of this specification MUST use only TLS 1.3 [RFC8446] or later.
+</t>
+</section>
+
 <section anchor="axot-mechanism" title="AXoT mechanism">
 <t>The figure below provides an outline of the AXoT mechanism including NOTIFYs.
 </t>
@@ -662,8 +667,6 @@ discuss are:
 </t>
 <t>
 <list style="symbols">
-<t>Should DoT in this new case be required to use only TLS 1.3 and
-higher to avoid residual exposure?</t>
 <t>How should padding be used in IXFR?</t>
 <t>Should there be an option to 'pad' an AXFR response (i.e. a set of AXFR
 responses on a given connection) to hide the zone size?</t>

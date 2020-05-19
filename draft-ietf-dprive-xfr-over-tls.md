@@ -323,6 +323,10 @@ EDNS0 Keepalive [RFC7828].
 
 It is useful to note that in these mechanisms is it the secondary that initiates the TLS connection to the primary for a XFR request, so that in terms of connectivity the secondary is the TLS client and the primary the TLS server.
 
+## TLS versions
+
+For improved security all implementations of this specification MUST use only TLS 1.3 [RFC8446] or later.
+
 ## AXoT mechanism
 
 The figure below provides an outline of the AXoT mechanism including NOTIFYs.
@@ -597,8 +601,6 @@ attacker collects entire DNS zones through eavesdropping on clear text DNS zone
 transfers. It presents a new Security Consideration for DNS. Some questions to
 discuss are: 
 
-* Should DoT in this new case be required to use only TLS 1.3 and
-higher to avoid residual exposure? 
 * How should padding be used in IXFR?
 * Should there be an option to 'pad' an AXFR response (i.e. a set of AXFR
   responses on a given connection) to hide the zone size?

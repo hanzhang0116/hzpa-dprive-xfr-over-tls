@@ -385,9 +385,10 @@
 <link href="#rfc.section.4.3.2" rel="Chapter" title="4.3.2 SOA"/>
 <link href="#rfc.section.5" rel="Chapter" title="5 Connection and Data Flows in XoT"/>
 <link href="#rfc.section.5.1" rel="Chapter" title="5.1 Performance Considerations"/>
-<link href="#rfc.section.5.2" rel="Chapter" title="5.2 AXoT mechanism"/>
-<link href="#rfc.section.5.3" rel="Chapter" title="5.3 IXoT mechanism"/>
-<link href="#rfc.section.5.3.1" rel="Chapter" title="5.3.1 Fallback to AXFR"/>
+<link href="#rfc.section.5.2" rel="Chapter" title="5.2 TLS versions"/>
+<link href="#rfc.section.5.3" rel="Chapter" title="5.3 AXoT mechanism"/>
+<link href="#rfc.section.5.4" rel="Chapter" title="5.4 IXoT mechanism"/>
+<link href="#rfc.section.5.4.1" rel="Chapter" title="5.4.1 Fallback to AXFR"/>
 <link href="#rfc.section.6" rel="Chapter" title="6 Zone Transfer with DoT - Authentication"/>
 <link href="#rfc.section.6.1" rel="Chapter" title="6.1 TSIG"/>
 <link href="#rfc.section.6.2" rel="Chapter" title="6.2 SIG(0)"/>
@@ -509,9 +510,10 @@
 <li>4.3.2.   <a href="#rfc.section.4.3.2">SOA</a></li>
 </ul></ul><li>5.   <a href="#rfc.section.5">Connection and Data Flows in XoT</a></li>
 <ul><li>5.1.   <a href="#rfc.section.5.1">Performance Considerations</a></li>
-<li>5.2.   <a href="#rfc.section.5.2">AXoT mechanism</a></li>
-<li>5.3.   <a href="#rfc.section.5.3">IXoT mechanism</a></li>
-<ul><li>5.3.1.   <a href="#rfc.section.5.3.1">Fallback to AXFR</a></li>
+<li>5.2.   <a href="#rfc.section.5.2">TLS versions</a></li>
+<li>5.3.   <a href="#rfc.section.5.3">AXoT mechanism</a></li>
+<li>5.4.   <a href="#rfc.section.5.4">IXoT mechanism</a></li>
+<ul><li>5.4.1.   <a href="#rfc.section.5.4.1">Fallback to AXFR</a></li>
 </ul></ul><li>6.   <a href="#rfc.section.6">Zone Transfer with DoT - Authentication</a></li>
 <ul><li>6.1.   <a href="#rfc.section.6.1">TSIG</a></li>
 <li>6.2.   <a href="#rfc.section.6.2">SIG(0)</a></li>
@@ -632,29 +634,31 @@
 <p id="rfc.section.5.1.p.1">The details in <a href="#RFC7766">[RFC7766]</a>, <a href="#RFC7858">[RFC7858]</a> and <a href="#RFC8310">[RFC8310]</a> about e.g. using persistent connections and TLS Session Resumption <a href="#RFC5077">[RFC5077]</a> are fully applicable to XFR-over-TLS as well.  </p>
 <p id="rfc.section.5.1.p.2">It is RECOMMENDED that clients and servers that support XoT also implement EDNS0 Keepalive [RFC7828].  </p>
 <p id="rfc.section.5.1.p.3">It is useful to note that in these mechanisms is it the secondary that initiates the TLS connection to the primary for a XFR request, so that in terms of connectivity the secondary is the TLS client and the primary the TLS server.  </p>
-<h1 id="rfc.section.5.2"><a href="#rfc.section.5.2">5.2.</a> <a href="#axot-mechanism" id="axot-mechanism">AXoT mechanism</a></h1>
-<p id="rfc.section.5.2.p.1">The figure below provides an outline of the AXoT mechanism including NOTIFYs.  </p>
+<h1 id="rfc.section.5.2"><a href="#rfc.section.5.2">5.2.</a> <a href="#tls-versions" id="tls-versions">TLS versions</a></h1>
+<p id="rfc.section.5.2.p.1">For improved security all implementations of this specification MUST use only TLS 1.3 [RFC8446] or later.  </p>
+<h1 id="rfc.section.5.3"><a href="#rfc.section.5.3">5.3.</a> <a href="#axot-mechanism" id="axot-mechanism">AXoT mechanism</a></h1>
+<p id="rfc.section.5.3.p.1">The figure below provides an outline of the AXoT mechanism including NOTIFYs.  </p>
 <p><a href="https://github.com/hanzhang0116/hzpa-dprive-xfr-over-tls/blob/02_updates/02-draft-svg/AXoT_mechanism_1.svg">Figure 3: AXoT mechanism</a> </p>
-<p id="rfc.section.5.2.p.3">The connection for AXFR-over-TLS SHOULD be established using port 853, as specified in <a href="#RFC7858">[RFC7858]</a>, unless there is mutual agreement between the secondary and primary to use a port other than port 853 for XFR-over-TLS.  </p>
-<p id="rfc.section.5.2.p.4">All implementations that support XoT MUST fully implement <a href="#RFC5953">[RFC5953]</a> behavior on TLS connections.  </p>
-<p id="rfc.section.5.2.p.5">Sections 4.1, 4.1.1 and 4.1.2 of <a href="#RFC5936">[RFC5936]</a> describe guidance for AXFR clients and servers with regard to re-use of sessions for multiple AXFRs, AXFRs of different zones and using TCP session for other queries including SOA.  </p>
-<p id="rfc.section.5.2.p.6">For clarity we restate here that an AXoT client MAY use an already opened TLS connection to send a AXFR request. Using an existing open connection is RECOMMENDED over opening a new connection. (Non-AXoT session traffic can also use an open connection.) </p>
-<p id="rfc.section.5.2.p.7">For clarity we additionally state here that an AXoT client MAY use an already opened TLS connection to send a SOA request. Using an existing open connection is RECOMMENDED over opening a new connection.  </p>
-<p id="rfc.section.5.2.p.8">QUESTION: Should there be a requirement that the SOA is always done on a TLS connection if the XFR is? For the case when no transfer is required this could be unnecessary overhead.  </p>
-<h1 id="rfc.section.5.3"><a href="#rfc.section.5.3">5.3.</a> <a href="#ixot-mechanism" id="ixot-mechanism">IXoT mechanism</a></h1>
-<p id="rfc.section.5.3.p.1">The figure below provides an outline of the IXoT mechanism including NOTIFYs.  </p>
+<p id="rfc.section.5.3.p.3">The connection for AXFR-over-TLS SHOULD be established using port 853, as specified in <a href="#RFC7858">[RFC7858]</a>, unless there is mutual agreement between the secondary and primary to use a port other than port 853 for XFR-over-TLS.  </p>
+<p id="rfc.section.5.3.p.4">All implementations that support XoT MUST fully implement <a href="#RFC5953">[RFC5953]</a> behavior on TLS connections.  </p>
+<p id="rfc.section.5.3.p.5">Sections 4.1, 4.1.1 and 4.1.2 of <a href="#RFC5936">[RFC5936]</a> describe guidance for AXFR clients and servers with regard to re-use of sessions for multiple AXFRs, AXFRs of different zones and using TCP session for other queries including SOA.  </p>
+<p id="rfc.section.5.3.p.6">For clarity we restate here that an AXoT client MAY use an already opened TLS connection to send a AXFR request. Using an existing open connection is RECOMMENDED over opening a new connection. (Non-AXoT session traffic can also use an open connection.) </p>
+<p id="rfc.section.5.3.p.7">For clarity we additionally state here that an AXoT client MAY use an already opened TLS connection to send a SOA request. Using an existing open connection is RECOMMENDED over opening a new connection.  </p>
+<p id="rfc.section.5.3.p.8">QUESTION: Should there be a requirement that the SOA is always done on a TLS connection if the XFR is? For the case when no transfer is required this could be unnecessary overhead.  </p>
+<h1 id="rfc.section.5.4"><a href="#rfc.section.5.4">5.4.</a> <a href="#ixot-mechanism" id="ixot-mechanism">IXoT mechanism</a></h1>
+<p id="rfc.section.5.4.p.1">The figure below provides an outline of the IXoT mechanism including NOTIFYs.  </p>
 <p><a href="https://github.com/hanzhang0116/hzpa-dprive-xfr-over-tls/blob/02_updates/02-draft-svg/IXoT_mechanism_1.svg">Figure 4: IXoT mechanism</a> </p>
-<p id="rfc.section.5.3.p.3">The connection for IXFR-over-TLS SHOULD be established using port 853, as specified in <a href="#RFC7858">[RFC7858]</a>, unless there is mutual agreement between the secondary and primary to use a port other than port 853 for XFR-over-TLS.  </p>
+<p id="rfc.section.5.4.p.3">The connection for IXFR-over-TLS SHOULD be established using port 853, as specified in <a href="#RFC7858">[RFC7858]</a>, unless there is mutual agreement between the secondary and primary to use a port other than port 853 for XFR-over-TLS.  </p>
 <p><a href="#RFC1995">[RFC1995]</a> says nothing with respect to optimizing IXFRs over TCP or re-using already open TCP connections to perform IXFRs or other queries. We provide guidance here that aligns with the guidance in <a href="#RFC5936">[RFC5936]</a> for AXFR and with that for performant TCP/TLS usage in <a href="#RFC7766">[RFC7766]</a> and <a href="#RFC7858">[RFC7858]</a>.  </p>
-<p id="rfc.section.5.3.p.5">An IXoT client MAY use an already opened TLS connection to send a IXFR request.  Using an existing open connection is RECOMMENDED over opening a new connection.  (Non-IXoT session traffic can also use an open connection.) </p>
-<p id="rfc.section.5.3.p.6">An IXoT client MAY use an already open TLS connection to send an SOA query.  Using an existing open connection is RECOMMENDED over opening a new connection.  </p>
-<p id="rfc.section.5.3.p.7">An IXoT server MUST be able to handle multiple IXoT requests on a single TLS connection, as well as to handle other query/response transactions over it.  </p>
-<p id="rfc.section.5.3.p.8">An IXoT client MAY keep an existing TLS session open in the expectation it is likely to need to perform an IXFR in the near future. The client may use the frequency of recent IXFRs to calculate an average update rate and then use EDNS0 Keepalive to request an appropriate timeout from the server (if the server supports EDNS0 Keepalive). If the server does not support EDNS0 Keepalive the client MAY keep the connection open for a few seconds (<a href="#RFC7766">[RFC7766]</a> recommends that servers use timeouts of at least a few seconds).  </p>
-<p id="rfc.section.5.3.p.9">An IXoT client MAY pipeline IXFR requests for different zones on a single TLS connection. AN IXoT server MAY respond to those requests out of order.  </p>
-<p id="rfc.section.5.3.p.10">QUESTION: Since this is a new specification should there be a requirement that IXoT servers are RECOMMENDED to condense responses as described in Section 6 of [RFC1995]. [RFC1995] document says this is optional and MAY be done but it can significantly reduce the size of responses and may have implications for padding? </p>
-<h1 id="rfc.section.5.3.1"><a href="#rfc.section.5.3.1">5.3.1.</a> <a href="#fallback-to-axfr" id="fallback-to-axfr">Fallback to AXFR</a></h1>
-<p id="rfc.section.5.3.1.p.1">Fallback to AXFR can happen, for example, if the server is not able to provide an IXFR for the requested SOA. Implementations differ in how long they store zone deltas and how many may be stored at any one time.  </p>
-<p id="rfc.section.5.3.1.p.2">After a failed IXFR a IXoT client SHOULD request the AXFR on the already open TLS connection.  </p>
+<p id="rfc.section.5.4.p.5">An IXoT client MAY use an already opened TLS connection to send a IXFR request.  Using an existing open connection is RECOMMENDED over opening a new connection.  (Non-IXoT session traffic can also use an open connection.) </p>
+<p id="rfc.section.5.4.p.6">An IXoT client MAY use an already open TLS connection to send an SOA query.  Using an existing open connection is RECOMMENDED over opening a new connection.  </p>
+<p id="rfc.section.5.4.p.7">An IXoT server MUST be able to handle multiple IXoT requests on a single TLS connection, as well as to handle other query/response transactions over it.  </p>
+<p id="rfc.section.5.4.p.8">An IXoT client MAY keep an existing TLS session open in the expectation it is likely to need to perform an IXFR in the near future. The client may use the frequency of recent IXFRs to calculate an average update rate and then use EDNS0 Keepalive to request an appropriate timeout from the server (if the server supports EDNS0 Keepalive). If the server does not support EDNS0 Keepalive the client MAY keep the connection open for a few seconds (<a href="#RFC7766">[RFC7766]</a> recommends that servers use timeouts of at least a few seconds).  </p>
+<p id="rfc.section.5.4.p.9">An IXoT client MAY pipeline IXFR requests for different zones on a single TLS connection. AN IXoT server MAY respond to those requests out of order.  </p>
+<p id="rfc.section.5.4.p.10">QUESTION: Since this is a new specification should there be a requirement that IXoT servers are RECOMMENDED to condense responses as described in Section 6 of [RFC1995]. [RFC1995] document says this is optional and MAY be done but it can significantly reduce the size of responses and may have implications for padding? </p>
+<h1 id="rfc.section.5.4.1"><a href="#rfc.section.5.4.1">5.4.1.</a> <a href="#fallback-to-axfr" id="fallback-to-axfr">Fallback to AXFR</a></h1>
+<p id="rfc.section.5.4.1.p.1">Fallback to AXFR can happen, for example, if the server is not able to provide an IXFR for the requested SOA. Implementations differ in how long they store zone deltas and how many may be stored at any one time.  </p>
+<p id="rfc.section.5.4.1.p.2">After a failed IXFR a IXoT client SHOULD request the AXFR on the already open TLS connection.  </p>
 <h1 id="rfc.section.6"><a href="#rfc.section.6">6.</a> <a href="#zone-transfer-with-dot--authentication" id="zone-transfer-with-dot--authentication">Zone Transfer with DoT - Authentication</a></h1>
 <h1 id="rfc.section.6.1"><a href="#rfc.section.6.1">6.1.</a> <a href="#tsig" id="tsig">TSIG</a></h1>
 <p id="rfc.section.6.1.p.1">TSIG <a href="#RFC2845">[RFC2845]</a> provides a mechanism for two parties to exchange secret keys which can then be used to create a message digest to protect individual DNS messages. This allows each party to authenticate that a request or response (and the data in it) came from the other party, even if it was transmitted-over-an unsecured channel or via a proxy. It provides party-to-party data authentication, but not hop-to-hop channel authentication or confidentiality.  </p>
@@ -732,7 +736,6 @@
 <p/>
 
 <ul>
-  <li>Should DoT in this new case be required to use only TLS 1.3 and higher to avoid residual exposure?</li>
   <li>How should padding be used in IXFR?</li>
   <li>Should there be an option to 'pad' an AXFR response (i.e. a set of AXFR responses on a given connection) to hide the zone size?</li>
 </ul>
