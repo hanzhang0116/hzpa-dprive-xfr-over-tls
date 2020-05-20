@@ -90,7 +90,7 @@
 <uri></uri>
 </address>
 </author>
-<date year="2020" month="May" day="19"/>
+<date year="2020" month="May" day="20"/>
 
 <area>Internet</area>
 <workgroup>dprive</workgroup>
@@ -681,6 +681,14 @@ discussions.
 </section>
 
 <section anchor="changelog" title="Changelog">
+<t>draft-ietf-dprive-xfr-over-tls-00
+</t>
+<t>
+<list style="symbols">
+<t>Minor editorial updates</t>
+<t>Add requirement for TLS 1.3. or later</t>
+</list>
+</t>
 <t>draft-ietf-dprive-xfr-over-tls-00
 </t>
 <t>

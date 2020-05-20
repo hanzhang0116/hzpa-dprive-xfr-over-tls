@@ -6,12 +6,12 @@ dprive                                                          H. Zhang
 Internet-Draft                                                   P. Aras
 Updates: 1995 (if approved)                                   Salesforce
 Intended status: Standards Track                               W. Toorop
-Expires: November 20, 2020                                    NLnet Labs
+Expires: November 21, 2020                                    NLnet Labs
                                                             S. Dickinson
                                                               Sinodun IT
                                                                A. Mankin
                                                               Salesforce
-                                                            May 19, 2020
+                                                            May 20, 2020
 
 
                        DNS Zone Transfer-over-TLS
@@ -42,7 +42,7 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on November 20, 2020.
+   This Internet-Draft will expire on November 21, 2020.
 
 Copyright Notice
 
@@ -53,7 +53,7 @@ Copyright Notice
 
 
 
-Zhang, et al.           Expires November 20, 2020               [Page 1]
+Zhang, et al.           Expires November 21, 2020               [Page 1]
 
 Internet-Draft                XFR-over-TLS                      May 2020
 
@@ -103,13 +103,13 @@ Table of Contents
    12. Security Considerations . . . . . . . . . . . . . . . . . . .  15
    13. Acknowledgements  . . . . . . . . . . . . . . . . . . . . . .  15
    14. Changelog . . . . . . . . . . . . . . . . . . . . . . . . . .  15
-   15. References  . . . . . . . . . . . . . . . . . . . . . . . . .  15
+   15. References  . . . . . . . . . . . . . . . . . . . . . . . . .  16
      15.1.  Normative References . . . . . . . . . . . . . . . . . .  16
      15.2.  Informative References . . . . . . . . . . . . . . . . .  17
 
 
 
-Zhang, et al.           Expires November 20, 2020               [Page 2]
+Zhang, et al.           Expires November 21, 2020               [Page 2]
 
 Internet-Draft                XFR-over-TLS                      May 2020
 
@@ -165,7 +165,7 @@ Internet-Draft                XFR-over-TLS                      May 2020
 
 
 
-Zhang, et al.           Expires November 20, 2020               [Page 3]
+Zhang, et al.           Expires November 21, 2020               [Page 3]
 
 Internet-Draft                XFR-over-TLS                      May 2020
 
@@ -221,7 +221,7 @@ Internet-Draft                XFR-over-TLS                      May 2020
 
 
 
-Zhang, et al.           Expires November 20, 2020               [Page 4]
+Zhang, et al.           Expires November 21, 2020               [Page 4]
 
 Internet-Draft                XFR-over-TLS                      May 2020
 
@@ -277,7 +277,7 @@ Internet-Draft                XFR-over-TLS                      May 2020
 
 
 
-Zhang, et al.           Expires November 20, 2020               [Page 5]
+Zhang, et al.           Expires November 21, 2020               [Page 5]
 
 Internet-Draft                XFR-over-TLS                      May 2020
 
@@ -333,7 +333,7 @@ Internet-Draft                XFR-over-TLS                      May 2020
 
 
 
-Zhang, et al.           Expires November 20, 2020               [Page 6]
+Zhang, et al.           Expires November 21, 2020               [Page 6]
 
 Internet-Draft                XFR-over-TLS                      May 2020
 
@@ -389,7 +389,7 @@ Internet-Draft                XFR-over-TLS                      May 2020
 
 
 
-Zhang, et al.           Expires November 20, 2020               [Page 7]
+Zhang, et al.           Expires November 21, 2020               [Page 7]
 
 Internet-Draft                XFR-over-TLS                      May 2020
 
@@ -445,7 +445,7 @@ Internet-Draft                XFR-over-TLS                      May 2020
 
 
 
-Zhang, et al.           Expires November 20, 2020               [Page 8]
+Zhang, et al.           Expires November 21, 2020               [Page 8]
 
 Internet-Draft                XFR-over-TLS                      May 2020
 
@@ -501,7 +501,7 @@ Internet-Draft                XFR-over-TLS                      May 2020
 
 
 
-Zhang, et al.           Expires November 20, 2020               [Page 9]
+Zhang, et al.           Expires November 21, 2020               [Page 9]
 
 Internet-Draft                XFR-over-TLS                      May 2020
 
@@ -557,7 +557,7 @@ Internet-Draft                XFR-over-TLS                      May 2020
 
 
 
-Zhang, et al.           Expires November 20, 2020              [Page 10]
+Zhang, et al.           Expires November 21, 2020              [Page 10]
 
 Internet-Draft                XFR-over-TLS                      May 2020
 
@@ -613,7 +613,7 @@ Internet-Draft                XFR-over-TLS                      May 2020
 
 
 
-Zhang, et al.           Expires November 20, 2020              [Page 11]
+Zhang, et al.           Expires November 21, 2020              [Page 11]
 
 Internet-Draft                XFR-over-TLS                      May 2020
 
@@ -669,7 +669,7 @@ Internet-Draft                XFR-over-TLS                      May 2020
 
 
 
-Zhang, et al.           Expires November 20, 2020              [Page 12]
+Zhang, et al.           Expires November 21, 2020              [Page 12]
 
 Internet-Draft                XFR-over-TLS                      May 2020
 
@@ -725,7 +725,7 @@ Internet-Draft                XFR-over-TLS                      May 2020
 
 
 
-Zhang, et al.           Expires November 20, 2020              [Page 13]
+Zhang, et al.           Expires November 21, 2020              [Page 13]
 
 Internet-Draft                XFR-over-TLS                      May 2020
 
@@ -781,7 +781,7 @@ Internet-Draft                XFR-over-TLS                      May 2020
 
 
 
-Zhang, et al.           Expires November 20, 2020              [Page 14]
+Zhang, et al.           Expires November 21, 2020              [Page 14]
 
 Internet-Draft                XFR-over-TLS                      May 2020
 
@@ -811,6 +811,12 @@ Internet-Draft                XFR-over-TLS                      May 2020
 
    draft-ietf-dprive-xfr-over-tls-00
 
+   o  Minor editorial updates
+
+   o  Add requirement for TLS 1.3. or later
+
+   draft-ietf-dprive-xfr-over-tls-00
+
    o  Rename after adoption and reference update.
 
    o  Add placeholder for SIG(0) discussion
@@ -829,18 +835,14 @@ Internet-Draft                XFR-over-TLS                      May 2020
 
    o  Initial commit
 
-15.  References
 
 
-
-
-
-
-
-Zhang, et al.           Expires November 20, 2020              [Page 15]
+Zhang, et al.           Expires November 21, 2020              [Page 15]
 
 Internet-Draft                XFR-over-TLS                      May 2020
 
+
+15.  References
 
 15.1.  Normative References
 
@@ -891,9 +893,7 @@ Internet-Draft                XFR-over-TLS                      May 2020
 
 
 
-
-
-Zhang, et al.           Expires November 20, 2020              [Page 16]
+Zhang, et al.           Expires November 21, 2020              [Page 16]
 
 Internet-Draft                XFR-over-TLS                      May 2020
 
@@ -949,7 +949,7 @@ Internet-Draft                XFR-over-TLS                      May 2020
 
 
 
-Zhang, et al.           Expires November 20, 2020              [Page 17]
+Zhang, et al.           Expires November 21, 2020              [Page 17]
 
 Internet-Draft                XFR-over-TLS                      May 2020
 
@@ -1005,7 +1005,7 @@ Authors' Addresses
 
 
 
-Zhang, et al.           Expires November 20, 2020              [Page 18]
+Zhang, et al.           Expires November 21, 2020              [Page 18]
 
 Internet-Draft                XFR-over-TLS                      May 2020
 
@@ -1061,4 +1061,4 @@ Internet-Draft                XFR-over-TLS                      May 2020
 
 
 
-Zhang, et al.           Expires November 20, 2020              [Page 19]
+Zhang, et al.           Expires November 21, 2020              [Page 19]

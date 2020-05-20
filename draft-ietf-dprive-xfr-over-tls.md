@@ -8,7 +8,7 @@
     workgroup = "dprive"
     keyword = ["DNS", "operations", "privacy"]
     updates = [1995]
-    date = 2020-05-19T00:00:00Z
+    date = 2020-05-20T00:00:00Z
     [pi]
     [[author]]
      initials="H."
@@ -612,6 +612,11 @@ discussions.
 
 
 # Changelog
+
+draft-ietf-dprive-xfr-over-tls-00
+
+* Minor editorial updates
+* Add requirement for TLS 1.3. or later
 
 draft-ietf-dprive-xfr-over-tls-00
 
