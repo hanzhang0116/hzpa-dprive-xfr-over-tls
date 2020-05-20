@@ -321,7 +321,7 @@ applicable to XFR-over-TLS as well.
 It is RECOMMENDED that clients and servers that support XoT also implement
 EDNS0 Keepalive [RFC7828].
 
-It is useful to note that in these mechanisms is it the secondary that initiates the TLS connection to the primary for a XFR request, so that in terms of connectivity the secondary is the TLS client and the primary the TLS server.
+It is useful to note that in these mechanisms it is the secondary that initiates the TLS connection to the primary for a XFR request, so that in terms of connectivity the secondary is the TLS client and the primary the TLS server.
 
 ## TLS versions
 
