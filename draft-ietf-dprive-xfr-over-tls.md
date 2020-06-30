@@ -2,13 +2,13 @@
     Title = "DNS Zone Transfer-over-TLS"
     abbrev = "XFR-over-TLS"
     category = "std"
-    docName= "draft-ietf-dprive-xfr-over-tls-01"
+    docName= "draft-ietf-dprive-xfr-over-tls-02"
     ipr = "trust200902"
     area = "Internet"
     workgroup = "dprive"
     keyword = ["DNS", "operations", "privacy"]
     updates = [1995]
-    date = 2020-05-20T00:00:00Z
+    date = 2020-06-30T00:00:00Z
     [pi]
     [[author]]
      initials="H."
@@ -167,7 +167,7 @@ IXoT: IXFR over-TLS
   support using a TCP connection for multiple AXFR sessions or XFRs of different
   zones because they have not been updated to follow the guidance in [@RFC5936].
   Any implementation of XFR-over-TLS would obviously be required to implement
-  optimized and interoperable transfers as described in [@RFC5936] e.g. transfer
+  optimized and interoperable transfers as described in [@RFC5936], e.g., transfer
   of multiple zones over one connection.
   
 * Performance. Current usage of TCP for IXFR is sub-optimal in some cases i.e.
@@ -266,7 +266,7 @@ fact is says in non-normative language:
 
 So there may be a forth step above where the client falls back to IXFR-over-TCP.
 There may also be a forth step where the secondary must fall back to AXFR
-because e.g. the primary does not support IXFR.
+because, e.g., the primary does not support IXFR.
 
 However it is noted that at least two widely used open source authoritative
 nameserver implementations ([BIND](https://www.isc.org/bind/) and
@@ -300,7 +300,7 @@ Unencrypted NOTIFY messages identify configured secondaries on the primary.
 [@RFC1996] also states: 
 
 "If ANCOUNT>0, then the answer section represents an
-  unsecure hint at the new RRset for this <QNAME,QCLASS,QTYPE>.
+  unsecure hint at the new RRset for this (QNAME,QCLASS,QTYPE).
   
 But since the only supported QTYPE for NOTIFY is SOA, this does not pose a
 potential leak.
@@ -314,7 +314,7 @@ any downstream secondary.
 
 ## Performance Considerations
 
-The details in [@RFC7766], [@!RFC7858] and [@!RFC8310] about e.g. using
+The details in [@RFC7766], [@!RFC7858] and [@!RFC8310] about, e.g., using
 persistent connections and TLS Session Resumption [@!RFC5077] are fully
 applicable to XFR-over-TLS as well.
 
@@ -357,6 +357,89 @@ QUESTION: Should there be a requirement that the SOA is always done on a TLS
 connection if the XFR is? For the case when no transfer is required this could
 be unnecessary overhead.
 
+### Padding AXFR responses
+
+NOTE: Not sure if we should dump all this section in a placeholder draft on
+padding or we could get a basic version ironed out to include here? We might
+need to include the capability for clients to accept 'empty' responses here for
+interoperability later on?
+
+QUESTIONS FOR US TO ANSWER: 
+
+* How do most open source implementations split up AXFR
+responses? A fixed number of records per response or as many as they can fit in
+a TCP message length of 65535 bytes? (Note RFC5936 talks about supporting old
+clients that expect one record per response!). 
+* Do they send records in a fixed or random order - would this allow anything
+  about the zone contents to be inferred by watching different message sizes
+  over time if they are not all padded to the same size
+
+The goal of padding AXFR responses would be two fold:
+
+* to obfuscate the actual size of the transferred zone to minimised information
+  leakage about the entire contents of the zone.
+* to obfuscate the incremental changes to the zone between SOA updates to
+  minimise information leakage about zone update activity and growth.
+
+Note that the re-use of TLS connections for transfers of multiple different
+zones would complicate any attempt to analyse the traffic size and timing to
+extract information.
+
+Note that deducing information about the the above from zone transfer sizes is
+dependant on whether and how the zone is DNSSEC signed, but this information can
+normally be obtained by directly querying the authoritative server. In the absence of DNSSEC deducing zone sizes from AXFRs is straight forward.
+
+A simplistic option, following the premise of the Block-Length Padding strategy
+recommended in [@RFC8467], would be to specify 
+
+* a 'message size' to which each individual AXFR response would always be padded
+  (with a maximum value of 65353 bytes) and
+* a compatible 'zone block size' for a zone to which the sum total of all the
+  AXFR responses should be padded. This could equivalently be specified as a
+  'zone number of AXFR responses block size'.
+
+This second requirement is likely to require an implementation to create 'empty'
+AXFR responses in order to pad a zone to the zone block size. That is, AXFR
+responses that contain no RR's apart from the EDNS(0) option for padding.
+However, as will existing AXFR, the last message sent MUST contain the same SOA
+that was in the first message of the AXFR response series in order to signal the
+conclusion of the zone transfer.
+
+QUESTION FOR US: What do existing clients do if they receive 'empty' responses
+today?
+
+Observation of the zone transfers would then reveal only zone block size step
+changes in the total zone size (if the zone size changed sufficiently)
+obfuscating the smaller fluctuations.
+
+Choosing a message size of less than 65535 only really makes sense for
+small zones that can be transferred in a single response (in which case the zone
+block size can be set to the same value). Choosing a zone block size close to
+the current zone size would provide some protection with a minimal overhead.
+Choosing a zone block size much larger than the current zone size would provide
+increased protection but with increased overhead.
+
+As with any padding strategy the trade-off between increased bandwidth and
+processing due to the larger size and number of padded DNS messages and the
+corresponding gain in confidentiality must be carefully considered.
+
+Primary implementations SHOULD provide a configurable block-size based padding
+mechanism. Secondary implementations MUST be resilient to receiving padded AXFR
+responses including 'empty' AXFR response that contain only padding.
+
+As noted in [@RFC8467], the maximum message length, as dictated by the protocol,
+limits the space for EDNS(0) options. Since padding will reduce the message
+space available to other EDNS(0) options, the "Padding" option MUST be the last
+EDNS(0) option applied before a DNS message is sent. In particular for AXFR,
+that means that if the message is to be signed with, e.g., TSIG this must be
+done before the padding is applied.
+
+Recommendation of specific values for the block sizes described above are out of
+scope for this specification. More detailed considerations of the trade-off
+described above with regard to block sizes, size recommendations and also
+alternative proposals for AXFR padding are expected to be the subject of future
+work.
+
 ## IXoT mechanism
 
 The figure below provides an outline of the IXoT mechanism including NOTIFYs.
@@ -394,7 +477,71 @@ recommends that servers use timeouts of at least a few seconds).
 An IXoT client MAY pipeline IXFR requests for different zones on a single TLS
 connection. AN IXoT server MAY respond to those requests out of order.
 
-QUESTION: Since this is a new specification should there be a requirement that IXoT servers are RECOMMENDED to condense responses as described in Section 6 of [RFC1995]. [RFC1995] document says this is optional and MAY be done but it can significantly reduce the size of responses and may have implications for padding?
+### Condensation of responses
+
+QUESTION: Since this is a new specification should there be a requirement that
+IXoT servers are RECOMMENDED to condense responses as described in Section 6 of
+[RFC1995]. [RFC1995] document says this is optional and MAY be done. Whilst it
+does add complexity to generating response it can significantly reduce the size
+of responses and will have implications for padding.
+
+### Padding of IXFR responses
+
+NOTE: As with AXFR not sure if we should dump all this section in a placeholder
+draft on padding or we could get a basic version ironed out to include here?
+
+The goal of padding AXFR responses would be to obfuscate the incremental changes
+to the zone between SOA updates to minimise information leakage about zone
+update activity and growth. Both the size and timing of the IXFRs could reveal
+information.
+
+Note that the re-use of TLS connections for transfers of multiple different
+zones would complicate any attempt to analyse the traffic size and timing to
+extract information.
+
+IXFR responses can vary in size greatly from the order of 100 bytes for one or
+two record updates, to tens of thousands of bytes for large dynamic DNSSEC
+signed zones and (in principle) up to the maximum size of a singe IXFR response
+(65535 bytes). The frequency of IXFR responses can also depend greatly on if and
+how the zone is DNSSEC signed. For example, both the following zones might see
+frequent similarly sized IXFR exchanges
+
+* a small DNSSEC signed zone with frequent record updates 
+* a large DNSSEC signed zone that receives no updates but the RRSIG signature
+  expiry dates are jittered across the signature lifetime window
+
+A simplistic option, following the premise of the Block-Length Padding strategy
+recommended in [@RFC8467], would be to specify 
+
+* a 'message block size' where each individual IXFR response would always be
+  padded to the closest multiple of that number of bytes (with a maximum value
+  of 65353 bytes)
+
+Choosing a message block size of less than 65535 will expose some information
+about zone activity but obfuscate the more granular changes.
+
+As with any padding strategy the trade-off between increased bandwidth and
+processing due to the larger size and number of padded DNS messages and the
+corresponding gain in confidentiality must be carefully considered. For IXFR a
+detailed understanding of the zone contents and transfer pattern is likely to be
+required in order to select the optimal block size for a zone.
+
+Primary implementations SHOULD provide a configurable message block size based
+padding mechanism. Secondary implementations MUST be resilient to receiving
+padded IXFR responses.
+
+As noted in [@RFC8467], the maximum message length, as dictated by the protocol,
+limits the space for EDNS(0) options. Since padding will reduce the message
+space available to other EDNS(0) options, the "Padding" option MUST be the last
+EDNS(0) option applied before a DNS message is sent. In particular for AXFR,
+that means that if the message is to be signed with, e.g., TSIG this must be
+done before the padding is applied.
+
+Recommendation of specific values for message block sizes are out of scope for
+this specification. More detailed considerations of the trade-off described
+above with regard to message block sizes, specific size recommendations and also
+alternative proposals for IXFR padding are expected to be the subject of future
+work.
 
 ### Fallback to AXFR
 
@@ -405,6 +552,32 @@ zone deltas and how many may be stored at any one time.
 After a failed IXFR a IXoT client SHOULD request the AXFR on the already open
 TLS connection.
 
+# Multi-primary Configurations
+
+Also known as multi-master configurations this model can provide flexibility
+and redundancy particularly for IXFR. A secondary will receive one or more
+NOTIFY messages and can send an SOA to all of the configured primaries. It can
+then choose to send an XFR request to the primary with the highest SOA (or
+other criteria, e.g., RTT).
+
+When using persistent connections the secondary may have a TLS connection
+already open to one or more primaries. Should a secondary preferentially
+request an XFR from a primary to which it already has an open TLS connection
+or the one with the highest SOA (assuming it doesn't have a connection open to
+it already)?
+
+Two extremes can be envisaged here. In the first case the secondary continues to
+use one persistent connection to a single primary until it has reason not to.
+Reasons not to might include the primary repeatedly closing the connection, long
+RTTs on transfers or the SOA of the primary being an unacceptable lag behind the
+SOA of an alternative primary.
+
+At the other extreme a primary could keep multiple persistent connections open
+to all available primaries and only request XFRs from the primary with the
+highest serial number. Since normally the number of secondaries and primaries in
+direct contact in a transfer group is reasonably low this might be feasible if
+latency is the most significant concern.
+
 # Zone Transfer with DoT - Authentication
 
 ## TSIG
@@ -412,13 +585,17 @@ TLS connection.
 TSIG [@RFC2845] provides a mechanism for two parties to exchange secret keys
 which can then be used to create a message digest to protect individual DNS
 messages. This allows each party to authenticate that a request or response (and
-the data in it) came from the other party, even if it was transmitted-over-an
+the data in it) came from the other party, even if it was transmitted over an
 unsecured channel or via a proxy. It provides party-to-party data
 authentication, but not hop-to-hop channel authentication or confidentiality.
 
 ## SIG(0)
 
-TBD
+SIG(0) [@RFC2535] similarly also provides a mechanism to digitally a sign DNS
+message but uses public key authentication, where the public keys are stored in
+DNS as KEY RRs and a private key is stored at the signer. It also provides
+party-to-party data authentication, but not hop-to-hop channel authentication or
+confidentiality.
 
 ## TLS
 
@@ -478,9 +655,9 @@ XFR-over-TLS but is not considered further.
 
 ## Comparison of Authentication Methods
 
-The Table below compares the properties of each of the above methods in terms of
-what protection they provide to the secondary and primary servers during XoT in
-terms of:
+The Table below compares the properties of a selection of the above methods in
+terms of what protection they provide to the secondary and primary servers
+during XoT in terms of:
 
 * 'Data Auth': Authentication that the DNS message data is signed by the party
   with whom credentials were shared (the signing party may or may not be party
@@ -513,7 +690,7 @@ Based on this analysis it can be seen that:
 
 * Using just mutual TLS can be considered a standalone solution if the
   secondary has reason to place equivalent trust in channel authentication as
-  data authentication e.g. the same operator runs both the primary and
+  data authentication, e.g., the same operator runs both the primary and
   secondary.
   
 * Using TSIG, Strict TLS and an ACL on the primary provides all 3 properties for
@@ -524,7 +701,7 @@ Based on this analysis it can be seen that:
 We call the entire group of servers involved in XFR (all the primaries and all
 the secondaries) the 'transfer group'.
 
-Within any transfer group both AXFRs and IXFRs for a zone SHOULD all use the same policy e.g. if AXFRs use AXoT all IXFRs SHOULD use IXoT.
+Within any transfer group both AXFRs and IXFRs for a zone SHOULD all use the same policy, e.g., if AXFRs use AXoT all IXFRs SHOULD use IXoT.
 
 In order to assure the confidentiality of the zone information, the entire
 transfer group MUST have a consistent policy of requiring confidentiality. If
@@ -532,7 +709,7 @@ any do not, this is a weak link for attackers to exploit.
 
 A XoT policy should specify
 
-* If TSIG is required
+* If TSIG or SIG(0) is required
 * What kind of TLS is required (Opportunistic, Strict or mTLS)
 * If IP based ACLs should also be used.
 
@@ -540,40 +717,14 @@ Since this may require configuration of a number of servers who may be under
 the control of different operators the desired consistency could be hard to
 enforce and audit in practice.
 
-Certain aspects of the Policies can be relatively easily tested independently
-e.g. by requesting zone transfers without TSIG, from unauthorized IP addresses
+Certain aspects of the Policies can be relatively easily tested independently,
+e.g., by requesting zone transfers without TSIG, from unauthorized IP addresses
 or over cleartext DNS. Other aspects such as if a secondary will accept data
 without a TSIG digest or if secondaries are using Strict as opposed to
 Opportunistic TLS are more challenging.
 
-NOTE: The authors request feedback on this challenge and welcome suggestions of
-how to practically manage this.
+The mechanics of co-ordinating or enforcing such policies are out of the scope of this document but may be the subject of future operational guidance. 
 
-# Multi-primary Configurations
-
-Also known as multi-master configurations this model can provide flexibility
-and redundancy particularly for IXFR. A secondary will receive one or more
-NOTIFY messages and can send an SOA to all of the configured primaries. It can
-then choose to send an IXFR request to the primary with the highest SOA (or
-other criteria e.g. RTT).
-
-When using persistent connections the secondary may have a TLS connection
-already open to one or more primaries. Should a secondary preferentially
-request an IXFR from a primary to which it already has an open TLS connection
-or the one with the highest SOA (assuming it doesn't have a connection open to
-it already)?
-
-Two extremes can be envisaged here. In the first case the secondary continues to
-use one persistent connection to a single primary until it has reason not to.
-Reasons not to might include the primary repeatedly closing the connection, long
-RTTs on transfers or the SOA of the primary being an unacceptable lag behind the
-SOA of an alternative primary.
-
-At the other extreme a primary could keep multiple persistent connections open
-to all available primaries and only request IXFRs from the primary with the
-highest serial number. Since normally the number of secondaries and primaries in
-direct contact in a transfer group is reasonably low this might be feasible if
-latency is the most significant concern.
 
 # Implementation Considerations
 
@@ -598,12 +749,15 @@ TBD
 
 This document specifies a security measure against a DNS risk: the risk that an
 attacker collects entire DNS zones through eavesdropping on clear text DNS zone
-transfers. It presents a new Security Consideration for DNS. Some questions to
-discuss are: 
+transfers. 
 
-* How should padding be used in IXFR?
-* Should there be an option to 'pad' an AXFR response (i.e. a set of AXFR
-  responses on a given connection) to hide the zone size?
+This does not mitigate:
+
+* the risk that some level of zone activity might be inferred by observing zone transfer sizes and timing on encrypted connections (even with padding applied), in combination with obtaining SOA records by directly querying authoritative servers.
+* the risk that hidden primaries might be inferred or identified via observation of encrypted connections.
+* the risk of zone contents being obtained via zone enumeration techniques.
+
+Security concerns of DNS-over-TLS are outlined in [@RFC7858] and [@RFC8310].
 
 # Acknowledgements
 
