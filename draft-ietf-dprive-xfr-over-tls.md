@@ -8,7 +8,7 @@
     workgroup = "dprive"
     keyword = ["DNS", "operations", "privacy"]
     updates = [1995]
-    date = 2020-06-30T00:00:00Z
+    date = 2020-07-01T00:00:00Z
     [pi]
     [[author]]
      initials="H."
@@ -125,8 +125,8 @@ a zone transfer and for data integrity, but does not express any need for
 confidentiality, and TSIG does not offer encryption. Some operators use SSH
 tunneling or IPSec to encrypt the transfer data. 
 
-Because the AXFR zone transfer is typically carried out-over-TCP from
-authoritative DNS protocol implementations, encrypting AXFR using DNS-over-TLS
+Because the AXFR zone transfer is typically carried out over TCP from
+authoritative DNS protocol implementations, encrypting AXFR using DoT
 [@!RFC7858] seems like a simple step forward. This document specifies how to use
 DoT to prevent zone collection from zone transfers, including discussion of
 approaches for IXFR, which uses UDP or TCP.
@@ -166,9 +166,9 @@ IXoT: IXFR over-TLS
   in [@RFC1034] and [@RFC1035]. For example, some older AXFR servers don’t
   support using a TCP connection for multiple AXFR sessions or XFRs of different
   zones because they have not been updated to follow the guidance in [@RFC5936].
-  Any implementation of XFR-over-TLS would obviously be required to implement
-  optimized and interoperable transfers as described in [@RFC5936], e.g., transfer
-  of multiple zones over one connection.
+  Any implementation of XFR-over-TLS (XoT) would obviously be required to
+  implement optimized and interoperable transfers as described in [@RFC5936],
+  e.g., transfer of multiple zones over one connection.
   
 * Performance. Current usage of TCP for IXFR is sub-optimal in some cases i.e.
   connections are frequently closed after a single IXFR.
@@ -186,7 +186,6 @@ zones.
 
 [@RFC5936] subsequently redefined the specification of AXFR to improve
 performance and interoperability.
-
 
 In this document we use the phrase "XFR mechanism" to describe the entire set of
 message exchanges between a secondary and a primary that concludes in a
@@ -221,7 +220,7 @@ the TCP connection.
 
 
 [@RFC5936] specifies that AXFR must use TCP as the transport protocol but
-details that there is no restriction in the protocol that a single TCP session
+details that there is no restriction in the protocol that a single TCP connection
 must be used only for a single AXFR exchange, or even solely for XFRs. For
 example, it outlines that the SOA query can also happen on this connection.
 However, this can cause interoperability problems with older implementations
@@ -275,13 +274,15 @@ default in their latest releases. For BIND TCP connections are sometimes used
 for SOA queries but in general they are not used persistently and close after
 an IXFR is completed.
  
-<!--TODO: Look at packet captures from NSD and Knot Auth to see what they do.-->
+QUESTION FOR US: Look at packet captures from NSD and Knot Auth to see what they do.
 
 It is noted that the specification for IXFR was published well before TCP was
 considered a first class transport for DNS. This document therefore updates
 [@RFC1995] to state that DNS implementations that support IXFR-over-TCP MUST use
 [@RFC7766] to optimise the use of TCP connections and SHOULD use [@!RFC7858] to
 manage persistent connections.
+
+QUESTION FOR US: We don't go as far here as updating IXFR-over-TCP to match the behaviour outlined in section 5.4.2 for IXoT. Should we? 
 
 
 ## Data Leakage of NOTIFY and SOA Message Exchanges
@@ -316,12 +317,14 @@ any downstream secondary.
 
 The details in [@RFC7766], [@!RFC7858] and [@!RFC8310] about, e.g., using
 persistent connections and TLS Session Resumption [@!RFC5077] are fully
-applicable to XFR-over-TLS as well.
+applicable to XoT as well.
 
 It is RECOMMENDED that clients and servers that support XoT also implement
 EDNS0 Keepalive [RFC7828].
 
-It is useful to note that in these mechanisms it is the secondary that initiates the TLS connection to the primary for a XFR request, so that in terms of connectivity the secondary is the TLS client and the primary the TLS server.
+It is useful to note that in these mechanisms it is the secondary that initiates
+the TLS connection to the primary for a XFR request, so that in terms of
+connectivity the secondary is the TLS client and the primary the TLS server.
 
 ## TLS versions
 
@@ -333,43 +336,106 @@ The figure below provides an outline of the AXoT mechanism including NOTIFYs.
 
 [Figure 3: AXoT mechanism](https://github.com/hanzhang0116/hzpa-dprive-xfr-over-tls/blob/02_updates/02-draft-svg/AXoT_mechanism_1.svg)
 
-The connection for AXFR-over-TLS SHOULD be established using port 853, as
+The connection for AXFR-over-TLS (AXoT) SHOULD be established using port 853, as
 specified in [@!RFC7858], unless there is mutual agreement between the secondary
-and primary to use a port other than port 853 for XFR-over-TLS.
+and primary to use a port other than port 853 for AXoT.
 
-All implementations that support XoT MUST fully implement [@RFC5953] behavior
-on TLS connections.
+### Coverage and relationship to RFC5936
 
-Sections 4.1, 4.1.1 and 4.1.2 of [@RFC5936] describe guidance for AXFR clients
-and servers with regard to re-use of sessions for multiple AXFRs, AXFRs of
-different zones and using TCP session for other queries including SOA.
+[@RFC5936] re-specified AXFR providing additional guidance beyond that provided
+in [@RFC1045] and [@RFC1035]. For example, sections 4.1, 4.1.1 and 4.1.2 of
+[@RFC5936] provide improved guidance for AXFR clients and servers with regard to
+re-use of connections for multiple AXFRs, AXFRs of different zones and using TCP
+connection for other queries including SOA. However [@RFC5936] was constrained
+by having to be backwards compatible with some very early basic implementations
+of AXFR. 
 
-For clarity we restate here that an AXoT client MAY use an already opened TLS
-connection to send a AXFR request. Using an existing open connection is
-RECOMMENDED over opening a new connection. (Non-AXoT session traffic can also
-use an open connection.)
+Here we specify some optimised behaviours for AXoT, based
+closely on those in [@RFC5936], but without the constraint of backwards
+compatibility since it is expected that all implementations of AXoT fully
+implement the behaviour described here.
 
-For clarity we additionally state here that an AXoT client MAY use an already
-opened TLS connection to send a SOA request. Using an existing open connection
-is RECOMMENDED over opening a new connection.
+Where any behavior is not explicitly described here, the behviour specified in
+[@RFC5953] MUST be followed. Any behaviour specified here takes precedence for
+AXoT implementations over that in [@RFC5953].
 
-QUESTION: Should there be a requirement that the SOA is always done on a TLS
-connection if the XFR is? For the case when no transfer is required this could
-be unnecessary overhead.
+### AXoT connection and message handling
+
+The first paragraph of Section 4.1.1 of [@RFC5936] says that clients SHOULD
+close the connection when there is no 'apparent need' to use the connection for
+some time period.
+
+For AXoT this requirement is updated: AXoT clients and servers SHOULD use EDNS0
+Keepalive [RFC7828] to establish the connection timeouts to be used. The AXoT
+server may use the frequency of recent AXFRs to calculate an average update rate
+as input to the decision of what EDNS0 Keepalive timeout to use. Note that use
+of EDNS0 Keepalive enables AXoT servers to signal the desire to close a
+connection due to low resources by sending an EDNS0 Keepalive option with a
+timeout of 0 (in the absence of another way to signal the abort of a AXoT
+transfer). If the server does not support EDNS0 Keepalive the client MAY keep
+the connection open for a few seconds ([@RFC7766] recommends that servers use
+timeouts of at least a few seconds).
+
+An AXoT server MUST be able to handle multiple IXFR requests on a
+single TLS connection (for the same and different zones), as well as to handle
+other query/response transactions over it.
+
+[@RFC5936] says:
+
+    "An AXFR client MAY use an already opened TCP connection to start an
+    AXFR session.  Using an existing open connection is RECOMMENDED over
+    opening a new connection.  (Non-AXFR session traffic can also use an
+    open connection.)"
+
+For AXoT this requirement is restated: AXoT clients SHOULD re-use an existing
+open TLS connection when starting any new AXoT session to the same primary, and
+for issuing SOA queries, instead of opening a new connection. (Non-AXoT session
+traffic can also use an open TLS connection.) The number of TLS connections
+between a secondary and primary SHOULD be minimised.
+
+Valid reasons for not re-using existing connections might include:
+
+* reaching a configured limit for the number of outstanding queries allowed on a
+  single TLS connection
+* the message ID pool has already been exhausted on an open connection
+* a large number of timeouts or slow responses have occurred on an open
+  connection
+* an EDNS0 Keepalive option with a timeout of 0 has been received from the
+  server and the client is in the process of closing the connection
+
+If no TLS connections are currently open, AXoT clients MAY send SOA queries over
+UDP, TCP or TLS.
+
+[@RFC5936] says:
+
+    "Some old AXFR clients expect each response message to contain only a
+    single RR.  To interoperate with such clients, the server MAY
+    restrict response messages to a single RR."
+
+This is as opposed to the normal behaviour of containing a sufficient number of
+RRs to reasonably amortize the per-message overhead. We clarify here that AXoT
+clients MUST be able to handle responses that include multiple RRs, up to the
+largest number that will fit within a DNS message (taking the required content
+of the other sections into account, as described here and in [@RFC5936]). This
+removes any burden on AXoT servers of having to accommodate a configuration
+option or support for restricting responses to containing only a single RR.
+
+An AXoT client SHOULD pipeline AXFR requests for different zones on a single TLS
+connection. An AXoT server SHOULD respond to those requests as soon as the
+response is available i.e. potentially out of order.
 
 ### Padding AXFR responses
 
-NOTE: Not sure if we should dump all this section in a placeholder draft on
-padding or we could get a basic version ironed out to include here? We might
-need to include the capability for clients to accept 'empty' responses here for
-interoperability later on?
+QUESTION FOR US: 
 
-QUESTIONS FOR US TO ANSWER: 
-
-* How do most open source implementations split up AXFR
-responses? A fixed number of records per response or as many as they can fit in
-a TCP message length of 65535 bytes? (Note RFC5936 talks about supporting old
-clients that expect one record per response!). 
+* Not sure if we should dump all this section in a placeholder draft on padding
+  or we could get a basic version ironed out to include here? We might need to
+  include the capability for clients to accept 'empty' responses here for
+  interoperability later on?
+* How do most open source implementations split up AXFR responses? A fixed
+  number of records per response or as many as they can fit in a TCP message
+  length of 65535 bytes? (Note RFC5936 talks about supporting old clients that
+  expect one record per response!).
 * Do they send records in a fixed or random order - would this allow anything
   about the zone contents to be inferred by watching different message sizes
   over time if they are not all padded to the same size
@@ -398,12 +464,27 @@ recommended in [@RFC8467], would be to specify
   AXFR responses should be padded. This could equivalently be specified as a
   'zone number of AXFR responses block size'.
 
+Primary implementations SHOULD provide a configurable block-size based padding
+mechanism.
+
 This second requirement is likely to require an implementation to create 'empty'
 AXFR responses in order to pad a zone to the zone block size. That is, AXFR
 responses that contain no RR's apart from the EDNS(0) option for padding.
 However, as will existing AXFR, the last message sent MUST contain the same SOA
 that was in the first message of the AXFR response series in order to signal the
 conclusion of the zone transfer.
+
+[@RFC5936] says:
+
+    "Each AXFR response message SHOULD contain a sufficient number of RRs
+    to reasonably amortize the per-message overhead, up to the largest
+    number that will fit within a DNS message (taking the required
+    content of the other sections into account, as described below)."
+
+'Empty' AXoT responses generated in order to meet a padding requirement are
+exempt from the above statement. Secondary implementations MUST be resilient to
+receiving padded AXFR responses including 'empty' AXFR response that contain
+only padding.
 
 QUESTION FOR US: What do existing clients do if they receive 'empty' responses
 today?
@@ -422,10 +503,6 @@ increased protection but with increased overhead.
 As with any padding strategy the trade-off between increased bandwidth and
 processing due to the larger size and number of padded DNS messages and the
 corresponding gain in confidentiality must be carefully considered.
-
-Primary implementations SHOULD provide a configurable block-size based padding
-mechanism. Secondary implementations MUST be resilient to receiving padded AXFR
-responses including 'empty' AXFR response that contain only padding.
 
 As noted in [@RFC8467], the maximum message length, as dictated by the protocol,
 limits the space for EDNS(0) options. Since padding will reduce the message
@@ -447,35 +524,62 @@ The figure below provides an outline of the IXoT mechanism including NOTIFYs.
 [Figure 4: IXoT mechanism]
 (https://github.com/hanzhang0116/hzpa-dprive-xfr-over-tls/blob/02_updates/02-draft-svg/IXoT_mechanism_1.svg)
 
-The connection for IXFR-over-TLS SHOULD be established using port 853, as
+The connection for IXFR-over-TLS (IXoT) SHOULD be established using port 853, as
 specified in [@!RFC7858], unless there is mutual agreement between the secondary
-and primary to use a port other than port 853 for XFR-over-TLS.
+and primary to use a port other than port 853 for IXoT.
+
+### Coverage and relationship to RFC1995
 
 [@RFC1995] says nothing with respect to optimizing IXFRs over TCP or re-using
-already open TCP connections to perform IXFRs or other queries. We provide
-guidance here that aligns with the guidance in [@RFC5936] for AXFR and with
+already open TCP connections to perform IXFRs or other queries. We provide new
+guidance here specific to IXoT that aligns with the guidance in [@RFC5936] for AXFR, that in section (#axot-mechanism) for AXoT, and with
 that for performant TCP/TLS usage in [@RFC7766] and [@RFC7858].
 
-An IXoT client MAY use an already opened TLS connection to send a IXFR request.
-Using an existing open connection is RECOMMENDED over opening a new connection.
-(Non-IXoT session traffic can also use an open connection.)
+Where any behavior is not explicitly described here, the behviour specified in
+[@RFC1995] MUST be followed. Any behaviour specified here takes precedence for
+AXoT implementations over that in [@RFC1995].
 
-An IXoT client MAY use an already open TLS connection to send an SOA query.
-Using an existing open connection is RECOMMENDED over opening a new connection.
+### IXoT connection and message handling
 
-An IXoT server MUST be able to handle multiple IXoT requests on a single TLS
-connection, as well as to handle other query/response transactions over it.
+IXoT clients and servers SHOULD use EDNS0 Keepalive [RFC7828] to establish the
+connection timeouts to be used. The IXoT server may use the frequency of recent
+IXFRs to calculate an average update rate as input to the decision of what EDNS0
+Keepalive timeout to use. Note that the use of EDNS0 Keepalive enables IXoT
+servers to signal the desire to close a connection due to low resources by
+sending an EDNS0 Keepalive option with a timeout of 0. If the server does not
+support EDNS0 Keepalive the client MAY keep the connection open for a few
+seconds ([@RFC7766] recommends that servers use timeouts of at least a few
+seconds).
 
-An IXoT client MAY keep an existing TLS session open in the expectation it is
-likely to need to perform an IXFR in the near future. The client may use the
-frequency of recent IXFRs to calculate an average update rate and then use
-EDNS0 Keepalive to request an appropriate timeout from the server (if the
-server supports EDNS0 Keepalive). If the server does not support EDNS0
-Keepalive the client MAY keep the connection open for a few seconds ([@RFC7766]
-recommends that servers use timeouts of at least a few seconds).
+In the original definition of IXFR, there arguably is an implicit assumption
+(probably unintentional) that a TCP connection is used for one and only one IXFR
+request. Indeed, several open source implementations currently take this
+approach. An IXoT server MUST be able to handle multiple IXFR requests on a
+single TLS connection (for the same and different zones), as well as to handle
+other query/response transactions over it.
 
-An IXoT client MAY pipeline IXFR requests for different zones on a single TLS
-connection. AN IXoT server MAY respond to those requests out of order.
+IXoT clients SHOULD re-use an existing open TLS connection when making any new
+IXoT request to the same primary, and for issuing SOA queries, instead of
+opening a new connection. (Non-IXoT traffic can also use an open TLS
+connection.) The number of TLS connections between a secondary and primary
+SHOULD be minimised.
+
+Valid reasons for not re-using existing connections might include:
+
+* reaching a configured limit for the number of outstanding queries allowed on a
+  single TLS connection
+* the message ID pool has already been exhausted on an open connection
+* a large number of timeouts or slow responses have occurred on an open
+  connection
+* an EDNS0 Keepalive option with a timeout of 0 has been received from the
+  server and the client is in the process of closing the connection
+
+If no TLS connections are currently open, IXoT clients MAY send SOA queries over
+UDP, TCP or TLS.
+
+An IXoT client SHOULD pipeline IXFR requests for different zones on a single TLS
+connection. An IXoT server SHOULD respond to those requests as soon as the
+response is available i.e. potentially out of order.
 
 ### Condensation of responses
 
@@ -487,7 +591,7 @@ of responses and will have implications for padding.
 
 ### Padding of IXFR responses
 
-NOTE: As with AXFR not sure if we should dump all this section in a placeholder
+QUESTION FOR US: As with AXFR not sure if we should dump all this section in a placeholder
 draft on padding or we could get a basic version ironed out to include here?
 
 The goal of padding AXFR responses would be to obfuscate the incremental changes
@@ -566,17 +670,19 @@ request an XFR from a primary to which it already has an open TLS connection
 or the one with the highest SOA (assuming it doesn't have a connection open to
 it already)?
 
-Two extremes can be envisaged here. In the first case the secondary continues to
-use one persistent connection to a single primary until it has reason not to.
-Reasons not to might include the primary repeatedly closing the connection, long
-RTTs on transfers or the SOA of the primary being an unacceptable lag behind the
-SOA of an alternative primary.
+Two extremes can be envisaged here. The first one can be considered a 'preferred
+primary connection' model. In this case the secondary continues to use one
+persistent connection to a single primary until it has reason not to. Reasons
+not to might include the primary repeatedly closing the connection, long RTTs on
+transfers or the SOA of the primary being an unacceptable lag behind the SOA of
+an alternative primary.
 
-At the other extreme a primary could keep multiple persistent connections open
-to all available primaries and only request XFRs from the primary with the
-highest serial number. Since normally the number of secondaries and primaries in
-direct contact in a transfer group is reasonably low this might be feasible if
-latency is the most significant concern.
+The other extreme can be considered a 'parallel primary connection' model. Here
+a secondary could keep multiple persistent connections open to all available
+primaries and only request XFRs from the primary with the highest serial number.
+Since normally the number of secondaries and primaries in direct contact in a
+transfer group is reasonably low this might be feasible if latency is the most
+significant concern.
 
 # Zone Transfer with DoT - Authentication
 
@@ -651,7 +757,7 @@ record described in this document includes fields reserved for future work to
 support large, dynamic zones.`
 
 It is complementary the above mechanisms and can be used in conjunction with
-XFR-over-TLS but is not considered further.
+XoT but is not considered further.
 
 ## Comparison of Authentication Methods
 
@@ -734,7 +840,7 @@ TBD
 
 The 1.9.2 version of
 [Unbound](https://github.com/NLnetLabs/unbound/blob/release-1.9.2/doc/Changelog)
- includes an option to perform AXFR-over-TLS (instead of TCP). This requires
+ includes an option to perform AXoT (instead of TCP). This requires
 the client (secondary) to authenticate the server (primary) using a configured
 authentication domain name.
 
@@ -757,7 +863,7 @@ This does not mitigate:
 * the risk that hidden primaries might be inferred or identified via observation of encrypted connections.
 * the risk of zone contents being obtained via zone enumeration techniques.
 
-Security concerns of DNS-over-TLS are outlined in [@RFC7858] and [@RFC8310].
+Security concerns of DoT are outlined in [@RFC7858] and [@RFC8310].
 
 # Acknowledgements
 
@@ -767,7 +873,16 @@ discussions.
 
 # Changelog
 
-draft-ietf-dprive-xfr-over-tls-00
+draft-ietf-dprive-xfr-over-tls-01
+
+* Significantly update descriptions for both AXoT and IXoT for message and connection handling taking into account previous specifications in more detail
+* Add new discussions of padding for both AXoT and IXoT
+* Add text on SIG(0)
+* Update security considerations
+* Move multi-primary considerations to earlier as they are related to connection
+  handling
+
+draft-ietf-dprive-xfr-over-tls-01
 
 * Minor editorial updates
 * Add requirement for TLS 1.3. or later

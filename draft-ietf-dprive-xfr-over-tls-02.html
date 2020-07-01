@@ -387,11 +387,15 @@
 <link href="#rfc.section.5.1" rel="Chapter" title="5.1 Performance Considerations"/>
 <link href="#rfc.section.5.2" rel="Chapter" title="5.2 TLS versions"/>
 <link href="#rfc.section.5.3" rel="Chapter" title="5.3 AXoT mechanism"/>
-<link href="#rfc.section.5.3.1" rel="Chapter" title="5.3.1 Padding AXFR responses"/>
+<link href="#rfc.section.5.3.1" rel="Chapter" title="5.3.1 Coverage and relationship to RFC5936"/>
+<link href="#rfc.section.5.3.2" rel="Chapter" title="5.3.2 AXoT connection and message handling"/>
+<link href="#rfc.section.5.3.3" rel="Chapter" title="5.3.3 Padding AXFR responses"/>
 <link href="#rfc.section.5.4" rel="Chapter" title="5.4 IXoT mechanism"/>
-<link href="#rfc.section.5.4.1" rel="Chapter" title="5.4.1 Condensation of responses"/>
-<link href="#rfc.section.5.4.2" rel="Chapter" title="5.4.2 Padding of IXFR responses"/>
-<link href="#rfc.section.5.4.3" rel="Chapter" title="5.4.3 Fallback to AXFR"/>
+<link href="#rfc.section.5.4.1" rel="Chapter" title="5.4.1 Coverage and relationship to RFC1995"/>
+<link href="#rfc.section.5.4.2" rel="Chapter" title="5.4.2 IXoT connection and message handling"/>
+<link href="#rfc.section.5.4.3" rel="Chapter" title="5.4.3 Condensation of responses"/>
+<link href="#rfc.section.5.4.4" rel="Chapter" title="5.4.4 Padding of IXFR responses"/>
+<link href="#rfc.section.5.4.5" rel="Chapter" title="5.4.5 Fallback to AXFR"/>
 <link href="#rfc.section.6" rel="Chapter" title="6 Multi-primary Configurations"/>
 <link href="#rfc.section.7" rel="Chapter" title="7 Zone Transfer with DoT - Authentication"/>
 <link href="#rfc.section.7.1" rel="Chapter" title="7.1 TSIG"/>
@@ -421,7 +425,7 @@
 
   <meta name="dct.creator" content="Zhang, H., Aras, P., Toorop, W., Dickinson, S., and A. Mankin" />
   <meta name="dct.identifier" content="urn:ietf:id:draft-ietf-dprive-xfr-over-tls-02" />
-  <meta name="dct.issued" scheme="ISO8601" content="2020-6-30" />
+  <meta name="dct.issued" scheme="ISO8601" content="2020-7-1" />
   <meta name="dct.abstract" content="DNS zone transfers are transmitted in clear text, which gives attackers the opportunity to collect the content of a zone by eavesdropping on network connections. The DNS Transaction Signature (TSIG) mechanism is specified to restrict direct zone transfer to authorized clients only, but it does not add confidentiality. This document specifies use of DNS-over-TLS to prevent zone contents collection via passive monitoring of zone transfers.  " />
   <meta name="description" content="DNS zone transfers are transmitted in clear text, which gives attackers the opportunity to collect the content of a zone by eavesdropping on network connections. The DNS Transaction Signature (TSIG) mechanism is specified to restrict direct zone transfer to authorized clients only, but it does not add confidentiality. This document specifies use of DNS-over-TLS to prevent zone contents collection via passive monitoring of zone transfers.  " />
 
@@ -449,7 +453,7 @@
   <td class="right">W. Toorop</td>
 </tr>
 <tr>
-  <td class="left">Expires: January 1, 2021</td>
+  <td class="left">Expires: January 2, 2021</td>
   <td class="right">NLnet Labs</td>
 </tr>
 <tr>
@@ -470,7 +474,7 @@
 </tr>
 <tr>
   <td class="left"></td>
-  <td class="right">June 30, 2020</td>
+  <td class="right">July 1, 2020</td>
 </tr>
 
     	
@@ -490,7 +494,7 @@
 <p>This Internet-Draft is submitted in full conformance with the provisions of BCP 78 and BCP 79.</p>
 <p>Internet-Drafts are working documents of the Internet Engineering Task Force (IETF).  Note that other groups may also distribute working documents as Internet-Drafts.  The list of current Internet-Drafts is at http://datatracker.ietf.org/drafts/current/.</p>
 <p>Internet-Drafts are draft documents valid for a maximum of six months and may be updated, replaced, or obsoleted by other documents at any time.  It is inappropriate to use Internet-Drafts as reference material or to cite them other than as "work in progress."</p>
-<p>This Internet-Draft will expire on January 1, 2021.</p>
+<p>This Internet-Draft will expire on January 2, 2021.</p>
 <h1 id="rfc.copyrightnotice">
   <a href="#rfc.copyrightnotice">Copyright Notice</a>
 </h1>
@@ -515,11 +519,15 @@
 <ul><li>5.1.   <a href="#rfc.section.5.1">Performance Considerations</a></li>
 <li>5.2.   <a href="#rfc.section.5.2">TLS versions</a></li>
 <li>5.3.   <a href="#rfc.section.5.3">AXoT mechanism</a></li>
-<ul><li>5.3.1.   <a href="#rfc.section.5.3.1">Padding AXFR responses</a></li>
+<ul><li>5.3.1.   <a href="#rfc.section.5.3.1">Coverage and relationship to RFC5936</a></li>
+<li>5.3.2.   <a href="#rfc.section.5.3.2">AXoT connection and message handling</a></li>
+<li>5.3.3.   <a href="#rfc.section.5.3.3">Padding AXFR responses</a></li>
 </ul><li>5.4.   <a href="#rfc.section.5.4">IXoT mechanism</a></li>
-<ul><li>5.4.1.   <a href="#rfc.section.5.4.1">Condensation of responses</a></li>
-<li>5.4.2.   <a href="#rfc.section.5.4.2">Padding of IXFR responses</a></li>
-<li>5.4.3.   <a href="#rfc.section.5.4.3">Fallback to AXFR</a></li>
+<ul><li>5.4.1.   <a href="#rfc.section.5.4.1">Coverage and relationship to RFC1995</a></li>
+<li>5.4.2.   <a href="#rfc.section.5.4.2">IXoT connection and message handling</a></li>
+<li>5.4.3.   <a href="#rfc.section.5.4.3">Condensation of responses</a></li>
+<li>5.4.4.   <a href="#rfc.section.5.4.4">Padding of IXFR responses</a></li>
+<li>5.4.5.   <a href="#rfc.section.5.4.5">Fallback to AXFR</a></li>
 </ul></ul><li>6.   <a href="#rfc.section.6">Multi-primary Configurations</a></li>
 <li>7.   <a href="#rfc.section.7">Zone Transfer with DoT - Authentication</a></li>
 <ul><li>7.1.   <a href="#rfc.section.7.1">TSIG</a></li>
@@ -555,7 +563,7 @@
 <p><a href="#RFC5155">[RFC5155]</a> specifies NSEC3 to prevent zone enumeration, which is when queries for the authenticated denial of existences records of DNSSEC allow a client to walk through the entire zone. Note that the need for this protection also motivates NSEC5 <a href="#I-D.vcelak-nsec5">[I-D.vcelak-nsec5]</a>; zone walking is now possible with NSEC3 due to crypto-breaking advances, and NSEC5 is a response to this problem.  </p>
 <p><a href="#RFC5155">[RFC5155]</a> does not address data obtained outside zone enumeration (nor does <a href="#I-D.vcelak-nsec5">[I-D.vcelak-nsec5]</a>). Preventing eavesdropping of zone transfers (this draft) is orthogonal to preventing zone enumeration, though they aim to protect the same information.  </p>
 <p><a href="#RFC5936">[RFC5936]</a> specifies using TSIG <a href="#RFC2845">[RFC2845]</a> for authorization of the clients of a zone transfer and for data integrity, but does not express any need for confidentiality, and TSIG does not offer encryption. Some operators use SSH tunneling or IPSec to encrypt the transfer data.  </p>
-<p id="rfc.section.1.p.9">Because the AXFR zone transfer is typically carried out-over-TCP from authoritative DNS protocol implementations, encrypting AXFR using DNS-over-TLS <a href="#RFC7858">[RFC7858]</a> seems like a simple step forward. This document specifies how to use DoT to prevent zone collection from zone transfers, including discussion of approaches for IXFR, which uses UDP or TCP.  </p>
+<p id="rfc.section.1.p.9">Because the AXFR zone transfer is typically carried out over TCP from authoritative DNS protocol implementations, encrypting AXFR using DoT <a href="#RFC7858">[RFC7858]</a> seems like a simple step forward. This document specifies how to use DoT to prevent zone collection from zone transfers, including discussion of approaches for IXFR, which uses UDP or TCP.  </p>
 <h1 id="rfc.section.2"><a href="#rfc.section.2">2.</a> <a href="#terminology" id="terminology">Terminology</a></h1>
 <p id="rfc.section.2.p.1">The key words "MUST", "MUST NOT", "REQUIRED", "SHALL", "SHALL NOT", "SHOULD", "SHOULD NOT", "RECOMMENDED", "NOT RECOMMENDED", "MAY", and "OPTIONAL" in this document are to be interpreted as described in BCP 14 <a href="#RFC2119">[RFC2119]</a> and <a href="#RFC8174">[RFC8174]</a> when, and only when, they appear in all capitals, as shown here.  </p>
 <p id="rfc.section.2.p.2">Privacy terminology is as described in Section 3 of <a href="#RFC6973">[RFC6973]</a>.  </p>
@@ -571,7 +579,7 @@
 <ul>
   <li>Confidentiality. Clearly using an encrypted transport for zone transfers will defeat zone content leakage that can occur via passive surveillance.</li>
   <li>Authentication. Use of single or mutual TLS authentication (in combination with ACLs) can complement and potentially be an alternative to TSIG.</li>
-  <li>Performance. Existing AXFR and IXFR mechanisms have the burden of backwards compatibility with older implementations based on the original specifications in <a href="#RFC1034">[RFC1034]</a> and <a href="#RFC1035">[RFC1035]</a>. For example, some older AXFR servers don&#8217;t support using a TCP connection for multiple AXFR sessions or XFRs of different zones because they have not been updated to follow the guidance in <a href="#RFC5936">[RFC5936]</a>.  Any implementation of XFR-over-TLS would obviously be required to implement optimized and interoperable transfers as described in <a href="#RFC5936">[RFC5936]</a>, e.g., transfer of multiple zones over one connection.</li>
+  <li>Performance. Existing AXFR and IXFR mechanisms have the burden of backwards compatibility with older implementations based on the original specifications in <a href="#RFC1034">[RFC1034]</a> and <a href="#RFC1035">[RFC1035]</a>. For example, some older AXFR servers don&#8217;t support using a TCP connection for multiple AXFR sessions or XFRs of different zones because they have not been updated to follow the guidance in <a href="#RFC5936">[RFC5936]</a>.  Any implementation of XFR-over-TLS (XoT) would obviously be required to implement optimized and interoperable transfers as described in <a href="#RFC5936">[RFC5936]</a>, e.g., transfer of multiple zones over one connection.</li>
   <li>Performance. Current usage of TCP for IXFR is sub-optimal in some cases i.e.  connections are frequently closed after a single IXFR.</li>
 </ul>
 
@@ -604,7 +612,7 @@
 </ol>
 
 <p> </p>
-<p><a href="#RFC5936">[RFC5936]</a> specifies that AXFR must use TCP as the transport protocol but details that there is no restriction in the protocol that a single TCP session must be used only for a single AXFR exchange, or even solely for XFRs. For example, it outlines that the SOA query can also happen on this connection.  However, this can cause interoperability problems with older implementations that support only the trivial case of one AXFR per connection.  </p>
+<p><a href="#RFC5936">[RFC5936]</a> specifies that AXFR must use TCP as the transport protocol but details that there is no restriction in the protocol that a single TCP connection must be used only for a single AXFR exchange, or even solely for XFRs. For example, it outlines that the SOA query can also happen on this connection.  However, this can cause interoperability problems with older implementations that support only the trivial case of one AXFR per connection.  </p>
 <p id="rfc.section.4.1.p.5">Further details of the limitations in existing AXFR implementations are outlined in <a href="#RFC5936">[RFC5936]</a>.  </p>
 <p id="rfc.section.4.1.p.6">It is noted that unless the NOTIFY is sent over a trusted communication channel and/or signed by TSIG is can be spoofed causing unnecessary zone transfer attempts.  </p>
 <p id="rfc.section.4.1.p.7">Similarly unless the SOA query is sent over a trusted communication channel and/or signed by TSIG the response can, in principle, be spoofed causing a secondary to incorrectly believe its version of the zone is update to date.  Repeated successful attacks on the SOA could result in a secondary serving stale zone data.  </p>
@@ -624,7 +632,9 @@
 <p id="rfc.section.4.2.p.5">"Thus, a client should first make an IXFR query using UDP." </p>
 <p id="rfc.section.4.2.p.6">So there may be a forth step above where the client falls back to IXFR-over-TCP.  There may also be a forth step where the secondary must fall back to AXFR because, e.g., the primary does not support IXFR.  </p>
 <p id="rfc.section.4.2.p.7">However it is noted that at least two widely used open source authoritative nameserver implementations (<a href="https://www.isc.org/bind/">BIND</a> and <a href="https://www.nlnetlabs.nl/projects/nsd/about/">NSD</a>) do IXFR using TCP by default in their latest releases. For BIND TCP connections are sometimes used for SOA queries but in general they are not used persistently and close after an IXFR is completed.  </p>
-<p id="rfc.section.4.2.p.8">It is noted that the specification for IXFR was published well before TCP was considered a first class transport for DNS. This document therefore updates <a href="#RFC1995">[RFC1995]</a> to state that DNS implementations that support IXFR-over-TCP MUST use <a href="#RFC7766">[RFC7766]</a> to optimise the use of TCP connections and SHOULD use <a href="#RFC7858">[RFC7858]</a> to manage persistent connections.  </p>
+<p id="rfc.section.4.2.p.8">QUESTION FOR US: Look at packet captures from NSD and Knot Auth to see what they do.  </p>
+<p id="rfc.section.4.2.p.9">It is noted that the specification for IXFR was published well before TCP was considered a first class transport for DNS. This document therefore updates <a href="#RFC1995">[RFC1995]</a> to state that DNS implementations that support IXFR-over-TCP MUST use <a href="#RFC7766">[RFC7766]</a> to optimise the use of TCP connections and SHOULD use <a href="#RFC7858">[RFC7858]</a> to manage persistent connections.  </p>
+<p id="rfc.section.4.2.p.10">QUESTION FOR US: We don't go as far here as updating IXFR-over-TCP to match the behaviour outlined in section 5.4.2 for IXoT. Should we? </p>
 <h1 id="rfc.section.4.3"><a href="#rfc.section.4.3">4.3.</a> <a href="#data-leakage-of-notify-and-soa-message-exchanges" id="data-leakage-of-notify-and-soa-message-exchanges">Data Leakage of NOTIFY and SOA Message Exchanges</a></h1>
 <p id="rfc.section.4.3.p.1">This section attempts to presents a rationale for also encrypting the other messages in the XFR mechanism.  </p>
 <p id="rfc.section.4.3.p.2">Since the SOA of the published zone can be trivially discovered by simply querying the publicly available authoritative servers leakage of this RR is not discussed in the following sections.  </p>
@@ -637,7 +647,7 @@
 <p id="rfc.section.4.3.2.p.1">For hidden primaries or secondaries the SOA response leaks the degree of lag of any downstream secondary.  </p>
 <h1 id="rfc.section.5"><a href="#rfc.section.5">5.</a> <a href="#connection-and-data-flows-in-xot" id="connection-and-data-flows-in-xot">Connection and Data Flows in XoT</a></h1>
 <h1 id="rfc.section.5.1"><a href="#rfc.section.5.1">5.1.</a> <a href="#performance-considerations" id="performance-considerations">Performance Considerations</a></h1>
-<p id="rfc.section.5.1.p.1">The details in <a href="#RFC7766">[RFC7766]</a>, <a href="#RFC7858">[RFC7858]</a> and <a href="#RFC8310">[RFC8310]</a> about, e.g., using persistent connections and TLS Session Resumption <a href="#RFC5077">[RFC5077]</a> are fully applicable to XFR-over-TLS as well.  </p>
+<p id="rfc.section.5.1.p.1">The details in <a href="#RFC7766">[RFC7766]</a>, <a href="#RFC7858">[RFC7858]</a> and <a href="#RFC8310">[RFC8310]</a> about, e.g., using persistent connections and TLS Session Resumption <a href="#RFC5077">[RFC5077]</a> are fully applicable to XoT as well.  </p>
 <p id="rfc.section.5.1.p.2">It is RECOMMENDED that clients and servers that support XoT also implement EDNS0 Keepalive [RFC7828].  </p>
 <p id="rfc.section.5.1.p.3">It is useful to note that in these mechanisms it is the secondary that initiates the TLS connection to the primary for a XFR request, so that in terms of connectivity the secondary is the TLS client and the primary the TLS server.  </p>
 <h1 id="rfc.section.5.2"><a href="#rfc.section.5.2">5.2.</a> <a href="#tls-versions" id="tls-versions">TLS versions</a></h1>
@@ -645,24 +655,55 @@
 <h1 id="rfc.section.5.3"><a href="#rfc.section.5.3">5.3.</a> <a href="#axot-mechanism" id="axot-mechanism">AXoT mechanism</a></h1>
 <p id="rfc.section.5.3.p.1">The figure below provides an outline of the AXoT mechanism including NOTIFYs.  </p>
 <p><a href="https://github.com/hanzhang0116/hzpa-dprive-xfr-over-tls/blob/02_updates/02-draft-svg/AXoT_mechanism_1.svg">Figure 3: AXoT mechanism</a> </p>
-<p id="rfc.section.5.3.p.3">The connection for AXFR-over-TLS SHOULD be established using port 853, as specified in <a href="#RFC7858">[RFC7858]</a>, unless there is mutual agreement between the secondary and primary to use a port other than port 853 for XFR-over-TLS.  </p>
-<p id="rfc.section.5.3.p.4">All implementations that support XoT MUST fully implement <a href="#RFC5953">[RFC5953]</a> behavior on TLS connections.  </p>
-<p id="rfc.section.5.3.p.5">Sections 4.1, 4.1.1 and 4.1.2 of <a href="#RFC5936">[RFC5936]</a> describe guidance for AXFR clients and servers with regard to re-use of sessions for multiple AXFRs, AXFRs of different zones and using TCP session for other queries including SOA.  </p>
-<p id="rfc.section.5.3.p.6">For clarity we restate here that an AXoT client MAY use an already opened TLS connection to send a AXFR request. Using an existing open connection is RECOMMENDED over opening a new connection. (Non-AXoT session traffic can also use an open connection.) </p>
-<p id="rfc.section.5.3.p.7">For clarity we additionally state here that an AXoT client MAY use an already opened TLS connection to send a SOA request. Using an existing open connection is RECOMMENDED over opening a new connection.  </p>
-<p id="rfc.section.5.3.p.8">QUESTION: Should there be a requirement that the SOA is always done on a TLS connection if the XFR is? For the case when no transfer is required this could be unnecessary overhead.  </p>
-<h1 id="rfc.section.5.3.1"><a href="#rfc.section.5.3.1">5.3.1.</a> <a href="#padding-axfr-responses" id="padding-axfr-responses">Padding AXFR responses</a></h1>
-<p id="rfc.section.5.3.1.p.1">NOTE: Not sure if we should dump all this section in a placeholder draft on padding or we could get a basic version ironed out to include here? We might need to include the capability for clients to accept 'empty' responses here for interoperability later on? </p>
-<p id="rfc.section.5.3.1.p.2">QUESTIONS FOR US TO ANSWER: </p>
+<p id="rfc.section.5.3.p.3">The connection for AXFR-over-TLS (AXoT) SHOULD be established using port 853, as specified in <a href="#RFC7858">[RFC7858]</a>, unless there is mutual agreement between the secondary and primary to use a port other than port 853 for AXoT.  </p>
+<h1 id="rfc.section.5.3.1"><a href="#rfc.section.5.3.1">5.3.1.</a> <a href="#coverage-and-relationship-to-rfc5936" id="coverage-and-relationship-to-rfc5936">Coverage and relationship to RFC5936</a></h1>
+<p><a href="#RFC5936">[RFC5936]</a> re-specified AXFR providing additional guidance beyond that provided in <a href="#RFC1045">[RFC1045]</a> and <a href="#RFC1035">[RFC1035]</a>. For example, sections 4.1, 4.1.1 and 4.1.2 of <a href="#RFC5936">[RFC5936]</a> provide improved guidance for AXFR clients and servers with regard to re-use of connections for multiple AXFRs, AXFRs of different zones and using TCP connection for other queries including SOA. However <a href="#RFC5936">[RFC5936]</a> was constrained by having to be backwards compatible with some very early basic implementations of AXFR.  </p>
+<p id="rfc.section.5.3.1.p.2">Here we specify some optimised behaviours for AXoT, based closely on those in <a href="#RFC5936">[RFC5936]</a>, but without the constraint of backwards compatibility since it is expected that all implementations of AXoT fully implement the behaviour described here.  </p>
+<p id="rfc.section.5.3.1.p.3">Where any behavior is not explicitly described here, the behviour specified in <a href="#RFC5953">[RFC5953]</a> MUST be followed. Any behaviour specified here takes precedence for AXoT implementations over that in <a href="#RFC5953">[RFC5953]</a>.  </p>
+<h1 id="rfc.section.5.3.2"><a href="#rfc.section.5.3.2">5.3.2.</a> <a href="#axot-connection-and-message-handling" id="axot-connection-and-message-handling">AXoT connection and message handling</a></h1>
+<p id="rfc.section.5.3.2.p.1">The first paragraph of Section 4.1.1 of <a href="#RFC5936">[RFC5936]</a> says that clients SHOULD close the connection when there is no 'apparent need' to use the connection for some time period.  </p>
+<p id="rfc.section.5.3.2.p.2">For AXoT this requirement is updated: AXoT clients and servers SHOULD use EDNS0 Keepalive [RFC7828] to establish the connection timeouts to be used. The AXoT server may use the frequency of recent AXFRs to calculate an average update rate as input to the decision of what EDNS0 Keepalive timeout to use. Note that use of EDNS0 Keepalive enables AXoT servers to signal the desire to close a connection due to low resources by sending an EDNS0 Keepalive option with a timeout of 0 (in the absence of another way to signal the abort of a AXoT transfer). If the server does not support EDNS0 Keepalive the client MAY keep the connection open for a few seconds (<a href="#RFC7766">[RFC7766]</a> recommends that servers use timeouts of at least a few seconds).  </p>
+<p id="rfc.section.5.3.2.p.3">An AXoT server MUST be able to handle multiple IXFR requests on a single TLS connection (for the same and different zones), as well as to handle other query/response transactions over it.  </p>
+<p><a href="#RFC5936">[RFC5936]</a> says: </p>
+<pre>
+"An AXFR client MAY use an already opened TCP connection to start an
+AXFR session.  Using an existing open connection is RECOMMENDED over
+opening a new connection.  (Non-AXFR session traffic can also use an
+open connection.)"
+</pre>
+<p id="rfc.section.5.3.2.p.5">For AXoT this requirement is restated: AXoT clients SHOULD re-use an existing open TLS connection when starting any new AXoT session to the same primary, and for issuing SOA queries, instead of opening a new connection. (Non-AXoT session traffic can also use an open TLS connection.) The number of TLS connections between a secondary and primary SHOULD be minimised.  </p>
+<p id="rfc.section.5.3.2.p.6">Valid reasons for not re-using existing connections might include: </p>
 <p/>
 
 <ul>
+  <li>reaching a configured limit for the number of outstanding queries allowed on a single TLS connection</li>
+  <li>the message ID pool has already been exhausted on an open connection</li>
+  <li>a large number of timeouts or slow responses have occurred on an open connection</li>
+  <li>an EDNS0 Keepalive option with a timeout of 0 has been received from the server and the client is in the process of closing the connection</li>
+</ul>
+
+<p> </p>
+<p id="rfc.section.5.3.2.p.8">If no TLS connections are currently open, AXoT clients MAY send SOA queries over UDP, TCP or TLS.  </p>
+<p><a href="#RFC5936">[RFC5936]</a> says: </p>
+<pre>
+"Some old AXFR clients expect each response message to contain only a
+single RR.  To interoperate with such clients, the server MAY
+restrict response messages to a single RR."
+</pre>
+<p id="rfc.section.5.3.2.p.10">This is as opposed to the normal behaviour of containing a sufficient number of RRs to reasonably amortize the per-message overhead. We clarify here that AXoT clients MUST be able to handle responses that include multiple RRs, up to the largest number that will fit within a DNS message (taking the required content of the other sections into account, as described here and in <a href="#RFC5936">[RFC5936]</a>). This removes any burden on AXoT servers of having to accommodate a configuration option or support for restricting responses to containing only a single RR.  </p>
+<p id="rfc.section.5.3.2.p.11">An AXoT client SHOULD pipeline AXFR requests for different zones on a single TLS connection. An AXoT server SHOULD respond to those requests as soon as the response is available i.e. potentially out of order.  </p>
+<h1 id="rfc.section.5.3.3"><a href="#rfc.section.5.3.3">5.3.3.</a> <a href="#padding-axfr-responses" id="padding-axfr-responses">Padding AXFR responses</a></h1>
+<p id="rfc.section.5.3.3.p.1">QUESTION FOR US: </p>
+<p/>
+
+<ul>
+  <li>Not sure if we should dump all this section in a placeholder draft on padding or we could get a basic version ironed out to include here? We might need to include the capability for clients to accept 'empty' responses here for interoperability later on?</li>
   <li>How do most open source implementations split up AXFR responses? A fixed number of records per response or as many as they can fit in a TCP message length of 65535 bytes? (Note RFC5936 talks about supporting old clients that expect one record per response!).</li>
   <li>Do they send records in a fixed or random order - would this allow anything about the zone contents to be inferred by watching different message sizes over time if they are not all padded to the same size</li>
 </ul>
 
 <p> </p>
-<p id="rfc.section.5.3.1.p.4">The goal of padding AXFR responses would be two fold: </p>
+<p id="rfc.section.5.3.3.p.3">The goal of padding AXFR responses would be two fold: </p>
 <p/>
 
 <ul>
@@ -671,9 +712,9 @@
 </ul>
 
 <p> </p>
-<p id="rfc.section.5.3.1.p.6">Note that the re-use of TLS connections for transfers of multiple different zones would complicate any attempt to analyse the traffic size and timing to extract information.  </p>
-<p id="rfc.section.5.3.1.p.7">Note that deducing information about the the above from zone transfer sizes is dependant on whether and how the zone is DNSSEC signed, but this information can normally be obtained by directly querying the authoritative server. In the absence of DNSSEC deducing zone sizes from AXFRs is straight forward.  </p>
-<p id="rfc.section.5.3.1.p.8">A simplistic option, following the premise of the Block-Length Padding strategy recommended in <a href="#RFC8467">[RFC8467]</a>, would be to specify </p>
+<p id="rfc.section.5.3.3.p.5">Note that the re-use of TLS connections for transfers of multiple different zones would complicate any attempt to analyse the traffic size and timing to extract information.  </p>
+<p id="rfc.section.5.3.3.p.6">Note that deducing information about the the above from zone transfer sizes is dependant on whether and how the zone is DNSSEC signed, but this information can normally be obtained by directly querying the authoritative server. In the absence of DNSSEC deducing zone sizes from AXFRs is straight forward.  </p>
+<p id="rfc.section.5.3.3.p.7">A simplistic option, following the premise of the Block-Length Padding strategy recommended in <a href="#RFC8467">[RFC8467]</a>, would be to specify </p>
 <p/>
 
 <ul>
@@ -682,31 +723,53 @@
 </ul>
 
 <p> </p>
-<p id="rfc.section.5.3.1.p.10">This second requirement is likely to require an implementation to create 'empty' AXFR responses in order to pad a zone to the zone block size. That is, AXFR responses that contain no RR's apart from the EDNS(0) option for padding.  However, as will existing AXFR, the last message sent MUST contain the same SOA that was in the first message of the AXFR response series in order to signal the conclusion of the zone transfer.  </p>
-<p id="rfc.section.5.3.1.p.11">QUESTION FOR US: What do existing clients do if they receive 'empty' responses today? </p>
-<p id="rfc.section.5.3.1.p.12">Observation of the zone transfers would then reveal only zone block size step changes in the total zone size (if the zone size changed sufficiently) obfuscating the smaller fluctuations.  </p>
-<p id="rfc.section.5.3.1.p.13">Choosing a message size of less than 65535 only really makes sense for small zones that can be transferred in a single response (in which case the zone block size can be set to the same value). Choosing a zone block size close to the current zone size would provide some protection with a minimal overhead.  Choosing a zone block size much larger than the current zone size would provide increased protection but with increased overhead.  </p>
-<p id="rfc.section.5.3.1.p.14">As with any padding strategy the trade-off between increased bandwidth and processing due to the larger size and number of padded DNS messages and the corresponding gain in confidentiality must be carefully considered.  </p>
-<p id="rfc.section.5.3.1.p.15">Primary implementations SHOULD provide a configurable block-size based padding mechanism. Secondary implementations MUST be resilient to receiving padded AXFR responses including 'empty' AXFR response that contain only padding.  </p>
-<p id="rfc.section.5.3.1.p.16">As noted in <a href="#RFC8467">[RFC8467]</a>, the maximum message length, as dictated by the protocol, limits the space for EDNS(0) options. Since padding will reduce the message space available to other EDNS(0) options, the "Padding" option MUST be the last EDNS(0) option applied before a DNS message is sent. In particular for AXFR, that means that if the message is to be signed with, e.g., TSIG this must be done before the padding is applied.  </p>
-<p id="rfc.section.5.3.1.p.17">Recommendation of specific values for the block sizes described above are out of scope for this specification. More detailed considerations of the trade-off described above with regard to block sizes, size recommendations and also alternative proposals for AXFR padding are expected to be the subject of future work.  </p>
+<p id="rfc.section.5.3.3.p.9">Primary implementations SHOULD provide a configurable block-size based padding mechanism.  </p>
+<p id="rfc.section.5.3.3.p.10">This second requirement is likely to require an implementation to create 'empty' AXFR responses in order to pad a zone to the zone block size. That is, AXFR responses that contain no RR's apart from the EDNS(0) option for padding.  However, as will existing AXFR, the last message sent MUST contain the same SOA that was in the first message of the AXFR response series in order to signal the conclusion of the zone transfer.  </p>
+<p><a href="#RFC5936">[RFC5936]</a> says: </p>
+<pre>
+"Each AXFR response message SHOULD contain a sufficient number of RRs
+to reasonably amortize the per-message overhead, up to the largest
+number that will fit within a DNS message (taking the required
+content of the other sections into account, as described below)."
+</pre>
+<p id="rfc.section.5.3.3.p.12">'Empty' AXoT responses generated in order to meet a padding requirement are exempt from the above statement. Secondary implementations MUST be resilient to receiving padded AXFR responses including 'empty' AXFR response that contain only padding.  </p>
+<p id="rfc.section.5.3.3.p.13">QUESTION FOR US: What do existing clients do if they receive 'empty' responses today? </p>
+<p id="rfc.section.5.3.3.p.14">Observation of the zone transfers would then reveal only zone block size step changes in the total zone size (if the zone size changed sufficiently) obfuscating the smaller fluctuations.  </p>
+<p id="rfc.section.5.3.3.p.15">Choosing a message size of less than 65535 only really makes sense for small zones that can be transferred in a single response (in which case the zone block size can be set to the same value). Choosing a zone block size close to the current zone size would provide some protection with a minimal overhead.  Choosing a zone block size much larger than the current zone size would provide increased protection but with increased overhead.  </p>
+<p id="rfc.section.5.3.3.p.16">As with any padding strategy the trade-off between increased bandwidth and processing due to the larger size and number of padded DNS messages and the corresponding gain in confidentiality must be carefully considered.  </p>
+<p id="rfc.section.5.3.3.p.17">As noted in <a href="#RFC8467">[RFC8467]</a>, the maximum message length, as dictated by the protocol, limits the space for EDNS(0) options. Since padding will reduce the message space available to other EDNS(0) options, the "Padding" option MUST be the last EDNS(0) option applied before a DNS message is sent. In particular for AXFR, that means that if the message is to be signed with, e.g., TSIG this must be done before the padding is applied.  </p>
+<p id="rfc.section.5.3.3.p.18">Recommendation of specific values for the block sizes described above are out of scope for this specification. More detailed considerations of the trade-off described above with regard to block sizes, size recommendations and also alternative proposals for AXFR padding are expected to be the subject of future work.  </p>
 <h1 id="rfc.section.5.4"><a href="#rfc.section.5.4">5.4.</a> <a href="#ixot-mechanism" id="ixot-mechanism">IXoT mechanism</a></h1>
 <p id="rfc.section.5.4.p.1">The figure below provides an outline of the IXoT mechanism including NOTIFYs.  </p>
 <p><a href="https://github.com/hanzhang0116/hzpa-dprive-xfr-over-tls/blob/02_updates/02-draft-svg/IXoT_mechanism_1.svg">Figure 4: IXoT mechanism</a> </p>
-<p id="rfc.section.5.4.p.3">The connection for IXFR-over-TLS SHOULD be established using port 853, as specified in <a href="#RFC7858">[RFC7858]</a>, unless there is mutual agreement between the secondary and primary to use a port other than port 853 for XFR-over-TLS.  </p>
-<p><a href="#RFC1995">[RFC1995]</a> says nothing with respect to optimizing IXFRs over TCP or re-using already open TCP connections to perform IXFRs or other queries. We provide guidance here that aligns with the guidance in <a href="#RFC5936">[RFC5936]</a> for AXFR and with that for performant TCP/TLS usage in <a href="#RFC7766">[RFC7766]</a> and <a href="#RFC7858">[RFC7858]</a>.  </p>
-<p id="rfc.section.5.4.p.5">An IXoT client MAY use an already opened TLS connection to send a IXFR request.  Using an existing open connection is RECOMMENDED over opening a new connection.  (Non-IXoT session traffic can also use an open connection.) </p>
-<p id="rfc.section.5.4.p.6">An IXoT client MAY use an already open TLS connection to send an SOA query.  Using an existing open connection is RECOMMENDED over opening a new connection.  </p>
-<p id="rfc.section.5.4.p.7">An IXoT server MUST be able to handle multiple IXoT requests on a single TLS connection, as well as to handle other query/response transactions over it.  </p>
-<p id="rfc.section.5.4.p.8">An IXoT client MAY keep an existing TLS session open in the expectation it is likely to need to perform an IXFR in the near future. The client may use the frequency of recent IXFRs to calculate an average update rate and then use EDNS0 Keepalive to request an appropriate timeout from the server (if the server supports EDNS0 Keepalive). If the server does not support EDNS0 Keepalive the client MAY keep the connection open for a few seconds (<a href="#RFC7766">[RFC7766]</a> recommends that servers use timeouts of at least a few seconds).  </p>
-<p id="rfc.section.5.4.p.9">An IXoT client MAY pipeline IXFR requests for different zones on a single TLS connection. AN IXoT server MAY respond to those requests out of order.  </p>
-<h1 id="rfc.section.5.4.1"><a href="#rfc.section.5.4.1">5.4.1.</a> <a href="#condensation-of-responses" id="condensation-of-responses">Condensation of responses</a></h1>
-<p id="rfc.section.5.4.1.p.1">QUESTION: Since this is a new specification should there be a requirement that IXoT servers are RECOMMENDED to condense responses as described in Section 6 of [RFC1995]. [RFC1995] document says this is optional and MAY be done. Whilst it does add complexity to generating response it can significantly reduce the size of responses and will have implications for padding.  </p>
-<h1 id="rfc.section.5.4.2"><a href="#rfc.section.5.4.2">5.4.2.</a> <a href="#padding-of-ixfr-responses" id="padding-of-ixfr-responses">Padding of IXFR responses</a></h1>
-<p id="rfc.section.5.4.2.p.1">NOTE: As with AXFR not sure if we should dump all this section in a placeholder draft on padding or we could get a basic version ironed out to include here? </p>
-<p id="rfc.section.5.4.2.p.2">The goal of padding AXFR responses would be to obfuscate the incremental changes to the zone between SOA updates to minimise information leakage about zone update activity and growth. Both the size and timing of the IXFRs could reveal information.  </p>
-<p id="rfc.section.5.4.2.p.3">Note that the re-use of TLS connections for transfers of multiple different zones would complicate any attempt to analyse the traffic size and timing to extract information.  </p>
-<p id="rfc.section.5.4.2.p.4">IXFR responses can vary in size greatly from the order of 100 bytes for one or two record updates, to tens of thousands of bytes for large dynamic DNSSEC signed zones and (in principle) up to the maximum size of a singe IXFR response (65535 bytes). The frequency of IXFR responses can also depend greatly on if and how the zone is DNSSEC signed. For example, both the following zones might see frequent similarly sized IXFR exchanges </p>
+<p id="rfc.section.5.4.p.3">The connection for IXFR-over-TLS (IXoT) SHOULD be established using port 853, as specified in <a href="#RFC7858">[RFC7858]</a>, unless there is mutual agreement between the secondary and primary to use a port other than port 853 for IXoT.  </p>
+<h1 id="rfc.section.5.4.1"><a href="#rfc.section.5.4.1">5.4.1.</a> <a href="#coverage-and-relationship-to-rfc1995" id="coverage-and-relationship-to-rfc1995">Coverage and relationship to RFC1995</a></h1>
+<p><a href="#RFC1995">[RFC1995]</a> says nothing with respect to optimizing IXFRs over TCP or re-using already open TCP connections to perform IXFRs or other queries. We provide new guidance here specific to IXoT that aligns with the guidance in <a href="#RFC5936">[RFC5936]</a> for AXFR, that in section <a href="#axot-mechanism">Section 5.3</a> for AXoT, and with that for performant TCP/TLS usage in <a href="#RFC7766">[RFC7766]</a> and <a href="#RFC7858">[RFC7858]</a>.  </p>
+<p id="rfc.section.5.4.1.p.2">Where any behavior is not explicitly described here, the behviour specified in <a href="#RFC1995">[RFC1995]</a> MUST be followed. Any behaviour specified here takes precedence for AXoT implementations over that in <a href="#RFC1995">[RFC1995]</a>.  </p>
+<h1 id="rfc.section.5.4.2"><a href="#rfc.section.5.4.2">5.4.2.</a> <a href="#ixot-connection-and-message-handling" id="ixot-connection-and-message-handling">IXoT connection and message handling</a></h1>
+<p id="rfc.section.5.4.2.p.1">IXoT clients and servers SHOULD use EDNS0 Keepalive [RFC7828] to establish the connection timeouts to be used. The IXoT server may use the frequency of recent IXFRs to calculate an average update rate as input to the decision of what EDNS0 Keepalive timeout to use. Note that the use of EDNS0 Keepalive enables IXoT servers to signal the desire to close a connection due to low resources by sending an EDNS0 Keepalive option with a timeout of 0. If the server does not support EDNS0 Keepalive the client MAY keep the connection open for a few seconds (<a href="#RFC7766">[RFC7766]</a> recommends that servers use timeouts of at least a few seconds).  </p>
+<p id="rfc.section.5.4.2.p.2">In the original definition of IXFR, there arguably is an implicit assumption (probably unintentional) that a TCP connection is used for one and only one IXFR request. Indeed, several open source implementations currently take this approach. An IXoT server MUST be able to handle multiple IXFR requests on a single TLS connection (for the same and different zones), as well as to handle other query/response transactions over it.  </p>
+<p id="rfc.section.5.4.2.p.3">IXoT clients SHOULD re-use an existing open TLS connection when making any new IXoT request to the same primary, and for issuing SOA queries, instead of opening a new connection. (Non-IXoT traffic can also use an open TLS connection.) The number of TLS connections between a secondary and primary SHOULD be minimised.  </p>
+<p id="rfc.section.5.4.2.p.4">Valid reasons for not re-using existing connections might include: </p>
+<p/>
+
+<ul>
+  <li>reaching a configured limit for the number of outstanding queries allowed on a single TLS connection</li>
+  <li>the message ID pool has already been exhausted on an open connection</li>
+  <li>a large number of timeouts or slow responses have occurred on an open connection</li>
+  <li>an EDNS0 Keepalive option with a timeout of 0 has been received from the server and the client is in the process of closing the connection</li>
+</ul>
+
+<p> </p>
+<p id="rfc.section.5.4.2.p.6">If no TLS connections are currently open, IXoT clients MAY send SOA queries over UDP, TCP or TLS.  </p>
+<p id="rfc.section.5.4.2.p.7">An IXoT client SHOULD pipeline IXFR requests for different zones on a single TLS connection. An IXoT server SHOULD respond to those requests as soon as the response is available i.e. potentially out of order.  </p>
+<h1 id="rfc.section.5.4.3"><a href="#rfc.section.5.4.3">5.4.3.</a> <a href="#condensation-of-responses" id="condensation-of-responses">Condensation of responses</a></h1>
+<p id="rfc.section.5.4.3.p.1">QUESTION: Since this is a new specification should there be a requirement that IXoT servers are RECOMMENDED to condense responses as described in Section 6 of [RFC1995]. [RFC1995] document says this is optional and MAY be done. Whilst it does add complexity to generating response it can significantly reduce the size of responses and will have implications for padding.  </p>
+<h1 id="rfc.section.5.4.4"><a href="#rfc.section.5.4.4">5.4.4.</a> <a href="#padding-of-ixfr-responses" id="padding-of-ixfr-responses">Padding of IXFR responses</a></h1>
+<p id="rfc.section.5.4.4.p.1">QUESTION FOR US: As with AXFR not sure if we should dump all this section in a placeholder draft on padding or we could get a basic version ironed out to include here? </p>
+<p id="rfc.section.5.4.4.p.2">The goal of padding AXFR responses would be to obfuscate the incremental changes to the zone between SOA updates to minimise information leakage about zone update activity and growth. Both the size and timing of the IXFRs could reveal information.  </p>
+<p id="rfc.section.5.4.4.p.3">Note that the re-use of TLS connections for transfers of multiple different zones would complicate any attempt to analyse the traffic size and timing to extract information.  </p>
+<p id="rfc.section.5.4.4.p.4">IXFR responses can vary in size greatly from the order of 100 bytes for one or two record updates, to tens of thousands of bytes for large dynamic DNSSEC signed zones and (in principle) up to the maximum size of a singe IXFR response (65535 bytes). The frequency of IXFR responses can also depend greatly on if and how the zone is DNSSEC signed. For example, both the following zones might see frequent similarly sized IXFR exchanges </p>
 <p/>
 
 <ul>
@@ -715,7 +778,7 @@
 </ul>
 
 <p> </p>
-<p id="rfc.section.5.4.2.p.6">A simplistic option, following the premise of the Block-Length Padding strategy recommended in <a href="#RFC8467">[RFC8467]</a>, would be to specify </p>
+<p id="rfc.section.5.4.4.p.6">A simplistic option, following the premise of the Block-Length Padding strategy recommended in <a href="#RFC8467">[RFC8467]</a>, would be to specify </p>
 <p/>
 
 <ul>
@@ -723,19 +786,19 @@
 </ul>
 
 <p> </p>
-<p id="rfc.section.5.4.2.p.8">Choosing a message block size of less than 65535 will expose some information about zone activity but obfuscate the more granular changes.  </p>
-<p id="rfc.section.5.4.2.p.9">As with any padding strategy the trade-off between increased bandwidth and processing due to the larger size and number of padded DNS messages and the corresponding gain in confidentiality must be carefully considered. For IXFR a detailed understanding of the zone contents and transfer pattern is likely to be required in order to select the optimal block size for a zone.  </p>
-<p id="rfc.section.5.4.2.p.10">Primary implementations SHOULD provide a configurable message block size based padding mechanism. Secondary implementations MUST be resilient to receiving padded IXFR responses.  </p>
-<p id="rfc.section.5.4.2.p.11">As noted in <a href="#RFC8467">[RFC8467]</a>, the maximum message length, as dictated by the protocol, limits the space for EDNS(0) options. Since padding will reduce the message space available to other EDNS(0) options, the "Padding" option MUST be the last EDNS(0) option applied before a DNS message is sent. In particular for AXFR, that means that if the message is to be signed with, e.g., TSIG this must be done before the padding is applied.  </p>
-<p id="rfc.section.5.4.2.p.12">Recommendation of specific values for message block sizes are out of scope for this specification. More detailed considerations of the trade-off described above with regard to message block sizes, specific size recommendations and also alternative proposals for IXFR padding are expected to be the subject of future work.  </p>
-<h1 id="rfc.section.5.4.3"><a href="#rfc.section.5.4.3">5.4.3.</a> <a href="#fallback-to-axfr" id="fallback-to-axfr">Fallback to AXFR</a></h1>
-<p id="rfc.section.5.4.3.p.1">Fallback to AXFR can happen, for example, if the server is not able to provide an IXFR for the requested SOA. Implementations differ in how long they store zone deltas and how many may be stored at any one time.  </p>
-<p id="rfc.section.5.4.3.p.2">After a failed IXFR a IXoT client SHOULD request the AXFR on the already open TLS connection.  </p>
+<p id="rfc.section.5.4.4.p.8">Choosing a message block size of less than 65535 will expose some information about zone activity but obfuscate the more granular changes.  </p>
+<p id="rfc.section.5.4.4.p.9">As with any padding strategy the trade-off between increased bandwidth and processing due to the larger size and number of padded DNS messages and the corresponding gain in confidentiality must be carefully considered. For IXFR a detailed understanding of the zone contents and transfer pattern is likely to be required in order to select the optimal block size for a zone.  </p>
+<p id="rfc.section.5.4.4.p.10">Primary implementations SHOULD provide a configurable message block size based padding mechanism. Secondary implementations MUST be resilient to receiving padded IXFR responses.  </p>
+<p id="rfc.section.5.4.4.p.11">As noted in <a href="#RFC8467">[RFC8467]</a>, the maximum message length, as dictated by the protocol, limits the space for EDNS(0) options. Since padding will reduce the message space available to other EDNS(0) options, the "Padding" option MUST be the last EDNS(0) option applied before a DNS message is sent. In particular for AXFR, that means that if the message is to be signed with, e.g., TSIG this must be done before the padding is applied.  </p>
+<p id="rfc.section.5.4.4.p.12">Recommendation of specific values for message block sizes are out of scope for this specification. More detailed considerations of the trade-off described above with regard to message block sizes, specific size recommendations and also alternative proposals for IXFR padding are expected to be the subject of future work.  </p>
+<h1 id="rfc.section.5.4.5"><a href="#rfc.section.5.4.5">5.4.5.</a> <a href="#fallback-to-axfr" id="fallback-to-axfr">Fallback to AXFR</a></h1>
+<p id="rfc.section.5.4.5.p.1">Fallback to AXFR can happen, for example, if the server is not able to provide an IXFR for the requested SOA. Implementations differ in how long they store zone deltas and how many may be stored at any one time.  </p>
+<p id="rfc.section.5.4.5.p.2">After a failed IXFR a IXoT client SHOULD request the AXFR on the already open TLS connection.  </p>
 <h1 id="rfc.section.6"><a href="#rfc.section.6">6.</a> <a href="#multiprimary-configurations" id="multiprimary-configurations">Multi-primary Configurations</a></h1>
 <p id="rfc.section.6.p.1">Also known as multi-master configurations this model can provide flexibility and redundancy particularly for IXFR. A secondary will receive one or more NOTIFY messages and can send an SOA to all of the configured primaries. It can then choose to send an XFR request to the primary with the highest SOA (or other criteria, e.g., RTT).  </p>
 <p id="rfc.section.6.p.2">When using persistent connections the secondary may have a TLS connection already open to one or more primaries. Should a secondary preferentially request an XFR from a primary to which it already has an open TLS connection or the one with the highest SOA (assuming it doesn't have a connection open to it already)? </p>
-<p id="rfc.section.6.p.3">Two extremes can be envisaged here. In the first case the secondary continues to use one persistent connection to a single primary until it has reason not to.  Reasons not to might include the primary repeatedly closing the connection, long RTTs on transfers or the SOA of the primary being an unacceptable lag behind the SOA of an alternative primary.  </p>
-<p id="rfc.section.6.p.4">At the other extreme a primary could keep multiple persistent connections open to all available primaries and only request XFRs from the primary with the highest serial number. Since normally the number of secondaries and primaries in direct contact in a transfer group is reasonably low this might be feasible if latency is the most significant concern.  </p>
+<p id="rfc.section.6.p.3">Two extremes can be envisaged here. The first one can be considered a 'preferred primary connection' model. In this case the secondary continues to use one persistent connection to a single primary until it has reason not to. Reasons not to might include the primary repeatedly closing the connection, long RTTs on transfers or the SOA of the primary being an unacceptable lag behind the SOA of an alternative primary.  </p>
+<p id="rfc.section.6.p.4">The other extreme can be considered a 'parallel primary connection' model. Here a secondary could keep multiple persistent connections open to all available primaries and only request XFRs from the primary with the highest serial number.  Since normally the number of secondaries and primaries in direct contact in a transfer group is reasonably low this might be feasible if latency is the most significant concern.  </p>
 <h1 id="rfc.section.7"><a href="#rfc.section.7">7.</a> <a href="#zone-transfer-with-dot--authentication" id="zone-transfer-with-dot--authentication">Zone Transfer with DoT - Authentication</a></h1>
 <h1 id="rfc.section.7.1"><a href="#rfc.section.7.1">7.1.</a> <a href="#tsig" id="tsig">TSIG</a></h1>
 <p id="rfc.section.7.1.p.1">TSIG <a href="#RFC2845">[RFC2845]</a> provides a mechanism for two parties to exchange secret keys which can then be used to create a message digest to protect individual DNS messages. This allows each party to authenticate that a request or response (and the data in it) came from the other party, even if it was transmitted over an unsecured channel or via a proxy. It provides party-to-party data authentication, but not hop-to-hop channel authentication or confidentiality.  </p>
@@ -755,7 +818,7 @@
 <h1 id="rfc.section.7.5"><a href="#rfc.section.7.5">7.5.</a> <a href="#zonemd" id="zonemd">ZONEMD</a></h1>
 <p id="rfc.section.7.5.p.1">Message Digest for DNS Zones (ZONEMD) <a href="#I-D.ietf-dnsop-dns-zone-digest">[I-D.ietf-dnsop-dns-zone-digest]</a> digest is a mechanism that can be used to verify the content of a standalone zone. It is designed to be independent of the transmission channel or mechanism, allowing a general consumer of a zone to do origin authentication of the entire zone contents. Note that the current version of <a href="#I-D.ietf-dnsop-dns-zone-digest">[I-D.ietf-dnsop-dns-zone-digest]</a> states: </p>
 <p><samp>As specified at this time, ZONEMD is not designed for use in large, dynamic zones due to the time and resources required for digest calculation. The ZONEMD record described in this document includes fields reserved for future work to support large, dynamic zones.</samp> </p>
-<p id="rfc.section.7.5.p.3">It is complementary the above mechanisms and can be used in conjunction with XFR-over-TLS but is not considered further.  </p>
+<p id="rfc.section.7.5.p.3">It is complementary the above mechanisms and can be used in conjunction with XoT but is not considered further.  </p>
 <h1 id="rfc.section.7.6"><a href="#rfc.section.7.6">7.6.</a> <a href="#comparison-of-authentication-methods" id="comparison-of-authentication-methods">Comparison of Authentication Methods</a></h1>
 <p id="rfc.section.7.6.p.1">The Table below compares the properties of a selection of the above methods in terms of what protection they provide to the secondary and primary servers during XoT in terms of: </p>
 <p/>
@@ -799,7 +862,7 @@
 <h1 id="rfc.section.9"><a href="#rfc.section.9">9.</a> <a href="#implementation-considerations" id="implementation-considerations">Implementation Considerations</a></h1>
 <p id="rfc.section.9.p.1">TBD </p>
 <h1 id="rfc.section.10"><a href="#rfc.section.10">10.</a> <a href="#implementation-status" id="implementation-status">Implementation Status</a></h1>
-<p id="rfc.section.10.p.1">The 1.9.2 version of <a href="https://github.com/NLnetLabs/unbound/blob/release-1.9.2/doc/Changelog">Unbound</a> includes an option to perform AXFR-over-TLS (instead of TCP). This requires the client (secondary) to authenticate the server (primary) using a configured authentication domain name.  </p>
+<p id="rfc.section.10.p.1">The 1.9.2 version of <a href="https://github.com/NLnetLabs/unbound/blob/release-1.9.2/doc/Changelog">Unbound</a> includes an option to perform AXoT (instead of TCP). This requires the client (secondary) to authenticate the server (primary) using a configured authentication domain name.  </p>
 <p id="rfc.section.10.p.2">It is noted that use of a TLS proxy in front of the primary server is a simple deployment solution that can enable server side XoT.  </p>
 <h1 id="rfc.section.11"><a href="#rfc.section.11">11.</a> <a href="#iana-considerations" id="iana-considerations">IANA Considerations</a></h1>
 <p id="rfc.section.11.p.1">TBD </p>
@@ -815,11 +878,23 @@
 </ul>
 
 <p> </p>
-<p id="rfc.section.12.p.4">Security concerns of DNS-over-TLS are outlined in <a href="#RFC7858">[RFC7858]</a> and <a href="#RFC8310">[RFC8310]</a>.  </p>
+<p id="rfc.section.12.p.4">Security concerns of DoT are outlined in <a href="#RFC7858">[RFC7858]</a> and <a href="#RFC8310">[RFC8310]</a>.  </p>
 <h1 id="rfc.section.13"><a href="#rfc.section.13">13.</a> <a href="#acknowledgements" id="acknowledgements">Acknowledgements</a></h1>
 <p id="rfc.section.13.p.1">The authors thank Benno Overeinder, Shumon Huque and Tim Wicinski for review and discussions.  </p>
 <h1 id="rfc.section.14"><a href="#rfc.section.14">14.</a> <a href="#changelog" id="changelog">Changelog</a></h1>
-<p id="rfc.section.14.p.1">draft-ietf-dprive-xfr-over-tls-00 </p>
+<p id="rfc.section.14.p.1">draft-ietf-dprive-xfr-over-tls-01 </p>
+<p/>
+
+<ul>
+  <li>Significantly update descriptions for both AXoT and IXoT for message and connection handling taking into account previous specifications in more detail</li>
+  <li>Add new discussions of padding for both AXoT and IXoT</li>
+  <li>Add text on SIG(0)</li>
+  <li>Update security considerations</li>
+  <li>Move multi-primary considerations to earlier as they are related to connection handling</li>
+</ul>
+
+<p> </p>
+<p id="rfc.section.14.p.3">draft-ietf-dprive-xfr-over-tls-01 </p>
 <p/>
 
 <ul>
@@ -828,7 +903,7 @@
 </ul>
 
 <p> </p>
-<p id="rfc.section.14.p.3">draft-ietf-dprive-xfr-over-tls-00 </p>
+<p id="rfc.section.14.p.5">draft-ietf-dprive-xfr-over-tls-00 </p>
 <p/>
 
 <ul>
@@ -838,7 +913,7 @@
 </ul>
 
 <p> </p>
-<p id="rfc.section.14.p.5">draft-hzpa-dprive-xfr-over-tls-02 </p>
+<p id="rfc.section.14.p.7">draft-hzpa-dprive-xfr-over-tls-02 </p>
 <p/>
 
 <ul>
@@ -846,7 +921,7 @@
 </ul>
 
 <p> </p>
-<p id="rfc.section.14.p.7">draft-hzpa-dprive-xfr-over-tls-01 </p>
+<p id="rfc.section.14.p.9">draft-hzpa-dprive-xfr-over-tls-01 </p>
 <p/>
 
 <ul>
@@ -854,7 +929,7 @@
 </ul>
 
 <p> </p>
-<p id="rfc.section.14.p.9">draft-hzpa-dprive-xfr-over-tls-00 </p>
+<p id="rfc.section.14.p.11">draft-hzpa-dprive-xfr-over-tls-00 </p>
 <p/>
 
 <ul>
@@ -972,6 +1047,12 @@
         <b id="RFC1035">[RFC1035]</b>
       </td>
       <td class="top"><a>Mockapetris, P.</a>, "<a href="http://tools.ietf.org/html/rfc1035">Domain names - implementation and specification</a>", STD 13, RFC 1035, DOI 10.17487/RFC1035, November 1987.</td>
+    </tr>
+    <tr>
+      <td class="reference">
+        <b id="RFC1045">[RFC1045]</b>
+      </td>
+      <td class="top"><a>Cheriton, D.</a>, "<a href="http://tools.ietf.org/html/rfc1045">VMTP: Versatile Message Transaction Protocol: Protocol specification</a>", RFC 1045, DOI 10.17487/RFC1045, February 1988.</td>
     </tr>
     <tr>
       <td class="reference">
