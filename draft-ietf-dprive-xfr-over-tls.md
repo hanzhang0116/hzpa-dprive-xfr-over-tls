@@ -438,57 +438,25 @@ An AXoT client SHOULD pipeline AXFR requests for different zones on a single TLS
 connection. An AXoT server SHOULD respond to those requests as soon as the
 response is available i.e. potentially out of order.
 
-### Padding AXFR responses
+### Padding AXoT responses
 
-QUESTION FOR US: 
+The goal of padding AXoT responses would be two fold:
 
-* Not sure if we should dump all this section in a placeholder draft on padding
-  or we could get a basic version ironed out to include here? We might need to
-  include the capability for clients to accept 'empty' responses here for
-  interoperability later on?
-* How do most open source implementations split up AXFR responses? A fixed
-  number of records per response or as many as they can fit in a TCP message
-  length of 65535 bytes? (Note RFC5936 talks about supporting old clients that
-  expect one record per response!).
-* Do they send records in a fixed or random order - would this allow anything
-  about the zone contents to be inferred by watching different message sizes
-  over time if they are not all padded to the same size
-
-The goal of padding AXFR responses would be two fold:
-
-* to obfuscate the actual size of the transferred zone to minimised information
+* to obfuscate the actual size of the transferred zone to minimize information
   leakage about the entire contents of the zone.
 * to obfuscate the incremental changes to the zone between SOA updates to
   minimize information leakage about zone update activity and growth.
 
 Note that the re-use of TLS connections for transfers of multiple different
-zones would complicate any attempt to analyze the traffic size and timing to
+zones complicates any attempt to analyze the traffic size and timing to
 extract information.
 
-Note that deducing information about the the above from zone transfer sizes is
-dependent on whether and how the zone is DNSSEC signed, but this information
-can normally be obtained by directly querying the authoritative server. In the
-absence of DNSSEC deducing zone sizes from AXFRs is straight forward.
-
-
-A simplistic option, following the premise of the Block-Length Padding strategy
-recommended in [@RFC8467], would be to specify 
-
-* a 'message size' to which each individual AXFR response would always be padded
-  (with a maximum value of 65353 bytes) and
-* a compatible 'zone block size' for a zone to which the sum total of all the
-  AXFR responses should be padded. This could equivalently be specified as a
-  'zone number of AXFR responses block size'.
-
-Primary implementations SHOULD provide a configurable block-size based padding
-mechanism.
-
-This second requirement is likely to require an implementation to create 'empty'
-AXFR responses in order to pad a zone to the zone block size. That is, AXFR
-responses that contain no RR's apart from the EDNS(0) option for padding.
-However, as will existing AXFR, the last message sent MUST contain the same SOA
-that was in the first message of the AXFR response series in order to signal the
-conclusion of the zone transfer.
+We note here that any requirement to obfuscate the total zone size is likely to
+require a server to create 'empty' AXoT responses. That is, AXoT responses that
+contain no RR's apart from an OPT RR containing the EDNS(0) option for padding.
+However, as with existing AXFR, the last AXoT response message sent MUST
+contain the same SOA that was in the first message of the AXoT response series
+in order to signal the conclusion of the zone transfer.
 
 [@RFC5936] says:
 
@@ -497,41 +465,16 @@ conclusion of the zone transfer.
     number that will fit within a DNS message (taking the required
     content of the other sections into account, as described below)."
 
-'Empty' AXoT responses generated in order to meet a padding requirement are
-exempt from the above statement. Secondary implementations MUST be resilient to
-receiving padded AXFR responses including 'empty' AXFR response that contain
-only padding.
+'Empty' AXoT responses generated in order to meet a padding requirement will be
+ exceptions to the above statement. In order to guarantee support for future
+padding policies, we state here that secondary implementations MUST be
+resilient to receiving padded AXoT responses, including 'empty' AXoT responses
+that contain only an OPT RR containing the EDNS(0) option for padding.
 
-QUESTION FOR US: What do existing clients do if they receive 'empty' responses
-today?
+Recommendation of specific policies for padding AXoT responses are out of scope
+for this specification. Detailed considerations of such policies and the
+trade-offs involved are expected to be the subject of future work.
 
-Observation of the zone transfers would then reveal only zone block size step
-changes in the total zone size (if the zone size changed sufficiently)
-obfuscating the smaller fluctuations.
-
-Choosing a message size of less than 65535 only really makes sense for
-small zones that can be transferred in a single response (in which case the zone
-block size can be set to the same value). Choosing a zone block size close to
-the current zone size would provide some protection with a minimal overhead.
-Choosing a zone block size much larger than the current zone size would provide
-increased protection but with increased overhead.
-
-As with any padding strategy the trade-off between increased bandwidth and
-processing due to the larger size and number of padded DNS messages and the
-corresponding gain in confidentiality must be carefully considered.
-
-As noted in [@RFC8467], the maximum message length, as dictated by the protocol,
-limits the space for EDNS(0) options. Since padding will reduce the message
-space available to other EDNS(0) options, the "Padding" option MUST be the last
-EDNS(0) option applied before a DNS message is sent. In particular for AXFR,
-that means that if the message is to be signed with, e.g., TSIG this must be
-done before the padding is applied.
-
-Recommendation of specific values for the block sizes described above are out of
-scope for this specification. More detailed considerations of the trade-off
-described above with regard to block sizes, size recommendations and also
-alternative proposals for AXFR padding are expected to be the subject of future
-work.
 
 ## IXoT mechanism
 
@@ -594,63 +537,25 @@ IXoT servers are RECOMMENDED to condense responses as described in Section 6 of
 does add complexity to generating response it can significantly reduce the size
 of responses and will have implications for padding.
 
-### Padding of IXFR responses
+### Padding of IXoT responses
 
-QUESTION FOR US: As with AXFR not sure if we should dump all this section in a placeholder
-draft on padding or we could get a basic version ironed out to include here?
-
-The goal of padding AXFR responses would be to obfuscate the incremental
+The goal of padding IXoT responses would be to obfuscate the incremental
 changes to the zone between SOA updates to minimize information leakage about
-zone update activity and growth. Both the size and timing of the IXFRs could
+zone update activity and growth. Both the size and timing of the IXoT responses could
 reveal information.
-
-Note that the re-use of TLS connections for transfers of multiple different
-zones would complicate any attempt to analyze the traffic size and timing to
-extract information.
 
 IXFR responses can vary in size greatly from the order of 100 bytes for one or
 two record updates, to tens of thousands of bytes for large dynamic DNSSEC
-signed zones and (in principle) up to the maximum size of a singe IXFR response
-(65535 bytes). The frequency of IXFR responses can also depend greatly on if and
-how the zone is DNSSEC signed. For example, both the following zones might see
-frequent similarly sized IXFR exchanges
+signed zones. The frequency of IXFR responses can also depend greatly on if and
+how the zone is DNSSEC signed. 
 
-* a small DNSSEC signed zone with frequent record updates 
-* a large DNSSEC signed zone that receives no updates but the RRSIG signature
-  expiry dates are jittered across the signature lifetime window
+In order to guarantee support for future padding policies, we state here that
+secondary implementations MUST be resilient to receiving padded IXoT responses.
 
-A simplistic option, following the premise of the Block-Length Padding strategy
-recommended in [@RFC8467], would be to specify 
+Recommendation of specific policies for padding IXoT responses are out of scope
+for this specification. Detailed considerations of such policies and the
+trade-offs involved are expected to be the subject of future work.
 
-* a 'message block size' where each individual IXFR response would always be
-  padded to the closest multiple of that number of bytes (with a maximum value
-  of 65353 bytes)
-
-Choosing a message block size of less than 65535 will expose some information
-about zone activity but obfuscate the more granular changes.
-
-As with any padding strategy the trade-off between increased bandwidth and
-processing due to the larger size and number of padded DNS messages and the
-corresponding gain in confidentiality must be carefully considered. For IXFR a
-detailed understanding of the zone contents and transfer pattern is likely to be
-required in order to select the optimal block size for a zone.
-
-Primary implementations SHOULD provide a configurable message block size based
-padding mechanism. Secondary implementations MUST be resilient to receiving
-padded IXFR responses.
-
-As noted in [@RFC8467], the maximum message length, as dictated by the protocol,
-limits the space for EDNS(0) options. Since padding will reduce the message
-space available to other EDNS(0) options, the "Padding" option MUST be the last
-EDNS(0) option applied before a DNS message is sent. In particular for AXFR,
-that means that if the message is to be signed with, e.g., TSIG this must be
-done before the padding is applied.
-
-Recommendation of specific values for message block sizes are out of scope for
-this specification. More detailed considerations of the trade-off described
-above with regard to message block sizes, specific size recommendations and also
-alternative proposals for IXFR padding are expected to be the subject of future
-work.
 
 ### Fallback to AXFR
 
