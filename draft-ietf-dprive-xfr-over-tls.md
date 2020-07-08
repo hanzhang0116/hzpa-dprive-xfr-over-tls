@@ -120,10 +120,10 @@ due to crypto-breaking advances, and NSEC5 is a response to this problem.
 is orthogonal to preventing zone enumeration, though they aim to protect the
 same information.
 
-[@!RFC5936] specifies using TSIG [@!RFC2845] for authorization of the clients of
-a zone transfer and for data integrity, but does not express any need for
+[@!RFC5936] specifies using TSIG [@!RFC2845] for authorization of the clients
+of a zone transfer and for data integrity, but does not express any need for
 confidentiality, and TSIG does not offer encryption. Some operators use SSH
-tunneling or IPSec to encrypt the transfer data. 
+tunneling or IPSec to encrypt the transfer data.
 
 Because the AXFR zone transfer is typically carried out over TCP from
 authoritative DNS protocol implementations, encrypting AXFR using DoT
@@ -279,10 +279,12 @@ QUESTION FOR US: Look at packet captures from NSD and Knot Auth to see what they
 It is noted that the specification for IXFR was published well before TCP was
 considered a first class transport for DNS. This document therefore updates
 [@RFC1995] to state that DNS implementations that support IXFR-over-TCP MUST use
-[@RFC7766] to optimise the use of TCP connections and SHOULD use [@!RFC7858] to
+[@RFC7766] to optimize the use of TCP connections and SHOULD use [@!RFC7858] to
 manage persistent connections.
 
-QUESTION FOR US: We don't go as far here as updating IXFR-over-TCP to match the behaviour outlined in section 5.4.2 for IXoT. Should we? 
+QUESTION FOR US: We don't go as far here as updating IXFR-over-TCP to match the
+behavior outlined in section 5.4.2 for IXoT. Should we?
+
 
 
 ## Data Leakage of NOTIFY and SOA Message Exchanges
@@ -343,21 +345,21 @@ and primary to use a port other than port 853 for AXoT.
 ### Coverage and relationship to RFC5936
 
 [@RFC5936] re-specified AXFR providing additional guidance beyond that provided
-in [@RFC1045] and [@RFC1035]. For example, sections 4.1, 4.1.1 and 4.1.2 of
+in [@RFC1034] and [@RFC1035]. For example, sections 4.1, 4.1.1 and 4.1.2 of
 [@RFC5936] provide improved guidance for AXFR clients and servers with regard to
 re-use of connections for multiple AXFRs, AXFRs of different zones and using TCP
 connection for other queries including SOA. However [@RFC5936] was constrained
 by having to be backwards compatible with some very early basic implementations
 of AXFR. 
 
-Here we specify some optimised behaviours for AXoT, based
+Here we specify some optimized behaviors for AXoT, based
 closely on those in [@RFC5936], but without the constraint of backwards
 compatibility since it is expected that all implementations of AXoT fully
-implement the behaviour described here.
+implement the behavior described here.
 
-Where any behavior is not explicitly described here, the behviour specified in
-[@RFC5953] MUST be followed. Any behaviour specified here takes precedence for
-AXoT implementations over that in [@RFC5953].
+Where any behavior is not explicitly described here, the behavior specified in
+[@RFC5936] MUST be followed. Any behavior specified here takes precedence for
+AXoT implementations over that in [@RFC5936].
 
 ### AXoT connection and message handling
 
@@ -366,17 +368,29 @@ close the connection when there is no 'apparent need' to use the connection for
 some time period.
 
 For AXoT this requirement is updated: AXoT clients and servers SHOULD use EDNS0
-Keepalive [RFC7828] to establish the connection timeouts to be used. The AXoT
-server may use the frequency of recent AXFRs to calculate an average update rate
-as input to the decision of what EDNS0 Keepalive timeout to use. Note that use
-of EDNS0 Keepalive enables AXoT servers to signal the desire to close a
-connection due to low resources by sending an EDNS0 Keepalive option with a
-timeout of 0 (in the absence of another way to signal the abort of a AXoT
-transfer). If the server does not support EDNS0 Keepalive the client MAY keep
-the connection open for a few seconds ([@RFC7766] recommends that servers use
-timeouts of at least a few seconds).
+Keepalive [RFC7828] to establish the connection timeouts to be used. The client
+SHOULD send the EDNS0 Keepalive option on every AXoT request sent so that the
+server has every opportunity to update the Keepalive timeout. The AXoT server
+may use the frequency of recent AXFRs to calculate an average update rate as
+input to the decision of what EDNS0 Keepalive timeout to use. If the server
+does not support EDNS0 Keepalive the client MAY keep the connection open for a
+few seconds ([@RFC7766] recommends that servers use timeouts of at least a few
+seconds).
 
-An AXoT server MUST be able to handle multiple IXFR requests on a
+Whilst the specification for EDNS0  [@RFC6891]  does not specifically mention AXFRs, it does say
+
+"If an OPT record is present in a received request, compliant
+   responders MUST include an OPT record in their respective responses."
+ 
+We clarify here that if an OPT record is present in a received AXoT request,
+compliant responders MUST include an OPT record in each of the subsequent AXoT
+responses. Note that this requirement, combined with the use of EDNS0
+Keepalive, enables AXoT servers to signal the desire to close a connection due
+to low resources by sending an EDNS0 Keepalive option with a timeout of 0 on
+any AXoT response (in the absence of another way to signal the abort of a AXoT
+transfer).
+
+An AXoT server MUST be able to handle multiple AXFR requests on a
 single TLS connection (for the same and different zones), as well as to handle
 other query/response transactions over it.
 
@@ -391,7 +405,7 @@ For AXoT this requirement is restated: AXoT clients SHOULD re-use an existing
 open TLS connection when starting any new AXoT session to the same primary, and
 for issuing SOA queries, instead of opening a new connection. (Non-AXoT session
 traffic can also use an open TLS connection.) The number of TLS connections
-between a secondary and primary SHOULD be minimised.
+between a secondary and primary SHOULD be minimized.
 
 Valid reasons for not re-using existing connections might include:
 
@@ -412,7 +426,7 @@ UDP, TCP or TLS.
     single RR.  To interoperate with such clients, the server MAY
     restrict response messages to a single RR."
 
-This is as opposed to the normal behaviour of containing a sufficient number of
+This is opposed to the normal behavior of containing a sufficient number of
 RRs to reasonably amortize the per-message overhead. We clarify here that AXoT
 clients MUST be able to handle responses that include multiple RRs, up to the
 largest number that will fit within a DNS message (taking the required content
@@ -445,15 +459,17 @@ The goal of padding AXFR responses would be two fold:
 * to obfuscate the actual size of the transferred zone to minimised information
   leakage about the entire contents of the zone.
 * to obfuscate the incremental changes to the zone between SOA updates to
-  minimise information leakage about zone update activity and growth.
+  minimize information leakage about zone update activity and growth.
 
 Note that the re-use of TLS connections for transfers of multiple different
-zones would complicate any attempt to analyse the traffic size and timing to
+zones would complicate any attempt to analyze the traffic size and timing to
 extract information.
 
 Note that deducing information about the the above from zone transfer sizes is
-dependant on whether and how the zone is DNSSEC signed, but this information can
-normally be obtained by directly querying the authoritative server. In the absence of DNSSEC deducing zone sizes from AXFRs is straight forward.
+dependent on whether and how the zone is DNSSEC signed, but this information
+can normally be obtained by directly querying the authoritative server. In the
+absence of DNSSEC deducing zone sizes from AXFRs is straight forward.
+
 
 A simplistic option, following the premise of the Block-Length Padding strategy
 recommended in [@RFC8467], would be to specify 
@@ -532,24 +548,20 @@ and primary to use a port other than port 853 for IXoT.
 
 [@RFC1995] says nothing with respect to optimizing IXFRs over TCP or re-using
 already open TCP connections to perform IXFRs or other queries. We provide new
-guidance here specific to IXoT that aligns with the guidance in [@RFC5936] for AXFR, that in section (#axot-mechanism) for AXoT, and with
-that for performant TCP/TLS usage in [@RFC7766] and [@RFC7858].
+guidance here specific to IXoT that aligns with the guidance in [@RFC5936] for
+AXFR, that in section (#axot-mechanism) for AXoT, and with that for performant
+TCP/TLS usage in [@RFC7766] and [@RFC7858].
 
-Where any behavior is not explicitly described here, the behviour specified in
-[@RFC1995] MUST be followed. Any behaviour specified here takes precedence for
-AXoT implementations over that in [@RFC1995].
+Where any behavior is not explicitly described here, the behavior specified in
+[@RFC1995] MUST be followed. Any behavior specified here takes precedence for
+IXoT implementations over that in [@RFC1995].
+
 
 ### IXoT connection and message handling
 
-IXoT clients and servers SHOULD use EDNS0 Keepalive [RFC7828] to establish the
-connection timeouts to be used. The IXoT server may use the frequency of recent
-IXFRs to calculate an average update rate as input to the decision of what EDNS0
-Keepalive timeout to use. Note that the use of EDNS0 Keepalive enables IXoT
-servers to signal the desire to close a connection due to low resources by
-sending an EDNS0 Keepalive option with a timeout of 0. If the server does not
-support EDNS0 Keepalive the client MAY keep the connection open for a few
-seconds ([@RFC7766] recommends that servers use timeouts of at least a few
-seconds).
+In a manner entirely analogous to that described in paragraph 2 of
+(#axot-connection-and-message-handling) IXoT clients and servers SHOULD use
+EDNS0 Keepalive [RFC7828] to establish the connection timeouts to be used.
 
 In the original definition of IXFR, there arguably is an implicit assumption
 (probably unintentional) that a TCP connection is used for one and only one IXFR
@@ -562,17 +574,10 @@ IXoT clients SHOULD re-use an existing open TLS connection when making any new
 IXoT request to the same primary, and for issuing SOA queries, instead of
 opening a new connection. (Non-IXoT traffic can also use an open TLS
 connection.) The number of TLS connections between a secondary and primary
-SHOULD be minimised.
+SHOULD be minimized.
 
-Valid reasons for not re-using existing connections might include:
-
-* reaching a configured limit for the number of outstanding queries allowed on a
-  single TLS connection
-* the message ID pool has already been exhausted on an open connection
-* a large number of timeouts or slow responses have occurred on an open
-  connection
-* an EDNS0 Keepalive option with a timeout of 0 has been received from the
-  server and the client is in the process of closing the connection
+Valid reasons for not re-using existing connections are the same as those
+described in (#axot-connection-and-message-handling)
 
 If no TLS connections are currently open, IXoT clients MAY send SOA queries over
 UDP, TCP or TLS.
@@ -594,13 +599,13 @@ of responses and will have implications for padding.
 QUESTION FOR US: As with AXFR not sure if we should dump all this section in a placeholder
 draft on padding or we could get a basic version ironed out to include here?
 
-The goal of padding AXFR responses would be to obfuscate the incremental changes
-to the zone between SOA updates to minimise information leakage about zone
-update activity and growth. Both the size and timing of the IXFRs could reveal
-information.
+The goal of padding AXFR responses would be to obfuscate the incremental
+changes to the zone between SOA updates to minimize information leakage about
+zone update activity and growth. Both the size and timing of the IXFRs could
+reveal information.
 
 Note that the re-use of TLS connections for transfers of multiple different
-zones would complicate any attempt to analyse the traffic size and timing to
+zones would complicate any attempt to analyze the traffic size and timing to
 extract information.
 
 IXFR responses can vary in size greatly from the order of 100 bytes for one or
@@ -684,20 +689,25 @@ Since normally the number of secondaries and primaries in direct contact in a
 transfer group is reasonably low this might be feasible if latency is the most
 significant concern.
 
+Recommendation of a particular scheme is out of scope of this document but
+implementations are encouraged to provide configuration options that allow
+operators to make choices about this behavior.
+
 # Zone Transfer with DoT - Authentication
 
 ## TSIG
 
-TSIG [@RFC2845] provides a mechanism for two parties to exchange secret keys
-which can then be used to create a message digest to protect individual DNS
-messages. This allows each party to authenticate that a request or response (and
-the data in it) came from the other party, even if it was transmitted over an
-unsecured channel or via a proxy. It provides party-to-party data
-authentication, but not hop-to-hop channel authentication or confidentiality.
+TSIG [@RFC2845] provides a mechanism for two or more parties to use shared
+secret keys which can then be used to create a message digest to protect
+individual DNS messages. This allows each party to authenticate that a request
+or response (and the data in it) came from the other party, even if it was
+transmitted over an unsecured channel or via a proxy. It provides party-to-party
+data authentication, but not hop-to-hop channel authentication or
+confidentiality.
 
 ## SIG(0)
 
-SIG(0) [@RFC2535] similarly also provides a mechanism to digitally a sign DNS
+SIG(0) [@RFC2535] similarly also provides a mechanism to digitally sign a DNS
 message but uses public key authentication, where the public keys are stored in
 DNS as KEY RRs and a private key is stored at the signer. It also provides
 party-to-party data authentication, but not hop-to-hop channel authentication or
@@ -707,7 +717,7 @@ confidentiality.
 
 ### Opportunistic
 
-Opportunistic TLS [@RFC8310] provides a defence against passive
+Opportunistic TLS [@RFC8310] provides a defense against passive
 surveillance, providing on-the-wire confidentiality.
 
 ### Strict
@@ -807,7 +817,8 @@ Based on this analysis it can be seen that:
 We call the entire group of servers involved in XFR (all the primaries and all
 the secondaries) the 'transfer group'.
 
-Within any transfer group both AXFRs and IXFRs for a zone SHOULD all use the same policy, e.g., if AXFRs use AXoT all IXFRs SHOULD use IXoT.
+Within any transfer group both AXFRs and IXFRs for a zone SHOULD all use the
+same policy, e.g., if AXFRs use AXoT all IXFRs SHOULD use IXoT.
 
 In order to assure the confidentiality of the zone information, the entire
 transfer group MUST have a consistent policy of requiring confidentiality. If
@@ -829,7 +840,8 @@ or over cleartext DNS. Other aspects such as if a secondary will accept data
 without a TSIG digest or if secondaries are using Strict as opposed to
 Opportunistic TLS are more challenging.
 
-The mechanics of co-ordinating or enforcing such policies are out of the scope of this document but may be the subject of future operational guidance. 
+The mechanics of co-ordinating or enforcing such policies are out of the scope
+of this document but may be the subject of future operational guidance.
 
 
 # Implementation Considerations
@@ -859,23 +871,28 @@ transfers.
 
 This does not mitigate:
 
-* the risk that some level of zone activity might be inferred by observing zone transfer sizes and timing on encrypted connections (even with padding applied), in combination with obtaining SOA records by directly querying authoritative servers.
-* the risk that hidden primaries might be inferred or identified via observation of encrypted connections.
+* the risk that some level of zone activity might be inferred by observing zone
+  transfer sizes and timing on encrypted connections (even with padding
+  applied), in combination with obtaining SOA records by directly querying
+  authoritative servers.
+* the risk that hidden primaries might be inferred or identified via
+  observation of encrypted connections.
 * the risk of zone contents being obtained via zone enumeration techniques.
 
 Security concerns of DoT are outlined in [@RFC7858] and [@RFC8310].
 
 # Acknowledgements
 
-The authors thank Benno Overeinder, Shumon Huque and Tim Wicinski for review and
-discussions.
+The authors thank Benno Overeinder, Shumon Huque and Tim Wicinski for review
+and discussions.
 
 
 # Changelog
 
 draft-ietf-dprive-xfr-over-tls-01
 
-* Significantly update descriptions for both AXoT and IXoT for message and connection handling taking into account previous specifications in more detail
+* Significantly update descriptions for both AXoT and IXoT for message and
+  connection handling taking into account previous specifications in more detail
 * Add new discussions of padding for both AXoT and IXoT
 * Add text on SIG(0)
 * Update security considerations
