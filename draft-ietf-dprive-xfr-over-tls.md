@@ -11,15 +11,15 @@
     date = 2020-07-01T00:00:00Z
     [pi]
     [[author]]
-     initials="H."
-     surname="Zhang"
-     fullname="Han Zhang"
+     initials="S."
+     surname="Sahib"
+     fullname="Shivan Sahib"
      organization = "Salesforce"
        [author.address]
-       email = "hzhang@salesforce.com"
+       email = "ssahib@salesforce.com"
        [author.address.postal]
-       city = "San Francisco, CA"
-       country = "United States"
+       city = "Vancouver, BC"
+       country = "Canada"
    [[author]]
     initials="P."
     surname="Aras"
@@ -791,6 +791,16 @@ Security concerns of DoT are outlined in [@RFC7858] and [@RFC8310].
 The authors thank Benno Overeinder, Shumon Huque and Tim Wicinski for review
 and discussions.
 
+# Contributors
+
+Significant contributions to the document were made by:
+
+   Han Zhang \
+   Salesforce\
+   San Francisco, CA\
+   United States\
+
+   Email: hzhang@salesforce.com
 
 # Changelog
 

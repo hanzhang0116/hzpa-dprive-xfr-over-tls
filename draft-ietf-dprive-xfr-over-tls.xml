@@ -12,18 +12,18 @@
 <front>
 <title abbrev="XFR-over-TLS">DNS Zone Transfer-over-TLS</title>
 
-<author initials="H." surname="Zhang" fullname="Han Zhang">
+<author initials="S." surname="Sahib" fullname="Shivan Sahib">
 <organization>Salesforce</organization>
 <address>
 <postal>
 <street></street>
-<city>San Francisco, CA</city>
+<city>Vancouver, BC</city>
 <code></code>
-<country>United States</country>
+<country>Canada</country>
 <region></region>
 </postal>
 <phone></phone>
-<email>hzhang@salesforce.com</email>
+<email>ssahib@salesforce.com</email>
 <uri></uri>
 </address>
 </author>
@@ -875,6 +875,21 @@ observation of encrypted connections.</t>
 <section anchor="acknowledgements" title="Acknowledgements">
 <t>The authors thank Benno Overeinder, Shumon Huque and Tim Wicinski for review
 and discussions.
+</t>
+</section>
+
+<section anchor="contributors" title="Contributors">
+<t>Significant contributions to the document were made by:
+</t>
+<t>Han Zhang 
+<vspace/>
+   Salesforce
+<vspace/>
+   San Francisco, CA
+<vspace/>
+   United States
+</t>
+<t>Email: hzhang@salesforce.com
 </t>
 </section>
 

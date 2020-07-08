@@ -413,17 +413,18 @@
 <link href="#rfc.section.11" rel="Chapter" title="11 IANA Considerations"/>
 <link href="#rfc.section.12" rel="Chapter" title="12 Security Considerations"/>
 <link href="#rfc.section.13" rel="Chapter" title="13 Acknowledgements"/>
-<link href="#rfc.section.14" rel="Chapter" title="14 Changelog"/>
-<link href="#rfc.references" rel="Chapter" title="15 References"/>
-<link href="#rfc.references.1" rel="Chapter" title="15.1 Normative References"/>
-<link href="#rfc.references.2" rel="Chapter" title="15.2 Informative References"/>
+<link href="#rfc.section.14" rel="Chapter" title="14 Contributors"/>
+<link href="#rfc.section.15" rel="Chapter" title="15 Changelog"/>
+<link href="#rfc.references" rel="Chapter" title="16 References"/>
+<link href="#rfc.references.1" rel="Chapter" title="16.1 Normative References"/>
+<link href="#rfc.references.2" rel="Chapter" title="16.2 Informative References"/>
 <link href="#rfc.authors" rel="Chapter"/>
 
 
   <meta name="generator" content="xml2rfc version 2.5.1 - http://tools.ietf.org/tools/xml2rfc" />
   <link rel="schema.dct" href="http://purl.org/dc/terms/" />
 
-  <meta name="dct.creator" content="Zhang, H., Aras, P., Toorop, W., Dickinson, S., and A. Mankin" />
+  <meta name="dct.creator" content="Sahib, S., Aras, P., Toorop, W., Dickinson, S., and A. Mankin" />
   <meta name="dct.identifier" content="urn:ietf:id:draft-ietf-dprive-xfr-over-tls-02" />
   <meta name="dct.issued" scheme="ISO8601" content="2020-7-1" />
   <meta name="dct.abstract" content="DNS zone transfers are transmitted in clear text, which gives attackers the opportunity to collect the content of a zone by eavesdropping on network connections. The DNS Transaction Signature (TSIG) mechanism is specified to restrict direct zone transfer to authorized clients only, but it does not add confidentiality. This document specifies use of DNS-over-TLS to prevent zone contents collection via passive monitoring of zone transfers.  " />
@@ -438,7 +439,7 @@
     
     	<tr>
   <td class="left">dprive</td>
-  <td class="right">H. Zhang</td>
+  <td class="right">S. Sahib</td>
 </tr>
 <tr>
   <td class="left">Internet-Draft</td>
@@ -545,10 +546,11 @@
 <li>11.   <a href="#rfc.section.11">IANA Considerations</a></li>
 <li>12.   <a href="#rfc.section.12">Security Considerations</a></li>
 <li>13.   <a href="#rfc.section.13">Acknowledgements</a></li>
-<li>14.   <a href="#rfc.section.14">Changelog</a></li>
-<li>15.   <a href="#rfc.references">References</a></li>
-<ul><li>15.1.   <a href="#rfc.references.1">Normative References</a></li>
-<li>15.2.   <a href="#rfc.references.2">Informative References</a></li>
+<li>14.   <a href="#rfc.section.14">Contributors</a></li>
+<li>15.   <a href="#rfc.section.15">Changelog</a></li>
+<li>16.   <a href="#rfc.references">References</a></li>
+<ul><li>16.1.   <a href="#rfc.references.1">Normative References</a></li>
+<li>16.2.   <a href="#rfc.references.2">Informative References</a></li>
 </ul><li><a href="#rfc.authors">Authors' Addresses</a></li>
 
 
@@ -828,8 +830,12 @@ content of the other sections into account, as described below)."
 <p id="rfc.section.12.p.4">Security concerns of DoT are outlined in <a href="#RFC7858">[RFC7858]</a> and <a href="#RFC8310">[RFC8310]</a>.  </p>
 <h1 id="rfc.section.13"><a href="#rfc.section.13">13.</a> <a href="#acknowledgements" id="acknowledgements">Acknowledgements</a></h1>
 <p id="rfc.section.13.p.1">The authors thank Benno Overeinder, Shumon Huque and Tim Wicinski for review and discussions.  </p>
-<h1 id="rfc.section.14"><a href="#rfc.section.14">14.</a> <a href="#changelog" id="changelog">Changelog</a></h1>
-<p id="rfc.section.14.p.1">draft-ietf-dprive-xfr-over-tls-01 </p>
+<h1 id="rfc.section.14"><a href="#rfc.section.14">14.</a> <a href="#contributors" id="contributors">Contributors</a></h1>
+<p id="rfc.section.14.p.1">Significant contributions to the document were made by: </p>
+<p id="rfc.section.14.p.2">Han Zhang <br/> Salesforce <br/> San Francisco, CA <br/> United States </p>
+<p id="rfc.section.14.p.3">Email: hzhang@salesforce.com </p>
+<h1 id="rfc.section.15"><a href="#rfc.section.15">15.</a> <a href="#changelog" id="changelog">Changelog</a></h1>
+<p id="rfc.section.15.p.1">draft-ietf-dprive-xfr-over-tls-01 </p>
 <p/>
 
 <ul>
@@ -841,7 +847,7 @@ content of the other sections into account, as described below)."
 </ul>
 
 <p> </p>
-<p id="rfc.section.14.p.3">draft-ietf-dprive-xfr-over-tls-01 </p>
+<p id="rfc.section.15.p.3">draft-ietf-dprive-xfr-over-tls-01 </p>
 <p/>
 
 <ul>
@@ -850,7 +856,7 @@ content of the other sections into account, as described below)."
 </ul>
 
 <p> </p>
-<p id="rfc.section.14.p.5">draft-ietf-dprive-xfr-over-tls-00 </p>
+<p id="rfc.section.15.p.5">draft-ietf-dprive-xfr-over-tls-00 </p>
 <p/>
 
 <ul>
@@ -860,7 +866,7 @@ content of the other sections into account, as described below)."
 </ul>
 
 <p> </p>
-<p id="rfc.section.14.p.7">draft-hzpa-dprive-xfr-over-tls-02 </p>
+<p id="rfc.section.15.p.7">draft-hzpa-dprive-xfr-over-tls-02 </p>
 <p/>
 
 <ul>
@@ -868,7 +874,7 @@ content of the other sections into account, as described below)."
 </ul>
 
 <p> </p>
-<p id="rfc.section.14.p.9">draft-hzpa-dprive-xfr-over-tls-01 </p>
+<p id="rfc.section.15.p.9">draft-hzpa-dprive-xfr-over-tls-01 </p>
 <p/>
 
 <ul>
@@ -876,7 +882,7 @@ content of the other sections into account, as described below)."
 </ul>
 
 <p> </p>
-<p id="rfc.section.14.p.11">draft-hzpa-dprive-xfr-over-tls-00 </p>
+<p id="rfc.section.15.p.11">draft-hzpa-dprive-xfr-over-tls-00 </p>
 <p/>
 
 <ul>
@@ -884,8 +890,8 @@ content of the other sections into account, as described below)."
 </ul>
 
 <p> </p>
-<h1 id="rfc.references"><a href="#rfc.references">15.</a> References</h1>
-<h1 id="rfc.references.1"><a href="#rfc.references.1">15.1.</a> Normative References</h1>
+<h1 id="rfc.references"><a href="#rfc.references">16.</a> References</h1>
+<h1 id="rfc.references.1"><a href="#rfc.references.1">16.1.</a> Normative References</h1>
 <table>
   <tbody>
     <tr>
@@ -974,7 +980,7 @@ content of the other sections into account, as described below)."
     </tr>
   </tbody>
 </table>
-<h1 id="rfc.references.2"><a href="#rfc.references.2">15.2.</a> Informative References</h1>
+<h1 id="rfc.references.2"><a href="#rfc.references.2">16.2.</a> Informative References</h1>
 <table>
   <tbody>
     <tr>
@@ -1033,22 +1039,22 @@ content of the other sections into account, as described below)."
 <div class="avoidbreak">
   <address class="vcard">
 	<span class="vcardline">
-	  <span class="fn">Han Zhang</span> 
+	  <span class="fn">Shivan Sahib</span> 
 	  <span class="n hidden">
-		<span class="family-name">Zhang</span>
+		<span class="family-name">Sahib</span>
 	  </span>
 	</span>
 	<span class="org vcardline">Salesforce</span>
 	<span class="adr">
 	  
 	  <span class="vcardline">
-		<span class="locality">San Francisco, CA</span>,  
+		<span class="locality">Vancouver, BC</span>,  
 		<span class="region"></span>
 		<span class="code"></span>
 	  </span>
-	  <span class="country-name vcardline">United States</span>
+	  <span class="country-name vcardline">Canada</span>
 	</span>
-	<span class="vcardline">EMail: <a href="mailto:hzhang@salesforce.com">hzhang@salesforce.com</a></span>
+	<span class="vcardline">EMail: <a href="mailto:ssahib@salesforce.com">ssahib@salesforce.com</a></span>
 
   </address>
 </div><div class="avoidbreak">

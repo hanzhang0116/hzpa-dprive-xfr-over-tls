@@ -2,7 +2,7 @@
 
 
 
-dprive                                                          H. Zhang
+dprive                                                          S. Sahib
 Internet-Draft                                                   P. Aras
 Updates: 1995 (if approved)                                   Salesforce
 Intended status: Standards Track                               W. Toorop
@@ -53,7 +53,7 @@ Copyright Notice
 
 
 
-Zhang, et al.            Expires January 2, 2021                [Page 1]
+Sahib, et al.            Expires January 2, 2021                [Page 1]
 
 Internet-Draft                XFR-over-TLS                     July 2020
 
@@ -109,7 +109,7 @@ Table of Contents
 
 
 
-Zhang, et al.            Expires January 2, 2021                [Page 2]
+Sahib, et al.            Expires January 2, 2021                [Page 2]
 
 Internet-Draft                XFR-over-TLS                     July 2020
 
@@ -117,11 +117,12 @@ Internet-Draft                XFR-over-TLS                     July 2020
    11. IANA Considerations . . . . . . . . . . . . . . . . . . . . .  18
    12. Security Considerations . . . . . . . . . . . . . . . . . . .  19
    13. Acknowledgements  . . . . . . . . . . . . . . . . . . . . . .  19
-   14. Changelog . . . . . . . . . . . . . . . . . . . . . . . . . .  19
-   15. References  . . . . . . . . . . . . . . . . . . . . . . . . .  20
-     15.1.  Normative References . . . . . . . . . . . . . . . . . .  20
-     15.2.  Informative References . . . . . . . . . . . . . . . . .  21
-     15.3.  URIs . . . . . . . . . . . . . . . . . . . . . . . . . .  22
+   14. Contributors  . . . . . . . . . . . . . . . . . . . . . . . .  19
+   15. Changelog . . . . . . . . . . . . . . . . . . . . . . . . . .  19
+   16. References  . . . . . . . . . . . . . . . . . . . . . . . . .  20
+     16.1.  Normative References . . . . . . . . . . . . . . . . . .  20
+     16.2.  Informative References . . . . . . . . . . . . . . . . .  22
+     16.3.  URIs . . . . . . . . . . . . . . . . . . . . . . . . . .  23
    Authors' Addresses  . . . . . . . . . . . . . . . . . . . . . . .  23
 
 1.  Introduction
@@ -160,16 +161,17 @@ Internet-Draft                XFR-over-TLS                     July 2020
    walking is now possible with NSEC3 due to crypto-breaking advances,
    and NSEC5 is a response to this problem.
 
-   [RFC5155] does not address data obtained outside zone enumeration
-   (nor does [I-D.vcelak-nsec5]).  Preventing eavesdropping of zone
 
 
 
-Zhang, et al.            Expires January 2, 2021                [Page 3]
+
+Sahib, et al.            Expires January 2, 2021                [Page 3]
 
 Internet-Draft                XFR-over-TLS                     July 2020
 
 
+   [RFC5155] does not address data obtained outside zone enumeration
+   (nor does [I-D.vcelak-nsec5]).  Preventing eavesdropping of zone
    transfers (this draft) is orthogonal to preventing zone enumeration,
    though they aim to protect the same information.
 
@@ -214,17 +216,19 @@ Internet-Draft                XFR-over-TLS                     July 2020
       transfers will defeat zone content leakage that can occur via
       passive surveillance.
 
-   o  Authentication.  Use of single or mutual TLS authentication (in
-      combination with ACLs) can complement and potentially be an
-      alternative to TSIG.
 
 
 
 
-Zhang, et al.            Expires January 2, 2021                [Page 4]
+
+Sahib, et al.            Expires January 2, 2021                [Page 4]
 
 Internet-Draft                XFR-over-TLS                     July 2020
 
+
+   o  Authentication.  Use of single or mutual TLS authentication (in
+      combination with ACLs) can complement and potentially be an
+      alternative to TSIG.
 
    o  Performance.  Existing AXFR and IXFR mechanisms have the burden of
       backwards compatibility with older implementations based on the
@@ -273,11 +277,7 @@ Internet-Draft                XFR-over-TLS                     July 2020
 
 
 
-
-
-
-
-Zhang, et al.            Expires January 2, 2021                [Page 5]
+Sahib, et al.            Expires January 2, 2021                [Page 5]
 
 Internet-Draft                XFR-over-TLS                     July 2020
 
@@ -333,7 +333,7 @@ Internet-Draft                XFR-over-TLS                     July 2020
 
 
 
-Zhang, et al.            Expires January 2, 2021                [Page 6]
+Sahib, et al.            Expires January 2, 2021                [Page 6]
 
 Internet-Draft                XFR-over-TLS                     July 2020
 
@@ -389,7 +389,7 @@ Internet-Draft                XFR-over-TLS                     July 2020
 
 
 
-Zhang, et al.            Expires January 2, 2021                [Page 7]
+Sahib, et al.            Expires January 2, 2021                [Page 7]
 
 Internet-Draft                XFR-over-TLS                     July 2020
 
@@ -445,7 +445,7 @@ Internet-Draft                XFR-over-TLS                     July 2020
 
 
 
-Zhang, et al.            Expires January 2, 2021                [Page 8]
+Sahib, et al.            Expires January 2, 2021                [Page 8]
 
 Internet-Draft                XFR-over-TLS                     July 2020
 
@@ -501,7 +501,7 @@ Internet-Draft                XFR-over-TLS                     July 2020
 
 
 
-Zhang, et al.            Expires January 2, 2021                [Page 9]
+Sahib, et al.            Expires January 2, 2021                [Page 9]
 
 Internet-Draft                XFR-over-TLS                     July 2020
 
@@ -557,7 +557,7 @@ Internet-Draft                XFR-over-TLS                     July 2020
 
 
 
-Zhang, et al.            Expires January 2, 2021               [Page 10]
+Sahib, et al.            Expires January 2, 2021               [Page 10]
 
 Internet-Draft                XFR-over-TLS                     July 2020
 
@@ -613,7 +613,7 @@ Internet-Draft                XFR-over-TLS                     July 2020
 
 
 
-Zhang, et al.            Expires January 2, 2021               [Page 11]
+Sahib, et al.            Expires January 2, 2021               [Page 11]
 
 Internet-Draft                XFR-over-TLS                     July 2020
 
@@ -669,7 +669,7 @@ Internet-Draft                XFR-over-TLS                     July 2020
 
 
 
-Zhang, et al.            Expires January 2, 2021               [Page 12]
+Sahib, et al.            Expires January 2, 2021               [Page 12]
 
 Internet-Draft                XFR-over-TLS                     July 2020
 
@@ -725,7 +725,7 @@ Internet-Draft                XFR-over-TLS                     July 2020
 
 
 
-Zhang, et al.            Expires January 2, 2021               [Page 13]
+Sahib, et al.            Expires January 2, 2021               [Page 13]
 
 Internet-Draft                XFR-over-TLS                     July 2020
 
@@ -781,7 +781,7 @@ Internet-Draft                XFR-over-TLS                     July 2020
 
 
 
-Zhang, et al.            Expires January 2, 2021               [Page 14]
+Sahib, et al.            Expires January 2, 2021               [Page 14]
 
 Internet-Draft                XFR-over-TLS                     July 2020
 
@@ -837,7 +837,7 @@ Internet-Draft                XFR-over-TLS                     July 2020
 
 
 
-Zhang, et al.            Expires January 2, 2021               [Page 15]
+Sahib, et al.            Expires January 2, 2021               [Page 15]
 
 Internet-Draft                XFR-over-TLS                     July 2020
 
@@ -893,7 +893,7 @@ Internet-Draft                XFR-over-TLS                     July 2020
 
 
 
-Zhang, et al.            Expires January 2, 2021               [Page 16]
+Sahib, et al.            Expires January 2, 2021               [Page 16]
 
 Internet-Draft                XFR-over-TLS                     July 2020
 
@@ -949,7 +949,7 @@ Internet-Draft                XFR-over-TLS                     July 2020
 
 
 
-Zhang, et al.            Expires January 2, 2021               [Page 17]
+Sahib, et al.            Expires January 2, 2021               [Page 17]
 
 Internet-Draft                XFR-over-TLS                     July 2020
 
@@ -1005,7 +1005,7 @@ Internet-Draft                XFR-over-TLS                     July 2020
 
 
 
-Zhang, et al.            Expires January 2, 2021               [Page 18]
+Sahib, et al.            Expires January 2, 2021               [Page 18]
 
 Internet-Draft                XFR-over-TLS                     July 2020
 
@@ -1036,7 +1036,18 @@ Internet-Draft                XFR-over-TLS                     July 2020
    The authors thank Benno Overeinder, Shumon Huque and Tim Wicinski for
    review and discussions.
 
-14.  Changelog
+14.  Contributors
+
+   Significant contributions to the document were made by:
+
+   Han Zhang
+   Salesforce
+   San Francisco, CA
+   United States
+
+   Email: hzhang@salesforce.com
+
+15.  Changelog
 
    draft-ietf-dprive-xfr-over-tls-01
 
@@ -1048,6 +1059,13 @@ Internet-Draft                XFR-over-TLS                     July 2020
 
    o  Add text on SIG(0)
 
+
+
+Sahib, et al.            Expires January 2, 2021               [Page 19]
+
+Internet-Draft                XFR-over-TLS                     July 2020
+
+
    o  Update security considerations
 
    o  Move multi-primary considerations to earlier as they are related
@@ -1058,13 +1076,6 @@ Internet-Draft                XFR-over-TLS                     July 2020
    o  Minor editorial updates
 
    o  Add requirement for TLS 1.3. or later
-
-
-
-Zhang, et al.            Expires January 2, 2021               [Page 19]
-
-Internet-Draft                XFR-over-TLS                     July 2020
-
 
    draft-ietf-dprive-xfr-over-tls-00
 
@@ -1086,9 +1097,9 @@ Internet-Draft                XFR-over-TLS                     July 2020
 
    o  Initial commit
 
-15.  References
+16.  References
 
-15.1.  Normative References
+16.1.  Normative References
 
    [I-D.ietf-dprive-rfc7626-bis]
               Bortzmeyer, S. and S. Dickinson, "DNS Privacy
@@ -1100,6 +1111,16 @@ Internet-Draft                XFR-over-TLS                     July 2020
               D. Lawrence, "NSEC5, DNSSEC Authenticated Denial of
               Existence", draft-vcelak-nsec5-08 (work in progress),
               December 2018.
+
+
+
+
+
+
+Sahib, et al.            Expires January 2, 2021               [Page 20]
+
+Internet-Draft                XFR-over-TLS                     July 2020
+
 
    [RFC1995]  Ohta, M., "Incremental Zone Transfer in DNS", RFC 1995,
               DOI 10.17487/RFC1995, August 1996, <https://www.rfc-
@@ -1114,13 +1135,6 @@ Internet-Draft                XFR-over-TLS                     July 2020
               Wellington, "Secret Key Transaction Authentication for DNS
               (TSIG)", RFC 2845, DOI 10.17487/RFC2845, May 2000,
               <https://www.rfc-editor.org/info/rfc2845>.
-
-
-
-Zhang, et al.            Expires January 2, 2021               [Page 20]
-
-Internet-Draft                XFR-over-TLS                     July 2020
-
 
    [RFC5077]  Salowey, J., Zhou, H., Eronen, P., and H. Tschofenig,
               "Transport Layer Security (TLS) Session Resumption without
@@ -1156,6 +1170,14 @@ Internet-Draft                XFR-over-TLS                     July 2020
               DOI 10.17487/RFC8310, March 2018, <https://www.rfc-
               editor.org/info/rfc8310>.
 
+
+
+
+Sahib, et al.            Expires January 2, 2021               [Page 21]
+
+Internet-Draft                XFR-over-TLS                     July 2020
+
+
    [RFC8484]  Hoffman, P. and P. McManus, "DNS Queries over HTTPS
               (DoH)", RFC 8484, DOI 10.17487/RFC8484, October 2018,
               <https://www.rfc-editor.org/info/rfc8484>.
@@ -1164,19 +1186,12 @@ Internet-Draft                XFR-over-TLS                     July 2020
               Terminology", BCP 219, RFC 8499, DOI 10.17487/RFC8499,
               January 2019, <https://www.rfc-editor.org/info/rfc8499>.
 
-15.2.  Informative References
+16.2.  Informative References
 
    [I-D.ietf-dnsop-dns-zone-digest]
               Wessels, D., Barber, P., Weinberg, M., Kumari, W., and W.
               Hardaker, "Message Digest for DNS Zones", draft-ietf-
               dnsop-dns-zone-digest-08 (work in progress), June 2020.
-
-
-
-Zhang, et al.            Expires January 2, 2021               [Page 21]
-
-Internet-Draft                XFR-over-TLS                     July 2020
-
 
    [RFC1034]  Mockapetris, P., "Domain names - concepts and facilities",
               STD 13, RFC 1034, DOI 10.17487/RFC1034, November 1987,
@@ -1208,7 +1223,18 @@ Internet-Draft                XFR-over-TLS                     July 2020
               Requirements", RFC 7766, DOI 10.17487/RFC7766, March 2016,
               <https://www.rfc-editor.org/info/rfc7766>.
 
-15.3.  URIs
+
+
+
+
+
+
+Sahib, et al.            Expires January 2, 2021               [Page 22]
+
+Internet-Draft                XFR-over-TLS                     July 2020
+
+
+16.3.  URIs
 
    [1] https://github.com/hanzhang0116/hzpa-dprive-xfr-over-tls/
        blob/02_updates/02-draft-svg/AXFR_mechanism.svg
@@ -1226,14 +1252,6 @@ Internet-Draft                XFR-over-TLS                     July 2020
    [6] https://github.com/hanzhang0116/hzpa-dprive-xfr-over-tls/
        blob/02_updates/02-draft-svg/IXoT_mechanism_1.svg
 
-
-
-
-Zhang, et al.            Expires January 2, 2021               [Page 22]
-
-Internet-Draft                XFR-over-TLS                     July 2020
-
-
    [7] https://github.com/hanzhang0116/hzpa-dprive-xfr-over-tls/
        blob/02_updates/02-draft-svg/
        Properties_of_Authentication_methods_for_XoT.svg
@@ -1243,12 +1261,12 @@ Internet-Draft                XFR-over-TLS                     July 2020
 
 Authors' Addresses
 
-   Han Zhang
+   Shivan Sahib
    Salesforce
-   San Francisco, CA
-   United States
+   Vancouver, BC
+   Canada
 
-   Email: hzhang@salesforce.com
+   Email: ssahib@salesforce.com
 
 
    Pallavi Aras
@@ -1257,6 +1275,19 @@ Authors' Addresses
    United States
 
    Email: paras@salesforce.com
+
+
+
+
+
+
+
+
+
+
+Sahib, et al.            Expires January 2, 2021               [Page 23]
+
+Internet-Draft                XFR-over-TLS                     July 2020
 
 
    Willem Toorop
@@ -1276,18 +1307,6 @@ Authors' Addresses
    United Kingdom
 
    Email: sara@sinodun.com
-
-
-
-
-
-
-
-
-
-Zhang, et al.            Expires January 2, 2021               [Page 23]
-
-Internet-Draft                XFR-over-TLS                     July 2020
 
 
    Allison Mankin
@@ -1322,23 +1341,4 @@ Internet-Draft                XFR-over-TLS                     July 2020
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-Zhang, et al.            Expires January 2, 2021               [Page 24]
+Sahib, et al.            Expires January 2, 2021               [Page 24]
