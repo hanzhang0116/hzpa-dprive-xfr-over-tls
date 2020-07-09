@@ -315,7 +315,7 @@ an IXFR is completed.
 <t>It is noted that the specification for IXFR was published well before TCP was
 considered a first class transport for DNS. This document therefore updates
 <xref target="RFC1995"/> to state that DNS implementations that support IXFR-over-TCP MUST use
-<xref target="RFC7766"/> to optimize the use of TCP connections and SHOULD use <xref target="RFC7858"/> to
+<xref target="RFC7766"/> to optimize the use of TCP connections and SHOULD use <xref target="RFC7858"/> tow
 manage persistent connections.
 </t>
 </section>
@@ -352,28 +352,52 @@ any downstream secondary.
 
 <section anchor="connections-and-data-flows-in-xot" title="Connections and Data Flows in XoT">
 
-<section anchor="connection-usage" title="Connection usage">
+<section anchor="tls-versions" title="TLS versions">
+<t>For improved security all implementations of this specification MUST use only TLS 1.3 [RFC8446] or later.
+</t>
+</section>
 
-<section anchor="background" title="Background">
+<section anchor="connection-usage" title="Connection usage">
 <t>It is useful to note that in these mechanisms it is the secondary that initiates
 the TLS connection to the primary for a XFR request, so that in terms of
 connectivity the secondary is the TLS client and the primary the TLS server.
 </t>
 <t>The details in <xref target="RFC7766"/>, <xref target="RFC7858"/> and <xref target="RFC8310"/> about, e.g., persistent
 connection and message handling are fully applicable to XoT as well. However
-any special behavior specified here takes precedence for XoT.
+any behavior specified here takes precedence for XoT.
 </t>
+
+<section anchor="high-level-xot-descriptions" title="High level XoT descriptions">
+<t>The figure below provides an outline of the AXoT mechanism including NOTIFYs.
+</t>
+<t><eref target="https://github.com/hanzhang0116/hzpa-dprive-xfr-over-tls/blob/02_updates/02-draft-svg/AXoT_mechanism_1.svg">Figure 3: AXoT mechanism</eref>
+</t>
+<t>The figure below provides an outline of the IXoT mechanism including NOTIFYs.
+</t>
+<t><eref target="https://github.com/hanzhang0116/hzpa-dprive-xfr-over-tls/blob/02_updates/02-draft-svg/IXoT_mechanism_1.svg">Figure 4: IXoT mechanism</eref>
+</t>
+</section>
+
+<section anchor="previous-specifications" title="Previous specifications">
 <t>We note that whilst <xref target="RFC5936"/> already recommends re-using open TCP
 connections, it does state &quot;Non-AXFR session traffic can also use an open TCP
 connection.&quot; when discussing AXFR-over-TCP. It defines an AXFR session as an
 AXFR query message and the sequence of AXFR response messages returned for it.
 Note that this excludes any SOA queries issued as part of the overall AXFR
-mechanism. This requirement raises some issues when considering applying the
-same requirement to XoT since there is no guarantee that a XoT server also
-supports DoT for regular queries and it would be optimal to have the capability to
-send SOA queries over an already open TLS connection.
+mechanism. This requirement needs to be re-evaluated when considering applying
+the same model to XoT since
 </t>
-<t>For further context we also point out that <xref target="RFC7766"/> later made general implementation recommendations with regard to TCP connection handling:
+<t>
+<list style="symbols">
+<t>There is no guarantee that a XoT server will also support DoT for regular
+queries. This is particularly true since work to specify DoT for recursive to
+authoritative communications is currently ongoing.</t>
+<t>It would, however, be optimal for XoT to include the capability to send SOA
+queries over an already open TLS connection.</t>
+</list>
+</t>
+<t>Moreover, it is worth noting that <xref target="RFC7766"/> made general implementation
+recommendations with regard to TCP/TLS connection handling:
 </t>
 <t>&quot;To mitigate the risk of unintentional server overload, DNS clients MUST take
 care to minimize the number of concurrent TCP connections made to any
@@ -385,98 +409,95 @@ certain primary/ secondary configurations with many busy zones might need to
 use more than one TCP connection for zone transfers for operational reasons
 (for example, to support concurrent transfers of multiple zones).&quot;
 </t>
-<t>This therefore recommends a particular behavior for the clients using TCP, but
+<t>Whilst this recommends a particular behavior for the clients using TCP, it
 does not relax the requirement for servers to handle 'mixed' traffic (regular
-queries and zone transfers) on any open TCP connection. It also overlooks the
-potential for other transports to want to take the same approach with regard to
-specific purposes for separate connections.
+queries and zone transfers) on any open TCP/TLS connection. It also overlooks the
+potential that other transports might want to take the same approach with regard to
+using separate connections for different purposes.
 </t>
 </section>
+</section>
 
-<section anchor="new-guidance" title="New guidance">
+<section anchor="update-to-rfc7766" title="Update to RFC7766">
 <t>This specification for XoT updates the guidance in <xref target="RFC7766"/> to provide the
 same separation of connection purpose (regular queries and zone transfers) for
 all transports being used on top of TCP. Therefore, it is RECOMMENDED that for
 each protocol used on top of TCP in any given client/server interaction there
 SHOULD be no more than one connection for regular queries and one for zone
-transfers.
-</t>
-<t>We provide specific details in the following sections of reasons
+transfers. We provide specific details in the following sections of reasons
 where more than one connection might be required for zone transfers.
 </t>
-<t>For the case where the transport is TLS, the connection initiated by the client
-to use primarily for regular queries can be considered a DoT connection whereas
-the connection initiated by the client to use primarily for zone transfers can
-be considered a XoT connection. This approach aligns with the model specified
-in <xref target="RFC7766"/>, but it does not preclude non-XoT traffic using an open XoT
-connection if both the client and server support DoT. We use the term XoT
-connection in the rest of this document to indicate connections that are
-initiated by the client for the primary or exclusive use for zone transfers.
-</t>
-<t>Various considerations around DoT and XoT connectivity include the following:
+</section>
+
+<section anchor="connection-establishment" title="Connection Establishment">
+<t>This specification additionally limits the scope of XoT as defined here to be
+the use of dedicated TLS connections (XoT connections) to exchange only traffic
+specific to enabling zone transfers. The set of transactions supported on such
+connections is limited to:
 </t>
 <t>
 <list style="symbols">
-<t>In practice, since the current DoT specification <xref target="RFC7858"/> is limited to the
-stub to recursive path, only recursive resolvers that are also capable of
-authoritatively hosting zones would support accepting both XoT and DoT
-connections. <xref target="RFC7858"/> says nothing in relation to stubs or other clients
-requesting zone transfers from recursive resolvers over DoT, or recursive
-resolvers providing them.</t>
-<t>Some authoritative server implementations do support DoT for regular queries
-today, but only on an experimental basis.</t>
-<t>Authoritative server implementations can in principle support XoT and not DoT
-but in practice they are likely to implement some form of DoT (e.g.
-non-standard, opportunistic DoT) prior to implementing XoT.</t>
-<t>In the absence of a signaling mechanism or specific configuration clients
-configured to request zone transfers cannot know if the configured XoT server
-also supports DoT. They also have no knowledge if it is a recursive
-implementation, and authoritative implementation or both.
-<list style="symbols">
-<t>In the absence of a signaling mechanism a server cannot know what type of
-connection (XoT vs DoT) the client intends to make. In particular if the
-first query received on a TLS connection is an SOA the server cannot
-determine the connection type. The presence of a TSIG signature on the SOA
-could be used to signal a XoT connection?</t>
-</list></t>
-<t>Many authoritative servers restrict zone transfers to only authorized clients
-which are most likely also purely authoritative servers and for that case it
-is unlikely that any non-XoT traffic would be exchanged between the primary
-and secondary. However the server typically does not know if the client is
-authorized until the first XFR request is received (based on source IP or
-TSIG).</t>
-<t>The authentication models for DoT and XoT are likely to be different. XoT
-clients that want to use Strict DoT will be pre-configured with an authentication
-domain name for the XoT server, the details of which are not limited by this specification.
-Work is still underway to understand how authentication in ADoT will work.</t>
+<t>AXFR</t>
+<t>IXFR</t>
+<t>SOA</t>
 </list>
+</t>
+<t>and is collectively referred to hereafter as 'XoT traffic'.
+</t>
+<t>Such connections MUST use an ALPN token of 'xot' during the TLS handshake (see
+<xref target="iana-considerations"/>).
+</t>
+<t>In the absence of DNS specific capability signaling mechanisms this greatly simplifies the
+implementation of XoT such that a XoT exchange can occur between any primary and
+secondary regardless of the role of each (e.g. purely authoritative, recursive
+resolver also authoritatively hosting zones, stub) or of other DNS transport
+capability each may have. It also clearly makes XoT support orthogonal to any
+set of zone transfer authentication mechanisms chosen by the two parties.
+</t>
+<t>XoT clients MUST only send XoT traffic on XoT connections. If a XoT server
+receives traffic other than XoT traffic on a XoT connection it MUST respond
+with the extended DNS error code 21 - Not Supported
+<xref target="I-D.ietf-dnsop-extended-error"/>. It SHOULD treat this as protocol error and close
+the connection.
+</t>
+<t>With the update to <xref target="RFC7766"/> guidance above, clients are free to open separate
+connections to the server to make any other queries they may need over either
+TLS, TCP or UDP. A specification for connections that support both XoT traffic
+and non-XoT traffic may be the subject of a future work.
+</t>
+
+<section anchor="draft-version-identification" title="Draft Version Identification">
+<t><spanx style="emph">RFC Editor's Note:</spanx> Please remove this section prior to publication
+of a final version of this document.
+</t>
+<t>Only implementations of the final, published RFC can identify
+themselves as &quot;xot&quot;.  Until such an RFC exists, implementations MUST
+NOT identify themselves using this string.
+</t>
+<t>Implementations of draft versions of the protocol MUST add the string
+&quot;-&quot; and the corresponding draft number to the identifier.  For
+example, draft-ietf-dprive-xfr-over-tls-02 is identified using the string
+&quot;xot-02&quot;.
 </t>
 </section>
 </section>
 
-<section anchor="tls-versions" title="TLS versions">
-<t>For improved security all implementations of this specification MUST use only TLS 1.3 [RFC8446] or later.
+<section anchor="port-selection" title="Port selection">
+<t>The connection for XoT SHOULD be established using port 853, as
+specified in <xref target="RFC7858"/>, unless there is mutual agreement between the secondary
+and primary to use a port other than port 853 for XoT. There MAY be agreement to use different ports for AXoT and IXoT.
 </t>
 </section>
 
 <section anchor="axot-mechanism" title="AXoT mechanism">
-<t>The figure below provides an outline of the AXoT mechanism including NOTIFYs.
-</t>
-<t><eref target="https://github.com/hanzhang0116/hzpa-dprive-xfr-over-tls/blob/02_updates/02-draft-svg/AXoT_mechanism_1.svg">Figure 3: AXoT mechanism</eref>
-</t>
-<t>The connection for AXoT SHOULD be established using port 853, as
-specified in <xref target="RFC7858"/>, unless there is mutual agreement between the secondary
-and primary to use a port other than port 853 for AXoT.
-</t>
 
 <section anchor="coverage-and-relationship-to-rfc5936" title="Coverage and relationship to RFC5936">
 <t><xref target="RFC5936"/> re-specified AXFR providing additional guidance beyond that provided
 in <xref target="RFC1034"/> and <xref target="RFC1035"/>. For example, sections 4.1, 4.1.1 and 4.1.2 of
-<xref target="RFC5936"/> provide improved guidance for AXFR clients and servers with regard to
-re-use of connections for multiple AXFRs, AXFRs of different zones and using TCP
-connection for other queries including SOA. However <xref target="RFC5936"/> was constrained
-by having to be backwards compatible with some very early basic implementations
-of AXFR.
+<xref target="RFC5936"/> provide improved guidance for AXFR clients and servers with regard
+to re-use of connections for multiple AXFRs and AXFRs of different zones.
+However <xref target="RFC5936"/> was constrained by having to be backwards compatible with
+some very early basic implementations of AXFR.
 </t>
 <t>Here we specify some optimized behaviors for AXoT, based
 closely on those in <xref target="RFC5936"/>, but without the constraint of backwards
@@ -518,10 +539,7 @@ any AXoT response (in the absence of another way to signal the abort of a AXoT
 transfer).
 </t>
 <t>An AXoT server MUST be able to handle multiple AXFR requests on a
-single XoT connection (for the same and different zones). It MAY also handle
-other query/response transactions over it if it also supports DoT.
-</t>
-<t>TODO: Specify server and client behavior if other traffic not supported.
+single XoT connection (for the same and different zones).
 </t>
 <t><xref target="RFC5936"/> says:
 </t>
@@ -532,7 +550,7 @@ AXFR session.  Using an existing open connection is RECOMMENDED over
 opening a new connection.  (Non-AXFR session traffic can also use an
 open connection.)"
 </artwork></figure>
-<t>For AXoT this requirement is restated: AXoT clients SHOULD re-use an existing
+<t>For AXoT this requirement is updated: AXoT clients SHOULD re-use an existing
 open XoT connection when starting any new AXoT session to the same primary, and
 for issuing SOA queries, instead of opening a new connection. The number of XoT
 connections between a secondary and primary SHOULD be minimized.
@@ -620,14 +638,6 @@ trade-offs involved are expected to be the subject of future work.
 </section>
 
 <section anchor="ixot-mechanism" title="IXoT mechanism">
-<t>The figure below provides an outline of the IXoT mechanism including NOTIFYs.
-</t>
-<t><eref target="https://github.com/hanzhang0116/hzpa-dprive-xfr-over-tls/blob/02_updates/02-draft-svg/IXoT_mechanism_1.svg">Figure 4: IXoT mechanism</eref>
-</t>
-<t>The connection for IXFR-over-TLS (IXoT) SHOULD be established using port 853, as
-specified in <xref target="RFC7858"/>, unless there is mutual agreement between the secondary
-and primary to use a port other than port 853 for IXoT.
-</t>
 
 <section anchor="coverage-and-relationship-to-rfc1995" title="Coverage and relationship to RFC1995">
 <t><xref target="RFC1995"/> says nothing with respect to optimizing IXFRs over TCP or re-using
@@ -652,10 +662,7 @@ IXoT implementations over that in <xref target="RFC1995"/>.
 EDNS0 Keepalive [RFC7828] to establish the connection timeouts to be used.
 </t>
 <t>An IXoT server MUST be able to handle multiple IXoT requests on a
-single XoT connection (for the same and different zones). It MAY also handle
-other query/response transactions over it if it also supports DoT.
-</t>
-<t>TODO: Specify server and client behavior if other traffic not supported.
+single XoT connection (for the same and different zones).
 </t>
 <t>IXoT clients SHOULD re-use an existing open XoT connection when making any new
 IXoT request to the same primary, and for issuing SOA queries, instead of
@@ -682,6 +689,16 @@ This specification does not update the optionality of condensation.
 </t>
 </section>
 
+<section anchor="fallback-to-axfr" title="Fallback to AXFR">
+<t>Fallback to AXFR can happen, for example, if the server is not able to provide
+an IXFR for the requested SOA. Implementations differ in how long they store
+zone deltas and how many may be stored at any one time.
+</t>
+<t>After a failed IXFR a IXoT client SHOULD request the AXFR on the already open
+XoT connection.
+</t>
+</section>
+
 <section anchor="padding-of-ixot-responses" title="Padding of IXoT responses">
 <t>The goal of padding IXoT responses would be to obfuscate the incremental
 changes to the zone between SOA updates to minimize information leakage about
@@ -699,16 +716,6 @@ secondary implementations MUST be resilient to receiving padded IXoT responses.
 <t>Recommendation of specific policies for padding IXoT responses are out of scope
 for this specification. Detailed considerations of such policies and the
 trade-offs involved are expected to be the subject of future work.
-</t>
-</section>
-
-<section anchor="fallback-to-axfr" title="Fallback to AXFR">
-<t>Fallback to AXFR can happen, for example, if the server is not able to provide
-an IXFR for the requested SOA. Implementations differ in how long they store
-zone deltas and how many may be stored at any one time.
-</t>
-<t>After a failed IXFR a IXoT client SHOULD request the AXFR on the already open
-XoT connection.
 </t>
 </section>
 </section>
@@ -931,8 +938,21 @@ deployment solution that can enable server side XoT.
 </section>
 
 <section anchor="iana-considerations" title="IANA Considerations">
-<t>TBD
+
+<section anchor="registration-of-xot-identification-string" title="Registration of XoT Identification String">
+<t>This document creates a new registration for the identification of
+   XoT in the &quot;Application Layer Protocol Negotiation (ALPN) Protocol
+   IDs&quot; registry [RFC7301].
 </t>
+<t>The &quot;xot&quot; string identifies XoT:
+</t>
+<t>Protocol: XoT
+</t>
+<t>Identification Sequence: 0x64 0x6F 0x72 (&quot;xot&quot;)
+</t>
+<t>Specification: This document
+</t>
+</section>
 </section>
 
 <section anchor="security-considerations" title="Security Considerations">
@@ -985,6 +1005,7 @@ and discussions.
 <list style="symbols">
 <t>Significantly update descriptions for both AXoT and IXoT for message and
 connection handling taking into account previous specifications in more detail</t>
+<t>Add use of APLN and limitations on traffic on XoT connections.</t>
 <t>Add new discussions of padding for both AXoT and IXoT</t>
 <t>Add text on SIG(0)</t>
 <t>Update security considerations</t>
@@ -1051,6 +1072,7 @@ handling</t>
 </references>
 <references title="Informative References">
 <?rfc include="https://xml2rfc.tools.ietf.org/public/rfc/bibxml3/reference.I-D.ietf-dnsop-dns-zone-digest.xml"?>
+<?rfc include="https://xml2rfc.tools.ietf.org/public/rfc/bibxml3/reference.I-D.ietf-dnsop-extended-error.xml"?>
 <?rfc include="https://xml2rfc.tools.ietf.org/public/rfc/bibxml/reference.RFC.1034.xml"?>
 <?rfc include="https://xml2rfc.tools.ietf.org/public/rfc/bibxml/reference.RFC.1035.xml"?>
 <?rfc include="https://xml2rfc.tools.ietf.org/public/rfc/bibxml/reference.RFC.1982.xml"?>
