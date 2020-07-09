@@ -7,7 +7,7 @@
     area = "Internet"
     workgroup = "dprive"
     keyword = ["DNS", "operations", "privacy"]
-    updates = [1995]
+    updates = [1995, 7766]
     date = 2020-07-01T00:00:00Z
     [pi]
     [[author]]
@@ -274,17 +274,13 @@ default in their latest releases. For BIND TCP connections are sometimes used
 for SOA queries but in general they are not used persistently and close after
 an IXFR is completed.
  
-QUESTION FOR US: Look at packet captures from NSD and Knot Auth to see what they do.
+<!-- QUESTION FOR US: Look at packet captures from NSD and Knot Auth to see what they do.-->
 
 It is noted that the specification for IXFR was published well before TCP was
 considered a first class transport for DNS. This document therefore updates
 [@RFC1995] to state that DNS implementations that support IXFR-over-TCP MUST use
 [@RFC7766] to optimize the use of TCP connections and SHOULD use [@!RFC7858] to
 manage persistent connections.
-
-QUESTION FOR US: We don't go as far here as updating IXFR-over-TCP to match the
-behavior outlined in section 5.4.2 for IXoT. Should we?
-
 
 
 ## Data Leakage of NOTIFY and SOA Message Exchanges
@@ -313,20 +309,108 @@ potential leak.
 For hidden primaries or secondaries the SOA response leaks the degree of lag of
 any downstream secondary.
 
-# Connection and Data Flows in XoT
+# Connections and Data Flows in XoT
 
-## Performance Considerations
+## Connection usage
 
-The details in [@RFC7766], [@!RFC7858] and [@!RFC8310] about, e.g., using
-persistent connections and TLS Session Resumption [@!RFC5077] are fully
-applicable to XoT as well.
-
-It is RECOMMENDED that clients and servers that support XoT also implement
-EDNS0 Keepalive [RFC7828].
+### Background
 
 It is useful to note that in these mechanisms it is the secondary that initiates
 the TLS connection to the primary for a XFR request, so that in terms of
 connectivity the secondary is the TLS client and the primary the TLS server.
+
+The details in [@RFC7766], [@!RFC7858] and [@!RFC8310] about, e.g., persistent
+connection and message handling are fully applicable to XoT as well. However
+any special behavior specified here takes precedence for XoT.
+
+We note that whilst [@RFC5936] already recommends re-using open TCP
+connections, it does state "Non-AXFR session traffic can also use an open TCP
+connection." when discussing AXFR-over-TCP. It defines an AXFR session as an
+AXFR query message and the sequence of AXFR response messages returned for it.
+Note that this excludes any SOA queries issued as part of the overall AXFR
+mechanism. This requirement raises some issues when considering applying the
+same requirement to XoT since there is no guarantee that a XoT server also
+supports DoT for regular queries and it would be optimal to have the capability to
+send SOA queries over an already open TLS connection.
+
+For further context we also point out that [@RFC7766] later made general implementation recommendations with regard to TCP connection handling:
+
+"To mitigate the risk of unintentional server overload, DNS clients MUST take
+care to minimize the number of concurrent TCP connections made to any
+individual server. It is RECOMMENDED that for any given client/server
+interaction there SHOULD be no more than one connection for regular queries,
+one for zone transfers, and one for each protocol that is being used on top of
+TCP (for example, if the resolver was using TLS). However, it is noted that
+certain primary/ secondary configurations with many busy zones might need to
+use more than one TCP connection for zone transfers for operational reasons
+(for example, to support concurrent transfers of multiple zones)."
+
+This therefore recommends a particular behavior for the clients using TCP, but
+does not relax the requirement for servers to handle 'mixed' traffic (regular
+queries and zone transfers) on any open TCP connection. It also overlooks the
+potential for other transports to want to take the same approach with regard to
+specific purposes for separate connections.
+
+### New guidance
+
+This specification for XoT updates the guidance in [@RFC7766] to provide the
+same separation of connection purpose (regular queries and zone transfers) for
+all transports being used on top of TCP. Therefore, it is RECOMMENDED that for
+each protocol used on top of TCP in any given client/server interaction there
+SHOULD be no more than one connection for regular queries and one for zone
+transfers. 
+
+We provide specific details in the following sections of reasons
+where more than one connection might be required for zone transfers.
+
+For the case where the transport is TLS, the connection initiated by the client
+to use primarily for regular queries can be considered a DoT connection whereas
+the connection initiated by the client to use primarily for zone transfers can
+be considered a XoT connection. This approach aligns with the model specified
+in [@RFC7766], but it does not preclude non-XoT traffic using an open XoT
+connection if both the client and server support DoT. We use the term XoT
+connection in the rest of this document to indicate connections that are
+initiated by the client for the primary or exclusive use for zone transfers.
+
+Various considerations around DoT and XoT connectivity include the following:
+
+* In practice, since the current DoT specification [@RFC7858] is limited to the
+  stub to recursive path, only recursive resolvers that are also capable of
+  authoritatively hosting zones would support accepting both XoT and DoT
+  connections. [@RFC7858] says nothing in relation to stubs or other clients
+  requesting zone transfers from recursive resolvers over DoT, or recursive
+  resolvers providing them.
+
+* Some authoritative server implementations do support DoT for regular queries
+  today, but only on an experimental basis.
+
+* Authoritative server implementations can in principle support XoT and not DoT
+  but in practice they are likely to implement some form of DoT (e.g.
+  non-standard, opportunistic DoT) prior to implementing XoT.
+
+* In the absence of a signaling mechanism or specific configuration clients
+  configured to request zone transfers cannot know if the configured XoT server
+  also supports DoT. They also have no knowledge if it is a recursive
+  implementation, and authoritative implementation or both.
+
+ * In the absence of a signaling mechanism a server cannot know what type of
+   connection (XoT vs DoT) the client intends to make. In particular if the
+   first query received on a TLS connection is an SOA the server cannot
+   determine the connection type. The presence of a TSIG signature on the SOA
+   could be used to signal a XoT connection?
+
+* Many authoritative servers restrict zone transfers to only authorized clients
+  which are most likely also purely authoritative servers and for that case it
+  is unlikely that any non-XoT traffic would be exchanged between the primary
+  and secondary. However the server typically does not know if the client is
+  authorized until the first XFR request is received (based on source IP or
+  TSIG).
+
+
+* The authentication models for DoT and XoT are likely to be different. XoT
+  clients that want to use Strict DoT will be pre-configured with an authentication
+  domain name for the XoT server, the details of which are not limited by this specification.
+  Work is still underway to understand how authentication in ADoT will work.
 
 ## TLS versions
 
@@ -338,7 +422,7 @@ The figure below provides an outline of the AXoT mechanism including NOTIFYs.
 
 [Figure 3: AXoT mechanism](https://github.com/hanzhang0116/hzpa-dprive-xfr-over-tls/blob/02_updates/02-draft-svg/AXoT_mechanism_1.svg)
 
-The connection for AXFR-over-TLS (AXoT) SHOULD be established using port 853, as
+The connection for AXoT SHOULD be established using port 853, as
 specified in [@!RFC7858], unless there is mutual agreement between the secondary
 and primary to use a port other than port 853 for AXoT.
 
@@ -391,8 +475,10 @@ any AXoT response (in the absence of another way to signal the abort of a AXoT
 transfer).
 
 An AXoT server MUST be able to handle multiple AXFR requests on a
-single TLS connection (for the same and different zones), as well as to handle
-other query/response transactions over it.
+single XoT connection (for the same and different zones). It MAY also handle
+other query/response transactions over it if it also supports DoT.
+
+TODO: Specify server and client behavior if other traffic not supported.
 
 [@RFC5936] says:
 
@@ -402,22 +488,21 @@ other query/response transactions over it.
     open connection.)"
 
 For AXoT this requirement is restated: AXoT clients SHOULD re-use an existing
-open TLS connection when starting any new AXoT session to the same primary, and
-for issuing SOA queries, instead of opening a new connection. (Non-AXoT session
-traffic can also use an open TLS connection.) The number of TLS connections
-between a secondary and primary SHOULD be minimized.
+open XoT connection when starting any new AXoT session to the same primary, and
+for issuing SOA queries, instead of opening a new connection. The number of XoT
+connections between a secondary and primary SHOULD be minimized.
 
 Valid reasons for not re-using existing connections might include:
 
 * reaching a configured limit for the number of outstanding queries allowed on a
-  single TLS connection
+  single XoT connection
 * the message ID pool has already been exhausted on an open connection
 * a large number of timeouts or slow responses have occurred on an open
   connection
 * an EDNS0 Keepalive option with a timeout of 0 has been received from the
   server and the client is in the process of closing the connection
 
-If no TLS connections are currently open, AXoT clients MAY send SOA queries over
+If no XoT connections are currently open, AXoT clients MAY send SOA queries over
 UDP, TCP or TLS.
 
 [@RFC5936] says:
@@ -434,7 +519,7 @@ of the other sections into account, as described here and in [@RFC5936]). This
 removes any burden on AXoT servers of having to accommodate a configuration
 option or support for restricting responses to containing only a single RR.
 
-An AXoT client SHOULD pipeline AXFR requests for different zones on a single TLS
+An AXoT client SHOULD pipeline AXFR requests for different zones on a single XoT
 connection. An AXoT server SHOULD respond to those requests as soon as the
 response is available i.e. potentially out of order.
 
@@ -447,7 +532,7 @@ The goal of padding AXoT responses would be two fold:
 * to obfuscate the incremental changes to the zone between SOA updates to
   minimize information leakage about zone update activity and growth.
 
-Note that the re-use of TLS connections for transfers of multiple different
+Note that the re-use of XoT connections for transfers of multiple different
 zones complicates any attempt to analyze the traffic size and timing to
 extract information.
 
@@ -490,10 +575,14 @@ and primary to use a port other than port 853 for IXoT.
 ### Coverage and relationship to RFC1995
 
 [@RFC1995] says nothing with respect to optimizing IXFRs over TCP or re-using
-already open TCP connections to perform IXFRs or other queries. We provide new
-guidance here specific to IXoT that aligns with the guidance in [@RFC5936] for
-AXFR, that in section (#axot-mechanism) for AXoT, and with that for performant
-TCP/TLS usage in [@RFC7766] and [@RFC7858].
+already open TCP connections to perform IXFRs or other queries. Therefore,
+there arguably is an implicit assumption (probably unintentional) that a TCP
+connection is used for one and only one IXFR request. Indeed, several open
+source implementations currently take this approach.
+
+We provide new guidance here specific to IXoT that aligns with the guidance in
+[@RFC5936] for AXFR, that in section (#axot-mechanism) for AXoT, and with that
+for performant TCP/TLS usage in [@RFC7766] and [@RFC7858].
 
 Where any behavior is not explicitly described here, the behavior specified in
 [@RFC1995] MUST be followed. Any behavior specified here takes precedence for
@@ -506,36 +595,33 @@ In a manner entirely analogous to that described in paragraph 2 of
 (#axot-connection-and-message-handling) IXoT clients and servers SHOULD use
 EDNS0 Keepalive [RFC7828] to establish the connection timeouts to be used.
 
-In the original definition of IXFR, there arguably is an implicit assumption
-(probably unintentional) that a TCP connection is used for one and only one IXFR
-request. Indeed, several open source implementations currently take this
-approach. An IXoT server MUST be able to handle multiple IXFR requests on a
-single TLS connection (for the same and different zones), as well as to handle
-other query/response transactions over it.
+An IXoT server MUST be able to handle multiple IXoT requests on a
+single XoT connection (for the same and different zones). It MAY also handle
+other query/response transactions over it if it also supports DoT.
 
-IXoT clients SHOULD re-use an existing open TLS connection when making any new
+TODO: Specify server and client behavior if other traffic not supported.
+
+IXoT clients SHOULD re-use an existing open XoT connection when making any new
 IXoT request to the same primary, and for issuing SOA queries, instead of
-opening a new connection. (Non-IXoT traffic can also use an open TLS
-connection.) The number of TLS connections between a secondary and primary
+opening a new connection. The number of XoT connections between a secondary and primary
 SHOULD be minimized.
 
 Valid reasons for not re-using existing connections are the same as those
 described in (#axot-connection-and-message-handling)
 
-If no TLS connections are currently open, IXoT clients MAY send SOA queries over
+If no XoT connections are currently open, IXoT clients MAY send SOA queries over
 UDP, TCP or TLS.
 
-An IXoT client SHOULD pipeline IXFR requests for different zones on a single TLS
+An IXoT client SHOULD pipeline IXFR requests for different zones on a single XoT
 connection. An IXoT server SHOULD respond to those requests as soon as the
 response is available i.e. potentially out of order.
 
 ### Condensation of responses
 
-QUESTION: Since this is a new specification should there be a requirement that
-IXoT servers are RECOMMENDED to condense responses as described in Section 6 of
-[RFC1995]. [RFC1995] document says this is optional and MAY be done. Whilst it
-does add complexity to generating response it can significantly reduce the size
-of responses and will have implications for padding.
+[@RFC1995] says condensation of responses is optional and MAY be done. Whilst
+it does add complexity to generating responses it can significantly reduce the
+size of responses. However any such reduction might be offset by increased message size due to padding.
+This specification does not update the optionality of condensation.
 
 ### Padding of IXoT responses
 
@@ -564,7 +650,7 @@ an IXFR for the requested SOA. Implementations differ in how long they store
 zone deltas and how many may be stored at any one time.
 
 After a failed IXFR a IXoT client SHOULD request the AXFR on the already open
-TLS connection.
+XoT connection.
 
 # Multi-primary Configurations
 
@@ -574,9 +660,9 @@ NOTIFY messages and can send an SOA to all of the configured primaries. It can
 then choose to send an XFR request to the primary with the highest SOA (or
 other criteria, e.g., RTT).
 
-When using persistent connections the secondary may have a TLS connection
+When using persistent connections the secondary may have a XoT connection
 already open to one or more primaries. Should a secondary preferentially
-request an XFR from a primary to which it already has an open TLS connection
+request an XFR from a primary to which it already has an open XoT connection
 or the one with the highest SOA (assuming it doesn't have a connection open to
 it already)?
 
