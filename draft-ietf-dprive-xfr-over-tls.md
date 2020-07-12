@@ -20,21 +20,6 @@
        [author.address.postal]
        city = "Vancouver, BC"
        country = "Canada"
-   [[author]]
-    initials="P."
-    surname="Aras"
-    fullname="Pallavi Aras"
-    organization = "Salesforce"
-      [author.address]
-      email = "paras@salesforce.com"
-      [author.address.postal]
-      city = "Herndon, VA"
-      country = "United States"
-    toc = "yes"
-    compact = "yes"
-    symrefs = "yes"
-    sortrefs = "yes"
-    subcompact = "no"
     [[author]]
      initials="W."
      surname="Toorop"
@@ -60,6 +45,21 @@
       code = "OX4 4GA"
       country = "United Kingdom"
     [[author]]
+     initials="P."
+     surname="Aras"
+     fullname="Pallavi Aras"
+     organization = "Salesforce"
+       [author.address]
+       email = "paras@salesforce.com"
+       [author.address.postal]
+       city = "Herndon, VA"
+       country = "United States"
+     toc = "yes"
+     compact = "yes"
+     symrefs = "yes"
+     sortrefs = "yes"
+     subcompact = "no"
+    [[author]]
      initials="A."
      surname="Mankin"
      fullname="Allison Mankin"
@@ -77,34 +77,41 @@ DNS zone transfers are transmitted in clear text, which gives attackers the
 opportunity to collect the content of a zone by eavesdropping on network
 connections. The DNS Transaction Signature (TSIG) mechanism is specified to
 restrict direct zone transfer to authorized clients only, but it does not add
-confidentiality. This document specifies use of DNS-over-TLS to prevent zone
-contents collection via passive monitoring of zone transfers.
+confidentiality. This document specifies use of TLS, rather then clear text, to
+prevent zone contents collection via passive monitoring of zone transfers.
 
 {mainmatter}
 
 # Introduction
 
 DNS has a number of privacy vulnerabilities, as discussed in detail in
-[@!I-D.ietf-dprive-rfc7626-bis]. Stub client to recursive resolver query
-privacy has received the most attention to date. There are now standards track
-documents for three encryption capabilities for stub to recursive queries and
-more work going on to guide deployment of specifically DNS-over-TLS (DoT)
-[@!RFC7858] and DNS-over-HTTPS (DoH) [@!RFC8484].
+[@!RFC7626]. Stub client to recursive resolver query privacy has received the
+most attention to date, with standards track documents for both DNS-over-TLS
+(DoT) [@!RFC7858] and DNS-over-HTTPS (DoH) [@!RFC8484], and a proposal for
+DNS-over-QUIC [@I-D.ietf-dprive-dnsoquic]. There is ongoing work on DNS privacy
+requirements for exchanges between recursive resolvers and authoritative
+servers [@I-D.ietf-dprive-phase2-requirements] and some suggestions for how
+signaling of DoT support by authoritatives might work, e.g.,
+[@I-D.vandijk-dprive-ds-dot-signal-and-pin]. However there is currently no RFC
+that specifically defines authoritative support for DNS-over-TLS.
 
-[@!I-D.ietf-dprive-rfc7626-bis] established that stub client DNS query
+[@!RFC7626] established that stub client DNS query
 transactions are not public and needed protection, but on zone transfer
 [@!RFC1995] [@!RFC5936] it says only:
 
 "Privacy risks for the holder of a zone (the risk that someone gets the data)
 are discussed in [RFC5936] and [RFC5155]."
 
-In what way is exposing the full contents of a zone a privacy risk? The contents
-of the zone could include information such as names of persons used in names of
-hosts. Best practice is not to use personal information for domain names, but
-many such domain names exist. There may also be regulatory, policy or other
-reasons why the zone contents in full must be treated as private.
+In what way is exposing the full contents of a zone a privacy risk? The
+contents of the zone could include information such as names of persons used in
+names of hosts. Best practice is not to use personal information for domain
+names, but many such domain names exist. Even if there are no names of persons,
+access to the complete contents of a zone may help an adversary find entry
+points for other types of attacks on privacy or security. There may also be
+regulatory, policy or other reasons why the zone contents in full must be
+treated as private.
 
-Neither of the RFCs mentioned in [@!I-D.ietf-dprive-rfc7626-bis]
+Neither of the RFCs mentioned in [@!RFC7626]
 contemplates the risk that someone gets the data through eavesdropping on
 network connections, only via enumeration or unauthorized transfer as described
 in the following paragraphs.
@@ -125,11 +132,12 @@ of a zone transfer and for data integrity, but does not express any need for
 confidentiality, and TSIG does not offer encryption. Some operators use SSH
 tunneling or IPSec to encrypt the transfer data.
 
-Because the AXFR zone transfer is typically carried out over TCP from
-authoritative DNS protocol implementations, encrypting AXFR using DoT
-[@!RFC7858] seems like a simple step forward. This document specifies how to use
-DoT to prevent zone collection from zone transfers, including discussion of
-approaches for IXFR, which uses UDP or TCP.
+Because the AXFR and IXFR zone transfers are typically carried out over TCP
+from authoritative DNS protocol implementations, encrypting zone transfers
+using TLS, based closely on DoT [@!RFC7858], seems like a simple step forward.
+This document specifies how to use TLS as a transport to prevent zone
+collection from zone transfers.
+
 
 # Terminology
 
@@ -347,9 +355,12 @@ Note that this excludes any SOA queries issued as part of the overall AXFR
 mechanism. This requirement needs to be re-evaluated when considering applying
 the same model to XoT since
 
-* There is no guarantee that a XoT server will also support DoT for regular
-  queries. This is particularly true since work to specify DoT for recursive to
-  authoritative communications is currently ongoing.
+* There is no guarantee that a XoT server (which is very likely, but not
+  necessarily, a purely authoritative server) will also support DoT for regular
+  queries. Requiring a purely authoritative server to also respond to any query
+  over a TLS connection would be equivalent to defining a form of authoritative
+  DoT. We consider this to be out of scope for this document, which is focussed
+  purely on zone transfers.
 * It would, however, be optimal for XoT to include the capability to send SOA
   queries over an already open TLS connection.
 
@@ -898,7 +909,7 @@ Significant contributions to the document were made by:
 
 # Changelog
 
-draft-ietf-dprive-xfr-over-tls-01
+draft-ietf-dprive-xfr-over-tls-02
 
 * Significantly update descriptions for both AXoT and IXoT for message and
   connection handling taking into account previous specifications in more detail

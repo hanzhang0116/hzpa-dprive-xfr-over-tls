@@ -431,11 +431,11 @@
   <meta name="generator" content="xml2rfc version 2.5.1 - http://tools.ietf.org/tools/xml2rfc" />
   <link rel="schema.dct" href="http://purl.org/dc/terms/" />
 
-  <meta name="dct.creator" content="Sahib, S., Aras, P., Toorop, W., Dickinson, S., and A. Mankin" />
+  <meta name="dct.creator" content="Sahib, S., Toorop, W., Dickinson, S., Aras, P., and A. Mankin" />
   <meta name="dct.identifier" content="urn:ietf:id:draft-ietf-dprive-xfr-over-tls-02" />
   <meta name="dct.issued" scheme="ISO8601" content="2020-7-1" />
-  <meta name="dct.abstract" content="DNS zone transfers are transmitted in clear text, which gives attackers the opportunity to collect the content of a zone by eavesdropping on network connections. The DNS Transaction Signature (TSIG) mechanism is specified to restrict direct zone transfer to authorized clients only, but it does not add confidentiality. This document specifies use of DNS-over-TLS to prevent zone contents collection via passive monitoring of zone transfers.  " />
-  <meta name="description" content="DNS zone transfers are transmitted in clear text, which gives attackers the opportunity to collect the content of a zone by eavesdropping on network connections. The DNS Transaction Signature (TSIG) mechanism is specified to restrict direct zone transfer to authorized clients only, but it does not add confidentiality. This document specifies use of DNS-over-TLS to prevent zone contents collection via passive monitoring of zone transfers.  " />
+  <meta name="dct.abstract" content="DNS zone transfers are transmitted in clear text, which gives attackers the opportunity to collect the content of a zone by eavesdropping on network connections. The DNS Transaction Signature (TSIG) mechanism is specified to restrict direct zone transfer to authorized clients only, but it does not add confidentiality. This document specifies use of TLS, rather then clear text, to prevent zone contents collection via passive monitoring of zone transfers.  " />
+  <meta name="description" content="DNS zone transfers are transmitted in clear text, which gives attackers the opportunity to collect the content of a zone by eavesdropping on network connections. The DNS Transaction Signature (TSIG) mechanism is specified to restrict direct zone transfer to authorized clients only, but it does not add confidentiality. This document specifies use of TLS, rather then clear text, to prevent zone contents collection via passive monitoring of zone transfers.  " />
 
 </head>
 
@@ -450,27 +450,27 @@
 </tr>
 <tr>
   <td class="left">Internet-Draft</td>
-  <td class="right">P. Aras</td>
-</tr>
-<tr>
-  <td class="left">Updates: 1995, 7766 (if approved)</td>
   <td class="right">Salesforce</td>
 </tr>
 <tr>
-  <td class="left">Intended status: Standards Track</td>
+  <td class="left">Updates: 1995, 7766 (if approved)</td>
   <td class="right">W. Toorop</td>
 </tr>
 <tr>
-  <td class="left">Expires: January 2, 2021</td>
+  <td class="left">Intended status: Standards Track</td>
   <td class="right">NLnet Labs</td>
 </tr>
 <tr>
-  <td class="left"></td>
+  <td class="left">Expires: January 2, 2021</td>
   <td class="right">S. Dickinson</td>
 </tr>
 <tr>
   <td class="left"></td>
   <td class="right">Sinodun IT</td>
+</tr>
+<tr>
+  <td class="left"></td>
+  <td class="right">P. Aras</td>
 </tr>
 <tr>
   <td class="left"></td>
@@ -495,7 +495,7 @@
   <h1 id="rfc.abstract">
   <a href="#rfc.abstract">Abstract</a>
 </h1>
-<p>DNS zone transfers are transmitted in clear text, which gives attackers the opportunity to collect the content of a zone by eavesdropping on network connections. The DNS Transaction Signature (TSIG) mechanism is specified to restrict direct zone transfer to authorized clients only, but it does not add confidentiality. This document specifies use of DNS-over-TLS to prevent zone contents collection via passive monitoring of zone transfers.  </p>
+<p>DNS zone transfers are transmitted in clear text, which gives attackers the opportunity to collect the content of a zone by eavesdropping on network connections. The DNS Transaction Signature (TSIG) mechanism is specified to restrict direct zone transfer to authorized clients only, but it does not add confidentiality. This document specifies use of TLS, rather then clear text, to prevent zone contents collection via passive monitoring of zone transfers.  </p>
 <h1 id="rfc.status">
   <a href="#rfc.status">Status of This Memo</a>
 </h1>
@@ -571,15 +571,15 @@
   </ul>
 
   <h1 id="rfc.section.1"><a href="#rfc.section.1">1.</a> <a href="#introduction" id="introduction">Introduction</a></h1>
-<p id="rfc.section.1.p.1">DNS has a number of privacy vulnerabilities, as discussed in detail in <a href="#I-D.ietf-dprive-rfc7626-bis">[I-D.ietf-dprive-rfc7626-bis]</a>. Stub client to recursive resolver query privacy has received the most attention to date. There are now standards track documents for three encryption capabilities for stub to recursive queries and more work going on to guide deployment of specifically DNS-over-TLS (DoT) <a href="#RFC7858">[RFC7858]</a> and DNS-over-HTTPS (DoH) <a href="#RFC8484">[RFC8484]</a>.  </p>
-<p><a href="#I-D.ietf-dprive-rfc7626-bis">[I-D.ietf-dprive-rfc7626-bis]</a> established that stub client DNS query transactions are not public and needed protection, but on zone transfer <a href="#RFC1995">[RFC1995]</a> <a href="#RFC5936">[RFC5936]</a> it says only: </p>
+<p id="rfc.section.1.p.1">DNS has a number of privacy vulnerabilities, as discussed in detail in <a href="#RFC7626">[RFC7626]</a>. Stub client to recursive resolver query privacy has received the most attention to date, with standards track documents for both DNS-over-TLS (DoT) <a href="#RFC7858">[RFC7858]</a> and DNS-over-HTTPS (DoH) <a href="#RFC8484">[RFC8484]</a>, and a proposal for DNS-over-QUIC <a href="#I-D.ietf-dprive-dnsoquic">[I-D.ietf-dprive-dnsoquic]</a>. There is ongoing work on DNS privacy requirements for exchanges between recursive resolvers and authoritative servers <a href="#I-D.ietf-dprive-phase2-requirements">[I-D.ietf-dprive-phase2-requirements]</a> and some suggestions for how signaling of DoT support by authoritatives might work, e.g., <a href="#I-D.vandijk-dprive-ds-dot-signal-and-pin">[I-D.vandijk-dprive-ds-dot-signal-and-pin]</a>. However there is currently no RFC that specifically defines authoritative support for DNS-over-TLS.  </p>
+<p><a href="#RFC7626">[RFC7626]</a> established that stub client DNS query transactions are not public and needed protection, but on zone transfer <a href="#RFC1995">[RFC1995]</a> <a href="#RFC5936">[RFC5936]</a> it says only: </p>
 <p id="rfc.section.1.p.3">"Privacy risks for the holder of a zone (the risk that someone gets the data) are discussed in [RFC5936] and [RFC5155]." </p>
-<p id="rfc.section.1.p.4">In what way is exposing the full contents of a zone a privacy risk? The contents of the zone could include information such as names of persons used in names of hosts. Best practice is not to use personal information for domain names, but many such domain names exist. There may also be regulatory, policy or other reasons why the zone contents in full must be treated as private.  </p>
-<p id="rfc.section.1.p.5">Neither of the RFCs mentioned in <a href="#I-D.ietf-dprive-rfc7626-bis">[I-D.ietf-dprive-rfc7626-bis]</a> contemplates the risk that someone gets the data through eavesdropping on network connections, only via enumeration or unauthorized transfer as described in the following paragraphs.  </p>
+<p id="rfc.section.1.p.4">In what way is exposing the full contents of a zone a privacy risk? The contents of the zone could include information such as names of persons used in names of hosts. Best practice is not to use personal information for domain names, but many such domain names exist. Even if there are no names of persons, access to the complete contents of a zone may help an adversary find entry points for other types of attacks on privacy or security. There may also be regulatory, policy or other reasons why the zone contents in full must be treated as private.  </p>
+<p id="rfc.section.1.p.5">Neither of the RFCs mentioned in <a href="#RFC7626">[RFC7626]</a> contemplates the risk that someone gets the data through eavesdropping on network connections, only via enumeration or unauthorized transfer as described in the following paragraphs.  </p>
 <p><a href="#RFC5155">[RFC5155]</a> specifies NSEC3 to prevent zone enumeration, which is when queries for the authenticated denial of existences records of DNSSEC allow a client to walk through the entire zone. Note that the need for this protection also motivates NSEC5 <a href="#I-D.vcelak-nsec5">[I-D.vcelak-nsec5]</a>; zone walking is now possible with NSEC3 due to crypto-breaking advances, and NSEC5 is a response to this problem.  </p>
 <p><a href="#RFC5155">[RFC5155]</a> does not address data obtained outside zone enumeration (nor does <a href="#I-D.vcelak-nsec5">[I-D.vcelak-nsec5]</a>). Preventing eavesdropping of zone transfers (this draft) is orthogonal to preventing zone enumeration, though they aim to protect the same information.  </p>
 <p><a href="#RFC5936">[RFC5936]</a> specifies using TSIG <a href="#RFC2845">[RFC2845]</a> for authorization of the clients of a zone transfer and for data integrity, but does not express any need for confidentiality, and TSIG does not offer encryption. Some operators use SSH tunneling or IPSec to encrypt the transfer data.  </p>
-<p id="rfc.section.1.p.9">Because the AXFR zone transfer is typically carried out over TCP from authoritative DNS protocol implementations, encrypting AXFR using DoT <a href="#RFC7858">[RFC7858]</a> seems like a simple step forward. This document specifies how to use DoT to prevent zone collection from zone transfers, including discussion of approaches for IXFR, which uses UDP or TCP.  </p>
+<p id="rfc.section.1.p.9">Because the AXFR and IXFR zone transfers are typically carried out over TCP from authoritative DNS protocol implementations, encrypting zone transfers using TLS, based closely on DoT <a href="#RFC7858">[RFC7858]</a>, seems like a simple step forward.  This document specifies how to use TLS as a transport to prevent zone collection from zone transfers.  </p>
 <h1 id="rfc.section.2"><a href="#rfc.section.2">2.</a> <a href="#terminology" id="terminology">Terminology</a></h1>
 <p id="rfc.section.2.p.1">The key words "MUST", "MUST NOT", "REQUIRED", "SHALL", "SHALL NOT", "SHOULD", "SHOULD NOT", "RECOMMENDED", "NOT RECOMMENDED", "MAY", and "OPTIONAL" in this document are to be interpreted as described in BCP 14 <a href="#RFC2119">[RFC2119]</a> and <a href="#RFC8174">[RFC8174]</a> when, and only when, they appear in all capitals, as shown here.  </p>
 <p id="rfc.section.2.p.2">Privacy terminology is as described in Section 3 of <a href="#RFC6973">[RFC6973]</a>.  </p>
@@ -675,7 +675,7 @@
 <p/>
 
 <ul>
-  <li>There is no guarantee that a XoT server will also support DoT for regular queries. This is particularly true since work to specify DoT for recursive to authoritative communications is currently ongoing.</li>
+  <li>There is no guarantee that a XoT server (which is very likely, but not necessarily, a purely authoritative server) will also support DoT for regular queries. Requiring a purely authoritative server to also respond to any query over a TLS connection would be equivalent to defining a form of authoritative DoT. We consider this to be out of scope for this document, which is focussed purely on zone transfers.</li>
   <li>It would, however, be optimal for XoT to include the capability to send SOA queries over an already open TLS connection.</li>
 </ul>
 
@@ -888,7 +888,7 @@ content of the other sections into account, as described below)."
 <p id="rfc.section.14.p.2">Han Zhang <br/> Salesforce <br/> San Francisco, CA <br/> United States </p>
 <p id="rfc.section.14.p.3">Email: hzhang@salesforce.com </p>
 <h1 id="rfc.section.15"><a href="#rfc.section.15">15.</a> <a href="#changelog" id="changelog">Changelog</a></h1>
-<p id="rfc.section.15.p.1">draft-ietf-dprive-xfr-over-tls-01 </p>
+<p id="rfc.section.15.p.1">draft-ietf-dprive-xfr-over-tls-02 </p>
 <p/>
 
 <ul>
@@ -950,12 +950,6 @@ content of the other sections into account, as described below)."
   <tbody>
     <tr>
       <td class="reference">
-        <b id="I-D.ietf-dprive-rfc7626-bis">[I-D.ietf-dprive-rfc7626-bis]</b>
-      </td>
-      <td class="top"><a>Bortzmeyer, S.</a> and <a>S. Dickinson</a>, "<a href="http://tools.ietf.org/html/draft-ietf-dprive-rfc7626-bis-05">DNS Privacy Considerations</a>", Internet-Draft draft-ietf-dprive-rfc7626-bis-05, May 2020.</td>
-    </tr>
-    <tr>
-      <td class="reference">
         <b id="I-D.vcelak-nsec5">[I-D.vcelak-nsec5]</b>
       </td>
       <td class="top"><a>Vcelak, J.</a>, <a>Goldberg, S.</a>, <a>Papadopoulos, D.</a>, <a>Huque, S.</a> and <a>D. Lawrence</a>, "<a href="http://tools.ietf.org/html/draft-vcelak-nsec5-08">NSEC5, DNSSEC Authenticated Denial of Existence</a>", Internet-Draft draft-vcelak-nsec5-08, December 2018.</td>
@@ -995,6 +989,12 @@ content of the other sections into account, as described below)."
         <b id="RFC6973">[RFC6973]</b>
       </td>
       <td class="top"><a>Cooper, A.</a>, <a>Tschofenig, H.</a>, <a>Aboba, B.</a>, <a>Peterson, J.</a>, <a>Morris, J.</a>, <a>Hansen, M.</a> and <a>R. Smith</a>, "<a href="http://tools.ietf.org/html/rfc6973">Privacy Considerations for Internet Protocols</a>", RFC 6973, DOI 10.17487/RFC6973, July 2013.</td>
+    </tr>
+    <tr>
+      <td class="reference">
+        <b id="RFC7626">[RFC7626]</b>
+      </td>
+      <td class="top"><a>Bortzmeyer, S.</a>, "<a href="http://tools.ietf.org/html/rfc7626">DNS Privacy Considerations</a>", RFC 7626, DOI 10.17487/RFC7626, August 2015.</td>
     </tr>
     <tr>
       <td class="reference">
@@ -1042,6 +1042,24 @@ content of the other sections into account, as described below)."
         <b id="I-D.ietf-dnsop-extended-error">[I-D.ietf-dnsop-extended-error]</b>
       </td>
       <td class="top"><a>Kumari, W.</a>, <a>Hunt, E.</a>, <a>Arends, R.</a>, <a>Hardaker, W.</a> and <a>D. Lawrence</a>, "<a href="http://tools.ietf.org/html/draft-ietf-dnsop-extended-error-16">Extended DNS Errors</a>", Internet-Draft draft-ietf-dnsop-extended-error-16, May 2020.</td>
+    </tr>
+    <tr>
+      <td class="reference">
+        <b id="I-D.ietf-dprive-dnsoquic">[I-D.ietf-dprive-dnsoquic]</b>
+      </td>
+      <td class="top"><a>Huitema, C.</a>, <a>Mankin, A.</a> and <a>S. Dickinson</a>, "<a href="http://tools.ietf.org/html/draft-ietf-dprive-dnsoquic-00">Specification of DNS over Dedicated QUIC Connections</a>", Internet-Draft draft-ietf-dprive-dnsoquic-00, April 2020.</td>
+    </tr>
+    <tr>
+      <td class="reference">
+        <b id="I-D.ietf-dprive-phase2-requirements">[I-D.ietf-dprive-phase2-requirements]</b>
+      </td>
+      <td class="top"><a>Livingood, J.</a>, <a>Mayrhofer, A.</a> and <a>B. Overeinder</a>, "<a href="http://tools.ietf.org/html/draft-ietf-dprive-phase2-requirements-01">DNS Privacy Requirements for Exchanges between Recursive Resolvers and Authoritative Servers</a>", Internet-Draft draft-ietf-dprive-phase2-requirements-01, June 2020.</td>
+    </tr>
+    <tr>
+      <td class="reference">
+        <b id="I-D.vandijk-dprive-ds-dot-signal-and-pin">[I-D.vandijk-dprive-ds-dot-signal-and-pin]</b>
+      </td>
+      <td class="top"><a>Dijk, P.</a>, <a>Geuze, R.</a> and <a>E. Bretelle</a>, "<a href="http://tools.ietf.org/html/draft-vandijk-dprive-ds-dot-signal-and-pin-00">Signalling Authoritative DoT support in DS records, with key pinning</a>", Internet-Draft draft-vandijk-dprive-ds-dot-signal-and-pin-00, May 2020.</td>
     </tr>
     <tr>
       <td class="reference">
@@ -1114,27 +1132,6 @@ content of the other sections into account, as described below)."
 </div><div class="avoidbreak">
   <address class="vcard">
 	<span class="vcardline">
-	  <span class="fn">Pallavi Aras</span> 
-	  <span class="n hidden">
-		<span class="family-name">Aras</span>
-	  </span>
-	</span>
-	<span class="org vcardline">Salesforce</span>
-	<span class="adr">
-	  
-	  <span class="vcardline">
-		<span class="locality">Herndon, VA</span>,  
-		<span class="region"></span>
-		<span class="code"></span>
-	  </span>
-	  <span class="country-name vcardline">United States</span>
-	</span>
-	<span class="vcardline">EMail: <a href="mailto:paras@salesforce.com">paras@salesforce.com</a></span>
-
-  </address>
-</div><div class="avoidbreak">
-  <address class="vcard">
-	<span class="vcardline">
 	  <span class="fn">Willem Toorop</span> 
 	  <span class="n hidden">
 		<span class="family-name">Toorop</span>
@@ -1175,6 +1172,27 @@ content of the other sections into account, as described below)."
 	  <span class="country-name vcardline">United Kingdom</span>
 	</span>
 	<span class="vcardline">EMail: <a href="mailto:sara@sinodun.com">sara@sinodun.com</a></span>
+
+  </address>
+</div><div class="avoidbreak">
+  <address class="vcard">
+	<span class="vcardline">
+	  <span class="fn">Pallavi Aras</span> 
+	  <span class="n hidden">
+		<span class="family-name">Aras</span>
+	  </span>
+	</span>
+	<span class="org vcardline">Salesforce</span>
+	<span class="adr">
+	  
+	  <span class="vcardline">
+		<span class="locality">Herndon, VA</span>,  
+		<span class="region"></span>
+		<span class="code"></span>
+	  </span>
+	  <span class="country-name vcardline">United States</span>
+	</span>
+	<span class="vcardline">EMail: <a href="mailto:paras@salesforce.com">paras@salesforce.com</a></span>
 
   </address>
 </div><div class="avoidbreak">
