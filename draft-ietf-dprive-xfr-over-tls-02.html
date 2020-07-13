@@ -628,7 +628,8 @@
 <p id="rfc.section.4.p.6">The term is used to encompasses the range of permutations that are possible and is useful to distinguish the 'XFR mechanism' from a single XFR request/response exchange.  </p>
 <h1 id="rfc.section.4.1"><a href="#rfc.section.4.1">4.1.</a> <a href="#axfr-mechanism" id="axfr-mechanism">AXFR Mechanism</a></h1>
 <p id="rfc.section.4.1.p.1">The figure below provides an outline of an AXFR mechanism including NOTIFYs.  </p>
-<p><a href="https://github.com/hanzhang0116/hzpa-dprive-xfr-over-tls/blob/02_updates/02-draft-svg/AXFR_mechanism.svg">Figure 1. AXFR Mechanism</a> </p>
+<p><a href="https://github.com/hanzhang0116/hzpa-dprive-xfr-over-tls/blob/master/02-draft-dprive-svg/AXFR_mechanism.svg">Figure 1. AXFR Mechanism</a> </p>
+<p id="rfc.section.4.1.p.3">&lt;--! Original is at <span>&lt;</span><a href="https://docs.google.com/presentation/d/1UNsqHLmxP0POlWpgq7jOrjo48CjIhi03pNKGDuKUpUk/">https://docs.google.com/presentation/d/1UNsqHLmxP0POlWpgq7jOrjo48CjIhi03pNKGDuKUpUk/</a><span>&gt;</span> --&gt; </p>
 <p/>
 
 <ol>
@@ -639,10 +640,11 @@
 
 <p> </p>
 <p><a href="#RFC5936">[RFC5936]</a> specifies that AXFR must use TCP as the transport protocol but details that there is no restriction in the protocol that a single TCP connection must be used only for a single AXFR exchange, or even solely for XFRs. For example, it outlines that the SOA query can also happen on this connection.  However, this can cause interoperability problems with older implementations that support only the trivial case of one AXFR per connection.  </p>
-<p id="rfc.section.4.1.p.5">Further details of the limitations in existing AXFR implementations are outlined in <a href="#RFC5936">[RFC5936]</a>.  </p>
+<p id="rfc.section.4.1.p.6">Further details of the limitations in existing AXFR implementations are outlined in <a href="#RFC5936">[RFC5936]</a>.  </p>
 <h1 id="rfc.section.4.2"><a href="#rfc.section.4.2">4.2.</a> <a href="#ixfr-mechanism" id="ixfr-mechanism">IXFR Mechanism</a></h1>
 <p id="rfc.section.4.2.p.1">The figure below provides an outline of the IXFR mechanism including NOTIFYs.  </p>
-<p><a href="https://github.com/hanzhang0116/hzpa-dprive-xfr-over-tls/blob/02_updates/02-draft-svg/IXFR%20mechanism.svg">Figure 1. IXFR Mechanism</a> </p>
+<p><a href="https://github.com/hanzhang0116/hzpa-dprive-xfr-over-tls/blob/master/02-draft-dprive-svg/IXFR_mechanism.svg">Figure 1. IXFR Mechanism</a> </p>
+<p id="rfc.section.4.2.p.3">&lt;--! Original is at <span>&lt;</span><a href="https://docs.google.com/presentation/d/1hT7cIYPhMX94GvluyBzrDv95MPcyMN35qnjNe_4brHc">https://docs.google.com/presentation/d/1hT7cIYPhMX94GvluyBzrDv95MPcyMN35qnjNe_4brHc</a><span>&gt;</span> --&gt; </p>
 <p/>
 
 <ol>
@@ -653,10 +655,10 @@
 
 <p> </p>
 <p><a href="#RFC1995">[RFC1995]</a> specifies that Incremental Transfer may use UDP if the entire IXFR response can be contained in a single DNS packet, otherwise, TCP is used. In fact is says in non-normative language: </p>
-<p id="rfc.section.4.2.p.5">"Thus, a client should first make an IXFR query using UDP." </p>
-<p id="rfc.section.4.2.p.6">So there may be a forth step above where the client falls back to IXFR-over-TCP.  There may also be a forth step where the secondary must fall back to AXFR because, e.g., the primary does not support IXFR.  </p>
-<p id="rfc.section.4.2.p.7">However it is noted that at least two widely used open source authoritative nameserver implementations (<a href="https://www.isc.org/bind/">BIND</a> and <a href="https://www.nlnetlabs.nl/projects/nsd/about/">NSD</a>) do IXFR using TCP by default in their latest releases. For BIND TCP connections are sometimes used for SOA queries but in general they are not used persistently and close after an IXFR is completed.  </p>
-<p id="rfc.section.4.2.p.8">It is noted that the specification for IXFR was published well before TCP was considered a first class transport for DNS. This document therefore updates <a href="#RFC1995">[RFC1995]</a> to state that DNS implementations that support IXFR-over-TCP MUST use <a href="#RFC7766">[RFC7766]</a> to optimize the use of TCP connections and SHOULD use <a href="#RFC7858">[RFC7858]</a> to manage persistent connections.  </p>
+<p id="rfc.section.4.2.p.6">"Thus, a client should first make an IXFR query using UDP." </p>
+<p id="rfc.section.4.2.p.7">So there may be a forth step above where the client falls back to IXFR-over-TCP.  There may also be a forth step where the secondary must fall back to AXFR because, e.g., the primary does not support IXFR.  </p>
+<p id="rfc.section.4.2.p.8">However it is noted that at least two widely used open source authoritative nameserver implementations (<a href="https://www.isc.org/bind/">BIND</a> and <a href="https://www.nlnetlabs.nl/projects/nsd/about/">NSD</a>) do IXFR using TCP by default in their latest releases. For BIND TCP connections are sometimes used for SOA queries but in general they are not used persistently and close after an IXFR is completed.  </p>
+<p id="rfc.section.4.2.p.9">It is noted that the specification for IXFR was published well before TCP was considered a first class transport for DNS. This document therefore updates <a href="#RFC1995">[RFC1995]</a> to state that DNS implementations that support IXFR-over-TCP MUST use <a href="#RFC7766">[RFC7766]</a> to optimize the use of TCP connections and SHOULD use <a href="#RFC7858">[RFC7858]</a> to manage persistent connections.  </p>
 <h1 id="rfc.section.4.3"><a href="#rfc.section.4.3">4.3.</a> <a href="#data-leakage-of-notify-and-soa-message-exchanges" id="data-leakage-of-notify-and-soa-message-exchanges">Data Leakage of NOTIFY and SOA Message Exchanges</a></h1>
 <p id="rfc.section.4.3.p.1">This section attempts to presents a rationale for also encrypting the other messages in the XFR mechanism.  </p>
 <p id="rfc.section.4.3.p.2">Since the SOA of the published zone can be trivially discovered by simply querying the publicly available authoritative servers leakage of this RR is not discussed in the following sections.  </p>
@@ -675,9 +677,11 @@
 <p id="rfc.section.5.2.p.2">The details in <a href="#RFC7766">[RFC7766]</a>, <a href="#RFC7858">[RFC7858]</a> and <a href="#RFC8310">[RFC8310]</a> about, e.g., persistent connection and message handling are fully applicable to XoT as well. However any behavior specified here takes precedence for XoT.  </p>
 <h1 id="rfc.section.5.2.1"><a href="#rfc.section.5.2.1">5.2.1.</a> <a href="#high-level-xot-descriptions" id="high-level-xot-descriptions">High level XoT descriptions</a></h1>
 <p id="rfc.section.5.2.1.p.1">The figure below provides an outline of the AXoT mechanism including NOTIFYs.  </p>
-<p><a href="https://github.com/hanzhang0116/hzpa-dprive-xfr-over-tls/blob/02_updates/02-draft-svg/AXoT_mechanism_1.svg">Figure 3: AXoT mechanism</a> </p>
-<p id="rfc.section.5.2.1.p.3">The figure below provides an outline of the IXoT mechanism including NOTIFYs.  </p>
-<p><a href="https://github.com/hanzhang0116/hzpa-dprive-xfr-over-tls/blob/02_updates/02-draft-svg/IXoT_mechanism_1.svg">Figure 4: IXoT mechanism</a> </p>
+<p><a href="https://github.com/hanzhang0116/hzpa-dprive-xfr-over-tls/blob/master/02-draft-dprive-svg/AXoT_mechanism.svg">Figure 3: AXoT mechanism</a> </p>
+<p id="rfc.section.5.2.1.p.3">&lt;--! Original is at <span>&lt;</span><a href="https://docs.google.com/presentation/d/1SaEWv9Cm3PujuX6vaOvVWQh8EuR15crWRsDYqSoKp9M">https://docs.google.com/presentation/d/1SaEWv9Cm3PujuX6vaOvVWQh8EuR15crWRsDYqSoKp9M</a><span>&gt;</span> --&gt; </p>
+<p id="rfc.section.5.2.1.p.4">The figure below provides an outline of the IXoT mechanism including NOTIFYs.  </p>
+<p><a href="https://github.com/hanzhang0116/hzpa-dprive-xfr-over-tls/blob/master/02-draft-dprive-svg/IXoT_mechanism.svg">Figure 4: IXoT mechanism</a> </p>
+<p id="rfc.section.5.2.1.p.6">&lt;--! Original is at <span>&lt;</span><a href="https://docs.google.com/presentation/d/1n3lAEaKfMCw_L9TYka4xbu2y0s7F1rMfRSg-6_Cvjws">https://docs.google.com/presentation/d/1n3lAEaKfMCw_L9TYka4xbu2y0s7F1rMfRSg-6_Cvjws</a><span>&gt;</span> --&gt; </p>
 <h1 id="rfc.section.5.2.2"><a href="#rfc.section.5.2.2">5.2.2.</a> <a href="#previous-specifications" id="previous-specifications">Previous specifications</a></h1>
 <p id="rfc.section.5.2.2.p.1">We note that whilst <a href="#RFC5936">[RFC5936]</a> already recommends re-using open TCP connections, it does state "Non-AXFR session traffic can also use an open TCP connection." when discussing AXFR-over-TCP. It defines an AXFR session as an AXFR query message and the sequence of AXFR response messages returned for it.  Note that this excludes any SOA queries issued as part of the overall AXFR mechanism. This requirement needs to be re-evaluated when considering applying the same model to XoT since </p>
 <p/>

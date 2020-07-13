@@ -218,7 +218,9 @@ request/response exchange.
 
 The figure below provides an outline of an AXFR mechanism including NOTIFYs.
 
-[Figure 1. AXFR Mechanism](https://github.com/hanzhang0116/hzpa-dprive-xfr-over-tls/blob/02_updates/02-draft-svg/AXFR_mechanism.svg)
+[Figure 1. AXFR Mechanism](https://github.com/hanzhang0116/hzpa-dprive-xfr-over-tls/blob/master/02-draft-dprive-svg/AXFR_mechanism.svg)
+
+<--! Original is at https://docs.google.com/presentation/d/1UNsqHLmxP0POlWpgq7jOrjo48CjIhi03pNKGDuKUpUk/ -->
 
 1. An AXFR is often (but not always) preceded by a NOTIFY (over UDP) from the
 primary to the secondary. A secondary may also initiate an AXFR based on a
@@ -247,7 +249,9 @@ in [@RFC5936].
 
 The figure below provides an outline of the IXFR mechanism including NOTIFYs.
 
-[Figure 1. IXFR Mechanism](https://github.com/hanzhang0116/hzpa-dprive-xfr-over-tls/blob/02_updates/02-draft-svg/IXFR%20mechanism.svg)
+[Figure 1. IXFR Mechanism](https://github.com/hanzhang0116/hzpa-dprive-xfr-over-tls/blob/master/02-draft-dprive-svg/IXFR_mechanism.svg)
+
+<--! Original is at https://docs.google.com/presentation/d/1hT7cIYPhMX94GvluyBzrDv95MPcyMN35qnjNe_4brHc -->
 
 1. An IXFR is normally (but not always) preceded by a NOTIFY (over UDP) from the
 primary to the secondary. A secondary may also initiate an IXFR based on a
@@ -333,12 +337,16 @@ any behavior specified here takes precedence for XoT.
 
 The figure below provides an outline of the AXoT mechanism including NOTIFYs.
 
-[Figure 3: AXoT mechanism](https://github.com/hanzhang0116/hzpa-dprive-xfr-over-tls/blob/02_updates/02-draft-svg/AXoT_mechanism_1.svg)
+[Figure 3: AXoT mechanism](https://github.com/hanzhang0116/hzpa-dprive-xfr-over-tls/blob/master/02-draft-dprive-svg/AXoT_mechanism.svg)
+
+<--! Original is at https://docs.google.com/presentation/d/1SaEWv9Cm3PujuX6vaOvVWQh8EuR15crWRsDYqSoKp9M -->
 
 The figure below provides an outline of the IXoT mechanism including NOTIFYs.
 
 [Figure 4: IXoT mechanism]
-(https://github.com/hanzhang0116/hzpa-dprive-xfr-over-tls/blob/02_updates/02-draft-svg/IXoT_mechanism_1.svg)
+(https://github.com/hanzhang0116/hzpa-dprive-xfr-over-tls/blob/master/02-draft-dprive-svg/IXoT_mechanism.svg)
+
+<--! Original is at https://docs.google.com/presentation/d/1n3lAEaKfMCw_L9TYka4xbu2y0s7F1rMfRSg-6_Cvjws -->
 
 
 ### Previous specifications

@@ -257,7 +257,9 @@ request/response exchange.
 <section anchor="axfr-mechanism" title="AXFR Mechanism">
 <t>The figure below provides an outline of an AXFR mechanism including NOTIFYs.
 </t>
-<t><eref target="https://github.com/hanzhang0116/hzpa-dprive-xfr-over-tls/blob/02_updates/02-draft-svg/AXFR_mechanism.svg">Figure 1. AXFR Mechanism</eref>
+<t><eref target="https://github.com/hanzhang0116/hzpa-dprive-xfr-over-tls/blob/master/02-draft-dprive-svg/AXFR_mechanism.svg">Figure 1. AXFR Mechanism</eref>
+</t>
+<t>&lt;--! Original is at <eref target="https://docs.google.com/presentation/d/1UNsqHLmxP0POlWpgq7jOrjo48CjIhi03pNKGDuKUpUk/"/> --&gt;
 </t>
 <t>
 <list style="numbers">
@@ -287,7 +289,9 @@ in <xref target="RFC5936"/>.
 <section anchor="ixfr-mechanism" title="IXFR Mechanism">
 <t>The figure below provides an outline of the IXFR mechanism including NOTIFYs.
 </t>
-<t><eref target="https://github.com/hanzhang0116/hzpa-dprive-xfr-over-tls/blob/02_updates/02-draft-svg/IXFR%20mechanism.svg">Figure 1. IXFR Mechanism</eref>
+<t><eref target="https://github.com/hanzhang0116/hzpa-dprive-xfr-over-tls/blob/master/02-draft-dprive-svg/IXFR_mechanism.svg">Figure 1. IXFR Mechanism</eref>
+</t>
+<t>&lt;--! Original is at <eref target="https://docs.google.com/presentation/d/1hT7cIYPhMX94GvluyBzrDv95MPcyMN35qnjNe_4brHc"/> --&gt;
 </t>
 <t>
 <list style="numbers">
@@ -376,11 +380,15 @@ any behavior specified here takes precedence for XoT.
 <section anchor="high-level-xot-descriptions" title="High level XoT descriptions">
 <t>The figure below provides an outline of the AXoT mechanism including NOTIFYs.
 </t>
-<t><eref target="https://github.com/hanzhang0116/hzpa-dprive-xfr-over-tls/blob/02_updates/02-draft-svg/AXoT_mechanism_1.svg">Figure 3: AXoT mechanism</eref>
+<t><eref target="https://github.com/hanzhang0116/hzpa-dprive-xfr-over-tls/blob/master/02-draft-dprive-svg/AXoT_mechanism.svg">Figure 3: AXoT mechanism</eref>
+</t>
+<t>&lt;--! Original is at <eref target="https://docs.google.com/presentation/d/1SaEWv9Cm3PujuX6vaOvVWQh8EuR15crWRsDYqSoKp9M"/> --&gt;
 </t>
 <t>The figure below provides an outline of the IXoT mechanism including NOTIFYs.
 </t>
-<t><eref target="https://github.com/hanzhang0116/hzpa-dprive-xfr-over-tls/blob/02_updates/02-draft-svg/IXoT_mechanism_1.svg">Figure 4: IXoT mechanism</eref>
+<t><eref target="https://github.com/hanzhang0116/hzpa-dprive-xfr-over-tls/blob/master/02-draft-dprive-svg/IXoT_mechanism.svg">Figure 4: IXoT mechanism</eref>
+</t>
+<t>&lt;--! Original is at <eref target="https://docs.google.com/presentation/d/1n3lAEaKfMCw_L9TYka4xbu2y0s7F1rMfRSg-6_Cvjws"/> --&gt;
 </t>
 </section>
 

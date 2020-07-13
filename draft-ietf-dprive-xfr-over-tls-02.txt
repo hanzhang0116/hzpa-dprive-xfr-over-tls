@@ -89,22 +89,22 @@ Table of Contents
        5.4.1.  Draft Version Identification  . . . . . . . . . . . .  11
      5.5.  Port selection  . . . . . . . . . . . . . . . . . . . . .  11
      5.6.  AXoT mechanism  . . . . . . . . . . . . . . . . . . . . .  11
-       5.6.1.  Coverage and relationship to RFC5936  . . . . . . . .  11
+       5.6.1.  Coverage and relationship to RFC5936  . . . . . . . .  12
        5.6.2.  AXoT connection and message handling  . . . . . . . .  12
-       5.6.3.  Padding AXoT responses  . . . . . . . . . . . . . . .  13
-     5.7.  IXoT mechanism  . . . . . . . . . . . . . . . . . . . . .  14
-       5.7.1.  Coverage and relationship to RFC1995  . . . . . . . .  14
+       5.6.3.  Padding AXoT responses  . . . . . . . . . . . . . . .  14
+     5.7.  IXoT mechanism  . . . . . . . . . . . . . . . . . . . . .  15
+       5.7.1.  Coverage and relationship to RFC1995  . . . . . . . .  15
        5.7.2.  IXoT connection and message handling  . . . . . . . .  15
-       5.7.3.  Condensation of responses . . . . . . . . . . . . . .  15
-       5.7.4.  Fallback to AXFR  . . . . . . . . . . . . . . . . . .  15
+       5.7.3.  Condensation of responses . . . . . . . . . . . . . .  16
+       5.7.4.  Fallback to AXFR  . . . . . . . . . . . . . . . . . .  16
        5.7.5.  Padding of IXoT responses . . . . . . . . . . . . . .  16
    6.  Multi-primary Configurations  . . . . . . . . . . . . . . . .  16
    7.  Zone Transfer with DoT - Authentication . . . . . . . . . . .  17
      7.1.  TSIG  . . . . . . . . . . . . . . . . . . . . . . . . . .  17
      7.2.  SIG(0)  . . . . . . . . . . . . . . . . . . . . . . . . .  17
-     7.3.  TLS . . . . . . . . . . . . . . . . . . . . . . . . . . .  17
-       7.3.1.  Opportunistic . . . . . . . . . . . . . . . . . . . .  17
-       7.3.2.  Strict  . . . . . . . . . . . . . . . . . . . . . . .  17
+     7.3.  TLS . . . . . . . . . . . . . . . . . . . . . . . . . . .  18
+       7.3.1.  Opportunistic . . . . . . . . . . . . . . . . . . . .  18
+       7.3.2.  Strict  . . . . . . . . . . . . . . . . . . . . . . .  18
        7.3.3.  Mutual  . . . . . . . . . . . . . . . . . . . . . . .  18
 
 
@@ -115,21 +115,21 @@ Internet-Draft                XFR-over-TLS                     July 2020
 
 
      7.4.  IP Based ACL on the Primary . . . . . . . . . . . . . . .  18
-     7.5.  ZONEMD  . . . . . . . . . . . . . . . . . . . . . . . . .  18
+     7.5.  ZONEMD  . . . . . . . . . . . . . . . . . . . . . . . . .  19
      7.6.  Comparison of Authentication Methods  . . . . . . . . . .  19
    8.  Policies for Both AXFR and IXFR . . . . . . . . . . . . . . .  20
-   9.  Implementation Considerations . . . . . . . . . . . . . . . .  20
-   10. Implementation Status . . . . . . . . . . . . . . . . . . . .  20
+   9.  Implementation Considerations . . . . . . . . . . . . . . . .  21
+   10. Implementation Status . . . . . . . . . . . . . . . . . . . .  21
    11. IANA Considerations . . . . . . . . . . . . . . . . . . . . .  21
      11.1.  Registration of XoT Identification String  . . . . . . .  21
    12. Security Considerations . . . . . . . . . . . . . . . . . . .  21
-   13. Acknowledgements  . . . . . . . . . . . . . . . . . . . . . .  21
+   13. Acknowledgements  . . . . . . . . . . . . . . . . . . . . . .  22
    14. Contributors  . . . . . . . . . . . . . . . . . . . . . . . .  22
    15. Changelog . . . . . . . . . . . . . . . . . . . . . . . . . .  22
    16. References  . . . . . . . . . . . . . . . . . . . . . . . . .  23
      16.1.  Normative References . . . . . . . . . . . . . . . . . .  23
      16.2.  Informative References . . . . . . . . . . . . . . . . .  24
-     16.3.  URIs . . . . . . . . . . . . . . . . . . . . . . . . . .  25
+     16.3.  URIs . . . . . . . . . . . . . . . . . . . . . . . . . .  26
    Authors' Addresses  . . . . . . . . . . . . . . . . . . . . . . .  26
 
 1.  Introduction
@@ -309,6 +309,9 @@ Internet-Draft                XFR-over-TLS                     July 2020
 
    Figure 1.  AXFR Mechanism [1]
 
+   <--! Original is at <https://docs.google.com/presentation/
+   d/1UNsqHLmxP0POlWpgq7jOrjo48CjIhi03pNKGDuKUpUk/> -->
+
    1.  An AXFR is often (but not always) preceded by a NOTIFY (over UDP)
        from the primary to the secondary.  A secondary may also initiate
        an AXFR based on a refresh timer or scheduled/triggered zone
@@ -327,9 +330,6 @@ Internet-Draft                XFR-over-TLS                     July 2020
    but details that there is no restriction in the protocol that a
    single TCP connection must be used only for a single AXFR exchange,
    or even solely for XFRs.  For example, it outlines that the SOA query
-   can also happen on this connection.  However, this can cause
-   interoperability problems with older implementations that support
-   only the trivial case of one AXFR per connection.
 
 
 
@@ -337,6 +337,10 @@ Sahib, et al.           Expires January 14, 2021                [Page 6]
 
 Internet-Draft                XFR-over-TLS                     July 2020
 
+
+   can also happen on this connection.  However, this can cause
+   interoperability problems with older implementations that support
+   only the trivial case of one AXFR per connection.
 
    Further details of the limitations in existing AXFR implementations
    are outlined in [RFC5936].
@@ -347,6 +351,9 @@ Internet-Draft                XFR-over-TLS                     July 2020
    NOTIFYs.
 
    Figure 1.  IXFR Mechanism [2]
+
+   <--! Original is at <https://docs.google.com/presentation/
+   d/1hT7cIYPhMX94GvluyBzrDv95MPcyMN35qnjNe_4brHc> -->
 
    1.  An IXFR is normally (but not always) preceded by a NOTIFY (over
        UDP) from the primary to the secondary.  A secondary may also
@@ -379,13 +386,6 @@ Internet-Draft                XFR-over-TLS                     July 2020
    connections are sometimes used for SOA queries but in general they
    are not used persistently and close after an IXFR is completed.
 
-   It is noted that the specification for IXFR was published well before
-   TCP was considered a first class transport for DNS.  This document
-   therefore updates [RFC1995] to state that DNS implementations that
-   support IXFR-over-TCP MUST use [RFC7766] to optimize the use of TCP
-   connections and SHOULD use [RFC7858] to manage persistent
-   connections.
-
 
 
 
@@ -393,6 +393,13 @@ Sahib, et al.           Expires January 14, 2021                [Page 7]
 
 Internet-Draft                XFR-over-TLS                     July 2020
 
+
+   It is noted that the specification for IXFR was published well before
+   TCP was considered a first class transport for DNS.  This document
+   therefore updates [RFC1995] to state that DNS implementations that
+   support IXFR-over-TCP MUST use [RFC7766] to optimize the use of TCP
+   connections and SHOULD use [RFC7858] to manage persistent
+   connections.
 
 4.3.  Data Leakage of NOTIFY and SOA Message Exchanges
 
@@ -435,13 +442,6 @@ Internet-Draft                XFR-over-TLS                     July 2020
    so that in terms of connectivity the secondary is the TLS client and
    the primary the TLS server.
 
-   The details in [RFC7766], [RFC7858] and [RFC8310] about, e.g.,
-   persistent connection and message handling are fully applicable to
-   XoT as well.  However any behavior specified here takes precedence
-   for XoT.
-
-
-
 
 
 
@@ -450,6 +450,11 @@ Sahib, et al.           Expires January 14, 2021                [Page 8]
 Internet-Draft                XFR-over-TLS                     July 2020
 
 
+   The details in [RFC7766], [RFC7858] and [RFC8310] about, e.g.,
+   persistent connection and message handling are fully applicable to
+   XoT as well.  However any behavior specified here takes precedence
+   for XoT.
+
 5.2.1.  High level XoT descriptions
 
    The figure below provides an outline of the AXoT mechanism including
@@ -457,10 +462,16 @@ Internet-Draft                XFR-over-TLS                     July 2020
 
    Figure 3: AXoT mechanism [5]
 
+   <--! Original is at <https://docs.google.com/presentation/
+   d/1SaEWv9Cm3PujuX6vaOvVWQh8EuR15crWRsDYqSoKp9M> -->
+
    The figure below provides an outline of the IXoT mechanism including
    NOTIFYs.
 
    Figure 4: IXoT mechanism [6]
+
+   <--! Original is at <https://docs.google.com/presentation/
+   d/1n3lAEaKfMCw_L9TYka4xbu2y0s7F1rMfRSg-6_Cvjws> -->
 
 5.2.2.  Previous specifications
 
@@ -488,6 +499,13 @@ Internet-Draft                XFR-over-TLS                     July 2020
    implementation recommendations with regard to TCP/TLS connection
    handling:
 
+
+
+Sahib, et al.           Expires January 14, 2021                [Page 9]
+
+Internet-Draft                XFR-over-TLS                     July 2020
+
+
    "To mitigate the risk of unintentional server overload, DNS clients
    MUST take care to minimize the number of concurrent TCP connections
    made to any individual server.  It is RECOMMENDED that for any given
@@ -498,13 +516,6 @@ Internet-Draft                XFR-over-TLS                     July 2020
    secondary configurations with many busy zones might need to use more
    than one TCP connection for zone transfers for operational reasons
    (for example, to support concurrent transfers of multiple zones)."
-
-
-
-Sahib, et al.           Expires January 14, 2021                [Page 9]
-
-Internet-Draft                XFR-over-TLS                     July 2020
-
 
    Whilst this recommends a particular behavior for the clients using
    TCP, it does not relax the requirement for servers to handle 'mixed'
@@ -542,6 +553,15 @@ Internet-Draft                XFR-over-TLS                     July 2020
    Such connections MUST use an ALPN token of 'xot' during the TLS
    handshake (see Section 11).
 
+
+
+
+
+Sahib, et al.           Expires January 14, 2021               [Page 10]
+
+Internet-Draft                XFR-over-TLS                     July 2020
+
+
    In the absence of DNS specific capability signaling mechanisms this
    greatly simplifies the implementation of XoT such that a XoT exchange
    can occur between any primary and secondary regardless of the role of
@@ -554,14 +574,6 @@ Internet-Draft                XFR-over-TLS                     July 2020
    XoT clients MUST only send XoT traffic on XoT connections.  If a XoT
    server receives traffic other than XoT traffic on a XoT connection it
    MUST respond with the extended DNS error code 21 - Not Supported
-
-
-
-Sahib, et al.           Expires January 14, 2021               [Page 10]
-
-Internet-Draft                XFR-over-TLS                     July 2020
-
-
    [I-D.ietf-dnsop-extended-error].  It SHOULD treat this as protocol
    error and close the connection.
 
@@ -594,6 +606,18 @@ Internet-Draft                XFR-over-TLS                     July 2020
 
 5.6.  AXoT mechanism
 
+
+
+
+
+
+
+
+Sahib, et al.           Expires January 14, 2021               [Page 11]
+
+Internet-Draft                XFR-over-TLS                     July 2020
+
+
 5.6.1.  Coverage and relationship to RFC5936
 
    [RFC5936] re-specified AXFR providing additional guidance beyond that
@@ -608,15 +632,6 @@ Internet-Draft                XFR-over-TLS                     July 2020
    those in [RFC5936], but without the constraint of backwards
    compatibility since it is expected that all implementations of AXoT
    fully implement the behavior described here.
-
-
-
-
-
-Sahib, et al.           Expires January 14, 2021               [Page 11]
-
-Internet-Draft                XFR-over-TLS                     July 2020
-
 
    Where any behavior is not explicitly described here, the behavior
    specified in [RFC5936] MUST be followed.  Any behavior specified here
@@ -650,6 +665,15 @@ Internet-Draft                XFR-over-TLS                     July 2020
    the subsequent AXoT responses.  Note that this requirement, combined
    with the use of EDNS0 Keepalive, enables AXoT servers to signal the
    desire to close a connection due to low resources by sending an EDNS0
+
+
+
+
+Sahib, et al.           Expires January 14, 2021               [Page 12]
+
+Internet-Draft                XFR-over-TLS                     July 2020
+
+
    Keepalive option with a timeout of 0 on any AXoT response (in the
    absence of another way to signal the abort of a AXoT transfer).
 
@@ -666,14 +690,6 @@ Internet-Draft                XFR-over-TLS                     July 2020
    For AXoT this requirement is updated: AXoT clients SHOULD re-use an
    existing open XoT connection when starting any new AXoT session to
    the same primary, and for issuing SOA queries, instead of opening a
-
-
-
-Sahib, et al.           Expires January 14, 2021               [Page 12]
-
-Internet-Draft                XFR-over-TLS                     July 2020
-
-
    new connection.  The number of XoT connections between a secondary
    and primary SHOULD be minimized.
 
@@ -706,6 +722,14 @@ Internet-Draft                XFR-over-TLS                     July 2020
    clarify here that AXoT clients MUST be able to handle responses that
    include multiple RRs, up to the largest number that will fit within a
    DNS message (taking the required content of the other sections into
+
+
+
+Sahib, et al.           Expires January 14, 2021               [Page 13]
+
+Internet-Draft                XFR-over-TLS                     July 2020
+
+
    account, as described here and in [RFC5936]).  This removes any
    burden on AXoT servers of having to accommodate a configuration
    option or support for restricting responses to containing only a
@@ -722,13 +746,6 @@ Internet-Draft                XFR-over-TLS                     July 2020
 
    o  to obfuscate the actual size of the transferred zone to minimize
       information leakage about the entire contents of the zone.
-
-
-
-Sahib, et al.           Expires January 14, 2021               [Page 13]
-
-Internet-Draft                XFR-over-TLS                     July 2020
-
 
    o  to obfuscate the incremental changes to the zone between SOA
       updates to minimize information leakage about zone update activity
@@ -760,6 +777,15 @@ Internet-Draft                XFR-over-TLS                     July 2020
    responses, including 'empty' AXoT responses that contain only an OPT
    RR containing the EDNS(0) option for padding.
 
+
+
+
+
+Sahib, et al.           Expires January 14, 2021               [Page 14]
+
+Internet-Draft                XFR-over-TLS                     July 2020
+
+
    Recommendation of specific policies for padding AXoT responses are
    out of scope for this specification.  Detailed considerations of such
    policies and the trade-offs involved are expected to be the subject
@@ -778,14 +804,6 @@ Internet-Draft                XFR-over-TLS                     July 2020
 
    We provide new guidance here specific to IXoT that aligns with the
    guidance in [RFC5936] for AXFR, that in section Section 5.6 for AXoT,
-
-
-
-Sahib, et al.           Expires January 14, 2021               [Page 14]
-
-Internet-Draft                XFR-over-TLS                     July 2020
-
-
    and with that for performant TCP/TLS usage in [RFC7766] and
    [RFC7858].
 
@@ -815,6 +833,15 @@ Internet-Draft                XFR-over-TLS                     July 2020
 
    An IXoT client SHOULD pipeline IXFR requests for different zones on a
    single XoT connection.  An IXoT server SHOULD respond to those
+
+
+
+
+Sahib, et al.           Expires January 14, 2021               [Page 15]
+
+Internet-Draft                XFR-over-TLS                     July 2020
+
+
    requests as soon as the response is available i.e. potentially out of
    order.
 
@@ -832,15 +859,6 @@ Internet-Draft                XFR-over-TLS                     July 2020
    to provide an IXFR for the requested SOA.  Implementations differ in
    how long they store zone deltas and how many may be stored at any one
    time.
-
-
-
-
-
-Sahib, et al.           Expires January 14, 2021               [Page 15]
-
-Internet-Draft                XFR-over-TLS                     July 2020
-
 
    After a failed IXFR a IXoT client SHOULD request the AXFR on the
    already open XoT connection.
@@ -871,6 +889,15 @@ Internet-Draft                XFR-over-TLS                     July 2020
    Also known as multi-master configurations this model can provide
    flexibility and redundancy particularly for IXFR.  A secondary will
    receive one or more NOTIFY messages and can send an SOA to all of the
+
+
+
+
+Sahib, et al.           Expires January 14, 2021               [Page 16]
+
+Internet-Draft                XFR-over-TLS                     July 2020
+
+
    configured primaries.  It can then choose to send an XFR request to
    the primary with the highest SOA (or other criteria, e.g., RTT).
 
@@ -890,14 +917,6 @@ Internet-Draft                XFR-over-TLS                     July 2020
 
    The other extreme can be considered a 'parallel primary connection'
    model.  Here a secondary could keep multiple persistent connections
-
-
-
-Sahib, et al.           Expires January 14, 2021               [Page 16]
-
-Internet-Draft                XFR-over-TLS                     July 2020
-
-
    open to all available primaries and only request XFRs from the
    primary with the highest serial number.  Since normally the number of
    secondaries and primaries in direct contact in a transfer group is
@@ -926,6 +945,15 @@ Internet-Draft                XFR-over-TLS                     July 2020
    SIG(0) [RFC2535] similarly also provides a mechanism to digitally
    sign a DNS message but uses public key authentication, where the
    public keys are stored in DNS as KEY RRs and a private key is stored
+
+
+
+
+Sahib, et al.           Expires January 14, 2021               [Page 17]
+
+Internet-Draft                XFR-over-TLS                     July 2020
+
+
    at the signer.  It also provides party-to-party data authentication,
    but not hop-to-hop channel authentication or confidentiality.
 
@@ -944,15 +972,6 @@ Internet-Draft                XFR-over-TLS                     July 2020
    provides a defense for the client against active surveillance,
    providing client-to-server authentication and end-to-end channel
    confidentiality.
-
-
-
-
-
-Sahib, et al.           Expires January 14, 2021               [Page 17]
-
-Internet-Draft                XFR-over-TLS                     July 2020
-
 
 7.3.3.  Mutual
 
@@ -981,6 +1000,16 @@ Internet-Draft                XFR-over-TLS                     July 2020
    connections on that port to all clients except those configured as
    secondaries.
 
+
+
+
+
+
+Sahib, et al.           Expires January 14, 2021               [Page 18]
+
+Internet-Draft                XFR-over-TLS                     July 2020
+
+
 7.5.  ZONEMD
 
    Message Digest for DNS Zones (ZONEMD)
@@ -998,17 +1027,6 @@ Internet-Draft                XFR-over-TLS                     July 2020
 
    It is complementary the above mechanisms and can be used in
    conjunction with XoT but is not considered further.
-
-
-
-
-
-
-
-Sahib, et al.           Expires January 14, 2021               [Page 18]
-
-Internet-Draft                XFR-over-TLS                     July 2020
-
 
 7.6.  Comparison of Authentication Methods
 
@@ -1040,6 +1058,14 @@ Internet-Draft                XFR-over-TLS                     July 2020
    authentication methods are best suited to the deployment model in
    question.
 
+
+
+
+Sahib, et al.           Expires January 14, 2021               [Page 19]
+
+Internet-Draft                XFR-over-TLS                     July 2020
+
+
    Table 1: Properties of Authentication methods for XoT [7]
 
    Based on this analysis it can be seen that:
@@ -1057,14 +1083,6 @@ Internet-Draft                XFR-over-TLS                     July 2020
    o  Using TSIG, Strict TLS and an ACL on the primary provides all 3
       properties for both parties with probably the lowest operational
       overhead.
-
-
-
-
-Sahib, et al.           Expires January 14, 2021               [Page 19]
-
-Internet-Draft                XFR-over-TLS                     July 2020
-
 
 8.  Policies for Both AXFR and IXFR
 
@@ -1096,6 +1114,14 @@ Internet-Draft                XFR-over-TLS                     July 2020
    independently, e.g., by requesting zone transfers without TSIG, from
    unauthorized IP addresses or over cleartext DNS.  Other aspects such
    as if a secondary will accept data without a TSIG digest or if
+
+
+
+Sahib, et al.           Expires January 14, 2021               [Page 20]
+
+Internet-Draft                XFR-over-TLS                     July 2020
+
+
    secondaries are using Strict as opposed to Opportunistic TLS are more
    challenging.
 
@@ -1113,14 +1139,6 @@ Internet-Draft                XFR-over-TLS                     July 2020
    (instead of AXFR-over-TCP).  This requires the client (secondary) to
    authenticate the server (primary) using a configured authentication
    domain name.
-
-
-
-
-Sahib, et al.           Expires January 14, 2021               [Page 20]
-
-Internet-Draft                XFR-over-TLS                     July 2020
-
 
    It is noted that use of a TLS proxy in front of the primary server is
    a simple deployment solution that can enable server side XoT.
@@ -1151,6 +1169,15 @@ Internet-Draft                XFR-over-TLS                     July 2020
 
    o  the risk that some level of zone activity might be inferred by
       observing zone transfer sizes and timing on encrypted connections
+
+
+
+
+Sahib, et al.           Expires January 14, 2021               [Page 21]
+
+Internet-Draft                XFR-over-TLS                     July 2020
+
+
       (even with padding applied), in combination with obtaining SOA
       records by directly querying authoritative servers.
 
@@ -1166,17 +1193,6 @@ Internet-Draft                XFR-over-TLS                     July 2020
 
    The authors thank Benno Overeinder, Shumon Huque and Tim Wicinski for
    review and discussions.
-
-
-
-
-
-
-
-Sahib, et al.           Expires January 14, 2021               [Page 21]
-
-Internet-Draft                XFR-over-TLS                     July 2020
-
 
 14.  Contributors
 
@@ -1210,6 +1226,14 @@ Internet-Draft                XFR-over-TLS                     July 2020
 
    draft-ietf-dprive-xfr-over-tls-01
 
+
+
+
+Sahib, et al.           Expires January 14, 2021               [Page 22]
+
+Internet-Draft                XFR-over-TLS                     July 2020
+
+
    o  Minor editorial updates
 
    o  Add requirement for TLS 1.3. or later
@@ -1225,14 +1249,6 @@ Internet-Draft                XFR-over-TLS                     July 2020
    draft-hzpa-dprive-xfr-over-tls-02
 
    o  Substantial re-work of the document.
-
-
-
-
-Sahib, et al.           Expires January 14, 2021               [Page 22]
-
-Internet-Draft                XFR-over-TLS                     July 2020
-
 
    draft-hzpa-dprive-xfr-over-tls-01
 
@@ -1266,6 +1282,14 @@ Internet-Draft                XFR-over-TLS                     July 2020
               (TSIG)", RFC 2845, DOI 10.17487/RFC2845, May 2000,
               <https://www.rfc-editor.org/info/rfc2845>.
 
+
+
+
+Sahib, et al.           Expires January 14, 2021               [Page 23]
+
+Internet-Draft                XFR-over-TLS                     July 2020
+
+
    [RFC5155]  Laurie, B., Sisson, G., Arends, R., and D. Blacka, "DNS
               Security (DNSSEC) Hashed Authenticated Denial of
               Existence", RFC 5155, DOI 10.17487/RFC5155, March 2008,
@@ -1280,15 +1304,6 @@ Internet-Draft                XFR-over-TLS                     July 2020
               Considerations for Internet Protocols", RFC 6973,
               DOI 10.17487/RFC6973, July 2013, <https://www.rfc-
               editor.org/info/rfc6973>.
-
-
-
-
-
-Sahib, et al.           Expires January 14, 2021               [Page 23]
-
-Internet-Draft                XFR-over-TLS                     July 2020
-
 
    [RFC7626]  Bortzmeyer, S., "DNS Privacy Considerations", RFC 7626,
               DOI 10.17487/RFC7626, August 2015, <https://www.rfc-
@@ -1323,6 +1338,14 @@ Internet-Draft                XFR-over-TLS                     July 2020
               Hardaker, "Message Digest for DNS Zones", draft-ietf-
               dnsop-dns-zone-digest-08 (work in progress), June 2020.
 
+
+
+
+Sahib, et al.           Expires January 14, 2021               [Page 24]
+
+Internet-Draft                XFR-over-TLS                     July 2020
+
+
    [I-D.ietf-dnsop-extended-error]
               Kumari, W., Hunt, E., Arends, R., Hardaker, W., and D.
               Lawrence, "Extended DNS Errors", draft-ietf-dnsop-
@@ -1338,13 +1361,6 @@ Internet-Draft                XFR-over-TLS                     July 2020
               Privacy Requirements for Exchanges between Recursive
               Resolvers and Authoritative Servers", draft-ietf-dprive-
               phase2-requirements-01 (work in progress), June 2020.
-
-
-
-Sahib, et al.           Expires January 14, 2021               [Page 24]
-
-Internet-Draft                XFR-over-TLS                     July 2020
-
 
    [I-D.vandijk-dprive-ds-dot-signal-and-pin]
               Dijk, P., Geuze, R., and E. Bretelle, "Signalling
@@ -1377,22 +1393,6 @@ Internet-Draft                XFR-over-TLS                     July 2020
               DOI 10.17487/RFC6891, April 2013, <https://www.rfc-
               editor.org/info/rfc6891>.
 
-   [RFC7766]  Dickinson, J., Dickinson, S., Bellis, R., Mankin, A., and
-              D. Wessels, "DNS Transport over TCP - Implementation
-              Requirements", RFC 7766, DOI 10.17487/RFC7766, March 2016,
-              <https://www.rfc-editor.org/info/rfc7766>.
-
-16.3.  URIs
-
-   [1] https://github.com/hanzhang0116/hzpa-dprive-xfr-over-tls/
-       blob/02_updates/02-draft-svg/AXFR_mechanism.svg
-
-   [2] https://github.com/hanzhang0116/hzpa-dprive-xfr-over-tls/
-       blob/02_updates/02-draft-svg/IXFR%20mechanism.svg
-
-   [3] https://www.isc.org/bind/
-
-   [4] https://www.nlnetlabs.nl/projects/nsd/about/
 
 
 
@@ -1402,11 +1402,28 @@ Sahib, et al.           Expires January 14, 2021               [Page 25]
 Internet-Draft                XFR-over-TLS                     July 2020
 
 
-   [5] https://github.com/hanzhang0116/hzpa-dprive-xfr-over-tls/
-       blob/02_updates/02-draft-svg/AXoT_mechanism_1.svg
+   [RFC7766]  Dickinson, J., Dickinson, S., Bellis, R., Mankin, A., and
+              D. Wessels, "DNS Transport over TCP - Implementation
+              Requirements", RFC 7766, DOI 10.17487/RFC7766, March 2016,
+              <https://www.rfc-editor.org/info/rfc7766>.
 
-   [6] https://github.com/hanzhang0116/hzpa-dprive-xfr-over-tls/
-       blob/02_updates/02-draft-svg/IXoT_mechanism_1.svg
+16.3.  URIs
+
+   [1] https://github.com/hanzhang0116/hzpa-dprive-xfr-over-tls/blob/
+       master/02-draft-dprive-svg/AXFR_mechanism.svg
+
+   [2] https://github.com/hanzhang0116/hzpa-dprive-xfr-over-tls/blob/
+       master/02-draft-dprive-svg/IXFR_mechanism.svg
+
+   [3] https://www.isc.org/bind/
+
+   [4] https://www.nlnetlabs.nl/projects/nsd/about/
+
+   [5] https://github.com/hanzhang0116/hzpa-dprive-xfr-over-tls/blob/
+       master/02-draft-dprive-svg/AXoT_mechanism.svg
+
+   [6] https://github.com/hanzhang0116/hzpa-dprive-xfr-over-tls/blob/
+       master/02-draft-dprive-svg/IXoT_mechanism.svg
 
    [7] https://github.com/hanzhang0116/hzpa-dprive-xfr-over-tls/
        blob/02_updates/02-draft-svg/
@@ -1434,6 +1451,13 @@ Authors' Addresses
    Email: willem@nlnetlabs.nl
 
 
+
+
+Sahib, et al.           Expires January 14, 2021               [Page 26]
+
+Internet-Draft                XFR-over-TLS                     July 2020
+
+
    Sara Dickinson
    Sinodun IT
    Magdalen Centre
@@ -1452,36 +1476,12 @@ Authors' Addresses
    Email: paras@salesforce.com
 
 
-
-Sahib, et al.           Expires January 14, 2021               [Page 26]
-
-Internet-Draft                XFR-over-TLS                     July 2020
-
-
    Allison Mankin
    Salesforce
    Herndon, VA
    United States
 
    Email: allison.mankin@gmail.com
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 
