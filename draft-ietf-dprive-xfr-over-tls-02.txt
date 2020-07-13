@@ -2,12 +2,11 @@
 
 
 
-dprive                                                          S. Sahib
-Internet-Draft                                                Salesforce
-Updates: 1995, 7766 (if approved)                              W. Toorop
-Intended status: Standards Track                              NLnet Labs
-Expires: January 14, 2021                                   S. Dickinson
-                                                              Sinodun IT
+dprive                                                         W. Toorop
+Internet-Draft                                                NLnet Labs
+Updates: 1995, 7766 (if approved)                           S. Dickinson
+Intended status: Standards Track                              Sinodun IT
+Expires: January 14, 2021                                       S. Sahib
                                                                  P. Aras
                                                                A. Mankin
                                                               Salesforce
@@ -49,17 +48,16 @@ Copyright Notice
    Copyright (c) 2020 IETF Trust and the persons identified as the
    document authors.  All rights reserved.
 
+   This document is subject to BCP 78 and the IETF Trust's Legal
+   Provisions Relating to IETF Documents
 
 
 
-
-Sahib, et al.           Expires January 14, 2021                [Page 1]
+Toorop, et al.          Expires January 14, 2021                [Page 1]
 
 Internet-Draft                XFR-over-TLS                     July 2020
 
 
-   This document is subject to BCP 78 and the IETF Trust's Legal
-   Provisions Relating to IETF Documents
    (http://trustee.ietf.org/license-info) in effect on the date of
    publication of this document.  Please review these documents
    carefully, as they describe your rights and restrictions with respect
@@ -106,16 +104,16 @@ Table of Contents
        7.3.1.  Opportunistic . . . . . . . . . . . . . . . . . . . .  18
        7.3.2.  Strict  . . . . . . . . . . . . . . . . . . . . . . .  18
        7.3.3.  Mutual  . . . . . . . . . . . . . . . . . . . . . . .  18
+     7.4.  IP Based ACL on the Primary . . . . . . . . . . . . . . .  18
+     7.5.  ZONEMD  . . . . . . . . . . . . . . . . . . . . . . . . .  19
 
 
 
-Sahib, et al.           Expires January 14, 2021                [Page 2]
+Toorop, et al.          Expires January 14, 2021                [Page 2]
 
 Internet-Draft                XFR-over-TLS                     July 2020
 
 
-     7.4.  IP Based ACL on the Primary . . . . . . . . . . . . . . .  18
-     7.5.  ZONEMD  . . . . . . . . . . . . . . . . . . . . . . . . .  19
      7.6.  Comparison of Authentication Methods  . . . . . . . . . .  19
    8.  Policies for Both AXFR and IXFR . . . . . . . . . . . . . . .  20
    9.  Implementation Considerations . . . . . . . . . . . . . . . .  21
@@ -151,8 +149,8 @@ Internet-Draft                XFR-over-TLS                     July 2020
    public and needed protection, but on zone transfer [RFC1995]
    [RFC5936] it says only:
 
-   "Privacy risks for the holder of a zone (the risk that someone gets
-   the data) are discussed in [RFC5936] and [RFC5155]."
+      "Privacy risks for the holder of a zone (the risk that someone
+      gets the data) are discussed in [RFC5936] and [RFC5155]."
 
    In what way is exposing the full contents of a zone a privacy risk?
    The contents of the zone could include information such as names of
@@ -163,14 +161,14 @@ Internet-Draft                XFR-over-TLS                     July 2020
    associated with the zone's organization.  It could also include
    references to other organizations.  Examples of this could be:
 
+   o  Person-laptop.example.org
 
 
-Sahib, et al.           Expires January 14, 2021                [Page 3]
+
+Toorop, et al.          Expires January 14, 2021                [Page 3]
 
 Internet-Draft                XFR-over-TLS                     July 2020
 
-
-   o  Person-laptop.example.org
 
    o  MX-for-Location.example.org
 
@@ -218,16 +216,15 @@ Internet-Draft                XFR-over-TLS                     July 2020
 
    Privacy terminology is as described in Section 3 of [RFC6973].
 
+   Note that in this document we choose to use the terms 'primary' and
+   'secondary' for two servers engaged in zone transfers.
 
 
 
-Sahib, et al.           Expires January 14, 2021                [Page 4]
+Toorop, et al.          Expires January 14, 2021                [Page 4]
 
 Internet-Draft                XFR-over-TLS                     July 2020
 
-
-   Note that in this document we choose to use the terms 'primary' and
-   'secondary' for two servers engaged in zone transfers.
 
    DNS terminology is as described in [RFC8499].
 
@@ -274,16 +271,16 @@ Internet-Draft                XFR-over-TLS                     July 2020
    This has largely replaced AXFR where possible, particularly for
    dynamically updated zones.
 
+   [RFC5936] subsequently redefined the specification of AXFR to improve
+   performance and interoperability.
 
 
 
-Sahib, et al.           Expires January 14, 2021                [Page 5]
+
+Toorop, et al.          Expires January 14, 2021                [Page 5]
 
 Internet-Draft                XFR-over-TLS                     July 2020
 
-
-   [RFC5936] subsequently redefined the specification of AXFR to improve
-   performance and interoperability.
 
    In this document we use the phrase "XFR mechanism" to describe the
    entire set of message exchanges between a secondary and a primary
@@ -309,9 +306,6 @@ Internet-Draft                XFR-over-TLS                     July 2020
 
    Figure 1.  AXFR Mechanism [1]
 
-   <--! Original is at <https://docs.google.com/presentation/
-   d/1UNsqHLmxP0POlWpgq7jOrjo48CjIhi03pNKGDuKUpUk/> -->
-
    1.  An AXFR is often (but not always) preceded by a NOTIFY (over UDP)
        from the primary to the secondary.  A secondary may also initiate
        an AXFR based on a refresh timer or scheduled/triggered zone
@@ -330,14 +324,6 @@ Internet-Draft                XFR-over-TLS                     July 2020
    but details that there is no restriction in the protocol that a
    single TCP connection must be used only for a single AXFR exchange,
    or even solely for XFRs.  For example, it outlines that the SOA query
-
-
-
-Sahib, et al.           Expires January 14, 2021                [Page 6]
-
-Internet-Draft                XFR-over-TLS                     July 2020
-
-
    can also happen on this connection.  However, this can cause
    interoperability problems with older implementations that support
    only the trivial case of one AXFR per connection.
@@ -345,15 +331,19 @@ Internet-Draft                XFR-over-TLS                     July 2020
    Further details of the limitations in existing AXFR implementations
    are outlined in [RFC5936].
 
+
+
+Toorop, et al.          Expires January 14, 2021                [Page 6]
+
+Internet-Draft                XFR-over-TLS                     July 2020
+
+
 4.2.  IXFR Mechanism
 
    The figure below provides an outline of the IXFR mechanism including
    NOTIFYs.
 
    Figure 1.  IXFR Mechanism [2]
-
-   <--! Original is at <https://docs.google.com/presentation/
-   d/1hT7cIYPhMX94GvluyBzrDv95MPcyMN35qnjNe_4brHc> -->
 
    1.  An IXFR is normally (but not always) preceded by a NOTIFY (over
        UDP) from the primary to the secondary.  A secondary may also
@@ -373,7 +363,7 @@ Internet-Draft                XFR-over-TLS                     July 2020
    entire IXFR response can be contained in a single DNS packet,
    otherwise, TCP is used.  In fact is says in non-normative language:
 
-   "Thus, a client should first make an IXFR query using UDP."
+        "Thus, a client should first make an IXFR query using UDP."
 
    So there may be a forth step above where the client falls back to
    IXFR-over-TCP.  There may also be a forth step where the secondary
@@ -386,20 +376,23 @@ Internet-Draft                XFR-over-TLS                     July 2020
    connections are sometimes used for SOA queries but in general they
    are not used persistently and close after an IXFR is completed.
 
-
-
-
-Sahib, et al.           Expires January 14, 2021                [Page 7]
-
-Internet-Draft                XFR-over-TLS                     July 2020
-
-
    It is noted that the specification for IXFR was published well before
    TCP was considered a first class transport for DNS.  This document
    therefore updates [RFC1995] to state that DNS implementations that
    support IXFR-over-TCP MUST use [RFC7766] to optimize the use of TCP
    connections and SHOULD use [RFC7858] to manage persistent
    connections.
+
+
+
+
+
+
+
+Toorop, et al.          Expires January 14, 2021                [Page 7]
+
+Internet-Draft                XFR-over-TLS                     July 2020
+
 
 4.3.  Data Leakage of NOTIFY and SOA Message Exchanges
 
@@ -417,8 +410,8 @@ Internet-Draft                XFR-over-TLS                     July 2020
 
    [RFC1996] also states:
 
-   "If ANCOUNT>0, then the answer section represents an unsecure hint at
-   the new RRset for this (QNAME,QCLASS,QTYPE).
+       "If ANCOUNT>0, then the answer section represents an
+       unsecure hint at the new RRset for this (QNAME,QCLASS,QTYPE).
 
    But since the only supported QTYPE for NOTIFY is SOA, this does not
    pose a potential leak.
@@ -442,18 +435,20 @@ Internet-Draft                XFR-over-TLS                     July 2020
    so that in terms of connectivity the secondary is the TLS client and
    the primary the TLS server.
 
-
-
-
-Sahib, et al.           Expires January 14, 2021                [Page 8]
-
-Internet-Draft                XFR-over-TLS                     July 2020
-
-
    The details in [RFC7766], [RFC7858] and [RFC8310] about, e.g.,
    persistent connection and message handling are fully applicable to
    XoT as well.  However any behavior specified here takes precedence
    for XoT.
+
+
+
+
+
+
+Toorop, et al.          Expires January 14, 2021                [Page 8]
+
+Internet-Draft                XFR-over-TLS                     July 2020
+
 
 5.2.1.  High level XoT descriptions
 
@@ -462,27 +457,23 @@ Internet-Draft                XFR-over-TLS                     July 2020
 
    Figure 3: AXoT mechanism [5]
 
-   <--! Original is at <https://docs.google.com/presentation/
-   d/1SaEWv9Cm3PujuX6vaOvVWQh8EuR15crWRsDYqSoKp9M> -->
-
    The figure below provides an outline of the IXoT mechanism including
    NOTIFYs.
 
    Figure 4: IXoT mechanism [6]
 
-   <--! Original is at <https://docs.google.com/presentation/
-   d/1n3lAEaKfMCw_L9TYka4xbu2y0s7F1rMfRSg-6_Cvjws> -->
-
 5.2.2.  Previous specifications
 
    We note that whilst [RFC5936] already recommends re-using open TCP
-   connections, it does state "Non-AXFR session traffic can also use an
-   open TCP connection." when discussing AXFR-over-TCP.  It defines an
-   AXFR session as an AXFR query message and the sequence of AXFR
-   response messages returned for it.  Note that this excludes any SOA
-   queries issued as part of the overall AXFR mechanism.  This
-   requirement needs to be re-evaluated when considering applying the
-   same model to XoT since
+   connections, it does state:
+
+      "Non-AXFR session traffic can also use an open TCP connection."
+
+   when discussing AXFR-over-TCP.  It defines an AXFR session as an AXFR
+   query message and the sequence of AXFR response messages returned for
+   it.  Note that this excludes any SOA queries issued as part of the
+   overall AXFR mechanism.  This requirement needs to be re-evaluated
+   when considering applying the same model to XoT since
 
    o  There is no guarantee that a XoT server (which is very likely, but
       not necessarily, a purely authoritative server) will also support
@@ -501,21 +492,31 @@ Internet-Draft                XFR-over-TLS                     July 2020
 
 
 
-Sahib, et al.           Expires January 14, 2021                [Page 9]
+
+
+
+
+
+
+
+
+
+Toorop, et al.          Expires January 14, 2021                [Page 9]
 
 Internet-Draft                XFR-over-TLS                     July 2020
 
 
-   "To mitigate the risk of unintentional server overload, DNS clients
-   MUST take care to minimize the number of concurrent TCP connections
-   made to any individual server.  It is RECOMMENDED that for any given
-   client/server interaction there SHOULD be no more than one connection
-   for regular queries, one for zone transfers, and one for each
-   protocol that is being used on top of TCP (for example, if the
-   resolver was using TLS).  However, it is noted that certain primary/
-   secondary configurations with many busy zones might need to use more
-   than one TCP connection for zone transfers for operational reasons
-   (for example, to support concurrent transfers of multiple zones)."
+      "To mitigate the risk of unintentional server overload, DNS
+      clients MUST take care to minimize the number of concurrent TCP
+      connections made to any individual server. It is RECOMMENDED
+      that for any given client/server interaction there SHOULD be no
+      more than one connection for regular queries, one for zone
+      transfers, and one for each protocol that is being used on top
+      of TCP (for example, if the resolver was using TLS). However,
+      it is noted that certain primary/ secondary configurations with
+      many busy zones might need to use more than one TCP connection
+      for zone transfers for operational reasons (for example, to
+      support concurrent transfers of multiple zones)."
 
    Whilst this recommends a particular behavior for the clients using
    TCP, it does not relax the requirement for servers to handle 'mixed'
@@ -556,8 +557,7 @@ Internet-Draft                XFR-over-TLS                     July 2020
 
 
 
-
-Sahib, et al.           Expires January 14, 2021               [Page 10]
+Toorop, et al.          Expires January 14, 2021               [Page 10]
 
 Internet-Draft                XFR-over-TLS                     July 2020
 
@@ -613,7 +613,7 @@ Internet-Draft                XFR-over-TLS                     July 2020
 
 
 
-Sahib, et al.           Expires January 14, 2021               [Page 11]
+Toorop, et al.          Expires January 14, 2021               [Page 11]
 
 Internet-Draft                XFR-over-TLS                     July 2020
 
@@ -657,8 +657,9 @@ Internet-Draft                XFR-over-TLS                     July 2020
    Whilst the specification for EDNS0 [RFC6891]  does not specifically
    mention AXFRs, it does say
 
-   "If an OPT record is present in a received request, compliant
-   responders MUST include an OPT record in their respective responses."
+       "If an OPT record is present in a received request, compliant
+       responders MUST include an OPT record in their respective
+       responses."
 
    We clarify here that if an OPT record is present in a received AXoT
    request, compliant responders MUST include an OPT record in each of
@@ -668,8 +669,7 @@ Internet-Draft                XFR-over-TLS                     July 2020
 
 
 
-
-Sahib, et al.           Expires January 14, 2021               [Page 12]
+Toorop, et al.          Expires January 14, 2021               [Page 12]
 
 Internet-Draft                XFR-over-TLS                     July 2020
 
@@ -682,10 +682,10 @@ Internet-Draft                XFR-over-TLS                     July 2020
 
    [RFC5936] says:
 
-   "An AXFR client MAY use an already opened TCP connection to start an
-   AXFR session.  Using an existing open connection is RECOMMENDED over
-   opening a new connection.  (Non-AXFR session traffic can also use an
-   open connection.)"
+       "An AXFR client MAY use an already opened TCP connection to
+       start an AXFR session. Using an existing open connection is
+       RECOMMENDED over opening a new connection. (Non-AXFR session
+       traffic can also use an open connection.)"
 
    For AXoT this requirement is updated: AXoT clients SHOULD re-use an
    existing open XoT connection when starting any new AXoT session to
@@ -713,9 +713,9 @@ Internet-Draft                XFR-over-TLS                     July 2020
 
    [RFC5936] says:
 
-   "Some old AXFR clients expect each response message to contain only a
-   single RR.  To interoperate with such clients, the server MAY
-   restrict response messages to a single RR."
+      "Some old AXFR clients expect each response message to contain
+      only a single RR. To interoperate with such clients, the server
+      MAY restrict response messages to a single RR."
 
    This is opposed to the normal behavior of containing a sufficient
    number of RRs to reasonably amortize the per-message overhead.  We
@@ -725,7 +725,7 @@ Internet-Draft                XFR-over-TLS                     July 2020
 
 
 
-Sahib, et al.           Expires January 14, 2021               [Page 13]
+Toorop, et al.          Expires January 14, 2021               [Page 13]
 
 Internet-Draft                XFR-over-TLS                     July 2020
 
@@ -765,10 +765,11 @@ Internet-Draft                XFR-over-TLS                     July 2020
 
    [RFC5936] says:
 
-   "Each AXFR response message SHOULD contain a sufficient number of RRs
-   to reasonably amortize the per-message overhead, up to the largest
-   number that will fit within a DNS message (taking the required
-   content of the other sections into account, as described below)."
+      "Each AXFR response message SHOULD contain a sufficient number
+      of RRs to reasonably amortize the per-message overhead, up to
+      the largest number that will fit within a DNS message (taking
+      the required content of the other sections into account, as
+      described below)."
 
    'Empty' AXoT responses generated in order to meet a padding
    requirement will be exceptions to the above statement.  In order to
@@ -780,8 +781,7 @@ Internet-Draft                XFR-over-TLS                     July 2020
 
 
 
-
-Sahib, et al.           Expires January 14, 2021               [Page 14]
+Toorop, et al.          Expires January 14, 2021               [Page 14]
 
 Internet-Draft                XFR-over-TLS                     July 2020
 
@@ -837,7 +837,7 @@ Internet-Draft                XFR-over-TLS                     July 2020
 
 
 
-Sahib, et al.           Expires January 14, 2021               [Page 15]
+Toorop, et al.          Expires January 14, 2021               [Page 15]
 
 Internet-Draft                XFR-over-TLS                     July 2020
 
@@ -893,7 +893,7 @@ Internet-Draft                XFR-over-TLS                     July 2020
 
 
 
-Sahib, et al.           Expires January 14, 2021               [Page 16]
+Toorop, et al.          Expires January 14, 2021               [Page 16]
 
 Internet-Draft                XFR-over-TLS                     July 2020
 
@@ -949,7 +949,7 @@ Internet-Draft                XFR-over-TLS                     July 2020
 
 
 
-Sahib, et al.           Expires January 14, 2021               [Page 17]
+Toorop, et al.          Expires January 14, 2021               [Page 17]
 
 Internet-Draft                XFR-over-TLS                     July 2020
 
@@ -1005,7 +1005,7 @@ Internet-Draft                XFR-over-TLS                     July 2020
 
 
 
-Sahib, et al.           Expires January 14, 2021               [Page 18]
+Toorop, et al.          Expires January 14, 2021               [Page 18]
 
 Internet-Draft                XFR-over-TLS                     July 2020
 
@@ -1061,7 +1061,7 @@ Internet-Draft                XFR-over-TLS                     July 2020
 
 
 
-Sahib, et al.           Expires January 14, 2021               [Page 19]
+Toorop, et al.          Expires January 14, 2021               [Page 19]
 
 Internet-Draft                XFR-over-TLS                     July 2020
 
@@ -1117,7 +1117,7 @@ Internet-Draft                XFR-over-TLS                     July 2020
 
 
 
-Sahib, et al.           Expires January 14, 2021               [Page 20]
+Toorop, et al.          Expires January 14, 2021               [Page 20]
 
 Internet-Draft                XFR-over-TLS                     July 2020
 
@@ -1173,7 +1173,7 @@ Internet-Draft                XFR-over-TLS                     July 2020
 
 
 
-Sahib, et al.           Expires January 14, 2021               [Page 21]
+Toorop, et al.          Expires January 14, 2021               [Page 21]
 
 Internet-Draft                XFR-over-TLS                     July 2020
 
@@ -1229,7 +1229,7 @@ Internet-Draft                XFR-over-TLS                     July 2020
 
 
 
-Sahib, et al.           Expires January 14, 2021               [Page 22]
+Toorop, et al.          Expires January 14, 2021               [Page 22]
 
 Internet-Draft                XFR-over-TLS                     July 2020
 
@@ -1285,7 +1285,7 @@ Internet-Draft                XFR-over-TLS                     July 2020
 
 
 
-Sahib, et al.           Expires January 14, 2021               [Page 23]
+Toorop, et al.          Expires January 14, 2021               [Page 23]
 
 Internet-Draft                XFR-over-TLS                     July 2020
 
@@ -1341,7 +1341,7 @@ Internet-Draft                XFR-over-TLS                     July 2020
 
 
 
-Sahib, et al.           Expires January 14, 2021               [Page 24]
+Toorop, et al.          Expires January 14, 2021               [Page 24]
 
 Internet-Draft                XFR-over-TLS                     July 2020
 
@@ -1397,7 +1397,7 @@ Internet-Draft                XFR-over-TLS                     July 2020
 
 
 
-Sahib, et al.           Expires January 14, 2021               [Page 25]
+Toorop, et al.          Expires January 14, 2021               [Page 25]
 
 Internet-Draft                XFR-over-TLS                     July 2020
 
@@ -1434,14 +1434,6 @@ Internet-Draft                XFR-over-TLS                     July 2020
 
 Authors' Addresses
 
-   Shivan Sahib
-   Salesforce
-   Vancouver, BC
-   Canada
-
-   Email: ssahib@salesforce.com
-
-
    Willem Toorop
    NLnet Labs
    Science Park 400
@@ -1453,7 +1445,15 @@ Authors' Addresses
 
 
 
-Sahib, et al.           Expires January 14, 2021               [Page 26]
+
+
+
+
+
+
+
+
+Toorop, et al.          Expires January 14, 2021               [Page 26]
 
 Internet-Draft                XFR-over-TLS                     July 2020
 
@@ -1466,6 +1466,14 @@ Internet-Draft                XFR-over-TLS                     July 2020
    United Kingdom
 
    Email: sara@sinodun.com
+
+
+   Shivan Sahib
+   Salesforce
+   Vancouver, BC
+   Canada
+
+   Email: ssahib@salesforce.com
 
 
    Pallavi Aras
@@ -1501,12 +1509,4 @@ Internet-Draft                XFR-over-TLS                     July 2020
 
 
 
-
-
-
-
-
-
-
-
-Sahib, et al.           Expires January 14, 2021               [Page 27]
+Toorop, et al.          Expires January 14, 2021               [Page 27]

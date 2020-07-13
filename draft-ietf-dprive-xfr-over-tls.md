@@ -11,16 +11,6 @@
     date = 2020-07-13T00:00:00Z
     [pi]
     [[author]]
-     initials="S."
-     surname="Sahib"
-     fullname="Shivan Sahib"
-     organization = "Salesforce"
-       [author.address]
-       email = "ssahib@salesforce.com"
-       [author.address.postal]
-       city = "Vancouver, BC"
-       country = "Canada"
-    [[author]]
      initials="W."
      surname="Toorop"
      fullname="Willem Toorop"
@@ -44,6 +34,16 @@
       city = "Oxford"
       code = "OX4 4GA"
       country = "United Kingdom"
+    [[author]]
+     initials="S."
+     surname="Sahib"
+     fullname="Shivan Sahib"
+     organization = "Salesforce"
+       [author.address]
+       email = "ssahib@salesforce.com"
+       [author.address.postal]
+       city = "Vancouver, BC"
+       country = "Canada"
     [[author]]
      initials="P."
      surname="Aras"
@@ -99,8 +99,10 @@ that specifically defines authoritative support for DNS-over-TLS.
 transactions are not public and needed protection, but on zone transfer
 [@!RFC1995] [@!RFC5936] it says only:
 
-"Privacy risks for the holder of a zone (the risk that someone gets the data)
-are discussed in [RFC5936] and [RFC5155]."
+    "Privacy risks for the holder of a zone (the risk that someone
+    gets the data) are discussed in [RFC5936] and [RFC5155]."
+
+
 
 In what way is exposing the full contents of a zone a privacy risk? The
 contents of the zone could include information such as names of persons used in
@@ -220,7 +222,7 @@ The figure below provides an outline of an AXFR mechanism including NOTIFYs.
 
 [Figure 1. AXFR Mechanism](https://github.com/hanzhang0116/hzpa-dprive-xfr-over-tls/blob/master/02-draft-dprive-svg/AXFR_mechanism.svg)
 
-<--! Original is at https://docs.google.com/presentation/d/1UNsqHLmxP0POlWpgq7jOrjo48CjIhi03pNKGDuKUpUk/ -->
+<!-- Original is at https://docs.google.com/presentation/d/1UNsqHLmxP0POlWpgq7jOrjo48CjIhi03pNKGDuKUpUk/ -->
 
 1. An AXFR is often (but not always) preceded by a NOTIFY (over UDP) from the
 primary to the secondary. A secondary may also initiate an AXFR based on a
@@ -251,7 +253,7 @@ The figure below provides an outline of the IXFR mechanism including NOTIFYs.
 
 [Figure 1. IXFR Mechanism](https://github.com/hanzhang0116/hzpa-dprive-xfr-over-tls/blob/master/02-draft-dprive-svg/IXFR_mechanism.svg)
 
-<--! Original is at https://docs.google.com/presentation/d/1hT7cIYPhMX94GvluyBzrDv95MPcyMN35qnjNe_4brHc -->
+<!-- Original is at https://docs.google.com/presentation/d/1hT7cIYPhMX94GvluyBzrDv95MPcyMN35qnjNe_4brHc -->
 
 1. An IXFR is normally (but not always) preceded by a NOTIFY (over UDP) from the
 primary to the secondary. A secondary may also initiate an IXFR based on a
@@ -269,7 +271,7 @@ primary after the primary sends an IXFR response.
 response can be contained in a single DNS packet, otherwise, TCP is used. In
 fact is says in non-normative language:
 
-"Thus, a client should first make an IXFR query using UDP."
+    "Thus, a client should first make an IXFR query using UDP."
 
 So there may be a forth step above where the client falls back to IXFR-over-TCP.
 There may also be a forth step where the secondary must fall back to AXFR
@@ -306,9 +308,9 @@ Unencrypted NOTIFY messages identify configured secondaries on the primary.
 
 [@RFC1996] also states: 
 
-"If ANCOUNT>0, then the answer section represents an
-  unsecure hint at the new RRset for this (QNAME,QCLASS,QTYPE).
-  
+    "If ANCOUNT>0, then the answer section represents an
+    unsecure hint at the new RRset for this (QNAME,QCLASS,QTYPE).
+
 But since the only supported QTYPE for NOTIFY is SOA, this does not pose a
 potential leak.
 
@@ -339,21 +341,25 @@ The figure below provides an outline of the AXoT mechanism including NOTIFYs.
 
 [Figure 3: AXoT mechanism](https://github.com/hanzhang0116/hzpa-dprive-xfr-over-tls/blob/master/02-draft-dprive-svg/AXoT_mechanism.svg)
 
-<--! Original is at https://docs.google.com/presentation/d/1SaEWv9Cm3PujuX6vaOvVWQh8EuR15crWRsDYqSoKp9M -->
+<!-- Original is at https://docs.google.com/presentation/d/1SaEWv9Cm3PujuX6vaOvVWQh8EuR15crWRsDYqSoKp9M -->
 
 The figure below provides an outline of the IXoT mechanism including NOTIFYs.
 
 [Figure 4: IXoT mechanism]
 (https://github.com/hanzhang0116/hzpa-dprive-xfr-over-tls/blob/master/02-draft-dprive-svg/IXoT_mechanism.svg)
 
-<--! Original is at https://docs.google.com/presentation/d/1n3lAEaKfMCw_L9TYka4xbu2y0s7F1rMfRSg-6_Cvjws -->
+<!-- Original is at https://docs.google.com/presentation/d/1n3lAEaKfMCw_L9TYka4xbu2y0s7F1rMfRSg-6_Cvjws -->
 
 
 ### Previous specifications
 
 We note that whilst [@RFC5936] already recommends re-using open TCP
-connections, it does state "Non-AXFR session traffic can also use an open TCP
-connection." when discussing AXFR-over-TCP. It defines an AXFR session as an
+connections, it does state:
+
+    "Non-AXFR session traffic can also use an open TCP connection."
+
+
+when discussing AXFR-over-TCP. It defines an AXFR session as an
 AXFR query message and the sequence of AXFR response messages returned for it.
 Note that this excludes any SOA queries issued as part of the overall AXFR
 mechanism. This requirement needs to be re-evaluated when considering applying
@@ -371,15 +377,19 @@ the same model to XoT since
 Moreover, it is worth noting that [@RFC7766] made general implementation
 recommendations with regard to TCP/TLS connection handling:
 
-"To mitigate the risk of unintentional server overload, DNS clients MUST take
-care to minimize the number of concurrent TCP connections made to any
-individual server. It is RECOMMENDED that for any given client/server
-interaction there SHOULD be no more than one connection for regular queries,
-one for zone transfers, and one for each protocol that is being used on top of
-TCP (for example, if the resolver was using TLS). However, it is noted that
-certain primary/ secondary configurations with many busy zones might need to
-use more than one TCP connection for zone transfers for operational reasons
-(for example, to support concurrent transfers of multiple zones)."
+    "To mitigate the risk of unintentional server overload, DNS
+    clients MUST take care to minimize the number of concurrent TCP
+    connections made to any individual server. It is RECOMMENDED
+    that for any given client/server interaction there SHOULD be no
+    more than one connection for regular queries, one for zone
+    transfers, and one for each protocol that is being used on top
+    of TCP (for example, if the resolver was using TLS). However,
+    it is noted that certain primary/ secondary configurations with
+    many busy zones might need to use more than one TCP connection
+    for zone transfers for operational reasons (for example, to
+    support concurrent transfers of multiple zones)."
+
+
 
 Whilst this recommends a particular behavior for the clients using TCP, it
 does not relax the requirement for servers to handle 'mixed' traffic (regular
@@ -489,8 +499,10 @@ seconds).
 
 Whilst the specification for EDNS0  [@RFC6891]  does not specifically mention AXFRs, it does say
 
-"If an OPT record is present in a received request, compliant
-   responders MUST include an OPT record in their respective responses."
+    "If an OPT record is present in a received request, compliant
+    responders MUST include an OPT record in their respective
+    responses."
+
  
 We clarify here that if an OPT record is present in a received AXoT request,
 compliant responders MUST include an OPT record in each of the subsequent AXoT
@@ -505,10 +517,10 @@ single XoT connection (for the same and different zones).
 
 [@RFC5936] says:
 
-    "An AXFR client MAY use an already opened TCP connection to start an
-    AXFR session.  Using an existing open connection is RECOMMENDED over
-    opening a new connection.  (Non-AXFR session traffic can also use an
-    open connection.)"
+    "An AXFR client MAY use an already opened TCP connection to
+    start an AXFR session. Using an existing open connection is
+    RECOMMENDED over opening a new connection. (Non-AXFR session
+    traffic can also use an open connection.)"
 
 For AXoT this requirement is updated: AXoT clients SHOULD re-use an existing
 open XoT connection when starting any new AXoT session to the same primary, and
@@ -530,9 +542,9 @@ UDP, TCP or TLS.
 
 [@RFC5936] says:
 
-    "Some old AXFR clients expect each response message to contain only a
-    single RR.  To interoperate with such clients, the server MAY
-    restrict response messages to a single RR."
+    "Some old AXFR clients expect each response message to contain
+    only a single RR. To interoperate with such clients, the server
+    MAY restrict response messages to a single RR."
 
 This is opposed to the normal behavior of containing a sufficient number of
 RRs to reasonably amortize the per-message overhead. We clarify here that AXoT
@@ -568,10 +580,11 @@ in order to signal the conclusion of the zone transfer.
 
 [@RFC5936] says:
 
-    "Each AXFR response message SHOULD contain a sufficient number of RRs
-    to reasonably amortize the per-message overhead, up to the largest
-    number that will fit within a DNS message (taking the required
-    content of the other sections into account, as described below)."
+    "Each AXFR response message SHOULD contain a sufficient number
+    of RRs to reasonably amortize the per-message overhead, up to
+    the largest number that will fit within a DNS message (taking
+    the required content of the other sections into account, as
+    described below)."
 
 'Empty' AXoT responses generated in order to meet a padding requirement will be
  exceptions to the above statement. In order to guarantee support for future
