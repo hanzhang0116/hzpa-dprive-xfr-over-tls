@@ -433,7 +433,7 @@
 
   <meta name="dct.creator" content="Sahib, S., Toorop, W., Dickinson, S., Aras, P., and A. Mankin" />
   <meta name="dct.identifier" content="urn:ietf:id:draft-ietf-dprive-xfr-over-tls-02" />
-  <meta name="dct.issued" scheme="ISO8601" content="2020-7-1" />
+  <meta name="dct.issued" scheme="ISO8601" content="2020-7-13" />
   <meta name="dct.abstract" content="DNS zone transfers are transmitted in clear text, which gives attackers the opportunity to collect the content of a zone by eavesdropping on network connections. The DNS Transaction Signature (TSIG) mechanism is specified to restrict direct zone transfer to authorized clients only, but it does not add confidentiality. This document specifies use of TLS, rather then clear text, to prevent zone contents collection via passive monitoring of zone transfers.  " />
   <meta name="description" content="DNS zone transfers are transmitted in clear text, which gives attackers the opportunity to collect the content of a zone by eavesdropping on network connections. The DNS Transaction Signature (TSIG) mechanism is specified to restrict direct zone transfer to authorized clients only, but it does not add confidentiality. This document specifies use of TLS, rather then clear text, to prevent zone contents collection via passive monitoring of zone transfers.  " />
 
@@ -461,7 +461,7 @@
   <td class="right">NLnet Labs</td>
 </tr>
 <tr>
-  <td class="left">Expires: January 2, 2021</td>
+  <td class="left">Expires: January 14, 2021</td>
   <td class="right">S. Dickinson</td>
 </tr>
 <tr>
@@ -482,7 +482,7 @@
 </tr>
 <tr>
   <td class="left"></td>
-  <td class="right">July 1, 2020</td>
+  <td class="right">July 13, 2020</td>
 </tr>
 
     	
@@ -502,7 +502,7 @@
 <p>This Internet-Draft is submitted in full conformance with the provisions of BCP 78 and BCP 79.</p>
 <p>Internet-Drafts are working documents of the Internet Engineering Task Force (IETF).  Note that other groups may also distribute working documents as Internet-Drafts.  The list of current Internet-Drafts is at http://datatracker.ietf.org/drafts/current/.</p>
 <p>Internet-Drafts are draft documents valid for a maximum of six months and may be updated, replaced, or obsoleted by other documents at any time.  It is inappropriate to use Internet-Drafts as reference material or to cite them other than as "work in progress."</p>
-<p>This Internet-Draft will expire on January 2, 2021.</p>
+<p>This Internet-Draft will expire on January 14, 2021.</p>
 <h1 id="rfc.copyrightnotice">
   <a href="#rfc.copyrightnotice">Copyright Notice</a>
 </h1>
@@ -574,12 +574,22 @@
 <p id="rfc.section.1.p.1">DNS has a number of privacy vulnerabilities, as discussed in detail in <a href="#RFC7626">[RFC7626]</a>. Stub client to recursive resolver query privacy has received the most attention to date, with standards track documents for both DNS-over-TLS (DoT) <a href="#RFC7858">[RFC7858]</a> and DNS-over-HTTPS (DoH) <a href="#RFC8484">[RFC8484]</a>, and a proposal for DNS-over-QUIC <a href="#I-D.ietf-dprive-dnsoquic">[I-D.ietf-dprive-dnsoquic]</a>. There is ongoing work on DNS privacy requirements for exchanges between recursive resolvers and authoritative servers <a href="#I-D.ietf-dprive-phase2-requirements">[I-D.ietf-dprive-phase2-requirements]</a> and some suggestions for how signaling of DoT support by authoritatives might work, e.g., <a href="#I-D.vandijk-dprive-ds-dot-signal-and-pin">[I-D.vandijk-dprive-ds-dot-signal-and-pin]</a>. However there is currently no RFC that specifically defines authoritative support for DNS-over-TLS.  </p>
 <p><a href="#RFC7626">[RFC7626]</a> established that stub client DNS query transactions are not public and needed protection, but on zone transfer <a href="#RFC1995">[RFC1995]</a> <a href="#RFC5936">[RFC5936]</a> it says only: </p>
 <p id="rfc.section.1.p.3">"Privacy risks for the holder of a zone (the risk that someone gets the data) are discussed in [RFC5936] and [RFC5155]." </p>
-<p id="rfc.section.1.p.4">In what way is exposing the full contents of a zone a privacy risk? The contents of the zone could include information such as names of persons used in names of hosts. Best practice is not to use personal information for domain names, but many such domain names exist. Even if there are no names of persons, access to the complete contents of a zone may help an adversary find entry points for other types of attacks on privacy or security. There may also be regulatory, policy or other reasons why the zone contents in full must be treated as private.  </p>
-<p id="rfc.section.1.p.5">Neither of the RFCs mentioned in <a href="#RFC7626">[RFC7626]</a> contemplates the risk that someone gets the data through eavesdropping on network connections, only via enumeration or unauthorized transfer as described in the following paragraphs.  </p>
+<p id="rfc.section.1.p.4">In what way is exposing the full contents of a zone a privacy risk? The contents of the zone could include information such as names of persons used in names of hosts. Best practice is not to use personal information for domain names, but many such domain names exist. The contents of the zone could also include references to locations that allow inference about location information of the individuals associated with the zone's organization. It could also include references to other organizations. Examples of this could be: </p>
+<p/>
+
+<ul>
+  <li>Person-laptop.example.org</li>
+  <li>MX-for-Location.example.org</li>
+  <li>Service-tenant-from-another-org.example.org</li>
+</ul>
+
+<p> </p>
+<p id="rfc.section.1.p.6">There may also be regulatory, policy or other reasons why the zone contents in full must be treated as private.  </p>
+<p id="rfc.section.1.p.7">Neither of the RFCs mentioned in <a href="#RFC7626">[RFC7626]</a> contemplates the risk that someone gets the data through eavesdropping on network connections, only via enumeration or unauthorized transfer as described in the following paragraphs.  </p>
 <p><a href="#RFC5155">[RFC5155]</a> specifies NSEC3 to prevent zone enumeration, which is when queries for the authenticated denial of existences records of DNSSEC allow a client to walk through the entire zone. Note that the need for this protection also motivates NSEC5 <a href="#I-D.vcelak-nsec5">[I-D.vcelak-nsec5]</a>; zone walking is now possible with NSEC3 due to crypto-breaking advances, and NSEC5 is a response to this problem.  </p>
 <p><a href="#RFC5155">[RFC5155]</a> does not address data obtained outside zone enumeration (nor does <a href="#I-D.vcelak-nsec5">[I-D.vcelak-nsec5]</a>). Preventing eavesdropping of zone transfers (this draft) is orthogonal to preventing zone enumeration, though they aim to protect the same information.  </p>
 <p><a href="#RFC5936">[RFC5936]</a> specifies using TSIG <a href="#RFC2845">[RFC2845]</a> for authorization of the clients of a zone transfer and for data integrity, but does not express any need for confidentiality, and TSIG does not offer encryption. Some operators use SSH tunneling or IPSec to encrypt the transfer data.  </p>
-<p id="rfc.section.1.p.9">Because the AXFR and IXFR zone transfers are typically carried out over TCP from authoritative DNS protocol implementations, encrypting zone transfers using TLS, based closely on DoT <a href="#RFC7858">[RFC7858]</a>, seems like a simple step forward.  This document specifies how to use TLS as a transport to prevent zone collection from zone transfers.  </p>
+<p id="rfc.section.1.p.11">Because both AXFR and IXFR zone transfers are typically carried out over TCP from authoritative DNS protocol implementations, encrypting zone transfers using TLS, based closely on DoT <a href="#RFC7858">[RFC7858]</a>, seems like a simple step forward.  This document specifies how to use TLS as a transport to prevent zone collection from zone transfers.  </p>
 <h1 id="rfc.section.2"><a href="#rfc.section.2">2.</a> <a href="#terminology" id="terminology">Terminology</a></h1>
 <p id="rfc.section.2.p.1">The key words "MUST", "MUST NOT", "REQUIRED", "SHALL", "SHALL NOT", "SHOULD", "SHOULD NOT", "RECOMMENDED", "NOT RECOMMENDED", "MAY", and "OPTIONAL" in this document are to be interpreted as described in BCP 14 <a href="#RFC2119">[RFC2119]</a> and <a href="#RFC8174">[RFC8174]</a> when, and only when, they appear in all capitals, as shown here.  </p>
 <p id="rfc.section.2.p.2">Privacy terminology is as described in Section 3 of <a href="#RFC6973">[RFC6973]</a>.  </p>
@@ -630,8 +640,6 @@
 <p> </p>
 <p><a href="#RFC5936">[RFC5936]</a> specifies that AXFR must use TCP as the transport protocol but details that there is no restriction in the protocol that a single TCP connection must be used only for a single AXFR exchange, or even solely for XFRs. For example, it outlines that the SOA query can also happen on this connection.  However, this can cause interoperability problems with older implementations that support only the trivial case of one AXFR per connection.  </p>
 <p id="rfc.section.4.1.p.5">Further details of the limitations in existing AXFR implementations are outlined in <a href="#RFC5936">[RFC5936]</a>.  </p>
-<p id="rfc.section.4.1.p.6">It is noted that unless the NOTIFY is sent over a trusted communication channel and/or signed by TSIG is can be spoofed causing unnecessary zone transfer attempts.  </p>
-<p id="rfc.section.4.1.p.7">Similarly unless the SOA query is sent over a trusted communication channel and/or signed by TSIG the response can, in principle, be spoofed causing a secondary to incorrectly believe its version of the zone is update to date.  Repeated successful attacks on the SOA could result in a secondary serving stale zone data.  </p>
 <h1 id="rfc.section.4.2"><a href="#rfc.section.4.2">4.2.</a> <a href="#ixfr-mechanism" id="ixfr-mechanism">IXFR Mechanism</a></h1>
 <p id="rfc.section.4.2.p.1">The figure below provides an outline of the IXFR mechanism including NOTIFYs.  </p>
 <p><a href="https://github.com/hanzhang0116/hzpa-dprive-xfr-over-tls/blob/02_updates/02-draft-svg/IXFR%20mechanism.svg">Figure 1. IXFR Mechanism</a> </p>
@@ -648,7 +656,7 @@
 <p id="rfc.section.4.2.p.5">"Thus, a client should first make an IXFR query using UDP." </p>
 <p id="rfc.section.4.2.p.6">So there may be a forth step above where the client falls back to IXFR-over-TCP.  There may also be a forth step where the secondary must fall back to AXFR because, e.g., the primary does not support IXFR.  </p>
 <p id="rfc.section.4.2.p.7">However it is noted that at least two widely used open source authoritative nameserver implementations (<a href="https://www.isc.org/bind/">BIND</a> and <a href="https://www.nlnetlabs.nl/projects/nsd/about/">NSD</a>) do IXFR using TCP by default in their latest releases. For BIND TCP connections are sometimes used for SOA queries but in general they are not used persistently and close after an IXFR is completed.  </p>
-<p id="rfc.section.4.2.p.8">It is noted that the specification for IXFR was published well before TCP was considered a first class transport for DNS. This document therefore updates <a href="#RFC1995">[RFC1995]</a> to state that DNS implementations that support IXFR-over-TCP MUST use <a href="#RFC7766">[RFC7766]</a> to optimize the use of TCP connections and SHOULD use <a href="#RFC7858">[RFC7858]</a> tow manage persistent connections.  </p>
+<p id="rfc.section.4.2.p.8">It is noted that the specification for IXFR was published well before TCP was considered a first class transport for DNS. This document therefore updates <a href="#RFC1995">[RFC1995]</a> to state that DNS implementations that support IXFR-over-TCP MUST use <a href="#RFC7766">[RFC7766]</a> to optimize the use of TCP connections and SHOULD use <a href="#RFC7858">[RFC7858]</a> to manage persistent connections.  </p>
 <h1 id="rfc.section.4.3"><a href="#rfc.section.4.3">4.3.</a> <a href="#data-leakage-of-notify-and-soa-message-exchanges" id="data-leakage-of-notify-and-soa-message-exchanges">Data Leakage of NOTIFY and SOA Message Exchanges</a></h1>
 <p id="rfc.section.4.3.p.1">This section attempts to presents a rationale for also encrypting the other messages in the XFR mechanism.  </p>
 <p id="rfc.section.4.3.p.2">Since the SOA of the published zone can be trivially discovered by simply querying the publicly available authoritative servers leakage of this RR is not discussed in the following sections.  </p>
@@ -859,7 +867,7 @@ content of the other sections into account, as described below)."
 <h1 id="rfc.section.9"><a href="#rfc.section.9">9.</a> <a href="#implementation-considerations" id="implementation-considerations">Implementation Considerations</a></h1>
 <p id="rfc.section.9.p.1">TBD </p>
 <h1 id="rfc.section.10"><a href="#rfc.section.10">10.</a> <a href="#implementation-status" id="implementation-status">Implementation Status</a></h1>
-<p id="rfc.section.10.p.1">The 1.9.2 version of <a href="https://github.com/NLnetLabs/unbound/blob/release-1.9.2/doc/Changelog">Unbound</a> includes an option to perform AXoT (instead of TCP). This requires the client (secondary) to authenticate the server (primary) using a configured authentication domain name.  </p>
+<p id="rfc.section.10.p.1">The 1.9.2 version of <a href="https://github.com/NLnetLabs/unbound/blob/release-1.9.2/doc/Changelog">Unbound</a> includes an option to perform AXoT (instead of AXFR-over-TCP). This requires the client (secondary) to authenticate the server (primary) using a configured authentication domain name.  </p>
 <p id="rfc.section.10.p.2">It is noted that use of a TLS proxy in front of the primary server is a simple deployment solution that can enable server side XoT.  </p>
 <h1 id="rfc.section.11"><a href="#rfc.section.11">11.</a> <a href="#iana-considerations" id="iana-considerations">IANA Considerations</a></h1>
 <h1 id="rfc.section.11.1"><a href="#rfc.section.11.1">11.1.</a> <a href="#registration-of-xot-identification-string" id="registration-of-xot-identification-string">Registration of XoT Identification String</a></h1>

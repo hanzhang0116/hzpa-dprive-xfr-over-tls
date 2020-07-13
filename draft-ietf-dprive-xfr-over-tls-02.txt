@@ -6,12 +6,12 @@ dprive                                                          S. Sahib
 Internet-Draft                                                Salesforce
 Updates: 1995, 7766 (if approved)                              W. Toorop
 Intended status: Standards Track                              NLnet Labs
-Expires: January 2, 2021                                    S. Dickinson
+Expires: January 14, 2021                                   S. Dickinson
                                                               Sinodun IT
                                                                  P. Aras
                                                                A. Mankin
                                                               Salesforce
-                                                            July 1, 2020
+                                                           July 13, 2020
 
 
                        DNS Zone Transfer-over-TLS
@@ -42,7 +42,7 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on January 2, 2021.
+   This Internet-Draft will expire on January 14, 2021.
 
 Copyright Notice
 
@@ -53,7 +53,7 @@ Copyright Notice
 
 
 
-Sahib, et al.            Expires January 2, 2021                [Page 1]
+Sahib, et al.           Expires January 14, 2021                [Page 1]
 
 Internet-Draft                XFR-over-TLS                     July 2020
 
@@ -109,7 +109,7 @@ Table of Contents
 
 
 
-Sahib, et al.            Expires January 2, 2021                [Page 2]
+Sahib, et al.           Expires January 14, 2021                [Page 2]
 
 Internet-Draft                XFR-over-TLS                     July 2020
 
@@ -157,21 +157,27 @@ Internet-Draft                XFR-over-TLS                     July 2020
    In what way is exposing the full contents of a zone a privacy risk?
    The contents of the zone could include information such as names of
    persons used in names of hosts.  Best practice is not to use personal
-   information for domain names, but many such domain names exist.  Even
-   if there are no names of persons, access to the complete contents of
-   a zone may help an adversary find entry points for other types of
-   attacks on privacy or security.  There may also be regulatory, policy
+   information for domain names, but many such domain names exist.  The
+   contents of the zone could also include references to locations that
+   allow inference about location information of the individuals
+   associated with the zone's organization.  It could also include
+   references to other organizations.  Examples of this could be:
 
 
 
-
-Sahib, et al.            Expires January 2, 2021                [Page 3]
+Sahib, et al.           Expires January 14, 2021                [Page 3]
 
 Internet-Draft                XFR-over-TLS                     July 2020
 
 
-   or other reasons why the zone contents in full must be treated as
-   private.
+   o  Person-laptop.example.org
+
+   o  MX-for-Location.example.org
+
+   o  Service-tenant-from-another-org.example.org
+
+   There may also be regulatory, policy or other reasons why the zone
+   contents in full must be treated as private.
 
    Neither of the RFCs mentioned in [RFC7626] contemplates the risk that
    someone gets the data through eavesdropping on network connections,
@@ -196,7 +202,7 @@ Internet-Draft                XFR-over-TLS                     July 2020
    encryption.  Some operators use SSH tunneling or IPSec to encrypt the
    transfer data.
 
-   Because the AXFR and IXFR zone transfers are typically carried out
+   Because both AXFR and IXFR zone transfers are typically carried out
    over TCP from authoritative DNS protocol implementations, encrypting
    zone transfers using TLS, based closely on DoT [RFC7858], seems like
    a simple step forward.  This document specifies how to use TLS as a
@@ -212,19 +218,20 @@ Internet-Draft                XFR-over-TLS                     July 2020
 
    Privacy terminology is as described in Section 3 of [RFC6973].
 
+
+
+
+Sahib, et al.           Expires January 14, 2021                [Page 4]
+
+Internet-Draft                XFR-over-TLS                     July 2020
+
+
    Note that in this document we choose to use the terms 'primary' and
    'secondary' for two servers engaged in zone transfers.
 
    DNS terminology is as described in [RFC8499].
 
    DoT: DNS-over-TLS as specified in [RFC7858]
-
-
-
-Sahib, et al.            Expires January 2, 2021                [Page 4]
-
-Internet-Draft                XFR-over-TLS                     July 2020
-
 
    XoT: Generic XFR-over-TLS mechanisms as specified in this document
 
@@ -267,6 +274,14 @@ Internet-Draft                XFR-over-TLS                     July 2020
    This has largely replaced AXFR where possible, particularly for
    dynamically updated zones.
 
+
+
+
+Sahib, et al.           Expires January 14, 2021                [Page 5]
+
+Internet-Draft                XFR-over-TLS                     July 2020
+
+
    [RFC5936] subsequently redefined the specification of AXFR to improve
    performance and interoperability.
 
@@ -274,13 +289,6 @@ Internet-Draft                XFR-over-TLS                     July 2020
    entire set of message exchanges between a secondary and a primary
    that concludes in a successful AXFR or IXFR request/response.  This
    set may or may not include
-
-
-
-Sahib, et al.            Expires January 2, 2021                [Page 5]
-
-Internet-Draft                XFR-over-TLS                     July 2020
-
 
    o  NOTIFY messages
 
@@ -323,26 +331,15 @@ Internet-Draft                XFR-over-TLS                     July 2020
    interoperability problems with older implementations that support
    only the trivial case of one AXFR per connection.
 
-   Further details of the limitations in existing AXFR implementations
-   are outlined in [RFC5936].
-
-   It is noted that unless the NOTIFY is sent over a trusted
-   communication channel and/or signed by TSIG is can be spoofed causing
-   unnecessary zone transfer attempts.
 
 
-
-
-Sahib, et al.            Expires January 2, 2021                [Page 6]
+Sahib, et al.           Expires January 14, 2021                [Page 6]
 
 Internet-Draft                XFR-over-TLS                     July 2020
 
 
-   Similarly unless the SOA query is sent over a trusted communication
-   channel and/or signed by TSIG the response can, in principle, be
-   spoofed causing a secondary to incorrectly believe its version of the
-   zone is update to date.  Repeated successful attacks on the SOA could
-   result in a secondary serving stale zone data.
+   Further details of the limitations in existing AXFR implementations
+   are outlined in [RFC5936].
 
 4.2.  IXFR Mechanism
 
@@ -386,16 +383,16 @@ Internet-Draft                XFR-over-TLS                     July 2020
    TCP was considered a first class transport for DNS.  This document
    therefore updates [RFC1995] to state that DNS implementations that
    support IXFR-over-TCP MUST use [RFC7766] to optimize the use of TCP
+   connections and SHOULD use [RFC7858] to manage persistent
+   connections.
 
 
 
-Sahib, et al.            Expires January 2, 2021                [Page 7]
+
+Sahib, et al.           Expires January 14, 2021                [Page 7]
 
 Internet-Draft                XFR-over-TLS                     July 2020
 
-
-   connections and SHOULD use [RFC7858] tow manage persistent
-   connections.
 
 4.3.  Data Leakage of NOTIFY and SOA Message Exchanges
 
@@ -445,7 +442,10 @@ Internet-Draft                XFR-over-TLS                     July 2020
 
 
 
-Sahib, et al.            Expires January 2, 2021                [Page 8]
+
+
+
+Sahib, et al.           Expires January 14, 2021                [Page 8]
 
 Internet-Draft                XFR-over-TLS                     July 2020
 
@@ -501,7 +501,7 @@ Internet-Draft                XFR-over-TLS                     July 2020
 
 
 
-Sahib, et al.            Expires January 2, 2021                [Page 9]
+Sahib, et al.           Expires January 14, 2021                [Page 9]
 
 Internet-Draft                XFR-over-TLS                     July 2020
 
@@ -557,7 +557,7 @@ Internet-Draft                XFR-over-TLS                     July 2020
 
 
 
-Sahib, et al.            Expires January 2, 2021               [Page 10]
+Sahib, et al.           Expires January 14, 2021               [Page 10]
 
 Internet-Draft                XFR-over-TLS                     July 2020
 
@@ -613,7 +613,7 @@ Internet-Draft                XFR-over-TLS                     July 2020
 
 
 
-Sahib, et al.            Expires January 2, 2021               [Page 11]
+Sahib, et al.           Expires January 14, 2021               [Page 11]
 
 Internet-Draft                XFR-over-TLS                     July 2020
 
@@ -669,7 +669,7 @@ Internet-Draft                XFR-over-TLS                     July 2020
 
 
 
-Sahib, et al.            Expires January 2, 2021               [Page 12]
+Sahib, et al.           Expires January 14, 2021               [Page 12]
 
 Internet-Draft                XFR-over-TLS                     July 2020
 
@@ -725,7 +725,7 @@ Internet-Draft                XFR-over-TLS                     July 2020
 
 
 
-Sahib, et al.            Expires January 2, 2021               [Page 13]
+Sahib, et al.           Expires January 14, 2021               [Page 13]
 
 Internet-Draft                XFR-over-TLS                     July 2020
 
@@ -781,7 +781,7 @@ Internet-Draft                XFR-over-TLS                     July 2020
 
 
 
-Sahib, et al.            Expires January 2, 2021               [Page 14]
+Sahib, et al.           Expires January 14, 2021               [Page 14]
 
 Internet-Draft                XFR-over-TLS                     July 2020
 
@@ -837,7 +837,7 @@ Internet-Draft                XFR-over-TLS                     July 2020
 
 
 
-Sahib, et al.            Expires January 2, 2021               [Page 15]
+Sahib, et al.           Expires January 14, 2021               [Page 15]
 
 Internet-Draft                XFR-over-TLS                     July 2020
 
@@ -893,7 +893,7 @@ Internet-Draft                XFR-over-TLS                     July 2020
 
 
 
-Sahib, et al.            Expires January 2, 2021               [Page 16]
+Sahib, et al.           Expires January 14, 2021               [Page 16]
 
 Internet-Draft                XFR-over-TLS                     July 2020
 
@@ -949,7 +949,7 @@ Internet-Draft                XFR-over-TLS                     July 2020
 
 
 
-Sahib, et al.            Expires January 2, 2021               [Page 17]
+Sahib, et al.           Expires January 14, 2021               [Page 17]
 
 Internet-Draft                XFR-over-TLS                     July 2020
 
@@ -1005,7 +1005,7 @@ Internet-Draft                XFR-over-TLS                     July 2020
 
 
 
-Sahib, et al.            Expires January 2, 2021               [Page 18]
+Sahib, et al.           Expires January 14, 2021               [Page 18]
 
 Internet-Draft                XFR-over-TLS                     July 2020
 
@@ -1061,7 +1061,7 @@ Internet-Draft                XFR-over-TLS                     July 2020
 
 
 
-Sahib, et al.            Expires January 2, 2021               [Page 19]
+Sahib, et al.           Expires January 14, 2021               [Page 19]
 
 Internet-Draft                XFR-over-TLS                     July 2020
 
@@ -1110,14 +1110,14 @@ Internet-Draft                XFR-over-TLS                     July 2020
 10.  Implementation Status
 
    The 1.9.2 version of Unbound [8] includes an option to perform AXoT
-   (instead of TCP).  This requires the client (secondary) to
+   (instead of AXFR-over-TCP).  This requires the client (secondary) to
    authenticate the server (primary) using a configured authentication
    domain name.
 
 
 
 
-Sahib, et al.            Expires January 2, 2021               [Page 20]
+Sahib, et al.           Expires January 14, 2021               [Page 20]
 
 Internet-Draft                XFR-over-TLS                     July 2020
 
@@ -1173,7 +1173,7 @@ Internet-Draft                XFR-over-TLS                     July 2020
 
 
 
-Sahib, et al.            Expires January 2, 2021               [Page 21]
+Sahib, et al.           Expires January 14, 2021               [Page 21]
 
 Internet-Draft                XFR-over-TLS                     July 2020
 
@@ -1229,7 +1229,7 @@ Internet-Draft                XFR-over-TLS                     July 2020
 
 
 
-Sahib, et al.            Expires January 2, 2021               [Page 22]
+Sahib, et al.           Expires January 14, 2021               [Page 22]
 
 Internet-Draft                XFR-over-TLS                     July 2020
 
@@ -1285,7 +1285,7 @@ Internet-Draft                XFR-over-TLS                     July 2020
 
 
 
-Sahib, et al.            Expires January 2, 2021               [Page 23]
+Sahib, et al.           Expires January 14, 2021               [Page 23]
 
 Internet-Draft                XFR-over-TLS                     July 2020
 
@@ -1341,7 +1341,7 @@ Internet-Draft                XFR-over-TLS                     July 2020
 
 
 
-Sahib, et al.            Expires January 2, 2021               [Page 24]
+Sahib, et al.           Expires January 14, 2021               [Page 24]
 
 Internet-Draft                XFR-over-TLS                     July 2020
 
@@ -1397,7 +1397,7 @@ Internet-Draft                XFR-over-TLS                     July 2020
 
 
 
-Sahib, et al.            Expires January 2, 2021               [Page 25]
+Sahib, et al.           Expires January 14, 2021               [Page 25]
 
 Internet-Draft                XFR-over-TLS                     July 2020
 
@@ -1453,7 +1453,7 @@ Authors' Addresses
 
 
 
-Sahib, et al.            Expires January 2, 2021               [Page 26]
+Sahib, et al.           Expires January 14, 2021               [Page 26]
 
 Internet-Draft                XFR-over-TLS                     July 2020
 
@@ -1509,4 +1509,4 @@ Internet-Draft                XFR-over-TLS                     July 2020
 
 
 
-Sahib, et al.            Expires January 2, 2021               [Page 27]
+Sahib, et al.           Expires January 14, 2021               [Page 27]

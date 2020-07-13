@@ -8,7 +8,7 @@
     workgroup = "dprive"
     keyword = ["DNS", "operations", "privacy"]
     updates = [1995, 7766]
-    date = 2020-07-01T00:00:00Z
+    date = 2020-07-13T00:00:00Z
     [pi]
     [[author]]
      initials="S."
@@ -105,11 +105,17 @@ are discussed in [RFC5936] and [RFC5155]."
 In what way is exposing the full contents of a zone a privacy risk? The
 contents of the zone could include information such as names of persons used in
 names of hosts. Best practice is not to use personal information for domain
-names, but many such domain names exist. Even if there are no names of persons,
-access to the complete contents of a zone may help an adversary find entry
-points for other types of attacks on privacy or security. There may also be
-regulatory, policy or other reasons why the zone contents in full must be
-treated as private.
+names, but many such domain names exist. The contents of the zone could also
+include references to locations that allow inference about location information
+of the individuals associated with the zone's organization. It could also
+include references to other organizations. Examples of this could be:
+
+   * Person-laptop.example.org 
+   * MX-for-Location.example.org
+   * Service-tenant-from-another-org.example.org
+
+There may also be regulatory, policy or other reasons why the zone contents in
+full must be treated as private.
 
 Neither of the RFCs mentioned in [@!RFC7626]
 contemplates the risk that someone gets the data through eavesdropping on
@@ -132,7 +138,7 @@ of a zone transfer and for data integrity, but does not express any need for
 confidentiality, and TSIG does not offer encryption. Some operators use SSH
 tunneling or IPSec to encrypt the transfer data.
 
-Because the AXFR and IXFR zone transfers are typically carried out over TCP
+Because both AXFR and IXFR zone transfers are typically carried out over TCP
 from authoritative DNS protocol implementations, encrypting zone transfers
 using TLS, based closely on DoT [@!RFC7858], seems like a simple step forward.
 This document specifies how to use TLS as a transport to prevent zone
@@ -237,16 +243,6 @@ that support only the trivial case of one AXFR per connection.
 Further details of the limitations in existing AXFR implementations are outlined
 in [@RFC5936].
 
-It is noted that unless the NOTIFY is sent over a trusted communication channel
-and/or signed by TSIG is can be spoofed causing unnecessary zone transfer
-attempts.
-
-Similarly unless the SOA query is sent over a trusted communication channel
-and/or signed by TSIG the response can, in principle, be spoofed causing a
-secondary to incorrectly believe its version of the zone is update to date.
-Repeated successful attacks on the SOA could result in a secondary serving stale
-zone data.
-
 ## IXFR Mechanism
 
 The figure below provides an outline of the IXFR mechanism including NOTIFYs.
@@ -287,7 +283,7 @@ an IXFR is completed.
 It is noted that the specification for IXFR was published well before TCP was
 considered a first class transport for DNS. This document therefore updates
 [@RFC1995] to state that DNS implementations that support IXFR-over-TCP MUST use
-[@RFC7766] to optimize the use of TCP connections and SHOULD use [@!RFC7858] tow
+[@RFC7766] to optimize the use of TCP connections and SHOULD use [@!RFC7858] to
 manage persistent connections.
 
 
@@ -419,8 +415,8 @@ set of zone transfer authentication mechanisms chosen by the two parties.
 XoT clients MUST only send XoT traffic on XoT connections. If a XoT server
 receives traffic other than XoT traffic on a XoT connection it MUST respond
 with the extended DNS error code 21 - Not Supported
-[@I-D.ietf-dnsop-extended-error]. It SHOULD treat this as protocol error and close
-the connection.
+[@I-D.ietf-dnsop-extended-error]. It SHOULD treat this as protocol error and
+close the connection.
 
 With the update to [@RFC7766] guidance above, clients are free to open separate
 connections to the server to make any other queries they may need over either
@@ -850,7 +846,7 @@ TBD
 
 The 1.9.2 version of
 [Unbound](https://github.com/NLnetLabs/unbound/blob/release-1.9.2/doc/Changelog)
- includes an option to perform AXoT (instead of TCP). This requires
+ includes an option to perform AXoT (instead of AXFR-over-TCP). This requires
 the client (secondary) to authenticate the server (primary) using a configured
 authentication domain name.
 
