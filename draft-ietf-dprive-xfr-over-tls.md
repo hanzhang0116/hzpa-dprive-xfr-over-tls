@@ -2,7 +2,7 @@
     Title = "DNS Zone Transfer-over-TLS"
     abbrev = "XFR-over-TLS"
     category = "std"
-    docName= "draft-ietf-dprive-xfr-over-tls-02"
+    docName= "draft-ietf-dprive-xfr-over-tls-03"
     ipr = "trust200902"
     area = "Internet"
     workgroup = "dprive"
@@ -124,11 +124,16 @@ contemplates the risk that someone gets the data through eavesdropping on
 network connections, only via enumeration or unauthorized transfer as described
 in the following paragraphs.
 
-[@!RFC5155] specifies NSEC3 to prevent zone enumeration, which is when queries
-for the authenticated denial of existences records of DNSSEC allow a client to
-walk through the entire zone. Note that the need for this protection also
-motivates NSEC5 [@!I-D.vcelak-nsec5]; zone walking is now possible with NSEC3
-due to crypto-breaking advances, and NSEC5 is a response to this problem.
+Zone enumeration is trivially possible for DNSSEC zones which use NSEC; i.e.
+queries for the authenticated denial of existences records allow a client to
+walk through the entire zone contents. [@!RFC5155] specifies NSEC3, a mechanism
+to provide measures against zone enumeration for DNSSEC signed zones (a goal
+was to make it as hard to enumerate an DNSSEC signed zone as an unsigned zone).
+Whilst this is widely used, zone walking is now possible with NSEC3 due to
+crypto-breaking advances. This has prompted further work on an alternative
+mechanism for DNSSEC authenticated denial of existence - NSEC5
+[@!I-D.vcelak-nsec5] - however questions remain over the practicality of this
+mechanism.
 
 [@!RFC5155] does not address data obtained outside zone enumeration (nor does
 [@!I-D.vcelak-nsec5]). Preventing eavesdropping of zone transfers (this draft)
@@ -269,11 +274,11 @@ primary after the primary sends an IXFR response.
 
 [@!RFC1995] specifies that Incremental Transfer may use UDP if the entire IXFR
 response can be contained in a single DNS packet, otherwise, TCP is used. In
-fact is says in non-normative language:
+fact is says:
 
     "Thus, a client should first make an IXFR query using UDP."
 
-So there may be a forth step above where the client falls back to IXFR-over-TCP.
+So there may be a fourth step above where the client falls back to IXFR-over-TCP.
 There may also be a forth step where the secondary must fall back to AXFR
 because, e.g., the primary does not support IXFR.
 
@@ -287,10 +292,9 @@ an IXFR is completed.
 <!-- QUESTION FOR US: Look at packet captures from NSD and Knot Auth to see what they do.-->
 
 It is noted that the specification for IXFR was published well before TCP was
-considered a first class transport for DNS. This document therefore updates
-[@RFC1995] to state that DNS implementations that support IXFR-over-TCP MUST use
-[@RFC7766] to optimize the use of TCP connections and SHOULD use [@!RFC7858] to
-manage persistent connections.
+considered a first class transport for DNS. See section
+(#update-to-rfc1995-for-ixfrovertcp) for new recommendations specific to
+IXFR-over-TCP.
 
 
 ## Data Leakage of NOTIFY and SOA Message Exchanges
@@ -318,6 +322,30 @@ potential leak.
 
 For hidden primaries or secondaries the SOA response leaks the degree of lag of
 any downstream secondary.
+
+# Update to RFC1995 for IXFR-over-TCP
+
+[@RFC1995] says nothing with respect to optimizing IXFRs over TCP or re-using
+already open TCP connections to perform IXFRs or other queries. Therefore,
+there arguably is an implicit assumption (probably unintentional) that a TCP
+connection is used for one and only one IXFR request. Indeed, several open
+source implementations currently take this approach.
+
+This document updates [@RFC1995] to state that DNS implementations that
+support IXFR-over-TCP MUST use [@RFC7766] to optimize the use of TCP
+connections and SHOULD use [@!RFC7858] to manage persistent connections.
+
+An IXoT server MUST be able to handle multiple IXoT requests on a
+single XoT connection (for the same and different zones).
+
+# Updates to RFC1995 and RFC5936 for IXFR-over-TCP
+
+TODO: Add text clarifying that intermingling if IXFR and AXFR on the same 
+connection is permitted. Do we need to talk here about
+
+* controls on concurrent transfers in general or for e.g. AXFRs of the same zone 
+  - they are not in any RFC but are implemented in BIND
+* intermingling of AXFR and IXFR for the same zone
 
 # Connections and Data Flows in XoT
 
@@ -404,8 +432,18 @@ same separation of connection purpose (regular queries and zone transfers) for
 all transports being used on top of TCP. Therefore, it is RECOMMENDED that for
 each protocol used on top of TCP in any given client/server interaction there
 SHOULD be no more than one connection for regular queries and one for zone
-transfers. We provide specific details in the following sections of reasons
-where more than one connection might be required for zone transfers.
+transfers. As an illustration it could be imagined that in future such an 
+interaction could hypothetically include one or all of the following:
+
+* one TCP connection for regular queries
+* one TCP connection for zone transfers
+* one TLS connection for regular queries
+* one TLS connection for zone transfers
+* one DoH connection for regular queries
+* one DoH connection for zone transfers
+
+We provide specific details in the following sections of reasons
+where more than one connection for a given transport might be required for zone transfers.
 
 ## Connection Establishment
 
@@ -432,9 +470,9 @@ set of zone transfer authentication mechanisms chosen by the two parties.
 
 XoT clients MUST only send XoT traffic on XoT connections. If a XoT server
 receives traffic other than XoT traffic on a XoT connection it MUST respond
-with the extended DNS error code 21 - Not Supported
-[@I-D.ietf-dnsop-extended-error]. It SHOULD treat this as protocol error and
-close the connection.
+with REFUSED, and if possible it should also return the extended DNS error code
+21 - Not Supported [@I-D.ietf-dnsop-extended-error]. It SHOULD treat this as
+protocol error and close the connection.
 
 With the update to [@RFC7766] guidance above, clients are free to open separate
 connections to the server to make any other queries they may need over either
@@ -507,10 +545,11 @@ Whilst the specification for EDNS0  [@RFC6891]  does not specifically mention AX
 We clarify here that if an OPT record is present in a received AXoT request,
 compliant responders MUST include an OPT record in each of the subsequent AXoT
 responses. Note that this requirement, combined with the use of EDNS0
-Keepalive, enables AXoT servers to signal the desire to close a connection due
-to low resources by sending an EDNS0 Keepalive option with a timeout of 0 on
-any AXoT response (in the absence of another way to signal the abort of a AXoT
-transfer).
+Keepalive, enables AXoT servers to signal the desire to close a connection
+(when existing transactions have competed) due to low resources by sending an
+EDNS0 Keepalive option with a timeout of 0 on any AXoT response. Aborting an
+AXFR during the transfer still requires the server to close the connection.
+
 
 An AXoT server MUST be able to handle multiple AXFR requests on a
 single XoT connection (for the same and different zones). 
@@ -571,9 +610,13 @@ Note that the re-use of XoT connections for transfers of multiple different
 zones complicates any attempt to analyze the traffic size and timing to
 extract information.
 
-We note here that any requirement to obfuscate the total zone size is likely to
+We note here that, depending on the padding policies eventually developed for XoT,
+the requirement to obfuscate the total zone size might
 require a server to create 'empty' AXoT responses. That is, AXoT responses that
 contain no RR's apart from an OPT RR containing the EDNS(0) option for padding.
+For example, without this capability the maximum size that a tiny zone could be padded to would 
+theoretically be limited if there had to be a minimum of 1 RR per packet. 
+
 However, as with existing AXFR, the last AXoT response message sent MUST
 contain the same SOA that was in the first message of the AXoT response series
 in order to signal the conclusion of the zone transfer.
@@ -587,10 +630,11 @@ in order to signal the conclusion of the zone transfer.
     described below)."
 
 'Empty' AXoT responses generated in order to meet a padding requirement will be
- exceptions to the above statement. In order to guarantee support for future
-padding policies, we state here that secondary implementations MUST be
-resilient to receiving padded AXoT responses, including 'empty' AXoT responses
-that contain only an OPT RR containing the EDNS(0) option for padding.
+exceptions to the above statement. For flexibility, future proofing and in
+order to guarantee support for future padding policies, we state here that
+secondary implementations MUST be resilient to receiving padded AXoT responses,
+including 'empty' AXoT responses that contain only an OPT RR containing the
+EDNS(0) option for padding.
 
 Recommendation of specific policies for padding AXoT responses are out of scope
 for this specification. Detailed considerations of such policies and the
@@ -601,29 +645,22 @@ trade-offs involved are expected to be the subject of future work.
 
 ### Coverage and relationship to RFC1995
 
-[@RFC1995] says nothing with respect to optimizing IXFRs over TCP or re-using
-already open TCP connections to perform IXFRs or other queries. Therefore,
-there arguably is an implicit assumption (probably unintentional) that a TCP
-connection is used for one and only one IXFR request. Indeed, several open
-source implementations currently take this approach.
+
 
 We provide new guidance here specific to IXoT that aligns with the guidance in
 [@RFC5936] for AXFR, that in section (#axot-mechanism) for AXoT, and with that
-for performant TCP/TLS usage in [@RFC7766] and [@RFC7858].
+for performant TCP/TLS usage in [@RFC7766] and [@RFC7858], as outlined in 
+(#update-to-rfc1995-for-ixfrovertcp).
 
 Where any behavior is not explicitly described here, the behavior specified in
 [@RFC1995] MUST be followed. Any behavior specified here takes precedence for
 IXoT implementations over that in [@RFC1995].
-
 
 ### IXoT connection and message handling
 
 In a manner entirely analogous to that described in paragraph 2 of
 (#axot-connection-and-message-handling) IXoT clients and servers SHOULD use
 EDNS0 Keepalive [RFC7828] to establish the connection timeouts to be used.
-
-An IXoT server MUST be able to handle multiple IXoT requests on a
-single XoT connection (for the same and different zones).
 
 IXoT clients SHOULD re-use an existing open XoT connection when making any new
 IXoT request to the same primary, and for issuing SOA queries, instead of
@@ -829,8 +866,8 @@ Based on this analysis it can be seen that:
 
 # Policies for Both AXFR and IXFR
 
-We call the entire group of servers involved in XFR (all the primaries and all
-the secondaries) the 'transfer group'.
+We call the entire group of servers involved in XFR for a particular set of
+zones (all the primaries and all the secondaries) the 'transfer group'.
 
 Within any transfer group both AXFRs and IXFRs for a zone SHOULD all use the
 same policy, e.g., if AXFRs use AXoT all IXFRs SHOULD use IXoT.
@@ -842,7 +879,7 @@ any do not, this is a weak link for attackers to exploit.
 A XoT policy should specify
 
 * If TSIG or SIG(0) is required
-* What kind of TLS is required (Opportunistic, Strict or mTLS)
+* What kind of TLS is required (Opportunistic, Strict or Mutual TLS)
 * If IP based ACLs should also be used.
 
 Since this may require configuration of a number of servers who may be under
