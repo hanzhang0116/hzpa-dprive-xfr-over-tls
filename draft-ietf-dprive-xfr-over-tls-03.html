@@ -380,53 +380,56 @@
 <link href="#rfc.section.4" rel="Chapter" title="4 Connection and Data Flows in Existing XFR Mechanisms"/>
 <link href="#rfc.section.4.1" rel="Chapter" title="4.1 AXFR Mechanism"/>
 <link href="#rfc.section.4.2" rel="Chapter" title="4.2 IXFR Mechanism"/>
-<link href="#rfc.section.4.3" rel="Chapter" title="4.3 Data Leakage of NOTIFY and SOA Message Exchanges"/>
-<link href="#rfc.section.4.3.1" rel="Chapter" title="4.3.1 NOTIFY"/>
-<link href="#rfc.section.4.3.2" rel="Chapter" title="4.3.2 SOA"/>
-<link href="#rfc.section.5" rel="Chapter" title="5 Update to RFC1995 for IXFR-over-TCP"/>
-<link href="#rfc.section.6" rel="Chapter" title="6 Updates to RFC1995 and RFC5936 for IXFR-over-TCP"/>
-<link href="#rfc.section.7" rel="Chapter" title="7 Connections and Data Flows in XoT"/>
-<link href="#rfc.section.7.1" rel="Chapter" title="7.1 TLS versions"/>
-<link href="#rfc.section.7.2" rel="Chapter" title="7.2 Connection usage"/>
-<link href="#rfc.section.7.2.1" rel="Chapter" title="7.2.1 High level XoT descriptions"/>
-<link href="#rfc.section.7.2.2" rel="Chapter" title="7.2.2 Previous specifications"/>
-<link href="#rfc.section.7.3" rel="Chapter" title="7.3 Update to RFC7766"/>
-<link href="#rfc.section.7.4" rel="Chapter" title="7.4 Connection Establishment"/>
-<link href="#rfc.section.7.4.1" rel="Chapter" title="7.4.1 Draft Version Identification"/>
-<link href="#rfc.section.7.5" rel="Chapter" title="7.5 Port selection"/>
-<link href="#rfc.section.7.6" rel="Chapter" title="7.6 AXoT mechanism"/>
-<link href="#rfc.section.7.6.1" rel="Chapter" title="7.6.1 Coverage and relationship to RFC5936"/>
-<link href="#rfc.section.7.6.2" rel="Chapter" title="7.6.2 AXoT connection and message handling"/>
-<link href="#rfc.section.7.6.3" rel="Chapter" title="7.6.3 Padding AXoT responses"/>
-<link href="#rfc.section.7.7" rel="Chapter" title="7.7 IXoT mechanism"/>
-<link href="#rfc.section.7.7.1" rel="Chapter" title="7.7.1 Coverage and relationship to RFC1995"/>
-<link href="#rfc.section.7.7.2" rel="Chapter" title="7.7.2 IXoT connection and message handling"/>
-<link href="#rfc.section.7.7.3" rel="Chapter" title="7.7.3 Condensation of responses"/>
-<link href="#rfc.section.7.7.4" rel="Chapter" title="7.7.4 Fallback to AXFR"/>
-<link href="#rfc.section.7.7.5" rel="Chapter" title="7.7.5 Padding of IXoT responses"/>
-<link href="#rfc.section.8" rel="Chapter" title="8 Multi-primary Configurations"/>
-<link href="#rfc.section.9" rel="Chapter" title="9 Zone Transfer with DoT - Authentication"/>
-<link href="#rfc.section.9.1" rel="Chapter" title="9.1 TSIG"/>
-<link href="#rfc.section.9.2" rel="Chapter" title="9.2 SIG(0)"/>
-<link href="#rfc.section.9.3" rel="Chapter" title="9.3 TLS"/>
-<link href="#rfc.section.9.3.1" rel="Chapter" title="9.3.1 Opportunistic"/>
-<link href="#rfc.section.9.3.2" rel="Chapter" title="9.3.2 Strict"/>
-<link href="#rfc.section.9.3.3" rel="Chapter" title="9.3.3 Mutual"/>
-<link href="#rfc.section.9.4" rel="Chapter" title="9.4 IP Based ACL on the Primary"/>
-<link href="#rfc.section.9.5" rel="Chapter" title="9.5 ZONEMD"/>
-<link href="#rfc.section.9.6" rel="Chapter" title="9.6 Comparison of Authentication Methods"/>
-<link href="#rfc.section.10" rel="Chapter" title="10 Policies for Both AXFR and IXFR"/>
-<link href="#rfc.section.11" rel="Chapter" title="11 Implementation Considerations"/>
-<link href="#rfc.section.12" rel="Chapter" title="12 Implementation Status"/>
-<link href="#rfc.section.13" rel="Chapter" title="13 IANA Considerations"/>
-<link href="#rfc.section.13.1" rel="Chapter" title="13.1 Registration of XoT Identification String"/>
-<link href="#rfc.section.14" rel="Chapter" title="14 Security Considerations"/>
-<link href="#rfc.section.15" rel="Chapter" title="15 Acknowledgements"/>
-<link href="#rfc.section.16" rel="Chapter" title="16 Contributors"/>
-<link href="#rfc.section.17" rel="Chapter" title="17 Changelog"/>
-<link href="#rfc.references" rel="Chapter" title="18 References"/>
-<link href="#rfc.references.1" rel="Chapter" title="18.1 Normative References"/>
-<link href="#rfc.references.2" rel="Chapter" title="18.2 Informative References"/>
+<link href="#rfc.section.4.3" rel="Chapter" title="4.3 Threat model"/>
+<link href="#rfc.section.4.4" rel="Chapter" title="4.4 Data Leakage of NOTIFY and SOA Message Exchanges"/>
+<link href="#rfc.section.4.4.1" rel="Chapter" title="4.4.1 NOTIFY"/>
+<link href="#rfc.section.4.4.2" rel="Chapter" title="4.4.2 SOA"/>
+<link href="#rfc.section.5" rel="Chapter" title="5 Updates to existing specifications"/>
+<link href="#rfc.section.5.1" rel="Chapter" title="5.1 Update to RFC1995 for IXFR-over-TCP"/>
+<link href="#rfc.section.5.2" rel="Chapter" title="5.2 Update to RFC5936 for AXFR-over-TCP"/>
+<link href="#rfc.section.5.3" rel="Chapter" title="5.3 Updates to RFC1995 and RFC5936 for XFR-over-TCP"/>
+<link href="#rfc.section.5.4" rel="Chapter" title="5.4 Update to RFC7766"/>
+<link href="#rfc.section.6" rel="Chapter" title="6 Connections and Data Flows in XoT"/>
+<link href="#rfc.section.6.1" rel="Chapter" title="6.1 TLS versions"/>
+<link href="#rfc.section.6.2" rel="Chapter" title="6.2 Port selection"/>
+<link href="#rfc.section.6.3" rel="Chapter" title="6.3 Connection usage"/>
+<link href="#rfc.section.6.4" rel="Chapter" title="6.4 High level XoT descriptions"/>
+<link href="#rfc.section.6.5" rel="Chapter" title="6.5 Connection establishment"/>
+<link href="#rfc.section.6.5.1" rel="Chapter" title="6.5.1 Using a proxy"/>
+<link href="#rfc.section.6.6" rel="Chapter" title="6.6 AXoT mechanism"/>
+<link href="#rfc.section.6.6.1" rel="Chapter" title="6.6.1 Coverage and relationship to RFC5936"/>
+<link href="#rfc.section.6.6.2" rel="Chapter" title="6.6.2 AXoT connection and message handling"/>
+<link href="#rfc.section.6.6.3" rel="Chapter" title="6.6.3 Padding AXoT responses"/>
+<link href="#rfc.section.6.7" rel="Chapter" title="6.7 IXoT mechanism"/>
+<link href="#rfc.section.6.7.1" rel="Chapter" title="6.7.1 Coverage and relationship to RFC1995"/>
+<link href="#rfc.section.6.7.2" rel="Chapter" title="6.7.2 IXoT connection and message handling"/>
+<link href="#rfc.section.6.7.3" rel="Chapter" title="6.7.3 Condensation of responses"/>
+<link href="#rfc.section.6.7.4" rel="Chapter" title="6.7.4 Fallback to AXFR"/>
+<link href="#rfc.section.6.7.5" rel="Chapter" title="6.7.5 Padding of IXoT responses"/>
+<link href="#rfc.section.6.8" rel="Chapter" title="6.8 Name compression and maximum payload sizes"/>
+<link href="#rfc.section.7" rel="Chapter" title="7 Multi-primary Configurations"/>
+<link href="#rfc.section.8" rel="Chapter" title="8 Zone Transfer with DoT - Authentication"/>
+<link href="#rfc.section.8.1" rel="Chapter" title="8.1 TSIG"/>
+<link href="#rfc.section.8.2" rel="Chapter" title="8.2 SIG(0)"/>
+<link href="#rfc.section.8.3" rel="Chapter" title="8.3 TLS"/>
+<link href="#rfc.section.8.3.1" rel="Chapter" title="8.3.1 Opportunistic"/>
+<link href="#rfc.section.8.3.2" rel="Chapter" title="8.3.2 Strict"/>
+<link href="#rfc.section.8.3.3" rel="Chapter" title="8.3.3 Mutual"/>
+<link href="#rfc.section.8.4" rel="Chapter" title="8.4 IP Based ACL on the Primary"/>
+<link href="#rfc.section.8.5" rel="Chapter" title="8.5 ZONEMD"/>
+<link href="#rfc.section.8.6" rel="Chapter" title="8.6 Comparison of Authentication Methods"/>
+<link href="#rfc.section.9" rel="Chapter" title="9 Policies for Both AXFR and IXFR"/>
+<link href="#rfc.section.10" rel="Chapter" title="10 Implementation Considerations"/>
+<link href="#rfc.section.11" rel="Chapter" title="11 Implementation Status"/>
+<link href="#rfc.section.12" rel="Chapter" title="12 IANA Considerations"/>
+<link href="#rfc.section.12.1" rel="Chapter" title="12.1 Registration of XoT Identification String"/>
+<link href="#rfc.section.13" rel="Chapter" title="13 Security Considerations"/>
+<link href="#rfc.section.14" rel="Chapter" title="14 Acknowledgements"/>
+<link href="#rfc.section.15" rel="Chapter" title="15 Contributors"/>
+<link href="#rfc.section.16" rel="Chapter" title="16 Changelog"/>
+<link href="#rfc.references" rel="Chapter" title="17 References"/>
+<link href="#rfc.references.1" rel="Chapter" title="17.1 Normative References"/>
+<link href="#rfc.references.2" rel="Chapter" title="17.2 Informative References"/>
 <link href="#rfc.authors" rel="Chapter"/>
 
 
@@ -455,7 +458,7 @@
   <td class="right">NLnet Labs</td>
 </tr>
 <tr>
-  <td class="left">Updates: 1995, 7766 (if approved)</td>
+  <td class="left">Updates: 1995, 5936, 7766 (if approved)</td>
   <td class="right">S. Dickinson</td>
 </tr>
 <tr>
@@ -518,53 +521,56 @@
 <li>4.   <a href="#rfc.section.4">Connection and Data Flows in Existing XFR Mechanisms</a></li>
 <ul><li>4.1.   <a href="#rfc.section.4.1">AXFR Mechanism</a></li>
 <li>4.2.   <a href="#rfc.section.4.2">IXFR Mechanism</a></li>
-<li>4.3.   <a href="#rfc.section.4.3">Data Leakage of NOTIFY and SOA Message Exchanges</a></li>
-<ul><li>4.3.1.   <a href="#rfc.section.4.3.1">NOTIFY</a></li>
-<li>4.3.2.   <a href="#rfc.section.4.3.2">SOA</a></li>
-</ul></ul><li>5.   <a href="#rfc.section.5">Update to RFC1995 for IXFR-over-TCP</a></li>
-<li>6.   <a href="#rfc.section.6">Updates to RFC1995 and RFC5936 for IXFR-over-TCP</a></li>
-<li>7.   <a href="#rfc.section.7">Connections and Data Flows in XoT</a></li>
-<ul><li>7.1.   <a href="#rfc.section.7.1">TLS versions</a></li>
-<li>7.2.   <a href="#rfc.section.7.2">Connection usage</a></li>
-<ul><li>7.2.1.   <a href="#rfc.section.7.2.1">High level XoT descriptions</a></li>
-<li>7.2.2.   <a href="#rfc.section.7.2.2">Previous specifications</a></li>
-</ul><li>7.3.   <a href="#rfc.section.7.3">Update to RFC7766</a></li>
-<li>7.4.   <a href="#rfc.section.7.4">Connection Establishment</a></li>
-<ul><li>7.4.1.   <a href="#rfc.section.7.4.1">Draft Version Identification</a></li>
-</ul><li>7.5.   <a href="#rfc.section.7.5">Port selection</a></li>
-<li>7.6.   <a href="#rfc.section.7.6">AXoT mechanism</a></li>
-<ul><li>7.6.1.   <a href="#rfc.section.7.6.1">Coverage and relationship to RFC5936</a></li>
-<li>7.6.2.   <a href="#rfc.section.7.6.2">AXoT connection and message handling</a></li>
-<li>7.6.3.   <a href="#rfc.section.7.6.3">Padding AXoT responses</a></li>
-</ul><li>7.7.   <a href="#rfc.section.7.7">IXoT mechanism</a></li>
-<ul><li>7.7.1.   <a href="#rfc.section.7.7.1">Coverage and relationship to RFC1995</a></li>
-<li>7.7.2.   <a href="#rfc.section.7.7.2">IXoT connection and message handling</a></li>
-<li>7.7.3.   <a href="#rfc.section.7.7.3">Condensation of responses</a></li>
-<li>7.7.4.   <a href="#rfc.section.7.7.4">Fallback to AXFR</a></li>
-<li>7.7.5.   <a href="#rfc.section.7.7.5">Padding of IXoT responses</a></li>
-</ul></ul><li>8.   <a href="#rfc.section.8">Multi-primary Configurations</a></li>
-<li>9.   <a href="#rfc.section.9">Zone Transfer with DoT - Authentication</a></li>
-<ul><li>9.1.   <a href="#rfc.section.9.1">TSIG</a></li>
-<li>9.2.   <a href="#rfc.section.9.2">SIG(0)</a></li>
-<li>9.3.   <a href="#rfc.section.9.3">TLS</a></li>
-<ul><li>9.3.1.   <a href="#rfc.section.9.3.1">Opportunistic</a></li>
-<li>9.3.2.   <a href="#rfc.section.9.3.2">Strict</a></li>
-<li>9.3.3.   <a href="#rfc.section.9.3.3">Mutual</a></li>
-</ul><li>9.4.   <a href="#rfc.section.9.4">IP Based ACL on the Primary</a></li>
-<li>9.5.   <a href="#rfc.section.9.5">ZONEMD</a></li>
-<li>9.6.   <a href="#rfc.section.9.6">Comparison of Authentication Methods</a></li>
-</ul><li>10.   <a href="#rfc.section.10">Policies for Both AXFR and IXFR</a></li>
-<li>11.   <a href="#rfc.section.11">Implementation Considerations</a></li>
-<li>12.   <a href="#rfc.section.12">Implementation Status</a></li>
-<li>13.   <a href="#rfc.section.13">IANA Considerations</a></li>
-<ul><li>13.1.   <a href="#rfc.section.13.1">Registration of XoT Identification String</a></li>
-</ul><li>14.   <a href="#rfc.section.14">Security Considerations</a></li>
-<li>15.   <a href="#rfc.section.15">Acknowledgements</a></li>
-<li>16.   <a href="#rfc.section.16">Contributors</a></li>
-<li>17.   <a href="#rfc.section.17">Changelog</a></li>
-<li>18.   <a href="#rfc.references">References</a></li>
-<ul><li>18.1.   <a href="#rfc.references.1">Normative References</a></li>
-<li>18.2.   <a href="#rfc.references.2">Informative References</a></li>
+<li>4.3.   <a href="#rfc.section.4.3">Threat model</a></li>
+<li>4.4.   <a href="#rfc.section.4.4">Data Leakage of NOTIFY and SOA Message Exchanges</a></li>
+<ul><li>4.4.1.   <a href="#rfc.section.4.4.1">NOTIFY</a></li>
+<li>4.4.2.   <a href="#rfc.section.4.4.2">SOA</a></li>
+</ul></ul><li>5.   <a href="#rfc.section.5">Updates to existing specifications</a></li>
+<ul><li>5.1.   <a href="#rfc.section.5.1">Update to RFC1995 for IXFR-over-TCP</a></li>
+<li>5.2.   <a href="#rfc.section.5.2">Update to RFC5936 for AXFR-over-TCP</a></li>
+<li>5.3.   <a href="#rfc.section.5.3">Updates to RFC1995 and RFC5936 for XFR-over-TCP</a></li>
+<li>5.4.   <a href="#rfc.section.5.4">Update to RFC7766</a></li>
+</ul><li>6.   <a href="#rfc.section.6">Connections and Data Flows in XoT</a></li>
+<ul><li>6.1.   <a href="#rfc.section.6.1">TLS versions</a></li>
+<li>6.2.   <a href="#rfc.section.6.2">Port selection</a></li>
+<li>6.3.   <a href="#rfc.section.6.3">Connection usage</a></li>
+<li>6.4.   <a href="#rfc.section.6.4">High level XoT descriptions</a></li>
+<li>6.5.   <a href="#rfc.section.6.5">Connection establishment</a></li>
+<ul><li>6.5.1.   <a href="#rfc.section.6.5.1">Using a proxy</a></li>
+</ul><li>6.6.   <a href="#rfc.section.6.6">AXoT mechanism</a></li>
+<ul><li>6.6.1.   <a href="#rfc.section.6.6.1">Coverage and relationship to RFC5936</a></li>
+<li>6.6.2.   <a href="#rfc.section.6.6.2">AXoT connection and message handling</a></li>
+<li>6.6.3.   <a href="#rfc.section.6.6.3">Padding AXoT responses</a></li>
+</ul><li>6.7.   <a href="#rfc.section.6.7">IXoT mechanism</a></li>
+<ul><li>6.7.1.   <a href="#rfc.section.6.7.1">Coverage and relationship to RFC1995</a></li>
+<li>6.7.2.   <a href="#rfc.section.6.7.2">IXoT connection and message handling</a></li>
+<li>6.7.3.   <a href="#rfc.section.6.7.3">Condensation of responses</a></li>
+<li>6.7.4.   <a href="#rfc.section.6.7.4">Fallback to AXFR</a></li>
+<li>6.7.5.   <a href="#rfc.section.6.7.5">Padding of IXoT responses</a></li>
+</ul><li>6.8.   <a href="#rfc.section.6.8">Name compression and maximum payload sizes</a></li>
+</ul><li>7.   <a href="#rfc.section.7">Multi-primary Configurations</a></li>
+<li>8.   <a href="#rfc.section.8">Zone Transfer with DoT - Authentication</a></li>
+<ul><li>8.1.   <a href="#rfc.section.8.1">TSIG</a></li>
+<li>8.2.   <a href="#rfc.section.8.2">SIG(0)</a></li>
+<li>8.3.   <a href="#rfc.section.8.3">TLS</a></li>
+<ul><li>8.3.1.   <a href="#rfc.section.8.3.1">Opportunistic</a></li>
+<li>8.3.2.   <a href="#rfc.section.8.3.2">Strict</a></li>
+<li>8.3.3.   <a href="#rfc.section.8.3.3">Mutual</a></li>
+</ul><li>8.4.   <a href="#rfc.section.8.4">IP Based ACL on the Primary</a></li>
+<li>8.5.   <a href="#rfc.section.8.5">ZONEMD</a></li>
+<li>8.6.   <a href="#rfc.section.8.6">Comparison of Authentication Methods</a></li>
+</ul><li>9.   <a href="#rfc.section.9">Policies for Both AXFR and IXFR</a></li>
+<li>10.   <a href="#rfc.section.10">Implementation Considerations</a></li>
+<li>11.   <a href="#rfc.section.11">Implementation Status</a></li>
+<li>12.   <a href="#rfc.section.12">IANA Considerations</a></li>
+<ul><li>12.1.   <a href="#rfc.section.12.1">Registration of XoT Identification String</a></li>
+</ul><li>13.   <a href="#rfc.section.13">Security Considerations</a></li>
+<li>14.   <a href="#rfc.section.14">Acknowledgements</a></li>
+<li>15.   <a href="#rfc.section.15">Contributors</a></li>
+<li>16.   <a href="#rfc.section.16">Changelog</a></li>
+<li>17.   <a href="#rfc.references">References</a></li>
+<ul><li>17.1.   <a href="#rfc.references.1">Normative References</a></li>
+<li>17.2.   <a href="#rfc.references.2">Informative References</a></li>
 </ul><li><a href="#rfc.authors">Authors' Addresses</a></li>
 
 
@@ -592,7 +598,8 @@ gets the data) are discussed in [RFC5936] and [RFC5155]."
 <p id="rfc.section.1.p.7">Zone enumeration is trivially possible for DNSSEC zones which use NSEC; i.e.  queries for the authenticated denial of existences records allow a client to walk through the entire zone contents. <a href="#RFC5155">[RFC5155]</a> specifies NSEC3, a mechanism to provide measures against zone enumeration for DNSSEC signed zones (a goal was to make it as hard to enumerate an DNSSEC signed zone as an unsigned zone).  Whilst this is widely used, zone walking is now possible with NSEC3 due to crypto-breaking advances. This has prompted further work on an alternative mechanism for DNSSEC authenticated denial of existence - NSEC5 <a href="#I-D.vcelak-nsec5">[I-D.vcelak-nsec5]</a> - however questions remain over the practicality of this mechanism.  </p>
 <p><a href="#RFC5155">[RFC5155]</a> does not address data obtained outside zone enumeration (nor does <a href="#I-D.vcelak-nsec5">[I-D.vcelak-nsec5]</a>). Preventing eavesdropping of zone transfers (this draft) is orthogonal to preventing zone enumeration, though they aim to protect the same information.  </p>
 <p><a href="#RFC5936">[RFC5936]</a> specifies using TSIG <a href="#RFC2845">[RFC2845]</a> for authorization of the clients of a zone transfer and for data integrity, but does not express any need for confidentiality, and TSIG does not offer encryption. Some operators use SSH tunneling or IPSec to encrypt the transfer data.  </p>
-<p id="rfc.section.1.p.10">Because both AXFR and IXFR zone transfers are typically carried out over TCP from authoritative DNS protocol implementations, encrypting zone transfers using TLS, based closely on DoT <a href="#RFC7858">[RFC7858]</a>, seems like a simple step forward.  This document specifies how to use TLS as a transport to prevent zone collection from zone transfers.  </p>
+<p id="rfc.section.1.p.10">Section 8 of the NIST guide on 'Secure Domain Name System (DNS) Deployment' <a href="#nist-guide">[nist-guide]</a> discusses restricting access for zone transfers using ACLs and TSIG in more detail. It is noted that in all the common open source implementations such ACLs are applied on a per query basis. Since requests typically occur on TCP connections authoritatives must cater for accepting any TCP connection and then handling the authentication of each XFR request individually.  </p>
+<p id="rfc.section.1.p.11">Because both AXFR and IXFR zone transfers are typically carried out over TCP from authoritative DNS protocol implementations, encrypting zone transfers using TLS, based closely on DoT <a href="#RFC7858">[RFC7858]</a>, seems like a simple step forward.  This document specifies how to use TLS as a transport to prevent zone collection from zone transfers.  </p>
 <h1 id="rfc.section.2"><a href="#rfc.section.2">2.</a> <a href="#terminology" id="terminology">Terminology</a></h1>
 <p id="rfc.section.2.p.1">The key words "MUST", "MUST NOT", "REQUIRED", "SHALL", "SHALL NOT", "SHOULD", "SHOULD NOT", "RECOMMENDED", "NOT RECOMMENDED", "MAY", and "OPTIONAL" in this document are to be interpreted as described in BCP 14 <a href="#RFC2119">[RFC2119]</a> and <a href="#RFC8174">[RFC8174]</a> when, and only when, they appear in all capitals, as shown here.  </p>
 <p id="rfc.section.2.p.2">Privacy terminology is as described in Section 3 of <a href="#RFC6973">[RFC6973]</a>.  </p>
@@ -637,11 +644,11 @@ gets the data) are discussed in [RFC5936] and [RFC5155]."
 <ol>
   <li>An AXFR is often (but not always) preceded by a NOTIFY (over UDP) from the primary to the secondary. A secondary may also initiate an AXFR based on a refresh timer or scheduled/triggered zone maintenance.</li>
   <li>The secondary will normally (but not always) make a SOA query to the primary to obtain the serial number of the zone held by the primary.</li>
-  <li>If the primary serial is higher than the secondaries serial (using Serial Number Arithmetic <a href="#RFC1982">[RFC1982]</a>), the secondary makes an AXFR request (over TCP) to the primary after which the AXFR data flows in one or more AXFR responses on the TCP connection.</li>
+  <li>If the primary serial is higher than the secondaries serial (using Serial Number Arithmetic <a href="#RFC1982">[RFC1982]</a>), the secondary makes an AXFR request (over TCP) to the primary after which the AXFR data flows in one or more AXFR responses on the TCP connection. <a href="#RFC5936">[RFC5936]</a> defines this specific step as an 'AXFR session' i.e. as an AXFR query message and the sequence of AXFR response messages returned for it.</li>
 </ol>
 
 <p> </p>
-<p><a href="#RFC5936">[RFC5936]</a> specifies that AXFR must use TCP as the transport protocol but details that there is no restriction in the protocol that a single TCP connection must be used only for a single AXFR exchange, or even solely for XFRs. For example, it outlines that the SOA query can also happen on this connection.  However, this can cause interoperability problems with older implementations that support only the trivial case of one AXFR per connection.  </p>
+<p><a href="#RFC5936">[RFC5936]</a> also specifies that AXFR must use TCP as the transport protocol but details that there is no restriction in the protocol that a single TCP connection must be used only for a single AXFR exchange, or even solely for XFRs. For example, it outlines that the SOA query can also happen on this connection. However, this can cause interoperability problems with older implementations that support only the trivial case of one AXFR per connection.  </p>
 <p id="rfc.section.4.1.p.5">Further details of the limitations in existing AXFR implementations are outlined in <a href="#RFC5936">[RFC5936]</a>.  </p>
 <h1 id="rfc.section.4.2"><a href="#rfc.section.4.2">4.2.</a> <a href="#ixfr-mechanism" id="ixfr-mechanism">IXFR Mechanism</a></h1>
 <p id="rfc.section.4.2.p.1">The figure below provides an outline of the IXFR mechanism including NOTIFYs.  </p>
@@ -661,60 +668,53 @@ gets the data) are discussed in [RFC5936] and [RFC5155]."
 </pre>
 <p id="rfc.section.4.2.p.5">So there may be a fourth step above where the client falls back to IXFR-over-TCP.  There may also be a forth step where the secondary must fall back to AXFR because, e.g., the primary does not support IXFR.  </p>
 <p id="rfc.section.4.2.p.6">However it is noted that at least two widely used open source authoritative nameserver implementations (<a href="https://www.isc.org/bind/">BIND</a> and <a href="https://www.nlnetlabs.nl/projects/nsd/about/">NSD</a>) do IXFR using TCP by default in their latest releases. For BIND TCP connections are sometimes used for SOA queries but in general they are not used persistently and close after an IXFR is completed.  </p>
-<p id="rfc.section.4.2.p.7">It is noted that the specification for IXFR was published well before TCP was considered a first class transport for DNS. See section <a href="#update-to-rfc1995-for-ixfrovertcp">Section 5</a> for new recommendations specific to IXFR-over-TCP.  </p>
-<h1 id="rfc.section.4.3"><a href="#rfc.section.4.3">4.3.</a> <a href="#data-leakage-of-notify-and-soa-message-exchanges" id="data-leakage-of-notify-and-soa-message-exchanges">Data Leakage of NOTIFY and SOA Message Exchanges</a></h1>
-<p id="rfc.section.4.3.p.1">This section attempts to presents a rationale for also encrypting the other messages in the XFR mechanism.  </p>
-<p id="rfc.section.4.3.p.2">Since the SOA of the published zone can be trivially discovered by simply querying the publicly available authoritative servers leakage of this RR is not discussed in the following sections.  </p>
-<h1 id="rfc.section.4.3.1"><a href="#rfc.section.4.3.1">4.3.1.</a> <a href="#notify" id="notify">NOTIFY</a></h1>
-<p id="rfc.section.4.3.1.p.1">Unencrypted NOTIFY messages identify configured secondaries on the primary.  </p>
+<p id="rfc.section.4.2.p.7">It is noted that the specification for IXFR was published well before TCP was considered a first class transport for DNS. See section <a href="#update-to-rfc1995-for-ixfrovertcp">Section 5.1</a> for new recommendations specific to IXFR-over-TCP.  </p>
+<h1 id="rfc.section.4.3"><a href="#rfc.section.4.3">4.3.</a> <a href="#threat-model" id="threat-model">Threat model</a></h1>
+<p id="rfc.section.4.3.p.1">The threat model considered here is one where the <em>contents</em> and size of the zone are considered sensitive and should be protected during transfer.  </p>
+<p id="rfc.section.4.3.p.2">This document does not consider the existence of a zone, the act of zone tranfser, nor the identities of the nameservers hosting that zone (including both those acting as hidden primaries/secondaries or directly serving the zone) as sensitive information. The proposed mechanisms does not attempt to obscure such information. The reasons for this include: </p>
+<p/>
+
+<ul>
+  <li>much of this information can be obtained by various methods including active scanning of the DNS</li>
+  <li>an attacker who can monitor network traffic can relatively easily infer relations between nameservers simply from traffic patterns, even when some or all of the traffic is encrypted</li>
+</ul>
+
+<p> </p>
+<p id="rfc.section.4.3.p.4">We note that the use of XoT will indicate a desire by the zone owner that the contents of the zone remain confidential and could be subject to blocking (e.g. via blocking of port 853) if an attacker had such capabilities. However this threat is likely true of any such mechanism that attempts to encrypt data passed between nameservers e.g. IPsec.  </p>
+<h1 id="rfc.section.4.4"><a href="#rfc.section.4.4">4.4.</a> <a href="#data-leakage-of-notify-and-soa-message-exchanges" id="data-leakage-of-notify-and-soa-message-exchanges">Data Leakage of NOTIFY and SOA Message Exchanges</a></h1>
+<p id="rfc.section.4.4.p.1">This section attempts to presents a rationale for also encrypting the other messages in the XFR mechanism.  </p>
+<p id="rfc.section.4.4.p.2">Since the SOA of the published zone can be trivially discovered by simply querying the publicly available authoritative servers leakage of this RR is not discussed in the following sections.  </p>
+<h1 id="rfc.section.4.4.1"><a href="#rfc.section.4.4.1">4.4.1.</a> <a href="#notify" id="notify">NOTIFY</a></h1>
+<p id="rfc.section.4.4.1.p.1">Unencrypted NOTIFY messages identify configured secondaries on the primary.  </p>
 <p><a href="#RFC1996">[RFC1996]</a> also states: </p>
 <pre>
 "If ANCOUNT&gt;0, then the answer section represents an
 unsecure hint at the new RRset for this (QNAME,QCLASS,QTYPE).
 </pre>
-<p id="rfc.section.4.3.1.p.3">But since the only supported QTYPE for NOTIFY is SOA, this does not pose a potential leak.  </p>
-<h1 id="rfc.section.4.3.2"><a href="#rfc.section.4.3.2">4.3.2.</a> <a href="#soa" id="soa">SOA</a></h1>
-<p id="rfc.section.4.3.2.p.1">For hidden primaries or secondaries the SOA response leaks the degree of lag of any downstream secondary.  </p>
-<h1 id="rfc.section.5"><a href="#rfc.section.5">5.</a> <a href="#update-to-rfc1995-for-ixfrovertcp" id="update-to-rfc1995-for-ixfrovertcp">Update to RFC1995 for IXFR-over-TCP</a></h1>
+<p id="rfc.section.4.4.1.p.3">But since the only supported QTYPE for NOTIFY is SOA, this does not pose a potential leak.  </p>
+<h1 id="rfc.section.4.4.2"><a href="#rfc.section.4.4.2">4.4.2.</a> <a href="#soa" id="soa">SOA</a></h1>
+<p id="rfc.section.4.4.2.p.1">For hidden primaries or secondaries the SOA response leaks the degree of lag of any downstream secondary.  </p>
+<h1 id="rfc.section.5"><a href="#rfc.section.5">5.</a> <a href="#updates-to-existing-specifications" id="updates-to-existing-specifications">Updates to existing specifications</a></h1>
+<h1 id="rfc.section.5.1"><a href="#rfc.section.5.1">5.1.</a> <a href="#update-to-rfc1995-for-ixfrovertcp" id="update-to-rfc1995-for-ixfrovertcp">Update to RFC1995 for IXFR-over-TCP</a></h1>
 <p><a href="#RFC1995">[RFC1995]</a> says nothing with respect to optimizing IXFRs over TCP or re-using already open TCP connections to perform IXFRs or other queries. Therefore, there arguably is an implicit assumption (probably unintentional) that a TCP connection is used for one and only one IXFR request. Indeed, several open source implementations currently take this approach.  </p>
-<p id="rfc.section.5.p.2">This document updates <a href="#RFC1995">[RFC1995]</a> to state that DNS implementations that support IXFR-over-TCP MUST use <a href="#RFC7766">[RFC7766]</a> to optimize the use of TCP connections and SHOULD use <a href="#RFC7858">[RFC7858]</a> to manage persistent connections.  </p>
-<p id="rfc.section.5.p.3">An IXoT server MUST be able to handle multiple IXoT requests on a single XoT connection (for the same and different zones).  </p>
-<h1 id="rfc.section.6"><a href="#rfc.section.6">6.</a> <a href="#updates-to-rfc1995-and-rfc5936-for-ixfrovertcp" id="updates-to-rfc1995-and-rfc5936-for-ixfrovertcp">Updates to RFC1995 and RFC5936 for IXFR-over-TCP</a></h1>
-<p id="rfc.section.6.p.1">TODO: Add text clarifying that intermingling if IXFR and AXFR on the same connection is permitted. Do we need to talk here about </p>
-<p/>
-
-<ul>
-  <li>controls on concurrent transfers in general or for e.g. AXFRs of the same zone <ul><li>they are not in any RFC but are implemented in BIND</li></ul></li>
-  <li>intermingling of AXFR and IXFR for the same zone</li>
-</ul>
-
-<p> </p>
-<h1 id="rfc.section.7"><a href="#rfc.section.7">7.</a> <a href="#connections-and-data-flows-in-xot" id="connections-and-data-flows-in-xot">Connections and Data Flows in XoT</a></h1>
-<h1 id="rfc.section.7.1"><a href="#rfc.section.7.1">7.1.</a> <a href="#tls-versions" id="tls-versions">TLS versions</a></h1>
-<p id="rfc.section.7.1.p.1">For improved security all implementations of this specification MUST use only TLS 1.3 [RFC8446] or later.  </p>
-<h1 id="rfc.section.7.2"><a href="#rfc.section.7.2">7.2.</a> <a href="#connection-usage" id="connection-usage">Connection usage</a></h1>
-<p id="rfc.section.7.2.p.1">It is useful to note that in these mechanisms it is the secondary that initiates the TLS connection to the primary for a XFR request, so that in terms of connectivity the secondary is the TLS client and the primary the TLS server.  </p>
-<p id="rfc.section.7.2.p.2">The details in <a href="#RFC7766">[RFC7766]</a>, <a href="#RFC7858">[RFC7858]</a> and <a href="#RFC8310">[RFC8310]</a> about, e.g., persistent connection and message handling are fully applicable to XoT as well. However any behavior specified here takes precedence for XoT.  </p>
-<h1 id="rfc.section.7.2.1"><a href="#rfc.section.7.2.1">7.2.1.</a> <a href="#high-level-xot-descriptions" id="high-level-xot-descriptions">High level XoT descriptions</a></h1>
-<p id="rfc.section.7.2.1.p.1">The figure below provides an outline of the AXoT mechanism including NOTIFYs.  </p>
-<p><a href="https://github.com/hanzhang0116/hzpa-dprive-xfr-over-tls/blob/master/02-draft-dprive-svg/AXoT_mechanism.svg">Figure 3: AXoT mechanism</a> </p>
-<p id="rfc.section.7.2.1.p.3">The figure below provides an outline of the IXoT mechanism including NOTIFYs.  </p>
-<p><a href="https://github.com/hanzhang0116/hzpa-dprive-xfr-over-tls/blob/master/02-draft-dprive-svg/IXoT_mechanism.svg">Figure 4: IXoT mechanism</a> </p>
-<h1 id="rfc.section.7.2.2"><a href="#rfc.section.7.2.2">7.2.2.</a> <a href="#previous-specifications" id="previous-specifications">Previous specifications</a></h1>
-<p id="rfc.section.7.2.2.p.1">We note that whilst <a href="#RFC5936">[RFC5936]</a> already recommends re-using open TCP connections, it does state: </p>
+<p id="rfc.section.5.1.p.2">This document updates <a href="#RFC1995">[RFC1995]</a> to state that DNS implementations that support IXFR-over-TCP MUST use <a href="#RFC7766">[RFC7766]</a> to optimize the use of TCP connections and SHOULD use <a href="#RFC7858">[RFC7858]</a> to manage persistent connections.  </p>
+<p id="rfc.section.5.1.p.3">For clarity - an IXFR-over-TCP server compliant with this specification MUST be able to handle multiple concurrent IXoT requests on a single XoT connection (for the same and different zones) and SHOULD send the responses as soon as they are available, which might be out-of-order compared to the requests.  </p>
+<p id="rfc.section.5.1.p.4">The server MAY limit the number of concurrent IXFR requests on a single connection if local policy dictates. The server MAY limit the total number of IXFR requests on a single connection if local policy dictates. The server MAY decline concurrent IXoT requests for the same zone if local policy dictates.  </p>
+<h1 id="rfc.section.5.2"><a href="#rfc.section.5.2">5.2.</a> <a href="#update-to-rfc5936-for-axfrovertcp" id="update-to-rfc5936-for-axfrovertcp">Update to RFC5936 for AXFR-over-TCP</a></h1>
+<p id="rfc.section.5.2.p.1">Similarly, this document updates <a href="#RFC5936">[RFC5936]</a> to state that DNS implementations that support AXFR-over-TCP MUST use <a href="#RFC7766">[RFC7766]</a> to optimize the use of TCP connections and SHOULD use <a href="#RFC7858">[RFC7858]</a> to manage persistent connections.  </p>
+<p id="rfc.section.5.2.p.2">For clarity - an AXFR-over-TCP server compliant with this specification MUST be able to handle multiple concurrent AXoT sessions on a single TCP connection (for the same and different zones). The response streams for concurrent AXFRs MAY be intermingled and AXFR-over-TCP clients compliant with this specification MUST be able to handle this.  </p>
+<p id="rfc.section.5.2.p.3">The server MAY limit the number of concurrent AXFR sessions on a single connection if local policy dictates. The server MAY limit the total number of AXFR requests on a single connection if local policy dictates. The server MAY decline concurrent AXoT requests for the same zone if local policy dictates.  </p>
+<h1 id="rfc.section.5.3"><a href="#rfc.section.5.3">5.3.</a> <a href="#updates-to-rfc1995-and-rfc5936-for-xfrovertcp" id="updates-to-rfc1995-and-rfc5936-for-xfrovertcp">Updates to RFC1995 and RFC5936 for XFR-over-TCP</a></h1>
+<p id="rfc.section.5.3.p.1">Neither <a href="#RFC1995">[RFC1995]</a> nor <a href="#RFC5936">[RFC5936]</a> explicitly discuss the use of a single TCP connection for both IXFR and AXFR requests but no specification to our knowledge prohibits this. <a href="#RFC5936">[RFC5936]</a> does make the general state: </p>
 <pre>
 "Non-AXFR session traffic can also use an open TCP connection."
 </pre>
-<p id="rfc.section.7.2.2.p.2">when discussing AXFR-over-TCP. It defines an AXFR session as an AXFR query message and the sequence of AXFR response messages returned for it.  Note that this excludes any SOA queries issued as part of the overall AXFR mechanism. This requirement needs to be re-evaluated when considering applying the same model to XoT since </p>
-<p/>
-
-<ul>
-  <li>There is no guarantee that a XoT server (which is very likely, but not necessarily, a purely authoritative server) will also support DoT for regular queries. Requiring a purely authoritative server to also respond to any query over a TLS connection would be equivalent to defining a form of authoritative DoT. We consider this to be out of scope for this document, which is focussed purely on zone transfers.</li>
-  <li>It would, however, be optimal for XoT to include the capability to send SOA queries over an already open TLS connection.</li>
-</ul>
-
-<p> </p>
-<p id="rfc.section.7.2.2.p.4">Moreover, it is worth noting that <a href="#RFC7766">[RFC7766]</a> made general implementation recommendations with regard to TCP/TLS connection handling: </p>
+<p id="rfc.section.5.3.p.2">We clarify here that implementations compliant with this specification SHOULD use the same TCP connection for both AXFR and IXFR requests, that such requests MAY be made concurrently and that the responses MAY be sent intermingled. Also see section <a href="#update-to-rfc7766">Section 5.4</a> for more details of connection sharing.  </p>
+<p id="rfc.section.5.3.p.3">The server MAY limit the number of concurrent XFR transfers on a single connection if local policy dictates. The server MAY limit the total number of XFR transfers on a single connection if local policy dictates.  </p>
+<p id="rfc.section.5.3.p.4">For both XFR mechanisms, if a server returns REFUSED to a zone transfer request because the client is not authorized, if possible the server SHOULD also return the extended DNS error code 18 - Prohibited [I-D.ietf-dnsop-extended-error].  </p>
+<p id="rfc.section.5.3.p.5">[OPEN QUESTION] Is there a desire to define additional XFR specific extended error codes so that a client can determine precisely why a specific XFR request was denied e.g., Max concurrent XFR: too may concurrent transfers in progress, Max total XFR: no more requests accepted on this connection, etc.  </p>
+<h1 id="rfc.section.5.4"><a href="#rfc.section.5.4">5.4.</a> <a href="#update-to-rfc7766" id="update-to-rfc7766">Update to RFC7766</a></h1>
+<p><a href="#RFC7766">[RFC7766]</a> made general implementation recommendations with regard to TCP/TLS connection handling: </p>
 <pre>
 "To mitigate the risk of unintentional server overload, DNS
 clients MUST take care to minimize the number of concurrent TCP
@@ -728,9 +728,8 @@ many busy zones might need to use more than one TCP connection
 for zone transfers for operational reasons (for example, to
 support concurrent transfers of multiple zones)."
 </pre>
-<p id="rfc.section.7.2.2.p.5">Whilst this recommends a particular behavior for the clients using TCP, it does not relax the requirement for servers to handle 'mixed' traffic (regular queries and zone transfers) on any open TCP/TLS connection. It also overlooks the potential that other transports might want to take the same approach with regard to using separate connections for different purposes.  </p>
-<h1 id="rfc.section.7.3"><a href="#rfc.section.7.3">7.3.</a> <a href="#update-to-rfc7766" id="update-to-rfc7766">Update to RFC7766</a></h1>
-<p id="rfc.section.7.3.p.1">This specification for XoT updates the guidance in <a href="#RFC7766">[RFC7766]</a> to provide the same separation of connection purpose (regular queries and zone transfers) for all transports being used on top of TCP. Therefore, it is RECOMMENDED that for each protocol used on top of TCP in any given client/server interaction there SHOULD be no more than one connection for regular queries and one for zone transfers. As an illustration it could be imagined that in future such an interaction could hypothetically include one or all of the following: </p>
+<p id="rfc.section.5.4.p.2">Whilst this recommends a particular behavior for the clients using TCP, it does not relax the requirement for servers to handle 'mixed' traffic (regular queries and zone transfers) on any open TCP/TLS connection. It also overlooks the potential that other transports might want to take the same approach with regard to using separate connections for different purposes.  </p>
+<p id="rfc.section.5.4.p.3">This specification for XoT updates the guidance in <a href="#RFC7766">[RFC7766]</a> to provide the same separation of connection purpose (regular queries and zone transfers) for all transports being used on top of TCP. Therefore, it is RECOMMENDED that for each protocol used on top of TCP in any given client/server interaction there SHOULD be no more than one connection for regular queries and one for zone transfers. As an illustration it could be imagined that in future such an interaction could hypothetically include one or all of the following: </p>
 <p/>
 
 <ul>
@@ -743,45 +742,47 @@ support concurrent transfers of multiple zones)."
 </ul>
 
 <p> </p>
-<p id="rfc.section.7.3.p.3">We provide specific details in the following sections of reasons where more than one connection for a given transport might be required for zone transfers.  </p>
-<h1 id="rfc.section.7.4"><a href="#rfc.section.7.4">7.4.</a> <a href="#connection-establishment" id="connection-establishment">Connection Establishment</a></h1>
-<p id="rfc.section.7.4.p.1">This specification additionally limits the scope of XoT as defined here to be the use of dedicated TLS connections (XoT connections) to exchange only traffic specific to enabling zone transfers. The set of transactions supported on such connections is limited to: </p>
+<p id="rfc.section.5.4.p.5">We provide specific details in the later sections of reasons where more than one connection for a given transport might be required for zone transfers.  </p>
+<h1 id="rfc.section.6"><a href="#rfc.section.6">6.</a> <a href="#connections-and-data-flows-in-xot" id="connections-and-data-flows-in-xot">Connections and Data Flows in XoT</a></h1>
+<h1 id="rfc.section.6.1"><a href="#rfc.section.6.1">6.1.</a> <a href="#tls-versions" id="tls-versions">TLS versions</a></h1>
+<p id="rfc.section.6.1.p.1">For improved security all implementations of this specification MUST use only TLS 1.3 [RFC8446] or later.  </p>
+<h1 id="rfc.section.6.2"><a href="#rfc.section.6.2">6.2.</a> <a href="#port-selection" id="port-selection">Port selection</a></h1>
+<p id="rfc.section.6.2.p.1">The connection for XoT SHOULD be established using port 853, as specified in <a href="#RFC7858">[RFC7858]</a>, unless there is mutual agreement between the secondary and primary to use a port other than port 853 for XoT. There MAY be agreement to use different ports for AXoT and IXoT.  </p>
+<h1 id="rfc.section.6.3"><a href="#rfc.section.6.3">6.3.</a> <a href="#connection-usage" id="connection-usage">Connection usage</a></h1>
+<p id="rfc.section.6.3.p.1">It is useful to note that in these mechanisms it is the secondary that initiates the TLS connection to the primary for a XFR request, so that in terms of connectivity the secondary is the TLS client and the primary the TLS server.  </p>
+<p id="rfc.section.6.3.p.2">The details in <a href="#updates-to-existing-specifications">Section 5</a> about e.g., persistent connections and XFR message handling are fully applicable to XoT as well. However any behavior specified here takes precedence for XoT.  </p>
+<p id="rfc.section.6.3.p.3">Details in <a href="#RFC8310">[RFC8310]</a> about authentication, usage profiles and TLS profiles are fully applicable to XoT.  </p>
+<h1 id="rfc.section.6.4"><a href="#rfc.section.6.4">6.4.</a> <a href="#high-level-xot-descriptions" id="high-level-xot-descriptions">High level XoT descriptions</a></h1>
+<p id="rfc.section.6.4.p.1">The figure below provides an outline of the AXoT mechanism including NOTIFYs.  </p>
+<p><a href="https://github.com/hanzhang0116/hzpa-dprive-xfr-over-tls/blob/master/02-draft-dprive-svg/AXoT_mechanism.svg">Figure 3: AXoT mechanism</a> </p>
+<p id="rfc.section.6.4.p.3">The figure below provides an outline of the IXoT mechanism including NOTIFYs.  </p>
+<p><a href="https://github.com/hanzhang0116/hzpa-dprive-xfr-over-tls/blob/master/02-draft-dprive-svg/IXoT_mechanism.svg">Figure 4: IXoT mechanism</a> </p>
+<h1 id="rfc.section.6.5"><a href="#rfc.section.6.5">6.5.</a> <a href="#connection-establishment" id="connection-establishment">Connection establishment</a></h1>
+<p id="rfc.section.6.5.p.1">TODO - rework this section </p>
 <p/>
 
 <ul>
-  <li>AXFR</li>
-  <li>IXFR</li>
-  <li>SOA</li>
+  <li>There is no guarantee that a XoT server (which is very likely, but not necessarily, a purely authoritative server) will also support DoT for regular queries. Requiring a purely authoritative server to also respond to any query over a TLS connection would be equivalent to defining a form of authoritative DoT.</li>
 </ul>
 
 <p> </p>
-<p id="rfc.section.7.4.p.3">and is collectively referred to hereafter as 'XoT traffic'.  </p>
-<p id="rfc.section.7.4.p.4">Such connections MUST use an ALPN token of 'xot' during the TLS handshake (see <a href="#iana-considerations">Section 13</a>).  </p>
-<p id="rfc.section.7.4.p.5">In the absence of DNS specific capability signaling mechanisms this greatly simplifies the implementation of XoT such that a XoT exchange can occur between any primary and secondary regardless of the role of each (e.g. purely authoritative, recursive resolver also authoritatively hosting zones, stub) or of other DNS transport capability each may have. It also clearly makes XoT support orthogonal to any set of zone transfer authentication mechanisms chosen by the two parties.  </p>
-<p id="rfc.section.7.4.p.6">XoT clients MUST only send XoT traffic on XoT connections. If a XoT server receives traffic other than XoT traffic on a XoT connection it MUST respond with REFUSED, and if possible it should also return the extended DNS error code 21 - Not Supported <a href="#I-D.ietf-dnsop-extended-error">[I-D.ietf-dnsop-extended-error]</a>. It SHOULD treat this as protocol error and close the connection.  </p>
-<p id="rfc.section.7.4.p.7">With the update to <a href="#RFC7766">[RFC7766]</a> guidance above, clients are free to open separate connections to the server to make any other queries they may need over either TLS, TCP or UDP. A specification for connections that support both XoT traffic and non-XoT traffic may be the subject of a future work.  </p>
-<h1 id="rfc.section.7.4.1"><a href="#rfc.section.7.4.1">7.4.1.</a> <a href="#draft-version-identification" id="draft-version-identification">Draft Version Identification</a></h1>
-<p><em>RFC Editor's Note:</em> Please remove this section prior to publication of a final version of this document.  </p>
-<p id="rfc.section.7.4.1.p.2">Only implementations of the final, published RFC can identify themselves as "xot".  Until such an RFC exists, implementations MUST NOT identify themselves using this string.  </p>
-<p id="rfc.section.7.4.1.p.3">Implementations of draft versions of the protocol MUST add the string "-" and the corresponding draft number to the identifier.  For example, draft-ietf-dprive-xfr-over-tls-02 is identified using the string "xot-02".  </p>
-<h1 id="rfc.section.7.5"><a href="#rfc.section.7.5">7.5.</a> <a href="#port-selection" id="port-selection">Port selection</a></h1>
-<p id="rfc.section.7.5.p.1">The connection for XoT SHOULD be established using port 853, as specified in <a href="#RFC7858">[RFC7858]</a>, unless there is mutual agreement between the secondary and primary to use a port other than port 853 for XoT. There MAY be agreement to use different ports for AXoT and IXoT.  </p>
-<h1 id="rfc.section.7.6"><a href="#rfc.section.7.6">7.6.</a> <a href="#axot-mechanism" id="axot-mechanism">AXoT mechanism</a></h1>
-<h1 id="rfc.section.7.6.1"><a href="#rfc.section.7.6.1">7.6.1.</a> <a href="#coverage-and-relationship-to-rfc5936" id="coverage-and-relationship-to-rfc5936">Coverage and relationship to RFC5936</a></h1>
+<h1 id="rfc.section.6.5.1"><a href="#rfc.section.6.5.1">6.5.1.</a> <a href="#using-a-proxy" id="using-a-proxy">Using a proxy</a></h1>
+<p id="rfc.section.6.5.1.p.1">TODO </p>
+<h1 id="rfc.section.6.6"><a href="#rfc.section.6.6">6.6.</a> <a href="#axot-mechanism" id="axot-mechanism">AXoT mechanism</a></h1>
+<h1 id="rfc.section.6.6.1"><a href="#rfc.section.6.6.1">6.6.1.</a> <a href="#coverage-and-relationship-to-rfc5936" id="coverage-and-relationship-to-rfc5936">Coverage and relationship to RFC5936</a></h1>
 <p><a href="#RFC5936">[RFC5936]</a> re-specified AXFR providing additional guidance beyond that provided in <a href="#RFC1034">[RFC1034]</a> and <a href="#RFC1035">[RFC1035]</a>. For example, sections 4.1, 4.1.1 and 4.1.2 of <a href="#RFC5936">[RFC5936]</a> provide improved guidance for AXFR clients and servers with regard to re-use of connections for multiple AXFRs and AXFRs of different zones.  However <a href="#RFC5936">[RFC5936]</a> was constrained by having to be backwards compatible with some very early basic implementations of AXFR.  </p>
-<p id="rfc.section.7.6.1.p.2">Here we specify some optimized behaviors for AXoT, based closely on those in <a href="#RFC5936">[RFC5936]</a>, but without the constraint of backwards compatibility since it is expected that all implementations of AXoT fully implement the behavior described here.  </p>
-<p id="rfc.section.7.6.1.p.3">Where any behavior is not explicitly described here, the behavior specified in <a href="#RFC5936">[RFC5936]</a> MUST be followed. Any behavior specified here takes precedence for AXoT implementations over that in <a href="#RFC5936">[RFC5936]</a>.  </p>
-<h1 id="rfc.section.7.6.2"><a href="#rfc.section.7.6.2">7.6.2.</a> <a href="#axot-connection-and-message-handling" id="axot-connection-and-message-handling">AXoT connection and message handling</a></h1>
-<p id="rfc.section.7.6.2.p.1">The first paragraph of Section 4.1.1 of <a href="#RFC5936">[RFC5936]</a> says that clients SHOULD close the connection when there is no 'apparent need' to use the connection for some time period.  </p>
-<p id="rfc.section.7.6.2.p.2">For AXoT this requirement is updated: AXoT clients and servers SHOULD use EDNS0 Keepalive [RFC7828] to establish the connection timeouts to be used. The client SHOULD send the EDNS0 Keepalive option on every AXoT request sent so that the server has every opportunity to update the Keepalive timeout. The AXoT server may use the frequency of recent AXFRs to calculate an average update rate as input to the decision of what EDNS0 Keepalive timeout to use. If the server does not support EDNS0 Keepalive the client MAY keep the connection open for a few seconds (<a href="#RFC7766">[RFC7766]</a> recommends that servers use timeouts of at least a few seconds).  </p>
-<p id="rfc.section.7.6.2.p.3">Whilst the specification for EDNS0  <a href="#RFC6891">[RFC6891]</a>  does not specifically mention AXFRs, it does say </p>
+<p id="rfc.section.6.6.1.p.2">Here we specify some optimized behaviors for AXoT, based closely on those in <a href="#RFC5936">[RFC5936]</a>, but without the constraint of backwards compatibility since it is expected that all implementations of AXoT fully implement the behavior described here.  </p>
+<p id="rfc.section.6.6.1.p.3">Where any behavior is not explicitly described here, the behavior specified in <a href="#RFC5936">[RFC5936]</a> MUST be followed. Any behavior specified here takes precedence for AXoT implementations over that in <a href="#RFC5936">[RFC5936]</a>.  </p>
+<h1 id="rfc.section.6.6.2"><a href="#rfc.section.6.6.2">6.6.2.</a> <a href="#axot-connection-and-message-handling" id="axot-connection-and-message-handling">AXoT connection and message handling</a></h1>
+<p id="rfc.section.6.6.2.p.1">The first paragraph of Section 4.1.1 of <a href="#RFC5936">[RFC5936]</a> says that clients SHOULD close the connection when there is no 'apparent need' to use the connection for some time period.  </p>
+<p id="rfc.section.6.6.2.p.2">For AXoT this requirement is updated: AXoT clients and servers SHOULD use EDNS0 Keepalive [RFC7828] to establish the connection timeouts to be used. The client SHOULD send the EDNS0 Keepalive option on every AXoT request sent so that the server has every opportunity to update the Keepalive timeout. The AXoT server may use the frequency of recent AXFRs to calculate an average update rate as input to the decision of what EDNS0 Keepalive timeout to use. If the server does not support EDNS0 Keepalive the client MAY keep the connection open for a few seconds (<a href="#RFC7766">[RFC7766]</a> recommends that servers use timeouts of at least a few seconds).  </p>
+<p id="rfc.section.6.6.2.p.3">Whilst the specification for EDNS0  <a href="#RFC6891">[RFC6891]</a>  does not specifically mention AXFRs, it does say </p>
 <pre>
 "If an OPT record is present in a received request, compliant
 responders MUST include an OPT record in their respective
 responses."
 </pre>
-<p id="rfc.section.7.6.2.p.4">We clarify here that if an OPT record is present in a received AXoT request, compliant responders MUST include an OPT record in each of the subsequent AXoT responses. Note that this requirement, combined with the use of EDNS0 Keepalive, enables AXoT servers to signal the desire to close a connection (when existing transactions have competed) due to low resources by sending an EDNS0 Keepalive option with a timeout of 0 on any AXoT response. Aborting an AXFR during the transfer still requires the server to close the connection.  </p>
-<p id="rfc.section.7.6.2.p.5">An AXoT server MUST be able to handle multiple AXFR requests on a single XoT connection (for the same and different zones).  </p>
+<p id="rfc.section.6.6.2.p.4">We clarify here that if an OPT record is present in a received AXoT request, compliant responders MUST include an OPT record in each of the subsequent AXoT responses. Note that this requirement, combined with the use of EDNS0 Keepalive, enables AXoT servers to signal the desire to close a connection (when existing transactions have competed) due to low resources by sending an EDNS0 Keepalive option with a timeout of 0 on any AXoT response. Aborting an AXFR during the transfer still requires the server to close the connection.  </p>
 <p><a href="#RFC5936">[RFC5936]</a> says: </p>
 <pre>
 "An AXFR client MAY use an already opened TCP connection to
@@ -789,8 +790,8 @@ start an AXFR session. Using an existing open connection is
 RECOMMENDED over opening a new connection. (Non-AXFR session
 traffic can also use an open connection.)"
 </pre>
-<p id="rfc.section.7.6.2.p.7">For AXoT this requirement is updated: AXoT clients SHOULD re-use an existing open XoT connection when starting any new AXoT session to the same primary, and for issuing SOA queries, instead of opening a new connection. The number of XoT connections between a secondary and primary SHOULD be minimized.  </p>
-<p id="rfc.section.7.6.2.p.8">Valid reasons for not re-using existing connections might include: </p>
+<p id="rfc.section.6.6.2.p.6">For AXoT this requirement is updated: AXoT clients SHOULD re-use an existing open XoT connection when starting any new AXoT session to the same primary, and for issuing SOA queries, instead of opening a new connection. The number of XoT connections between a secondary and primary SHOULD be minimized.  </p>
+<p id="rfc.section.6.6.2.p.7">Valid reasons for not re-using existing connections might include: </p>
 <p/>
 
 <ul>
@@ -801,17 +802,17 @@ traffic can also use an open connection.)"
 </ul>
 
 <p> </p>
-<p id="rfc.section.7.6.2.p.10">If no XoT connections are currently open, AXoT clients MAY send SOA queries over UDP, TCP or TLS.  </p>
+<p id="rfc.section.6.6.2.p.9">If no XoT connections are currently open, AXoT clients MAY send SOA queries over UDP, TCP or TLS.  </p>
 <p><a href="#RFC5936">[RFC5936]</a> says: </p>
 <pre>
 "Some old AXFR clients expect each response message to contain
 only a single RR. To interoperate with such clients, the server
 MAY restrict response messages to a single RR."
 </pre>
-<p id="rfc.section.7.6.2.p.12">This is opposed to the normal behavior of containing a sufficient number of RRs to reasonably amortize the per-message overhead. We clarify here that AXoT clients MUST be able to handle responses that include multiple RRs, up to the largest number that will fit within a DNS message (taking the required content of the other sections into account, as described here and in <a href="#RFC5936">[RFC5936]</a>). This removes any burden on AXoT servers of having to accommodate a configuration option or support for restricting responses to containing only a single RR.  </p>
-<p id="rfc.section.7.6.2.p.13">An AXoT client SHOULD pipeline AXFR requests for different zones on a single XoT connection. An AXoT server SHOULD respond to those requests as soon as the response is available i.e. potentially out of order.  </p>
-<h1 id="rfc.section.7.6.3"><a href="#rfc.section.7.6.3">7.6.3.</a> <a href="#padding-axot-responses" id="padding-axot-responses">Padding AXoT responses</a></h1>
-<p id="rfc.section.7.6.3.p.1">The goal of padding AXoT responses would be two fold: </p>
+<p id="rfc.section.6.6.2.p.11">This is opposed to the normal behavior of containing a sufficient number of RRs to reasonably amortize the per-message overhead. We clarify here that AXoT clients MUST be able to handle responses that include multiple RRs, up to the largest number that will fit within a DNS message (taking the required content of the other sections into account, as described here and in <a href="#RFC5936">[RFC5936]</a>). This removes any burden on AXoT servers of having to accommodate a configuration option or support for restricting responses to containing only a single RR.  </p>
+<p id="rfc.section.6.6.2.p.12">An AXoT client SHOULD pipeline AXFR requests for different zones on a single XoT connection. An AXoT server SHOULD respond to those requests as soon as the response is available i.e. potentially out of order.  </p>
+<h1 id="rfc.section.6.6.3"><a href="#rfc.section.6.6.3">6.6.3.</a> <a href="#padding-axot-responses" id="padding-axot-responses">Padding AXoT responses</a></h1>
+<p id="rfc.section.6.6.3.p.1">The goal of padding AXoT responses would be two fold: </p>
 <p/>
 
 <ul>
@@ -820,9 +821,9 @@ MAY restrict response messages to a single RR."
 </ul>
 
 <p> </p>
-<p id="rfc.section.7.6.3.p.3">Note that the re-use of XoT connections for transfers of multiple different zones complicates any attempt to analyze the traffic size and timing to extract information.  </p>
-<p id="rfc.section.7.6.3.p.4">We note here that, depending on the padding policies eventually developed for XoT, the requirement to obfuscate the total zone size might require a server to create 'empty' AXoT responses. That is, AXoT responses that contain no RR's apart from an OPT RR containing the EDNS(0) option for padding.  For example, without this capability the maximum size that a tiny zone could be padded to would theoretically be limited if there had to be a minimum of 1 RR per packet.  </p>
-<p id="rfc.section.7.6.3.p.5">However, as with existing AXFR, the last AXoT response message sent MUST contain the same SOA that was in the first message of the AXoT response series in order to signal the conclusion of the zone transfer.  </p>
+<p id="rfc.section.6.6.3.p.3">Note that the re-use of XoT connections for transfers of multiple different zones complicates any attempt to analyze the traffic size and timing to extract information.  </p>
+<p id="rfc.section.6.6.3.p.4">We note here that, depending on the padding policies eventually developed for XoT, the requirement to obfuscate the total zone size might require a server to create 'empty' AXoT responses. That is, AXoT responses that contain no RR's apart from an OPT RR containing the EDNS(0) option for padding.  For example, without this capability the maximum size that a tiny zone could be padded to would theoretically be limited if there had to be a minimum of 1 RR per packet.  </p>
+<p id="rfc.section.6.6.3.p.5">However, as with existing AXFR, the last AXoT response message sent MUST contain the same SOA that was in the first message of the AXoT response series in order to signal the conclusion of the zone transfer.  </p>
 <p><a href="#RFC5936">[RFC5936]</a> says: </p>
 <pre>
 "Each AXFR response message SHOULD contain a sufficient number
@@ -831,56 +832,59 @@ the largest number that will fit within a DNS message (taking
 the required content of the other sections into account, as
 described below)."
 </pre>
-<p id="rfc.section.7.6.3.p.7">'Empty' AXoT responses generated in order to meet a padding requirement will be exceptions to the above statement. For flexibility, future proofing and in order to guarantee support for future padding policies, we state here that secondary implementations MUST be resilient to receiving padded AXoT responses, including 'empty' AXoT responses that contain only an OPT RR containing the EDNS(0) option for padding.  </p>
-<p id="rfc.section.7.6.3.p.8">Recommendation of specific policies for padding AXoT responses are out of scope for this specification. Detailed considerations of such policies and the trade-offs involved are expected to be the subject of future work.  </p>
-<h1 id="rfc.section.7.7"><a href="#rfc.section.7.7">7.7.</a> <a href="#ixot-mechanism" id="ixot-mechanism">IXoT mechanism</a></h1>
-<h1 id="rfc.section.7.7.1"><a href="#rfc.section.7.7.1">7.7.1.</a> <a href="#coverage-and-relationship-to-rfc1995" id="coverage-and-relationship-to-rfc1995">Coverage and relationship to RFC1995</a></h1>
-<p id="rfc.section.7.7.1.p.1">We provide new guidance here specific to IXoT that aligns with the guidance in <a href="#RFC5936">[RFC5936]</a> for AXFR, that in section <a href="#axot-mechanism">Section 7.6</a> for AXoT, and with that for performant TCP/TLS usage in <a href="#RFC7766">[RFC7766]</a> and <a href="#RFC7858">[RFC7858]</a>, as outlined in <a href="#update-to-rfc1995-for-ixfrovertcp">Section 5</a>.  </p>
-<p id="rfc.section.7.7.1.p.2">Where any behavior is not explicitly described here, the behavior specified in <a href="#RFC1995">[RFC1995]</a> MUST be followed. Any behavior specified here takes precedence for IXoT implementations over that in <a href="#RFC1995">[RFC1995]</a>.  </p>
-<h1 id="rfc.section.7.7.2"><a href="#rfc.section.7.7.2">7.7.2.</a> <a href="#ixot-connection-and-message-handling" id="ixot-connection-and-message-handling">IXoT connection and message handling</a></h1>
-<p id="rfc.section.7.7.2.p.1">In a manner entirely analogous to that described in paragraph 2 of <a href="#axot-connection-and-message-handling">Section 7.6.2</a> IXoT clients and servers SHOULD use EDNS0 Keepalive [RFC7828] to establish the connection timeouts to be used.  </p>
-<p id="rfc.section.7.7.2.p.2">IXoT clients SHOULD re-use an existing open XoT connection when making any new IXoT request to the same primary, and for issuing SOA queries, instead of opening a new connection. The number of XoT connections between a secondary and primary SHOULD be minimized.  </p>
-<p id="rfc.section.7.7.2.p.3">Valid reasons for not re-using existing connections are the same as those described in <a href="#axot-connection-and-message-handling">Section 7.6.2</a> </p>
-<p id="rfc.section.7.7.2.p.4">If no XoT connections are currently open, IXoT clients MAY send SOA queries over UDP, TCP or TLS.  </p>
-<p id="rfc.section.7.7.2.p.5">An IXoT client SHOULD pipeline IXFR requests for different zones on a single XoT connection. An IXoT server SHOULD respond to those requests as soon as the response is available i.e. potentially out of order.  </p>
-<h1 id="rfc.section.7.7.3"><a href="#rfc.section.7.7.3">7.7.3.</a> <a href="#condensation-of-responses" id="condensation-of-responses">Condensation of responses</a></h1>
+<p id="rfc.section.6.6.3.p.7">'Empty' AXoT responses generated in order to meet a padding requirement will be exceptions to the above statement. For flexibility, future proofing and in order to guarantee support for future padding policies, we state here that secondary implementations MUST be resilient to receiving padded AXoT responses, including 'empty' AXoT responses that contain only an OPT RR containing the EDNS(0) option for padding.  </p>
+<p id="rfc.section.6.6.3.p.8">Recommendation of specific policies for padding AXoT responses are out of scope for this specification. Detailed considerations of such policies and the trade-offs involved are expected to be the subject of future work.  </p>
+<h1 id="rfc.section.6.7"><a href="#rfc.section.6.7">6.7.</a> <a href="#ixot-mechanism" id="ixot-mechanism">IXoT mechanism</a></h1>
+<h1 id="rfc.section.6.7.1"><a href="#rfc.section.6.7.1">6.7.1.</a> <a href="#coverage-and-relationship-to-rfc1995" id="coverage-and-relationship-to-rfc1995">Coverage and relationship to RFC1995</a></h1>
+<p id="rfc.section.6.7.1.p.1">We provide new guidance here specific to IXoT that aligns with the guidance in <a href="#RFC5936">[RFC5936]</a> for AXFR, that in section <a href="#axot-mechanism">Section 6.6</a> for AXoT, and with that for performant TCP/TLS usage in <a href="#RFC7766">[RFC7766]</a> and <a href="#RFC7858">[RFC7858]</a>, as outlined in <a href="#update-to-rfc1995-for-ixfrovertcp">Section 5.1</a>.  </p>
+<p id="rfc.section.6.7.1.p.2">Where any behavior is not explicitly described here, the behavior specified in <a href="#RFC1995">[RFC1995]</a> MUST be followed. Any behavior specified here takes precedence for IXoT implementations over that in <a href="#RFC1995">[RFC1995]</a>.  </p>
+<h1 id="rfc.section.6.7.2"><a href="#rfc.section.6.7.2">6.7.2.</a> <a href="#ixot-connection-and-message-handling" id="ixot-connection-and-message-handling">IXoT connection and message handling</a></h1>
+<p id="rfc.section.6.7.2.p.1">In a manner entirely analogous to that described in paragraph 2 of <a href="#axot-connection-and-message-handling">Section 6.6.2</a> IXoT clients and servers SHOULD use EDNS0 Keepalive [RFC7828] to establish the connection timeouts to be used.  </p>
+<p id="rfc.section.6.7.2.p.2">IXoT clients SHOULD re-use an existing open XoT connection when making any new IXoT request to the same primary, and for issuing SOA queries, instead of opening a new connection. The number of XoT connections between a secondary and primary SHOULD be minimized.  </p>
+<p id="rfc.section.6.7.2.p.3">Valid reasons for not re-using existing connections are the same as those described in <a href="#axot-connection-and-message-handling">Section 6.6.2</a> </p>
+<p id="rfc.section.6.7.2.p.4">If no XoT connections are currently open, IXoT clients MAY send SOA queries over UDP, TCP or TLS.  </p>
+<p id="rfc.section.6.7.2.p.5">An IXoT client SHOULD pipeline IXFR requests for different zones on a single XoT connection. An IXoT server SHOULD respond to those requests as soon as the response is available i.e. potentially out of order.  </p>
+<h1 id="rfc.section.6.7.3"><a href="#rfc.section.6.7.3">6.7.3.</a> <a href="#condensation-of-responses" id="condensation-of-responses">Condensation of responses</a></h1>
 <p><a href="#RFC1995">[RFC1995]</a> says condensation of responses is optional and MAY be done. Whilst it does add complexity to generating responses it can significantly reduce the size of responses. However any such reduction might be offset by increased message size due to padding.  This specification does not update the optionality of condensation.  </p>
-<h1 id="rfc.section.7.7.4"><a href="#rfc.section.7.7.4">7.7.4.</a> <a href="#fallback-to-axfr" id="fallback-to-axfr">Fallback to AXFR</a></h1>
-<p id="rfc.section.7.7.4.p.1">Fallback to AXFR can happen, for example, if the server is not able to provide an IXFR for the requested SOA. Implementations differ in how long they store zone deltas and how many may be stored at any one time.  </p>
-<p id="rfc.section.7.7.4.p.2">After a failed IXFR a IXoT client SHOULD request the AXFR on the already open XoT connection.  </p>
-<h1 id="rfc.section.7.7.5"><a href="#rfc.section.7.7.5">7.7.5.</a> <a href="#padding-of-ixot-responses" id="padding-of-ixot-responses">Padding of IXoT responses</a></h1>
-<p id="rfc.section.7.7.5.p.1">The goal of padding IXoT responses would be to obfuscate the incremental changes to the zone between SOA updates to minimize information leakage about zone update activity and growth. Both the size and timing of the IXoT responses could reveal information.  </p>
-<p id="rfc.section.7.7.5.p.2">IXFR responses can vary in size greatly from the order of 100 bytes for one or two record updates, to tens of thousands of bytes for large dynamic DNSSEC signed zones. The frequency of IXFR responses can also depend greatly on if and how the zone is DNSSEC signed.  </p>
-<p id="rfc.section.7.7.5.p.3">In order to guarantee support for future padding policies, we state here that secondary implementations MUST be resilient to receiving padded IXoT responses.  </p>
-<p id="rfc.section.7.7.5.p.4">Recommendation of specific policies for padding IXoT responses are out of scope for this specification. Detailed considerations of such policies and the trade-offs involved are expected to be the subject of future work.  </p>
-<h1 id="rfc.section.8"><a href="#rfc.section.8">8.</a> <a href="#multiprimary-configurations" id="multiprimary-configurations">Multi-primary Configurations</a></h1>
-<p id="rfc.section.8.p.1">Also known as multi-master configurations this model can provide flexibility and redundancy particularly for IXFR. A secondary will receive one or more NOTIFY messages and can send an SOA to all of the configured primaries. It can then choose to send an XFR request to the primary with the highest SOA (or other criteria, e.g., RTT).  </p>
-<p id="rfc.section.8.p.2">When using persistent connections the secondary may have a XoT connection already open to one or more primaries. Should a secondary preferentially request an XFR from a primary to which it already has an open XoT connection or the one with the highest SOA (assuming it doesn't have a connection open to it already)? </p>
-<p id="rfc.section.8.p.3">Two extremes can be envisaged here. The first one can be considered a 'preferred primary connection' model. In this case the secondary continues to use one persistent connection to a single primary until it has reason not to. Reasons not to might include the primary repeatedly closing the connection, long RTTs on transfers or the SOA of the primary being an unacceptable lag behind the SOA of an alternative primary.  </p>
-<p id="rfc.section.8.p.4">The other extreme can be considered a 'parallel primary connection' model. Here a secondary could keep multiple persistent connections open to all available primaries and only request XFRs from the primary with the highest serial number.  Since normally the number of secondaries and primaries in direct contact in a transfer group is reasonably low this might be feasible if latency is the most significant concern.  </p>
-<p id="rfc.section.8.p.5">Recommendation of a particular scheme is out of scope of this document but implementations are encouraged to provide configuration options that allow operators to make choices about this behavior.  </p>
-<h1 id="rfc.section.9"><a href="#rfc.section.9">9.</a> <a href="#zone-transfer-with-dot--authentication" id="zone-transfer-with-dot--authentication">Zone Transfer with DoT - Authentication</a></h1>
-<h1 id="rfc.section.9.1"><a href="#rfc.section.9.1">9.1.</a> <a href="#tsig" id="tsig">TSIG</a></h1>
-<p id="rfc.section.9.1.p.1">TSIG <a href="#RFC2845">[RFC2845]</a> provides a mechanism for two or more parties to use shared secret keys which can then be used to create a message digest to protect individual DNS messages. This allows each party to authenticate that a request or response (and the data in it) came from the other party, even if it was transmitted over an unsecured channel or via a proxy. It provides party-to-party data authentication, but not hop-to-hop channel authentication or confidentiality.  </p>
-<h1 id="rfc.section.9.2"><a href="#rfc.section.9.2">9.2.</a> <a href="#sig0" id="sig0">SIG(0)</a></h1>
-<p id="rfc.section.9.2.p.1">SIG(0) <a href="#RFC2535">[RFC2535]</a> similarly also provides a mechanism to digitally sign a DNS message but uses public key authentication, where the public keys are stored in DNS as KEY RRs and a private key is stored at the signer. It also provides party-to-party data authentication, but not hop-to-hop channel authentication or confidentiality.  </p>
-<h1 id="rfc.section.9.3"><a href="#rfc.section.9.3">9.3.</a> <a href="#tls" id="tls">TLS</a></h1>
-<h1 id="rfc.section.9.3.1"><a href="#rfc.section.9.3.1">9.3.1.</a> <a href="#opportunistic" id="opportunistic">Opportunistic</a></h1>
-<p id="rfc.section.9.3.1.p.1">Opportunistic TLS <a href="#RFC8310">[RFC8310]</a> provides a defense against passive surveillance, providing on-the-wire confidentiality.  </p>
-<h1 id="rfc.section.9.3.2"><a href="#rfc.section.9.3.2">9.3.2.</a> <a href="#strict" id="strict">Strict</a></h1>
-<p id="rfc.section.9.3.2.p.1">Strict TLS <a href="#RFC8310">[RFC8310]</a> requires that a client is configured with an authentication domain name (and/or SPKI pinset) that should be used to authenticate the TLS handshake with the server. This additionally provides a defense for the client against active surveillance, providing client-to-server authentication and end-to-end channel confidentiality.  </p>
-<h1 id="rfc.section.9.3.3"><a href="#rfc.section.9.3.3">9.3.3.</a> <a href="#mutual" id="mutual">Mutual</a></h1>
-<p id="rfc.section.9.3.3.p.1">This is an extension to Strict TLS <a href="#RFC8310">[RFC8310]</a> which requires that a client is configured with an authentication domain name (and/or SPKI pinset) and a client certificate. The client offers the certificate for authentication by the server and the client can authentic the server the same way as in Strict TLS. This provides a defense for both parties against active surveillance, providing bi-directional authentication and end-to-end channel confidentiality.  </p>
-<h1 id="rfc.section.9.4"><a href="#rfc.section.9.4">9.4.</a> <a href="#ip-based-acl-on-the-primary" id="ip-based-acl-on-the-primary">IP Based ACL on the Primary</a></h1>
-<p id="rfc.section.9.4.p.1">Most DNS server implementations offer an option to configure an IP based Access Control List (ACL), which is often used in combination with TSIG based ACLs to restrict access to zone transfers on primary servers.  </p>
-<p id="rfc.section.9.4.p.2">This is also possible with XoT but it must be noted that as with TCP the implementation of such an ACL cannot be enforced on the primary until a XFR request is received on an established connection.  </p>
-<p id="rfc.section.9.4.p.3">If control were to be any more fine-grained than this then a separate, dedicated port would need to be agreed between primary and secondary for XoT such that implementations would be able to refuse connections on that port to all clients except those configured as secondaries.  </p>
-<h1 id="rfc.section.9.5"><a href="#rfc.section.9.5">9.5.</a> <a href="#zonemd" id="zonemd">ZONEMD</a></h1>
-<p id="rfc.section.9.5.p.1">Message Digest for DNS Zones (ZONEMD) <a href="#I-D.ietf-dnsop-dns-zone-digest">[I-D.ietf-dnsop-dns-zone-digest]</a> digest is a mechanism that can be used to verify the content of a standalone zone. It is designed to be independent of the transmission channel or mechanism, allowing a general consumer of a zone to do origin authentication of the entire zone contents. Note that the current version of <a href="#I-D.ietf-dnsop-dns-zone-digest">[I-D.ietf-dnsop-dns-zone-digest]</a> states: </p>
+<h1 id="rfc.section.6.7.4"><a href="#rfc.section.6.7.4">6.7.4.</a> <a href="#fallback-to-axfr" id="fallback-to-axfr">Fallback to AXFR</a></h1>
+<p id="rfc.section.6.7.4.p.1">Fallback to AXFR can happen, for example, if the server is not able to provide an IXFR for the requested SOA. Implementations differ in how long they store zone deltas and how many may be stored at any one time.  </p>
+<p id="rfc.section.6.7.4.p.2">After a failed IXFR a IXoT client SHOULD request the AXFR on the already open XoT connection.  </p>
+<h1 id="rfc.section.6.7.5"><a href="#rfc.section.6.7.5">6.7.5.</a> <a href="#padding-of-ixot-responses" id="padding-of-ixot-responses">Padding of IXoT responses</a></h1>
+<p id="rfc.section.6.7.5.p.1">The goal of padding IXoT responses would be to obfuscate the incremental changes to the zone between SOA updates to minimize information leakage about zone update activity and growth. Both the size and timing of the IXoT responses could reveal information.  </p>
+<p id="rfc.section.6.7.5.p.2">IXFR responses can vary in size greatly from the order of 100 bytes for one or two record updates, to tens of thousands of bytes for large dynamic DNSSEC signed zones. The frequency of IXFR responses can also depend greatly on if and how the zone is DNSSEC signed.  </p>
+<p id="rfc.section.6.7.5.p.3">In order to guarantee support for future padding policies, we state here that secondary implementations MUST be resilient to receiving padded IXoT responses.  </p>
+<p id="rfc.section.6.7.5.p.4">Recommendation of specific policies for padding IXoT responses are out of scope for this specification. Detailed considerations of such policies and the trade-offs involved are expected to be the subject of future work.  </p>
+<h1 id="rfc.section.6.8"><a href="#rfc.section.6.8">6.8.</a> <a href="#name-compression-and-maximum-payload-sizes" id="name-compression-and-maximum-payload-sizes">Name compression and maximum payload sizes</a></h1>
+<p id="rfc.section.6.8.p.1">We note here that many DNS implementations make use of name compression <a href="#RFC1035">[RFC1035]</a> in XFR responses to reduce the size of the payload. For a simple implementation this will limit the size of an individual payload to something around 16Kb since this is the maximum value of the offset that can be used in the name compression pointer structure. (A more sophisticated implementation might use sequential 'sets' of offsets throughout the message to support a larger payload size.) </p>
+<p id="rfc.section.6.8.p.2">Implementations may wish to offer options to disable name compression for XoT responses to enable larger payloads. This might be particularly helpful when padding is used since minimizing the payload size is not necessarily a useful optimization in this case and disabling name compression will reduce the resources required to construct the payload.  </p>
+<h1 id="rfc.section.7"><a href="#rfc.section.7">7.</a> <a href="#multiprimary-configurations" id="multiprimary-configurations">Multi-primary Configurations</a></h1>
+<p id="rfc.section.7.p.1">Also known as multi-master configurations this model can provide flexibility and redundancy particularly for IXFR. A secondary will receive one or more NOTIFY messages and can send an SOA to all of the configured primaries. It can then choose to send an XFR request to the primary with the highest SOA (or other criteria, e.g., RTT).  </p>
+<p id="rfc.section.7.p.2">When using persistent connections the secondary may have a XoT connection already open to one or more primaries. Should a secondary preferentially request an XFR from a primary to which it already has an open XoT connection or the one with the highest SOA (assuming it doesn't have a connection open to it already)? </p>
+<p id="rfc.section.7.p.3">Two extremes can be envisaged here. The first one can be considered a 'preferred primary connection' model. In this case the secondary continues to use one persistent connection to a single primary until it has reason not to. Reasons not to might include the primary repeatedly closing the connection, long RTTs on transfers or the SOA of the primary being an unacceptable lag behind the SOA of an alternative primary.  </p>
+<p id="rfc.section.7.p.4">The other extreme can be considered a 'parallel primary connection' model. Here a secondary could keep multiple persistent connections open to all available primaries and only request XFRs from the primary with the highest serial number.  Since normally the number of secondaries and primaries in direct contact in a transfer group is reasonably low this might be feasible if latency is the most significant concern.  </p>
+<p id="rfc.section.7.p.5">Recommendation of a particular scheme is out of scope of this document but implementations are encouraged to provide configuration options that allow operators to make choices about this behavior.  </p>
+<h1 id="rfc.section.8"><a href="#rfc.section.8">8.</a> <a href="#zone-transfer-with-dot--authentication" id="zone-transfer-with-dot--authentication">Zone Transfer with DoT - Authentication</a></h1>
+<h1 id="rfc.section.8.1"><a href="#rfc.section.8.1">8.1.</a> <a href="#tsig" id="tsig">TSIG</a></h1>
+<p id="rfc.section.8.1.p.1">TSIG <a href="#RFC2845">[RFC2845]</a> provides a mechanism for two or more parties to use shared secret keys which can then be used to create a message digest to protect individual DNS messages. This allows each party to authenticate that a request or response (and the data in it) came from the other party, even if it was transmitted over an unsecured channel or via a proxy. It provides party-to-party data authentication, but not hop-to-hop channel authentication or confidentiality.  </p>
+<h1 id="rfc.section.8.2"><a href="#rfc.section.8.2">8.2.</a> <a href="#sig0" id="sig0">SIG(0)</a></h1>
+<p id="rfc.section.8.2.p.1">SIG(0) <a href="#RFC2535">[RFC2535]</a> similarly also provides a mechanism to digitally sign a DNS message but uses public key authentication, where the public keys are stored in DNS as KEY RRs and a private key is stored at the signer. It also provides party-to-party data authentication, but not hop-to-hop channel authentication or confidentiality.  </p>
+<h1 id="rfc.section.8.3"><a href="#rfc.section.8.3">8.3.</a> <a href="#tls" id="tls">TLS</a></h1>
+<h1 id="rfc.section.8.3.1"><a href="#rfc.section.8.3.1">8.3.1.</a> <a href="#opportunistic" id="opportunistic">Opportunistic</a></h1>
+<p id="rfc.section.8.3.1.p.1">Opportunistic TLS <a href="#RFC8310">[RFC8310]</a> provides a defense against passive surveillance, providing on-the-wire confidentiality.  </p>
+<h1 id="rfc.section.8.3.2"><a href="#rfc.section.8.3.2">8.3.2.</a> <a href="#strict" id="strict">Strict</a></h1>
+<p id="rfc.section.8.3.2.p.1">Strict TLS <a href="#RFC8310">[RFC8310]</a> requires that a client is configured with an authentication domain name (and/or SPKI pinset) that should be used to authenticate the TLS handshake with the server. This additionally provides a defense for the client against active surveillance, providing client-to-server authentication and end-to-end channel confidentiality.  </p>
+<h1 id="rfc.section.8.3.3"><a href="#rfc.section.8.3.3">8.3.3.</a> <a href="#mutual" id="mutual">Mutual</a></h1>
+<p id="rfc.section.8.3.3.p.1">This is an extension to Strict TLS <a href="#RFC8310">[RFC8310]</a> which requires that a client is configured with an authentication domain name (and/or SPKI pinset) and a client certificate. The client offers the certificate for authentication by the server and the client can authentic the server the same way as in Strict TLS. This provides a defense for both parties against active surveillance, providing bi-directional authentication and end-to-end channel confidentiality.  </p>
+<h1 id="rfc.section.8.4"><a href="#rfc.section.8.4">8.4.</a> <a href="#ip-based-acl-on-the-primary" id="ip-based-acl-on-the-primary">IP Based ACL on the Primary</a></h1>
+<p id="rfc.section.8.4.p.1">Most DNS server implementations offer an option to configure an IP based Access Control List (ACL), which is often used in combination with TSIG based ACLs to restrict access to zone transfers on primary servers.  </p>
+<p id="rfc.section.8.4.p.2">This is also possible with XoT but it must be noted that as with TCP the implementation of such an ACL cannot be enforced on the primary until a XFR request is received on an established connection.  </p>
+<p id="rfc.section.8.4.p.3">If control were to be any more fine-grained than this then a separate, dedicated port would need to be agreed between primary and secondary for XoT such that implementations would be able to refuse connections on that port to all clients except those configured as secondaries.  </p>
+<h1 id="rfc.section.8.5"><a href="#rfc.section.8.5">8.5.</a> <a href="#zonemd" id="zonemd">ZONEMD</a></h1>
+<p id="rfc.section.8.5.p.1">Message Digest for DNS Zones (ZONEMD) <a href="#I-D.ietf-dnsop-dns-zone-digest">[I-D.ietf-dnsop-dns-zone-digest]</a> digest is a mechanism that can be used to verify the content of a standalone zone. It is designed to be independent of the transmission channel or mechanism, allowing a general consumer of a zone to do origin authentication of the entire zone contents. Note that the current version of <a href="#I-D.ietf-dnsop-dns-zone-digest">[I-D.ietf-dnsop-dns-zone-digest]</a> states: </p>
 <p><samp>As specified at this time, ZONEMD is not designed for use in large, dynamic zones due to the time and resources required for digest calculation. The ZONEMD record described in this document includes fields reserved for future work to support large, dynamic zones.</samp> </p>
-<p id="rfc.section.9.5.p.3">It is complementary the above mechanisms and can be used in conjunction with XoT but is not considered further.  </p>
-<h1 id="rfc.section.9.6"><a href="#rfc.section.9.6">9.6.</a> <a href="#comparison-of-authentication-methods" id="comparison-of-authentication-methods">Comparison of Authentication Methods</a></h1>
-<p id="rfc.section.9.6.p.1">The Table below compares the properties of a selection of the above methods in terms of what protection they provide to the secondary and primary servers during XoT in terms of: </p>
+<p id="rfc.section.8.5.p.3">It is complementary the above mechanisms and can be used in conjunction with XoT but is not considered further.  </p>
+<h1 id="rfc.section.8.6"><a href="#rfc.section.8.6">8.6.</a> <a href="#comparison-of-authentication-methods" id="comparison-of-authentication-methods">Comparison of Authentication Methods</a></h1>
+<p id="rfc.section.8.6.p.1">The Table below compares the properties of a selection of the above methods in terms of what protection they provide to the secondary and primary servers during XoT in terms of: </p>
 <p/>
 
 <ul>
@@ -890,9 +894,9 @@ described below)."
 </ul>
 
 <p> </p>
-<p id="rfc.section.9.6.p.3">It is noted that zone transfer scenarios can vary from a simple single primary/secondary relationship where both servers are under the control of a single operator to a complex hierarchical structure which includes proxies and multiple operators. Each deployment scenario will require specific analysis to determine which authentication methods are best suited to the deployment model in question.  </p>
+<p id="rfc.section.8.6.p.3">It is noted that zone transfer scenarios can vary from a simple single primary/secondary relationship where both servers are under the control of a single operator to a complex hierarchical structure which includes proxies and multiple operators. Each deployment scenario will require specific analysis to determine which authentication methods are best suited to the deployment model in question.  </p>
 <p><a href="https://github.com/hanzhang0116/hzpa-dprive-xfr-over-tls/blob/02_updates/02-draft-svg/Properties_of_Authentication_methods_for_XoT.svg">Table 1: Properties of Authentication methods for XoT</a> </p>
-<p id="rfc.section.9.6.p.5">Based on this analysis it can be seen that: </p>
+<p id="rfc.section.8.6.p.5">Based on this analysis it can be seen that: </p>
 <p/>
 
 <ul>
@@ -902,11 +906,11 @@ described below)."
 </ul>
 
 <p> </p>
-<h1 id="rfc.section.10"><a href="#rfc.section.10">10.</a> <a href="#policies-for-both-axfr-and-ixfr" id="policies-for-both-axfr-and-ixfr">Policies for Both AXFR and IXFR</a></h1>
-<p id="rfc.section.10.p.1">We call the entire group of servers involved in XFR for a particular set of zones (all the primaries and all the secondaries) the 'transfer group'.  </p>
-<p id="rfc.section.10.p.2">Within any transfer group both AXFRs and IXFRs for a zone SHOULD all use the same policy, e.g., if AXFRs use AXoT all IXFRs SHOULD use IXoT.  </p>
-<p id="rfc.section.10.p.3">In order to assure the confidentiality of the zone information, the entire transfer group MUST have a consistent policy of requiring confidentiality. If any do not, this is a weak link for attackers to exploit.  </p>
-<p id="rfc.section.10.p.4">A XoT policy should specify </p>
+<h1 id="rfc.section.9"><a href="#rfc.section.9">9.</a> <a href="#policies-for-both-axfr-and-ixfr" id="policies-for-both-axfr-and-ixfr">Policies for Both AXFR and IXFR</a></h1>
+<p id="rfc.section.9.p.1">We call the entire group of servers involved in XFR for a particular set of zones (all the primaries and all the secondaries) the 'transfer group'.  </p>
+<p id="rfc.section.9.p.2">Within any transfer group both AXFRs and IXFRs for a zone SHOULD all use the same policy, e.g., if AXFRs use AXoT all IXFRs SHOULD use IXoT.  </p>
+<p id="rfc.section.9.p.3">In order to assure the confidentiality of the zone information, the entire transfer group MUST have a consistent policy of requiring confidentiality. If any do not, this is a weak link for attackers to exploit.  </p>
+<p id="rfc.section.9.p.4">A XoT policy should specify </p>
 <p/>
 
 <ul>
@@ -916,24 +920,24 @@ described below)."
 </ul>
 
 <p> </p>
-<p id="rfc.section.10.p.6">Since this may require configuration of a number of servers who may be under the control of different operators the desired consistency could be hard to enforce and audit in practice.  </p>
-<p id="rfc.section.10.p.7">Certain aspects of the Policies can be relatively easily tested independently, e.g., by requesting zone transfers without TSIG, from unauthorized IP addresses or over cleartext DNS. Other aspects such as if a secondary will accept data without a TSIG digest or if secondaries are using Strict as opposed to Opportunistic TLS are more challenging.  </p>
-<p id="rfc.section.10.p.8">The mechanics of co-ordinating or enforcing such policies are out of the scope of this document but may be the subject of future operational guidance.  </p>
-<h1 id="rfc.section.11"><a href="#rfc.section.11">11.</a> <a href="#implementation-considerations" id="implementation-considerations">Implementation Considerations</a></h1>
-<p id="rfc.section.11.p.1">TBD </p>
-<h1 id="rfc.section.12"><a href="#rfc.section.12">12.</a> <a href="#implementation-status" id="implementation-status">Implementation Status</a></h1>
-<p id="rfc.section.12.p.1">The 1.9.2 version of <a href="https://github.com/NLnetLabs/unbound/blob/release-1.9.2/doc/Changelog">Unbound</a> includes an option to perform AXoT (instead of AXFR-over-TCP). This requires the client (secondary) to authenticate the server (primary) using a configured authentication domain name.  </p>
-<p id="rfc.section.12.p.2">It is noted that use of a TLS proxy in front of the primary server is a simple deployment solution that can enable server side XoT.  </p>
-<h1 id="rfc.section.13"><a href="#rfc.section.13">13.</a> <a href="#iana-considerations" id="iana-considerations">IANA Considerations</a></h1>
-<h1 id="rfc.section.13.1"><a href="#rfc.section.13.1">13.1.</a> <a href="#registration-of-xot-identification-string" id="registration-of-xot-identification-string">Registration of XoT Identification String</a></h1>
-<p id="rfc.section.13.1.p.1">This document creates a new registration for the identification of XoT in the "Application Layer Protocol Negotiation (ALPN) Protocol IDs" registry [RFC7301].  </p>
-<p id="rfc.section.13.1.p.2">The "xot" string identifies XoT: </p>
-<p id="rfc.section.13.1.p.3">Protocol: XoT </p>
-<p id="rfc.section.13.1.p.4">Identification Sequence: 0x64 0x6F 0x72 ("xot") </p>
-<p id="rfc.section.13.1.p.5">Specification: This document </p>
-<h1 id="rfc.section.14"><a href="#rfc.section.14">14.</a> <a href="#security-considerations" id="security-considerations">Security Considerations</a></h1>
-<p id="rfc.section.14.p.1">This document specifies a security measure against a DNS risk: the risk that an attacker collects entire DNS zones through eavesdropping on clear text DNS zone transfers.  </p>
-<p id="rfc.section.14.p.2">This does not mitigate: </p>
+<p id="rfc.section.9.p.6">Since this may require configuration of a number of servers who may be under the control of different operators the desired consistency could be hard to enforce and audit in practice.  </p>
+<p id="rfc.section.9.p.7">Certain aspects of the Policies can be relatively easily tested independently, e.g., by requesting zone transfers without TSIG, from unauthorized IP addresses or over cleartext DNS. Other aspects such as if a secondary will accept data without a TSIG digest or if secondaries are using Strict as opposed to Opportunistic TLS are more challenging.  </p>
+<p id="rfc.section.9.p.8">The mechanics of co-ordinating or enforcing such policies are out of the scope of this document but may be the subject of future operational guidance.  </p>
+<h1 id="rfc.section.10"><a href="#rfc.section.10">10.</a> <a href="#implementation-considerations" id="implementation-considerations">Implementation Considerations</a></h1>
+<p id="rfc.section.10.p.1">TBD </p>
+<h1 id="rfc.section.11"><a href="#rfc.section.11">11.</a> <a href="#implementation-status" id="implementation-status">Implementation Status</a></h1>
+<p id="rfc.section.11.p.1">The 1.9.2 version of <a href="https://github.com/NLnetLabs/unbound/blob/release-1.9.2/doc/Changelog">Unbound</a> includes an option to perform AXoT (instead of AXFR-over-TCP). This requires the client (secondary) to authenticate the server (primary) using a configured authentication domain name.  </p>
+<p id="rfc.section.11.p.2">It is noted that use of a TLS proxy in front of the primary server is a simple deployment solution that can enable server side XoT.  </p>
+<h1 id="rfc.section.12"><a href="#rfc.section.12">12.</a> <a href="#iana-considerations" id="iana-considerations">IANA Considerations</a></h1>
+<h1 id="rfc.section.12.1"><a href="#rfc.section.12.1">12.1.</a> <a href="#registration-of-xot-identification-string" id="registration-of-xot-identification-string">Registration of XoT Identification String</a></h1>
+<p id="rfc.section.12.1.p.1">This document creates a new registration for the identification of XoT in the "Application Layer Protocol Negotiation (ALPN) Protocol IDs" registry [RFC7301].  </p>
+<p id="rfc.section.12.1.p.2">The "xot" string identifies XoT: </p>
+<p id="rfc.section.12.1.p.3">Protocol: XoT </p>
+<p id="rfc.section.12.1.p.4">Identification Sequence: 0x64 0x6F 0x72 ("xot") </p>
+<p id="rfc.section.12.1.p.5">Specification: This document </p>
+<h1 id="rfc.section.13"><a href="#rfc.section.13">13.</a> <a href="#security-considerations" id="security-considerations">Security Considerations</a></h1>
+<p id="rfc.section.13.p.1">This document specifies a security measure against a DNS risk: the risk that an attacker collects entire DNS zones through eavesdropping on clear text DNS zone transfers.  </p>
+<p id="rfc.section.13.p.2">This does not mitigate: </p>
 <p/>
 
 <ul>
@@ -943,15 +947,15 @@ described below)."
 </ul>
 
 <p> </p>
-<p id="rfc.section.14.p.4">Security concerns of DoT are outlined in <a href="#RFC7858">[RFC7858]</a> and <a href="#RFC8310">[RFC8310]</a>.  </p>
-<h1 id="rfc.section.15"><a href="#rfc.section.15">15.</a> <a href="#acknowledgements" id="acknowledgements">Acknowledgements</a></h1>
-<p id="rfc.section.15.p.1">The authors thank Benno Overeinder, Shumon Huque and Tim Wicinski for review and discussions.  </p>
-<h1 id="rfc.section.16"><a href="#rfc.section.16">16.</a> <a href="#contributors" id="contributors">Contributors</a></h1>
-<p id="rfc.section.16.p.1">Significant contributions to the document were made by: </p>
-<p id="rfc.section.16.p.2">Han Zhang <br/> Salesforce <br/> San Francisco, CA <br/> United States </p>
-<p id="rfc.section.16.p.3">Email: hzhang@salesforce.com </p>
-<h1 id="rfc.section.17"><a href="#rfc.section.17">17.</a> <a href="#changelog" id="changelog">Changelog</a></h1>
-<p id="rfc.section.17.p.1">draft-ietf-dprive-xfr-over-tls-02 </p>
+<p id="rfc.section.13.p.4">Security concerns of DoT are outlined in <a href="#RFC7858">[RFC7858]</a> and <a href="#RFC8310">[RFC8310]</a>.  </p>
+<h1 id="rfc.section.14"><a href="#rfc.section.14">14.</a> <a href="#acknowledgements" id="acknowledgements">Acknowledgements</a></h1>
+<p id="rfc.section.14.p.1">The authors thank Benno Overeinder, Shumon Huque and Tim Wicinski for review and discussions.  </p>
+<h1 id="rfc.section.15"><a href="#rfc.section.15">15.</a> <a href="#contributors" id="contributors">Contributors</a></h1>
+<p id="rfc.section.15.p.1">Significant contributions to the document were made by: </p>
+<p id="rfc.section.15.p.2">Han Zhang <br/> Salesforce <br/> San Francisco, CA <br/> United States </p>
+<p id="rfc.section.15.p.3">Email: hzhang@salesforce.com </p>
+<h1 id="rfc.section.16"><a href="#rfc.section.16">16.</a> <a href="#changelog" id="changelog">Changelog</a></h1>
+<p id="rfc.section.16.p.1">draft-ietf-dprive-xfr-over-tls-02 </p>
 <p/>
 
 <ul>
@@ -964,7 +968,7 @@ described below)."
 </ul>
 
 <p> </p>
-<p id="rfc.section.17.p.3">draft-ietf-dprive-xfr-over-tls-01 </p>
+<p id="rfc.section.16.p.3">draft-ietf-dprive-xfr-over-tls-01 </p>
 <p/>
 
 <ul>
@@ -973,7 +977,7 @@ described below)."
 </ul>
 
 <p> </p>
-<p id="rfc.section.17.p.5">draft-ietf-dprive-xfr-over-tls-00 </p>
+<p id="rfc.section.16.p.5">draft-ietf-dprive-xfr-over-tls-00 </p>
 <p/>
 
 <ul>
@@ -983,7 +987,7 @@ described below)."
 </ul>
 
 <p> </p>
-<p id="rfc.section.17.p.7">draft-hzpa-dprive-xfr-over-tls-02 </p>
+<p id="rfc.section.16.p.7">draft-hzpa-dprive-xfr-over-tls-02 </p>
 <p/>
 
 <ul>
@@ -991,7 +995,7 @@ described below)."
 </ul>
 
 <p> </p>
-<p id="rfc.section.17.p.9">draft-hzpa-dprive-xfr-over-tls-01 </p>
+<p id="rfc.section.16.p.9">draft-hzpa-dprive-xfr-over-tls-01 </p>
 <p/>
 
 <ul>
@@ -999,7 +1003,7 @@ described below)."
 </ul>
 
 <p> </p>
-<p id="rfc.section.17.p.11">draft-hzpa-dprive-xfr-over-tls-00 </p>
+<p id="rfc.section.16.p.11">draft-hzpa-dprive-xfr-over-tls-00 </p>
 <p/>
 
 <ul>
@@ -1007,8 +1011,8 @@ described below)."
 </ul>
 
 <p> </p>
-<h1 id="rfc.references"><a href="#rfc.references">18.</a> References</h1>
-<h1 id="rfc.references.1"><a href="#rfc.references.1">18.1.</a> Normative References</h1>
+<h1 id="rfc.references"><a href="#rfc.references">17.</a> References</h1>
+<h1 id="rfc.references.1"><a href="#rfc.references.1">17.1.</a> Normative References</h1>
 <table>
   <tbody>
     <tr>
@@ -1019,9 +1023,27 @@ described below)."
     </tr>
     <tr>
       <td class="reference">
+        <b id="RFC1034">[RFC1034]</b>
+      </td>
+      <td class="top"><a>Mockapetris, P.</a>, "<a href="http://tools.ietf.org/html/rfc1034">Domain names - concepts and facilities</a>", STD 13, RFC 1034, DOI 10.17487/RFC1034, November 1987.</td>
+    </tr>
+    <tr>
+      <td class="reference">
+        <b id="RFC1035">[RFC1035]</b>
+      </td>
+      <td class="top"><a>Mockapetris, P.</a>, "<a href="http://tools.ietf.org/html/rfc1035">Domain names - implementation and specification</a>", STD 13, RFC 1035, DOI 10.17487/RFC1035, November 1987.</td>
+    </tr>
+    <tr>
+      <td class="reference">
         <b id="RFC1995">[RFC1995]</b>
       </td>
       <td class="top"><a>Ohta, M.</a>, "<a href="http://tools.ietf.org/html/rfc1995">Incremental Zone Transfer in DNS</a>", RFC 1995, DOI 10.17487/RFC1995, August 1996.</td>
+    </tr>
+    <tr>
+      <td class="reference">
+        <b id="RFC1996">[RFC1996]</b>
+      </td>
+      <td class="top"><a>Vixie, P.</a>, "<a href="http://tools.ietf.org/html/rfc1996">A Mechanism for Prompt Notification of Zone Changes (DNS NOTIFY)</a>", RFC 1996, DOI 10.17487/RFC1996, August 1996.</td>
     </tr>
     <tr>
       <td class="reference">
@@ -1034,12 +1056,6 @@ described below)."
         <b id="RFC2845">[RFC2845]</b>
       </td>
       <td class="top"><a>Vixie, P.</a>, <a>Gudmundsson, O.</a>, <a>Eastlake 3rd, D.</a> and <a>B. Wellington</a>, "<a href="http://tools.ietf.org/html/rfc2845">Secret Key Transaction Authentication for DNS (TSIG)</a>", RFC 2845, DOI 10.17487/RFC2845, May 2000.</td>
-    </tr>
-    <tr>
-      <td class="reference">
-        <b id="RFC5155">[RFC5155]</b>
-      </td>
-      <td class="top"><a>Laurie, B.</a>, <a>Sisson, G.</a>, <a>Arends, R.</a> and <a>D. Blacka</a>, "<a href="http://tools.ietf.org/html/rfc5155">DNS Security (DNSSEC) Hashed Authenticated Denial of Existence</a>", RFC 5155, DOI 10.17487/RFC5155, March 2008.</td>
     </tr>
     <tr>
       <td class="reference">
@@ -1061,6 +1077,12 @@ described below)."
     </tr>
     <tr>
       <td class="reference">
+        <b id="RFC7766">[RFC7766]</b>
+      </td>
+      <td class="top"><a>Dickinson, J.</a>, <a>Dickinson, S.</a>, <a>Bellis, R.</a>, <a>Mankin, A.</a> and <a>D. Wessels</a>, "<a href="http://tools.ietf.org/html/rfc7766">DNS Transport over TCP - Implementation Requirements</a>", RFC 7766, DOI 10.17487/RFC7766, March 2016.</td>
+    </tr>
+    <tr>
+      <td class="reference">
         <b id="RFC7858">[RFC7858]</b>
       </td>
       <td class="top"><a>Hu, Z.</a>, <a>Zhu, L.</a>, <a>Heidemann, J.</a>, <a>Mankin, A.</a>, <a>Wessels, D.</a> and <a>P. Hoffman</a>, "<a href="http://tools.ietf.org/html/rfc7858">Specification for DNS over Transport Layer Security (TLS)</a>", RFC 7858, DOI 10.17487/RFC7858, May 2016.</td>
@@ -1079,32 +1101,20 @@ described below)."
     </tr>
     <tr>
       <td class="reference">
-        <b id="RFC8484">[RFC8484]</b>
-      </td>
-      <td class="top"><a>Hoffman, P.</a> and <a>P. McManus</a>, "<a href="http://tools.ietf.org/html/rfc8484">DNS Queries over HTTPS (DoH)</a>", RFC 8484, DOI 10.17487/RFC8484, October 2018.</td>
-    </tr>
-    <tr>
-      <td class="reference">
         <b id="RFC8499">[RFC8499]</b>
       </td>
       <td class="top"><a>Hoffman, P.</a>, <a>Sullivan, A.</a> and <a>K. Fujiwara</a>, "<a href="http://tools.ietf.org/html/rfc8499">DNS Terminology</a>", BCP 219, RFC 8499, DOI 10.17487/RFC8499, January 2019.</td>
     </tr>
   </tbody>
 </table>
-<h1 id="rfc.references.2"><a href="#rfc.references.2">18.2.</a> Informative References</h1>
+<h1 id="rfc.references.2"><a href="#rfc.references.2">17.2.</a> Informative References</h1>
 <table>
   <tbody>
     <tr>
       <td class="reference">
         <b id="I-D.ietf-dnsop-dns-zone-digest">[I-D.ietf-dnsop-dns-zone-digest]</b>
       </td>
-      <td class="top"><a>Wessels, D.</a>, <a>Barber, P.</a>, <a>Weinberg, M.</a>, <a>Kumari, W.</a> and <a>W. Hardaker</a>, "<a href="http://tools.ietf.org/html/draft-ietf-dnsop-dns-zone-digest-09">Message Digest for DNS Zones</a>", Internet-Draft draft-ietf-dnsop-dns-zone-digest-09, August 2020.</td>
-    </tr>
-    <tr>
-      <td class="reference">
-        <b id="I-D.ietf-dnsop-extended-error">[I-D.ietf-dnsop-extended-error]</b>
-      </td>
-      <td class="top"><a>Kumari, W.</a>, <a>Hunt, E.</a>, <a>Arends, R.</a>, <a>Hardaker, W.</a> and <a>D. Lawrence</a>, "<a href="http://tools.ietf.org/html/draft-ietf-dnsop-extended-error-16">Extended DNS Errors</a>", Internet-Draft draft-ietf-dnsop-extended-error-16, May 2020.</td>
+      <td class="top"><a>Wessels, D.</a>, <a>Barber, P.</a>, <a>Weinberg, M.</a>, <a>Kumari, W.</a> and <a>W. Hardaker</a>, "<a href="http://tools.ietf.org/html/draft-ietf-dnsop-dns-zone-digest-12">Message Digest for DNS Zones</a>", Internet-Draft draft-ietf-dnsop-dns-zone-digest-12, September 2020.</td>
     </tr>
     <tr>
       <td class="reference">
@@ -1126,15 +1136,9 @@ described below)."
     </tr>
     <tr>
       <td class="reference">
-        <b id="RFC1034">[RFC1034]</b>
+        <b id="nist-guide">[nist-guide]</b>
       </td>
-      <td class="top"><a>Mockapetris, P.</a>, "<a href="http://tools.ietf.org/html/rfc1034">Domain names - concepts and facilities</a>", STD 13, RFC 1034, DOI 10.17487/RFC1034, November 1987.</td>
-    </tr>
-    <tr>
-      <td class="reference">
-        <b id="RFC1035">[RFC1035]</b>
-      </td>
-      <td class="top"><a>Mockapetris, P.</a>, "<a href="http://tools.ietf.org/html/rfc1035">Domain names - implementation and specification</a>", STD 13, RFC 1035, DOI 10.17487/RFC1035, November 1987.</td>
+      <td class="top"><a title="NIST">Chandramouli, R.</a> and <a title="NIST">S. Rose</a>, "<a href="https://nvlpubs.nist.gov/nistpubs/SpecialPublications/NIST.SP.800-81-2.pdf">Secure Domain Name System (DNS) Deployment Guide</a>", 2013.</td>
     </tr>
     <tr>
       <td class="reference">
@@ -1144,15 +1148,15 @@ described below)."
     </tr>
     <tr>
       <td class="reference">
-        <b id="RFC1996">[RFC1996]</b>
-      </td>
-      <td class="top"><a>Vixie, P.</a>, "<a href="http://tools.ietf.org/html/rfc1996">A Mechanism for Prompt Notification of Zone Changes (DNS NOTIFY)</a>", RFC 1996, DOI 10.17487/RFC1996, August 1996.</td>
-    </tr>
-    <tr>
-      <td class="reference">
         <b id="RFC2535">[RFC2535]</b>
       </td>
       <td class="top"><a>Eastlake 3rd, D.</a>, "<a href="http://tools.ietf.org/html/rfc2535">Domain Name System Security Extensions</a>", RFC 2535, DOI 10.17487/RFC2535, March 1999.</td>
+    </tr>
+    <tr>
+      <td class="reference">
+        <b id="RFC5155">[RFC5155]</b>
+      </td>
+      <td class="top"><a>Laurie, B.</a>, <a>Sisson, G.</a>, <a>Arends, R.</a> and <a>D. Blacka</a>, "<a href="http://tools.ietf.org/html/rfc5155">DNS Security (DNSSEC) Hashed Authenticated Denial of Existence</a>", RFC 5155, DOI 10.17487/RFC5155, March 2008.</td>
     </tr>
     <tr>
       <td class="reference">
@@ -1162,9 +1166,9 @@ described below)."
     </tr>
     <tr>
       <td class="reference">
-        <b id="RFC7766">[RFC7766]</b>
+        <b id="RFC8484">[RFC8484]</b>
       </td>
-      <td class="top"><a>Dickinson, J.</a>, <a>Dickinson, S.</a>, <a>Bellis, R.</a>, <a>Mankin, A.</a> and <a>D. Wessels</a>, "<a href="http://tools.ietf.org/html/rfc7766">DNS Transport over TCP - Implementation Requirements</a>", RFC 7766, DOI 10.17487/RFC7766, March 2016.</td>
+      <td class="top"><a>Hoffman, P.</a> and <a>P. McManus</a>, "<a href="http://tools.ietf.org/html/rfc8484">DNS Queries over HTTPS (DoH)</a>", RFC 8484, DOI 10.17487/RFC8484, October 2018.</td>
     </tr>
   </tbody>
 </table>
