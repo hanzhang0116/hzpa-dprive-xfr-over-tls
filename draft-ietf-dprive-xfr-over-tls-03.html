@@ -664,7 +664,40 @@ gets the data) are discussed in [RFC5936] and [RFC5155]."
 <p id="rfc.section.4.p.6">The term is used to encompasses the range of permutations that are possible and is useful to distinguish the 'XFR mechanism' from a single XFR request/response exchange.  </p>
 <h1 id="rfc.section.4.1"><a href="#rfc.section.4.1">4.1.</a> <a href="#axfr-mechanism" id="axfr-mechanism">AXFR Mechanism</a></h1>
 <p id="rfc.section.4.1.p.1">The figure below provides an outline of an AXFR mechanism including NOTIFYs.  </p>
-<p><a href="https://github.com/hanzhang0116/hzpa-dprive-xfr-over-tls/blob/master/02-draft-dprive-svg/AXFR_mechanism.svg">Figure 1. AXFR Mechanism</a> </p>
+<pre>
+   Secondary                            Primary
+
+       |              NOTIFY               |
+       | --------------------------------&gt; |  UPD
+       | &lt;-------------------------------- |
+       |          NOTIFY Response          |
+       |                                   |
+       |                                   |
+       |            SOA Request            |
+       | --------------------------------&gt; |  UDP (or part of
+       | &lt;-------------------------------- |  a TCP session)
+       |           SOA Response            |
+       |                                   |
+       |                                   |
+       |                                   |
+       |            AXFR Request           | ---
+       | --------------------------------&gt; |   |
+       | &lt;-------------------------------- |   |
+       |          AXFR Response 1          |   |
+       |             (Zone data)           |   |
+       |                                   |   |
+       | &lt;-------------------------------- |   | TCP
+       |          AXFR Response 2          |   | Session
+       |             (Zone data)           |   |
+       |                                   |   |
+       | &lt;-------------------------------- |   |
+       |          AXFR Response 3          |   |
+       |             (Zone data)           | ---
+       |                                   |
+
+              Figure 1. AXFR Mechanism
+              
+</pre>
 <p/>
 
 <ol>
@@ -675,10 +708,41 @@ gets the data) are discussed in [RFC5936] and [RFC5155]."
 
 <p> </p>
 <p><a href="#RFC5936">[RFC5936]</a> re-specified AXFR providing additional guidance beyond that provided in <a href="#RFC1034">[RFC1034]</a> and <a href="#RFC1035">[RFC1035]</a> and importantly specified that AXFR must use TCP as the transport protocol.  </p>
-<p id="rfc.section.4.1.p.5">Additionally, sections 4.1, 4.1.1 and 4.1.2 of <a href="#RFC5936">[RFC5936]</a> provide improved guidance for AXFR clients and servers with regard to re-use of TCP connections for multiple AXFRs and AXFRs of different zones. However <a href="#RFC5936">[RFC5936]</a> was constrained by having to be backwards compatible with some very early basic implementations of AXFR. For example, it outlines that the SOA query can also happen on this connection. However, this can cause interoperability problems with older implementations that support only the trivial case of one AXFR per connection.  </p>
+<p id="rfc.section.4.1.p.4">Additionally, sections 4.1, 4.1.1 and 4.1.2 of <a href="#RFC5936">[RFC5936]</a> provide improved guidance for AXFR clients and servers with regard to re-use of TCP connections for multiple AXFRs and AXFRs of different zones. However <a href="#RFC5936">[RFC5936]</a> was constrained by having to be backwards compatible with some very early basic implementations of AXFR. For example, it outlines that the SOA query can also happen on this connection. However, this can cause interoperability problems with older implementations that support only the trivial case of one AXFR per connection.  </p>
 <h1 id="rfc.section.4.2"><a href="#rfc.section.4.2">4.2.</a> <a href="#ixfr-mechanism" id="ixfr-mechanism">IXFR Mechanism</a></h1>
 <p id="rfc.section.4.2.p.1">The figure below provides an outline of the IXFR mechanism including NOTIFYs.  </p>
-<p><a href="https://github.com/hanzhang0116/hzpa-dprive-xfr-over-tls/blob/master/02-draft-dprive-svg/IXFR_mechanism.svg">Figure 1. IXFR Mechanism</a> </p>
+<pre>
+   Secondary                            Primary
+
+       |              NOTIFY               |
+       | --------------------------------&gt; |  UPD
+       | &lt;-------------------------------- |
+       |          NOTIFY Response          |
+       |                                   |
+       |                                   |
+       |            SOA Request            |
+       | --------------------------------&gt; |  UDP or TCP
+       | &lt;-------------------------------- |  
+       |           SOA Response            |
+       |                                   |
+       |                                   |
+       |                                   |
+       |            IXFR Request           |
+       | --------------------------------&gt; |  UDP or TCP
+       | &lt;-------------------------------- |
+       |            IXFR Response          |
+       |             (Zone data)           |
+       |                                   |
+       |                                   | ---
+       |            IXFR Request           |    |
+       | --------------------------------&gt; |    | Retry over
+       | &lt;-------------------------------- |    | TCP if 
+       |            IXFR Response          |    | required
+       |             (Zone data)           | ---
+
+              Figure 1. IXFR Mechanism
+              
+</pre>
 <p/>
 
 <ol>
@@ -692,9 +756,9 @@ gets the data) are discussed in [RFC5936] and [RFC5155]."
 <pre>
 "Thus, a client should first make an IXFR query using UDP."
 </pre>
-<p id="rfc.section.4.2.p.5">So there may be a fourth step above where the client falls back to IXFR-over-TCP.  There may also be a forth step where the secondary must fall back to AXFR because, e.g., the primary does not support IXFR.  </p>
-<p id="rfc.section.4.2.p.6">However it is noted that at least two widely used open source authoritative nameserver implementations (<a href="https://www.isc.org/bind/">BIND</a> and <a href="https://www.nlnetlabs.nl/projects/nsd/about/">NSD</a>) do IXFR using TCP by default in their latest releases. For BIND TCP connections are sometimes used for SOA queries but in general they are not used persistently and close after an IXFR is completed.  </p>
-<p id="rfc.section.4.2.p.7">TODO: Look at packet captures from NSD and Knot Auth to see what they do </p>
+<p id="rfc.section.4.2.p.4">So there may be a fourth step above where the client falls back to IXFR-over-TCP.  There may also be a forth step where the secondary must fall back to AXFR because, e.g., the primary does not support IXFR.  </p>
+<p id="rfc.section.4.2.p.5">However it is noted that at least two widely used open source authoritative nameserver implementations (<a href="https://www.isc.org/bind/">BIND</a> and <a href="https://www.nlnetlabs.nl/projects/nsd/about/">NSD</a>) do IXFR using TCP by default in their latest releases. For BIND TCP connections are sometimes used for SOA queries but in general they are not used persistently and close after an IXFR is completed.  </p>
+<p id="rfc.section.4.2.p.6">TODO: Look at packet captures from NSD and Knot Auth to see what they do </p>
 <h1 id="rfc.section.4.3"><a href="#rfc.section.4.3">4.3.</a> <a href="#data-leakage-of-notify-and-soa-message-exchanges" id="data-leakage-of-notify-and-soa-message-exchanges">Data Leakage of NOTIFY and SOA Message Exchanges</a></h1>
 <p id="rfc.section.4.3.p.1">This section attempts to presents a rationale for also encrypting the other messages in the XFR mechanism.  </p>
 <p id="rfc.section.4.3.p.2">Since the SOA of the published zone can be trivially discovered by simply querying the publicly available authoritative servers leakage of this RR is not discussed in the following sections.  </p>
@@ -813,10 +877,74 @@ support concurrent transfers of multiple zones)."
 <p id="rfc.section.6.2.p.1">The connection for XoT SHOULD be established using port 853, as specified in <a href="#RFC7858">[RFC7858]</a>, unless there is mutual agreement between the secondary and primary to use a port other than port 853 for XoT. There MAY be agreement to use different ports for AXoT and IXoT.  </p>
 <h1 id="rfc.section.6.3"><a href="#rfc.section.6.3">6.3.</a> <a href="#high-level-xot-descriptions" id="high-level-xot-descriptions">High level XoT descriptions</a></h1>
 <p id="rfc.section.6.3.p.1">The figure below provides an outline of the AXoT mechanism including NOTIFYs.  </p>
-<p><a href="https://github.com/hanzhang0116/hzpa-dprive-xfr-over-tls/blob/master/02-draft-dprive-svg/AXoT_mechanism.svg">Figure 3: AXoT mechanism</a> </p>
-<p id="rfc.section.6.3.p.3">The figure below provides an outline of the IXoT mechanism including NOTIFYs.  </p>
-<p><a href="https://github.com/hanzhang0116/hzpa-dprive-xfr-over-tls/blob/master/02-draft-dprive-svg/IXoT_mechanism.svg">Figure 4: IXoT mechanism</a> </p>
-<p id="rfc.section.6.3.p.5">It is useful to note that in XoT it is the secondary that initiates the TLS connection to the primary for a XFR request, so that in terms of connectivity the secondary is the TLS client and the primary the TLS server.  </p>
+<pre>
+   Secondary                            Primary
+
+       |              NOTIFY               |
+       | --------------------------------&gt; |  UPD
+       | &lt;-------------------------------- |
+       |          NOTIFY Response          |
+       |                                   |
+       |                                   |
+       |            SOA Request            |
+       | --------------------------------&gt; |  UDP (or part of
+       | &lt;-------------------------------- |  a TCP session)
+       |           SOA Response            |
+       |                                   |
+       |                                   |
+       |                                   |
+       |            AXFR Request           | ---
+       | --------------------------------&gt; |   |
+       | &lt;-------------------------------- |   |
+       |          AXFR Response 1          |   |
+       |             (Zone data)           |   |
+       |                                   |   |
+       | &lt;-------------------------------- |   | TLS
+       |          AXFR Response 2          |   | Session
+       |             (Zone data)           |   |
+       |                                   |   |
+       | &lt;-------------------------------- |   |
+       |          AXFR Response 3          |   |
+       |             (Zone data)           | ---
+       |                                   |
+
+              Figure 3. AXoT Mechanism
+              
+</pre>
+<p id="rfc.section.6.3.p.2">The figure below provides an outline of the IXoT mechanism including NOTIFYs.  </p>
+<pre>
+   Secondary                            Primary
+
+       |              NOTIFY               |
+       | --------------------------------&gt; |  UPD
+       | &lt;-------------------------------- |
+       |          NOTIFY Response          |
+       |                                   |
+       |                                   |
+       |            SOA Request            |
+       | --------------------------------&gt; |  UDP (or part of
+       | &lt;-------------------------------- |  a TLS session)
+       |           SOA Response            |
+       |                                   |
+       |                                   |
+       |                                   |
+       |            IXFR Request           | ---
+       | --------------------------------&gt; |    |
+       | &lt;-------------------------------- |    |
+       |            IXFR Response          |    |
+       |             (Zone data)           |    |
+       |                                   |    | TLS
+       |                                   |    | session
+       |            IXFR Request           |    |
+       | --------------------------------&gt; |    |
+       | &lt;-------------------------------- |    |
+       |            IXFR Response          |    |
+       |             (Zone data)           | ---
+
+              Figure 1. IXoT Mechanism
+              
+</pre>
+<p id="rfc.section.6.3.p.3">It is useful to note that in XoT it is the secondary that initiates the TLS connection to the primary for a XFR request, so that in terms of connectivity the secondary is the TLS client and the primary the TLS server.  </p>
 <h1 id="rfc.section.6.4"><a href="#rfc.section.6.4">6.4.</a> <a href="#xot-transfers" id="xot-transfers">XoT transfers</a></h1>
 <p id="rfc.section.6.4.p.1">For a zone transfer between two end points to be considered protected with XoT all XFR requests and response for that zone MUST be sent over TLS connections where at a minimum: </p>
 <p/>
@@ -831,7 +959,6 @@ support concurrent transfers of multiple zones)."
 <h1 id="rfc.section.6.5"><a href="#rfc.section.6.5">6.5.</a> <a href="#xot-connections" id="xot-connections">XoT connections</a></h1>
 <p id="rfc.section.6.5.p.1">The details in <a href="#updates-to-existing-specifications">Section 5</a> about e.g., persistent connections and XFR message handling are fully applicable to XoT connections as well. However any behavior specified here takes precedence for XoT.  </p>
 <p id="rfc.section.6.5.p.2">If no TLS connections are currently open, XoT clients MAY send SOA queries over UDP or TCP, or TLS.  </p>
-<p id="rfc.section.6.5.p.3">TODO: Need definition of a XoT connection...? </p>
 <h1 id="rfc.section.6.6"><a href="#rfc.section.6.6">6.6.</a> <a href="#xot-vs-adot" id="xot-vs-adot">XoT vs ADoT</a></h1>
 <p id="rfc.section.6.6.p.1">TODO - this section needs work </p>
 <p id="rfc.section.6.6.p.2">As noted earlier, there is currently no specification for encryption of connections from recursive resolvers to authoritative servers. Some authoritatives are experimenting with ADoT and opportunistic encryption has also been raised as a possibility; it is therefore highly likely that use of encryption by authoritative servers will evolve in the coming years.  </p>
@@ -925,7 +1052,67 @@ described below)."
 
 <p> </p>
 <p id="rfc.section.8.6.p.3">It is noted that zone transfer scenarios can vary from a simple single primary/secondary relationship where both servers are under the control of a single operator to a complex hierarchical structure which includes proxies and multiple operators. Each deployment scenario will require specific analysis to determine which authentication methods are best suited to the deployment model in question.  </p>
-<p><a href="https://github.com/hanzhang0116/hzpa-dprive-xfr-over-tls/blob/02_updates/02-draft-svg/Properties_of_Authentication_methods_for_XoT.svg">Table 1: Properties of Authentication methods for XoT</a> </p>
+<table cellpadding="3" cellspacing="0" class="tt full center">
+  <thead>
+    <tr>
+      <th class="left">Method</th>
+      <th class="center">DA(S)</th>
+      <th class="center">CC(S)</th>
+      <th class="center">CA(S)</th>
+      <th class="center">DA(P)</th>
+      <th class="center">CC(P)</th>
+      <th class="left">CA(P)</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td class="left">TSIG</td>
+      <td class="center">Y</td>
+      <td class="center"/>
+      <td class="center"/>
+      <td class="center">Y</td>
+      <td class="center"/>
+      <td class="left"/>
+    </tr>
+    <tr>
+      <td class="left">Oppo TLS</td>
+      <td class="center"/>
+      <td class="center">Y</td>
+      <td class="center">Y</td>
+      <td class="center"/>
+      <td class="center">Y</td>
+      <td class="left"/>
+    </tr>
+    <tr>
+      <td class="left">Strict TLS</td>
+      <td class="center"/>
+      <td class="center">Y</td>
+      <td class="center">Y</td>
+      <td class="center"/>
+      <td class="center">Y</td>
+      <td class="left"/>
+    </tr>
+    <tr>
+      <td class="left">m TLS</td>
+      <td class="center"/>
+      <td class="center">Y</td>
+      <td class="center">Y</td>
+      <td class="center"/>
+      <td class="center">Y</td>
+      <td class="left">Y</td>
+    </tr>
+    <tr>
+      <td class="left">ACL on primary</td>
+      <td class="center"/>
+      <td class="center"/>
+      <td class="center"/>
+      <td class="center"/>
+      <td class="center"/>
+      <td class="left">Y</td>
+    </tr>
+  </tbody>
+</table>
+<p id="rfc.section.8.6.p.4">Table 1: Properties of Authentication methods for XoT </p>
 <p id="rfc.section.8.6.p.5">Based on this analysis it can be seen that: </p>
 <p/>
 

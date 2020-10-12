@@ -295,8 +295,41 @@ request/response exchange.
 <section anchor="axfr-mechanism" title="AXFR Mechanism">
 <t>The figure below provides an outline of an AXFR mechanism including NOTIFYs.
 </t>
-<t><eref target="https://github.com/hanzhang0116/hzpa-dprive-xfr-over-tls/blob/master/02-draft-dprive-svg/AXFR_mechanism.svg">Figure 1. AXFR Mechanism</eref>
-</t>
+
+<figure align="center"><artwork align="center">
+   Secondary                            Primary
+
+       |              NOTIFY               |
+       | --------------------------------&gt; |  UPD
+       | &lt;-------------------------------- |
+       |          NOTIFY Response          |
+       |                                   |
+       |                                   |
+       |            SOA Request            |
+       | --------------------------------&gt; |  UDP (or part of
+       | &lt;-------------------------------- |  a TCP session)
+       |           SOA Response            |
+       |                                   |
+       |                                   |
+       |                                   |
+       |            AXFR Request           | ---
+       | --------------------------------&gt; |   |
+       | &lt;-------------------------------- |   |
+       |          AXFR Response 1          |   |
+       |             (Zone data)           |   |
+       |                                   |   |
+       | &lt;-------------------------------- |   | TCP
+       |          AXFR Response 2          |   | Session
+       |             (Zone data)           |   |
+       |                                   |   |
+       | &lt;-------------------------------- |   |
+       |          AXFR Response 3          |   |
+       |             (Zone data)           | ---
+       |                                   |
+
+              Figure 1. AXFR Mechanism
+              
+</artwork></figure>
 <t>
 <list style="numbers">
 <t>An AXFR is often (but not always) preceded by a NOTIFY (over UDP) from the
@@ -330,8 +363,39 @@ connection.
 <section anchor="ixfr-mechanism" title="IXFR Mechanism">
 <t>The figure below provides an outline of the IXFR mechanism including NOTIFYs.
 </t>
-<t><eref target="https://github.com/hanzhang0116/hzpa-dprive-xfr-over-tls/blob/master/02-draft-dprive-svg/IXFR_mechanism.svg">Figure 1. IXFR Mechanism</eref>
-</t>
+
+<figure align="center"><artwork align="center">
+   Secondary                            Primary
+
+       |              NOTIFY               |
+       | --------------------------------&gt; |  UPD
+       | &lt;-------------------------------- |
+       |          NOTIFY Response          |
+       |                                   |
+       |                                   |
+       |            SOA Request            |
+       | --------------------------------&gt; |  UDP or TCP
+       | &lt;-------------------------------- |  
+       |           SOA Response            |
+       |                                   |
+       |                                   |
+       |                                   |
+       |            IXFR Request           |
+       | --------------------------------&gt; |  UDP or TCP
+       | &lt;-------------------------------- |
+       |            IXFR Response          |
+       |             (Zone data)           |
+       |                                   |
+       |                                   | ---
+       |            IXFR Request           |    |
+       | --------------------------------&gt; |    | Retry over
+       | &lt;-------------------------------- |    | TCP if 
+       |            IXFR Response          |    | required
+       |             (Zone data)           | ---
+
+              Figure 1. IXFR Mechanism
+              
+</artwork></figure>
 <t>
 <list style="numbers">
 <t>An IXFR is normally (but not always) preceded by a NOTIFY (over UDP) from the
@@ -643,12 +707,76 @@ different ports for AXoT and IXoT.
 <section anchor="high-level-xot-descriptions" title="High level XoT descriptions">
 <t>The figure below provides an outline of the AXoT mechanism including NOTIFYs.
 </t>
-<t><eref target="https://github.com/hanzhang0116/hzpa-dprive-xfr-over-tls/blob/master/02-draft-dprive-svg/AXoT_mechanism.svg">Figure 3: AXoT mechanism</eref>
-</t>
+
+<figure align="center"><artwork align="center">
+   Secondary                            Primary
+
+       |              NOTIFY               |
+       | --------------------------------&gt; |  UPD
+       | &lt;-------------------------------- |
+       |          NOTIFY Response          |
+       |                                   |
+       |                                   |
+       |            SOA Request            |
+       | --------------------------------&gt; |  UDP (or part of
+       | &lt;-------------------------------- |  a TCP session)
+       |           SOA Response            |
+       |                                   |
+       |                                   |
+       |                                   |
+       |            AXFR Request           | ---
+       | --------------------------------&gt; |   |
+       | &lt;-------------------------------- |   |
+       |          AXFR Response 1          |   |
+       |             (Zone data)           |   |
+       |                                   |   |
+       | &lt;-------------------------------- |   | TLS
+       |          AXFR Response 2          |   | Session
+       |             (Zone data)           |   |
+       |                                   |   |
+       | &lt;-------------------------------- |   |
+       |          AXFR Response 3          |   |
+       |             (Zone data)           | ---
+       |                                   |
+
+              Figure 3. AXoT Mechanism
+              
+</artwork></figure>
 <t>The figure below provides an outline of the IXoT mechanism including NOTIFYs.
 </t>
-<t><eref target="https://github.com/hanzhang0116/hzpa-dprive-xfr-over-tls/blob/master/02-draft-dprive-svg/IXoT_mechanism.svg">Figure 4: IXoT mechanism</eref>
-</t>
+
+<figure align="center"><artwork align="center">
+   Secondary                            Primary
+
+       |              NOTIFY               |
+       | --------------------------------&gt; |  UPD
+       | &lt;-------------------------------- |
+       |          NOTIFY Response          |
+       |                                   |
+       |                                   |
+       |            SOA Request            |
+       | --------------------------------&gt; |  UDP (or part of
+       | &lt;-------------------------------- |  a TLS session)
+       |           SOA Response            |
+       |                                   |
+       |                                   |
+       |                                   |
+       |            IXFR Request           | ---
+       | --------------------------------&gt; |    |
+       | &lt;-------------------------------- |    |
+       |            IXFR Response          |    |
+       |             (Zone data)           |    |
+       |                                   |    | TLS
+       |                                   |    | session
+       |            IXFR Request           |    |
+       | --------------------------------&gt; |    |
+       | &lt;-------------------------------- |    |
+       |            IXFR Response          |    |
+       |             (Zone data)           | ---
+
+              Figure 1. IXoT Mechanism
+              
+</artwork></figure>
 <t>It is useful to note that in XoT it is the secondary that initiates
 the TLS connection to the primary for a XFR request, so that in terms of
 connectivity the secondary is the TLS client and the primary the TLS server.
@@ -680,8 +808,6 @@ well. However any behavior specified here takes precedence for XoT.
 </t>
 <t>If no TLS connections are currently open, XoT clients MAY send SOA queries over
 UDP or TCP, or TLS.
-</t>
-<t>TODO: Need definition of a XoT connection...?
 </t>
 </section>
 
@@ -999,7 +1125,22 @@ multiple operators. Each deployment scenario will require specific analysis to
 determine which authentication methods are best suited to the deployment model
 in question.
 </t>
-<t><eref target="https://github.com/hanzhang0116/hzpa-dprive-xfr-over-tls/blob/02_updates/02-draft-svg/Properties_of_Authentication_methods_for_XoT.svg">Table 1: Properties of Authentication methods for XoT</eref>
+<texttable>
+<ttcol align="left">Method</ttcol>
+<ttcol align="center">DA(S)</ttcol>
+<ttcol align="center">CC(S)</ttcol>
+<ttcol align="center">CA(S)</ttcol>
+<ttcol align="center">DA(P)</ttcol>
+<ttcol align="center">CC(P)</ttcol>
+<ttcol align="left">CA(P)</ttcol>
+
+<c>TSIG</c><c>Y</c><c></c><c></c><c>Y</c><c></c><c></c>
+<c>Oppo TLS</c><c></c><c>Y</c><c>Y</c><c></c><c>Y</c><c></c>
+<c>Strict TLS</c><c></c><c>Y</c><c>Y</c><c></c><c>Y</c><c></c>
+<c>m TLS</c><c></c><c>Y</c><c>Y</c><c></c><c>Y</c><c>Y</c>
+<c>ACL on primary</c><c></c><c></c><c></c><c></c><c></c><c>Y</c>
+</texttable>
+<t>Table 1: Properties of Authentication methods for XoT
 </t>
 <t>Based on this analysis it can be seen that:
 </t>
