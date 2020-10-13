@@ -1024,9 +1024,9 @@ described below)."
 <p/>
 
 <ul>
-  <li>'Data Origin Authentication': Authentication that the DNS message originated from the party with whom credentials were shared, and of the data integrity of the message contents (the originating party may or may not be party operating the far end of a TCP/TLS connection in a 'proxy' scenario).</li>
-  <li>'Channel Confidentiality': Confidentiality of the communication channel between the client and server (i.e. the two end points of a TCP/TLS connection) from passive surveillance.</li>
-  <li>Channel Authentication: Authentication of the identity of party to whom a TCP/TLS connection is made (this might not be a direct connection between the primary and secondary in a proxy scenario).</li>
+  <li>'Data Origin Authentication' (DO): Authentication that the DNS message originated from the party with whom credentials were shared, and of the data integrity of the message contents (the originating party may or may not be party operating the far end of a TCP/TLS connection in a 'proxy' scenario).</li>
+  <li>'Channel Confidentiality' (CC): Confidentiality of the communication channel between the client and server (i.e. the two end points of a TCP/TLS connection) from passive surveillance.</li>
+  <li>'Channel Authentication' (CA): Authentication of the identity of party to whom a TCP/TLS connection is made (this might not be a direct connection between the primary and secondary in a proxy scenario).</li>
 </ul>
 
 <p> </p>
@@ -1067,7 +1067,7 @@ described below)."
 <p id="rfc.section.8.5.p.3">It is complementary but orthogonal the above mechanisms; and can be used in conjunction with XoT but is not considered further here.  </p>
 <h1 id="rfc.section.9"><a href="#rfc.section.9">9.</a> <a href="#xot-authentication" id="xot-authentication">XoT authentication</a></h1>
 <p id="rfc.section.9.p.1">It is noted that zone transfer scenarios can vary from a simple single primary/secondary relationship where both servers are under the control of a single operator to a complex hierarchical structure which includes proxies and multiple operators. Each deployment scenario will require specific analysis to determine which combination of authentication methods are best suited to the deployment model in question.  </p>
-<p id="rfc.section.9.p.2">The XoT authentication requirement specified in <a href="#xot-transfers">Section 6.4</a> addresses the issue of ensuring that the transfers is encrypted between the two endpoints directly involved in the current transfers. The following table summarized this: </p>
+<p id="rfc.section.9.p.2">The XoT authentication requirement specified in <a href="#xot-transfers">Section 6.4</a> addresses the issue of ensuring that the transfers is encrypted between the two endpoints directly involved in the current transfers. The following table summarized the properties of a selection of the mechanisms discussed in <a href="#authentication-mechanisms">Section 8</a>. The two letter acronyms for the properties are used below and (S) indicates the secondary and (P) indicates the primary.  </p>
 <table cellpadding="3" cellspacing="0" class="tt full center">
   <thead>
     <tr>

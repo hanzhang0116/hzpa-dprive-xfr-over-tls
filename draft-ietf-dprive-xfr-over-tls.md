@@ -921,15 +921,15 @@ combination of TLS authentication, TSIG and IP based ACLs interact for XoT.
 
 We classify the mechanisms based on the following properties:
 
-* 'Data Origin Authentication': Authentication that the DNS message originated
+* 'Data Origin Authentication' (DO): Authentication that the DNS message originated
   from the party with whom credentials were shared, and of the data integrity
   of the message contents (the originating party may or may not be party
   operating the far end of a TCP/TLS connection in a 'proxy' scenario).
 
-* 'Channel Confidentiality': Confidentiality of the communication channel between the
+* 'Channel Confidentiality' (CC): Confidentiality of the communication channel between the
   client and server (i.e. the two end points of a TCP/TLS connection) from passive surveillance.
 
-* Channel Authentication: Authentication of the identity of party to whom a TCP/TLS
+* 'Channel Authentication' (CA): Authentication of the identity of party to whom a TCP/TLS
   connection is made (this might not be a direct connection between the primary
   and secondary in a proxy scenario).
 
@@ -1034,7 +1034,11 @@ deployment model in question.
 
 The XoT authentication requirement specified in (#xot-transfers) addresses the
 issue of ensuring that the transfers is encrypted between the two endpoints
-directly involved in the current transfers. The following table summarized this:
+directly involved in the current transfers. The following table summarized the
+properties of a selection of the mechanisms discussed in
+(#authentication-mechanisms). The two letter acronyms for the properties are
+used below and (S) indicates the secondary and (P) indicates
+the primary.
 
 Method               |  DO(S) | CC(S) | CA(S) |  DO(P) | CC(P) | CA(P)
 :----------------------|:---------:|:--------:|:--------:|:---------:|:-----------:|:--:
