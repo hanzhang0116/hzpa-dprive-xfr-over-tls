@@ -1075,7 +1075,12 @@ same policy, e.g., if AXFRs use AXoT all IXFRs MUST use IXoT.
 
 In order to assure the confidentiality of the zone information, the entire
 transfer group MUST have a consistent policy of requiring confidentiality. If
-any do not, this is a weak link for attackers to exploit. 
+any do not, this is a weak link for attackers to exploit.
+
+An individual zone transfer is not considered protected by XoT unless
+both the client and server are configured to use only XoT and the overall zone
+transfer is not considered protected until all members of the transfer group
+are configured to use only XoT with all other transfers servers (see (#implementation-considerations)). 
 
 A XoT policy should specify
 
@@ -1096,10 +1101,14 @@ Opportunistic TLS are more challenging.
 The mechanics of co-ordinating or enforcing such policies are out of the scope
 of this document but may be the subject of future operational guidance.
 
-
 # Implementation Considerations
 
-TBD
+Server implementations may want to also offer options that allow ACLs on a zone
+to specify that a specific client can use either XoT or TCP. This would allow
+for a flexibility while clients are migrating to XoT. Client implementations
+may similarly want to offer such options to cater for the multi-primary case
+where the primaries are migrating to XoT. Such configuration options MUST
+only be used in a 'migration mode' though and should be used with care.
 
 # Implementation Status
 

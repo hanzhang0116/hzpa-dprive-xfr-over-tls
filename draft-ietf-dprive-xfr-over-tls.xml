@@ -801,7 +801,7 @@ using one or both of the following:
 </list>
 </t>
 <t>The server MAY also require a valid TSIG/SIG(0) signature, but this alone is
-not sufficient to authenticate the client. Authentication mechanisms are
+not sufficient to authenticate the client or server. Authentication mechanisms are
 discussed in full in <xref target="authentication-mechanisms"/> and the rationale for the above
 requirement in <xref target="xot-authentication"/>. Transfer group policies are discussed in
 <xref target="policies-for-both-axot-and-ixot"/>.
@@ -1209,6 +1209,11 @@ same policy, e.g., if AXFRs use AXoT all IXFRs MUST use IXoT.
 transfer group MUST have a consistent policy of requiring confidentiality. If
 any do not, this is a weak link for attackers to exploit.
 </t>
+<t>An individual zone transfer is not considered protected by XoT unless
+both the client and server are configured to use only XoT and the overall zone
+transfer is not considered protected until all members of the transfer group
+are configured to use only XoT with all other transfers servers (see <xref target="implementation-considerations"/>).
+</t>
 <t>A XoT policy should specify
 </t>
 <t>
@@ -1234,7 +1239,12 @@ of this document but may be the subject of future operational guidance.
 </section>
 
 <section anchor="implementation-considerations" title="Implementation Considerations">
-<t>TBD
+<t>Server implementations may want to also offer options that allow ACLs on a zone
+to specify that a specific client can use either XoT or TCP. This would allow
+for a flexibility while clients are migrating to XoT. Client implementations
+may similarly want to offer such options to cater for the multi-primary case
+where the primaries are migrating to XoT. Such configuration options MUST
+only be used in a 'migration mode' though and should be used with care.
 </t>
 </section>
 

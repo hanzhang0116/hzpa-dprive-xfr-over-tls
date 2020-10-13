@@ -134,7 +134,7 @@ Internet-Draft                XFR-over-TLS                     July 2020
    17. Changelog . . . . . . . . . . . . . . . . . . . . . . . . . .  30
    18. References  . . . . . . . . . . . . . . . . . . . . . . . . .  31
      18.1.  Normative References . . . . . . . . . . . . . . . . . .  31
-     18.2.  Informative References . . . . . . . . . . . . . . . . .  32
+     18.2.  Informative References . . . . . . . . . . . . . . . . .  33
      18.3.  URIs . . . . . . . . . . . . . . . . . . . . . . . . . .  34
    Appendix A.  XoT server connection handling . . . . . . . . . . .  34
      A.1.  Client specific TLS acceptance  . . . . . . . . . . . . .  34
@@ -1072,10 +1072,10 @@ Internet-Draft                XFR-over-TLS                     July 2020
       *  Mutual TLS (mTLS)
 
    The server MAY also require a valid TSIG/SIG(0) signature, but this
-   alone is not sufficient to authenticate the client.  Authentication
-   mechanisms are discussed in full in Section 8 and the rationale for
-   the above requirement in Section 9.  Transfer group policies are
-   discussed in Section 10.
+   alone is not sufficient to authenticate the client or server.
+   Authentication mechanisms are discussed in full in Section 8 and the
+   rationale for the above requirement in Section 9.  Transfer group
+   policies are discussed in Section 10.
 
 6.5.  XoT connections
 
@@ -1547,6 +1547,12 @@ Internet-Draft                XFR-over-TLS                     July 2020
    confidentiality.  If any do not, this is a weak link for attackers to
    exploit.
 
+   An individual zone transfer is not considered protected by XoT unless
+   both the client and server are configured to use only XoT and the
+   overall zone transfer is not considered protected until all members
+   of the transfer group are configured to use only XoT with all other
+   transfers servers (see Section 11).
+
    A XoT policy should specify
 
    o  What kind of TLS is required (Strict or Mutual TLS)
@@ -1555,13 +1561,7 @@ Internet-Draft                XFR-over-TLS                     July 2020
 
    o  (optionally) if TSIG/SIG(0) is required
 
-   Since this may require configuration of a number of servers who may
-   be under the control of different operators the desired consistency
-   could be hard to enforce and audit in practice.
 
-   Certain aspects of the Policies can be relatively easily tested
-   independently, e.g., by requesting zone transfers without TSIG, from
-   unauthorized IP addresses or over cleartext DNS.  Other aspects such
 
 
 
@@ -1570,6 +1570,13 @@ Toorop, et al.          Expires January 14, 2021               [Page 28]
 Internet-Draft                XFR-over-TLS                     July 2020
 
 
+   Since this may require configuration of a number of servers who may
+   be under the control of different operators the desired consistency
+   could be hard to enforce and audit in practice.
+
+   Certain aspects of the Policies can be relatively easily tested
+   independently, e.g., by requesting zone transfers without TSIG, from
+   unauthorized IP addresses or over cleartext DNS.  Other aspects such
    as if a secondary will accept data without a TSIG digest or if
    secondaries are using Strict as opposed to Opportunistic TLS are more
    challenging.
@@ -1580,7 +1587,13 @@ Internet-Draft                XFR-over-TLS                     July 2020
 
 11.  Implementation Considerations
 
-   TBD
+   Server implementations may want to also offer options that allow ACLs
+   on a zone to specify that a specific client can use either XoT or
+   TCP.  This would allow for a flexibility while clients are migrating
+   to XoT.  Client implementations may similarly want to offer such
+   options to cater for the multi-primary case where the primaries are
+   migrating to XoT.  Such configuration options MUST only be used in a
+   'migration mode' though and should be used with care.
 
 12.  Implementation Status
 
@@ -1604,6 +1617,15 @@ Internet-Draft                XFR-over-TLS                     July 2020
 
    o  the risk that some level of zone activity might be inferred by
       observing zone transfer sizes and timing on encrypted connections
+
+
+
+
+Toorop, et al.          Expires January 14, 2021               [Page 29]
+
+Internet-Draft                XFR-over-TLS                     July 2020
+
+
       (even with padding applied), in combination with obtaining SOA
       records by directly querying authoritative servers.
 
@@ -1614,17 +1636,6 @@ Internet-Draft                XFR-over-TLS                     July 2020
       techniques.
 
    Security concerns of DoT are outlined in [RFC7858] and [RFC8310].
-
-
-
-
-
-
-
-Toorop, et al.          Expires January 14, 2021               [Page 29]
-
-Internet-Draft                XFR-over-TLS                     July 2020
-
 
 15.  Acknowledgements
 
@@ -1663,6 +1674,14 @@ Internet-Draft                XFR-over-TLS                     July 2020
 
    draft-ietf-dprive-xfr-over-tls-01
 
+
+
+
+Toorop, et al.          Expires January 14, 2021               [Page 30]
+
+Internet-Draft                XFR-over-TLS                     July 2020
+
+
    o  Minor editorial updates
 
    o  Add requirement for TLS 1.3. or later
@@ -1674,13 +1693,6 @@ Internet-Draft                XFR-over-TLS                     July 2020
    o  Add placeholder for SIG(0) discussion
 
    o  Update section on ZONEMD
-
-
-
-Toorop, et al.          Expires January 14, 2021               [Page 30]
-
-Internet-Draft                XFR-over-TLS                     July 2020
-
 
    draft-hzpa-dprive-xfr-over-tls-02
 
@@ -1716,6 +1728,16 @@ Internet-Draft                XFR-over-TLS                     July 2020
               DOI 10.17487/RFC1995, August 1996, <https://www.rfc-
               editor.org/info/rfc1995>.
 
+
+
+
+
+
+Toorop, et al.          Expires January 14, 2021               [Page 31]
+
+Internet-Draft                XFR-over-TLS                     July 2020
+
+
    [RFC1996]  Vixie, P., "A Mechanism for Prompt Notification of Zone
               Changes (DNS NOTIFY)", RFC 1996, DOI 10.17487/RFC1996,
               August 1996, <https://www.rfc-editor.org/info/rfc1996>.
@@ -1729,14 +1751,6 @@ Internet-Draft                XFR-over-TLS                     July 2020
               Wellington, "Secret Key Transaction Authentication for DNS
               (TSIG)", RFC 2845, DOI 10.17487/RFC2845, May 2000,
               <https://www.rfc-editor.org/info/rfc2845>.
-
-
-
-
-Toorop, et al.          Expires January 14, 2021               [Page 31]
-
-Internet-Draft                XFR-over-TLS                     July 2020
-
 
    [RFC5936]  Lewis, E. and A. Hoenes, Ed., "DNS Zone Transfer Protocol
               (AXFR)", RFC 5936, DOI 10.17487/RFC5936, June 2010,
@@ -1771,6 +1785,15 @@ Internet-Draft                XFR-over-TLS                     July 2020
               DOI 10.17487/RFC8310, March 2018, <https://www.rfc-
               editor.org/info/rfc8310>.
 
+
+
+
+
+Toorop, et al.          Expires January 14, 2021               [Page 32]
+
+Internet-Draft                XFR-over-TLS                     July 2020
+
+
    [RFC8499]  Hoffman, P., Sullivan, A., and K. Fujiwara, "DNS
               Terminology", BCP 219, RFC 8499, DOI 10.17487/RFC8499,
               January 2019, <https://www.rfc-editor.org/info/rfc8499>.
@@ -1782,17 +1805,6 @@ Internet-Draft                XFR-over-TLS                     July 2020
               Hardaker, "Message Digest for DNS Zones", draft-ietf-
               dnsop-dns-zone-digest-12 (work in progress), September
               2020.
-
-
-
-
-
-
-
-Toorop, et al.          Expires January 14, 2021               [Page 32]
-
-Internet-Draft                XFR-over-TLS                     July 2020
-
 
    [I-D.ietf-dnsop-extended-error]
               Kumari, W., Hunt, E., Arends, R., Hardaker, W., and D.
@@ -1830,6 +1842,14 @@ Internet-Draft                XFR-over-TLS                     July 2020
               Extensions", RFC 2535, DOI 10.17487/RFC2535, March 1999,
               <https://www.rfc-editor.org/info/rfc2535>.
 
+
+
+
+Toorop, et al.          Expires January 14, 2021               [Page 33]
+
+Internet-Draft                XFR-over-TLS                     July 2020
+
+
    [RFC5155]  Laurie, B., Sisson, G., Arends, R., and D. Blacka, "DNS
               Security (DNSSEC) Hashed Authenticated Denial of
               Existence", RFC 5155, DOI 10.17487/RFC5155, March 2008,
@@ -1839,16 +1859,6 @@ Internet-Draft                XFR-over-TLS                     July 2020
               for DNS (EDNS(0))", STD 75, RFC 6891,
               DOI 10.17487/RFC6891, April 2013, <https://www.rfc-
               editor.org/info/rfc6891>.
-
-
-
-
-
-
-Toorop, et al.          Expires January 14, 2021               [Page 33]
-
-Internet-Draft                XFR-over-TLS                     July 2020
-
 
    [RFC7828]  Wouters, P., Abley, J., Dickinson, S., and R. Bellis, "The
               edns-tcp-keepalive EDNS0 Option", RFC 7828,
@@ -1888,16 +1898,6 @@ A.1.  Client specific TLS acceptance
    number of TLS connections a server will have to support can be easily
    assessed.  Once the connection is accepted the server might well be
    willing to answer any query on that connection since it is coming
-   from a configured secondary and a specific response policy on the
-   connection may not be needed (see below).
-
-   Cons: Currently, none of the major open source DNS authoritative
-   implementations support such an option.
-
-
-
-
-
 
 
 
@@ -1905,6 +1905,12 @@ Toorop, et al.          Expires January 14, 2021               [Page 34]
 
 Internet-Draft                XFR-over-TLS                     July 2020
 
+
+   from a configured secondary and a specific response policy on the
+   connection may not be needed (see below).
+
+   Cons: Currently, none of the major open source DNS authoritative
+   implementations support such an option.
 
 A.2.  SNI based TLS acceptance
 
@@ -1947,13 +1953,7 @@ A.3.  TLS specific response policies
    o  relaxed: answer all non-XoT queries on all TLS connections with
       the same policy applied to TCP queries
 
-   Pros: Allows for flexible behavior by the server that could be
-   changed over time.
 
-   Cons: The server must handle the burden of accepting all TLS
-   connections just to perform XFRs with a small number of secondaries.
-   Client behavior to REFUSED response is not clearly defined (see
-   below).  Currently, none of the major open source DNS authoritative
 
 
 
@@ -1962,6 +1962,13 @@ Toorop, et al.          Expires January 14, 2021               [Page 35]
 Internet-Draft                XFR-over-TLS                     July 2020
 
 
+   Pros: Allows for flexible behavior by the server that could be
+   changed over time.
+
+   Cons: The server must handle the burden of accepting all TLS
+   connections just to perform XFRs with a small number of secondaries.
+   Client behavior to REFUSED response is not clearly defined (see
+   below).  Currently, none of the major open source DNS authoritative
    implementations offer an option for different response policies in
    different transports (but could potentially be implemented using a
    proxy).
@@ -1999,13 +2006,6 @@ Authors' Addresses
    Email: sara@sinodun.com
 
 
-   Shivan Sahib
-   Salesforce
-   Vancouver, BC
-   Canada
-
-   Email: ssahib@salesforce.com
-
 
 
 
@@ -2016,6 +2016,14 @@ Authors' Addresses
 Toorop, et al.          Expires January 14, 2021               [Page 36]
 
 Internet-Draft                XFR-over-TLS                     July 2020
+
+
+   Shivan Sahib
+   Salesforce
+   Vancouver, BC
+   Canada
+
+   Email: ssahib@salesforce.com
 
 
    Pallavi Aras
@@ -2032,14 +2040,6 @@ Internet-Draft                XFR-over-TLS                     July 2020
    United States
 
    Email: allison.mankin@gmail.com
-
-
-
-
-
-
-
-
 
 
 

@@ -953,7 +953,7 @@ support concurrent transfers of multiple zones)."
 </ul>
 
 <p> </p>
-<p id="rfc.section.6.4.p.3">The server MAY also require a valid TSIG/SIG(0) signature, but this alone is not sufficient to authenticate the client. Authentication mechanisms are discussed in full in <a href="#authentication-mechanisms">Section 8</a> and the rationale for the above requirement in <a href="#xot-authentication">Section 9</a>. Transfer group policies are discussed in <a href="#policies-for-both-axot-and-ixot">Section 10</a>.  </p>
+<p id="rfc.section.6.4.p.3">The server MAY also require a valid TSIG/SIG(0) signature, but this alone is not sufficient to authenticate the client or server. Authentication mechanisms are discussed in full in <a href="#authentication-mechanisms">Section 8</a> and the rationale for the above requirement in <a href="#xot-authentication">Section 9</a>. Transfer group policies are discussed in <a href="#policies-for-both-axot-and-ixot">Section 10</a>.  </p>
 <h1 id="rfc.section.6.5"><a href="#rfc.section.6.5">6.5.</a> <a href="#xot-connections" id="xot-connections">XoT connections</a></h1>
 <p id="rfc.section.6.5.p.1">The details in <a href="#updates-to-existing-specifications">Section 5</a> about e.g., persistent connections and XFR message handling are fully applicable to XoT connections as well. However any behavior specified here takes precedence for XoT.  </p>
 <p id="rfc.section.6.5.p.2">If no TLS connections are currently open, XoT clients MAY send SOA queries over UDP or TCP, or TLS.  </p>
@@ -1135,7 +1135,8 @@ described below)."
 <p id="rfc.section.10.p.2">We call the entire group of servers involved in XFR for a particular set of zones (all the primaries and all the secondaries) the 'transfer group'.  </p>
 <p id="rfc.section.10.p.3">Within any transfer group both AXFRs and IXFRs for a zone MUST all use the same policy, e.g., if AXFRs use AXoT all IXFRs MUST use IXoT.  </p>
 <p id="rfc.section.10.p.4">In order to assure the confidentiality of the zone information, the entire transfer group MUST have a consistent policy of requiring confidentiality. If any do not, this is a weak link for attackers to exploit.  </p>
-<p id="rfc.section.10.p.5">A XoT policy should specify </p>
+<p id="rfc.section.10.p.5">An individual zone transfer is not considered protected by XoT unless both the client and server are configured to use only XoT and the overall zone transfer is not considered protected until all members of the transfer group are configured to use only XoT with all other transfers servers (see <a href="#implementation-considerations">Section 11</a>).  </p>
+<p id="rfc.section.10.p.6">A XoT policy should specify </p>
 <p/>
 
 <ul>
@@ -1145,11 +1146,11 @@ described below)."
 </ul>
 
 <p> </p>
-<p id="rfc.section.10.p.7">Since this may require configuration of a number of servers who may be under the control of different operators the desired consistency could be hard to enforce and audit in practice.  </p>
-<p id="rfc.section.10.p.8">Certain aspects of the Policies can be relatively easily tested independently, e.g., by requesting zone transfers without TSIG, from unauthorized IP addresses or over cleartext DNS. Other aspects such as if a secondary will accept data without a TSIG digest or if secondaries are using Strict as opposed to Opportunistic TLS are more challenging.  </p>
-<p id="rfc.section.10.p.9">The mechanics of co-ordinating or enforcing such policies are out of the scope of this document but may be the subject of future operational guidance.  </p>
+<p id="rfc.section.10.p.8">Since this may require configuration of a number of servers who may be under the control of different operators the desired consistency could be hard to enforce and audit in practice.  </p>
+<p id="rfc.section.10.p.9">Certain aspects of the Policies can be relatively easily tested independently, e.g., by requesting zone transfers without TSIG, from unauthorized IP addresses or over cleartext DNS. Other aspects such as if a secondary will accept data without a TSIG digest or if secondaries are using Strict as opposed to Opportunistic TLS are more challenging.  </p>
+<p id="rfc.section.10.p.10">The mechanics of co-ordinating or enforcing such policies are out of the scope of this document but may be the subject of future operational guidance.  </p>
 <h1 id="rfc.section.11"><a href="#rfc.section.11">11.</a> <a href="#implementation-considerations" id="implementation-considerations">Implementation Considerations</a></h1>
-<p id="rfc.section.11.p.1">TBD </p>
+<p id="rfc.section.11.p.1">Server implementations may want to also offer options that allow ACLs on a zone to specify that a specific client can use either XoT or TCP. This would allow for a flexibility while clients are migrating to XoT. Client implementations may similarly want to offer such options to cater for the multi-primary case where the primaries are migrating to XoT. Such configuration options MUST only be used in a 'migration mode' though and should be used with care.  </p>
 <h1 id="rfc.section.12"><a href="#rfc.section.12">12.</a> <a href="#implementation-status" id="implementation-status">Implementation Status</a></h1>
 <p id="rfc.section.12.p.1">The 1.9.2 version of <a href="https://github.com/NLnetLabs/unbound/blob/release-1.9.2/doc/Changelog">Unbound</a> includes an option to perform AXoT (instead of AXFR-over-TCP). This requires the client (secondary) to authenticate the server (primary) using a configured authentication domain name.  </p>
 <p id="rfc.section.12.p.2">It is noted that use of a TLS proxy in front of the primary server is a simple deployment solution that can enable server side XoT.  </p>
