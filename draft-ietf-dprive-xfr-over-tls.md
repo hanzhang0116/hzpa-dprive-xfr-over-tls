@@ -706,11 +706,11 @@ where at a minimum:
   name using a Strict Privacy Profile as described in [@!RFC8310]
 * the server MUST validate the client is authorized to request or proxy a zone transfer by
   using one or both of the following:
-      * an IP based ACL
+      * an IP based ACL (which can be either per-message or per-connection)
       * Mutual TLS (mTLS)
 
 The server MAY also require a valid TSIG/SIG(0) signature, but this alone is
-not sufficient to authenticate the client. Authentication mechanisms are
+not sufficient to authenticate the client or server. Authentication mechanisms are
 discussed in full in (#authentication-mechanisms) and the rationale for the above
 requirement in (#xot-authentication). Transfer group policies are discussed in
 (#policies-for-both-axot-and-ixot).

@@ -1066,7 +1066,8 @@ Toorop, et al.          Expires January 14, 2021               [Page 19]
 Internet-Draft                XFR-over-TLS                     July 2020
 
 
-      *  an IP based ACL
+      *  an IP based ACL (which can be either per-message or per-
+         connection)
 
       *  Mutual TLS (mTLS)
 
@@ -1113,7 +1114,6 @@ Internet-Draft                XFR-over-TLS                     July 2020
    over TLS just because it has enabled XoT would be equivalent to
    defining a form of authoritative DoT.  This specification does not
    propose that, but it also does not prohibit servers from answering
-
 
 
 

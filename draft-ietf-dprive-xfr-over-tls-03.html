@@ -949,7 +949,7 @@ support concurrent transfers of multiple zones)."
 
 <ul>
   <li>the client MUST authenticate the server by use of an authentication domain name using a Strict Privacy Profile as described in <a href="#RFC8310">[RFC8310]</a></li>
-  <li>the server MUST validate the client is authorized to request or proxy a zone transfer by using one or both of the following: <ul><li>an IP based ACL</li><li>Mutual TLS (mTLS)</li></ul></li>
+  <li>the server MUST validate the client is authorized to request or proxy a zone transfer by using one or both of the following: <ul><li>an IP based ACL (which can be either per-message or per-connection)</li><li>Mutual TLS (mTLS)</li></ul></li>
 </ul>
 
 <p> </p>

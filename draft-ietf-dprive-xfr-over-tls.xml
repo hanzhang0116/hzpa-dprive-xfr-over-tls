@@ -795,7 +795,7 @@ name using a Strict Privacy Profile as described in <xref target="RFC8310"/></t>
 <t>the server MUST validate the client is authorized to request or proxy a zone transfer by
 using one or both of the following:
 <list style="symbols">
-<t>an IP based ACL</t>
+<t>an IP based ACL (which can be either per-message or per-connection)</t>
 <t>Mutual TLS (mTLS)</t>
 </list></t>
 </list>
