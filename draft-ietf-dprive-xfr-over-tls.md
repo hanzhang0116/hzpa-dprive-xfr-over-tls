@@ -90,10 +90,10 @@ most attention to date, with standards track documents for both DNS-over-TLS
 (DoT) [@!RFC7858] and DNS-over-HTTPS (DoH) [@RFC8484], and a proposal for
 DNS-over-QUIC [@I-D.ietf-dprive-dnsoquic]. There is ongoing work on DNS privacy
 requirements for exchanges between recursive resolvers and authoritative
-servers (ADoT) [@I-D.ietf-dprive-phase2-requirements] and some suggestions for how
+servers [@I-D.ietf-dprive-phase2-requirements] and some suggestions for how
 signaling of DoT support by authoritatives might work, e.g.,
 [@I-D.vandijk-dprive-ds-dot-signal-and-pin]. However there is currently no RFC
-that specifically defines authoritative support for DNS-over-TLS.
+that specifically defines recursive to authoritative DNS-over-TLS (ADoT).
 
 [@!RFC7626] established that stub client DNS query
 transactions are not public and needed protection, but on zone transfer
@@ -204,7 +204,7 @@ IXoT: IXFR over-TLS
 The threat model considered here is one where the current contents and size of the zone are considered
 sensitive and should be protected during transfer.
 
-The threat model does not however consider the existence of a zone, the act of
+The threat model does not, however, consider the existence of a zone, the act of
 zone transfer between two entities, nor the identities of the nameservers
 hosting a zone (including both those acting as hidden primaries/secondaries
 or directly serving the zone) as sensitive information. The proposed mechanisms
@@ -412,7 +412,7 @@ any downstream secondary.
 For convenience, phrase 'XFR-over-TCP' is used in this document to mean both
 IXFR-over-TCP and AXFR-over-TCP and therefore statements that use it update
 both [@RFC1995] and [@RFC5936], and implicitly also apply to XFRs-over-TLS.
-Difference in behaviour specific to XoT are discussed in
+Differences in behavior specific to XoT are discussed in
 (#xot-specification).
 
 Both [@RFC1995] and [@RFC5936] were published sometime before TCP was
@@ -698,17 +698,22 @@ connectivity the secondary is the TLS client and the primary the TLS server.
 
 ## XoT transfers
 
-For a zone transfer between two end points to be considered protected with XoT all XFR requests and response for that zone 
-MUST be sent over TLS connections where at a minimum:
+For a zone transfer between two end points to be considered protected with XoT
+all XFR requests and response for that zone MUST be sent over TLS connections
+where at a minimum:
 
 * the client MUST authenticate the server by use of an authentication domain
   name using a Strict Privacy Profile as described in [@!RFC8310]
-* the server MUST validate the client is authorized for the zone transfer by
-  using either Mutual TLS (mTLS), TSIG/SIG(0) or an IP based ACL.
+* the server MUST validate the client is authorized to request or proxy a zone transfer by
+  using one or both of the following:
+      * an IP based ACL
+      * Mutual TLS (mTLS)
 
-Authentication mechanisms are discussed in full in
-(#xot-authentication-models), and transfer group policies are
-discussed in (#policies-for-both-axot-and-ixot).
+The server MAY also require a valid TSIG/SIG(0) signature, but this alone is
+not sufficient to authenticate the client. Authentication mechanisms are
+discussed in full in (#authentication-mechanisms) and the rationale for the above
+requirement in (#xot-authentication). Transfer group policies are discussed in
+(#policies-for-both-axot-and-ixot).
 
 ## XoT connections 
 
@@ -745,11 +750,12 @@ responding to all queries received over TLS just because it has enabled XoT
 would be equivalent to defining a form of authoritative DoT. This specification
 does not propose that, but it also does not prohibit servers from answering
 queries other than those directly related to XFR exchanges over TLS. Rather we
-outline here
+simply outline in later sections:
 
-* how XoT implementations should utilize EDE codes for queries on TLS connections they are not willing to answer (see (#response-rcodes))
+* how XoT implementations should utilize EDE codes for queries on TLS
+  connections they are not willing to answer (see (#response-rcodes))
 * the operational and policy options that a XoT server operator has
-  with regard to managing TLS connections and messages (#xot-server-connection-handling) 
+  with regard to managing TLS connections and messages (see (#xot-server-connection-handling))
 
 ## Response RCODES
 
@@ -905,7 +911,27 @@ Recommendation of a particular scheme is out of scope of this document but
 implementations are encouraged to provide configuration options that allow
 operators to make choices about this behavior.
 
-# XoT authentication models
+# Authentication mechanisms
+
+To provide context, this section provides a brief summary of some of the
+existing authentication and validation mechanisms (both transport independent
+and TLS specific) that are available when performing zone transfers. The
+following section (#xot-authentication) then discusses in more details specifically how a
+combination of TLS authentication, TSIG and IP based ACLs interact for XoT.
+
+We classify the mechanisms based on the following properties:
+
+* 'Data Origin Authentication': Authentication that the DNS message originated
+  from the party with whom credentials were shared, and of the data integrity
+  of the message contents (the originating party may or may not be party
+  operating the far end of a TCP/TLS connection in a 'proxy' scenario).
+
+* 'Channel Confidentiality': Confidentiality of the communication channel between the
+  client and server (i.e. the two end points of a TCP/TLS connection) from passive surveillance.
+
+* Channel Authentication: Authentication of the identity of party to whom a TCP/TLS
+  connection is made (this might not be a direct connection between the primary
+  and secondary in a proxy scenario).
 
 ## TSIG
 
@@ -913,32 +939,44 @@ TSIG [@RFC2845] provides a mechanism for two or more parties to use shared
 secret keys which can then be used to create a message digest to protect
 individual DNS messages. This allows each party to authenticate that a request
 or response (and the data in it) came from the other party, even if it was
-transmitted over an unsecured channel or via a proxy. It provides party-to-party
-data authentication, but not hop-to-hop channel authentication or
-confidentiality.
+transmitted over an unsecured channel or via a proxy. 
+
+Properties: Data origin authentication
 
 ## SIG(0)
 
 SIG(0) [@RFC2535] similarly also provides a mechanism to digitally sign a DNS
 message but uses public key authentication, where the public keys are stored in
-DNS as KEY RRs and a private key is stored at the signer. It also provides
-party-to-party data authentication, but not hop-to-hop channel authentication or
-confidentiality.
+DNS as KEY RRs and a private key is stored at the signer. 
+
+Properties: Data origin authentication
 
 ## TLS
 
 ### Opportunistic
 
-Opportunistic TLS [@RFC8310] provides a defense against passive
-surveillance, providing on-the-wire confidentiality.
+Opportunistic TLS is defined in [@RFC8310] and can provide a defense against passive
+surveillance, providing on-the-wire confidentiality. Essentially
+
+* clients that know authentication information for a server SHOULD try to authenticate the server
+* however they MAY fallback to using TLS without authentication and 
+* they MAY fallback to using cleartext is TLS is not available.
+
+As such it does not offer a defense against active attacks (e.g. a MitM attack
+on the connection from client to server), and is not considered as useful for XoT.
+
+Properties: None guaranteed. 
 
 ### Strict
 
 Strict TLS [@RFC8310] requires that a client is configured with an
-authentication domain name (and/or SPKI pinset) that should be used to
-authenticate the TLS handshake with the server. This additionally provides a
-defense for the client against active surveillance, providing client-to-server
-authentication and end-to-end channel confidentiality.
+authentication domain name (and/or SPKI pinset) that MUST be used to
+authenticate the TLS handshake with the server. If authentication of the server
+fails, the client will not proceed with the connection. This provides a defense
+for the client against active surveillance, providing client-to-server
+authentication and end-to-end channel confidentiality.  
+
+Properties: Channel confidentiality and authentication (of the server).
 
 ### Mutual
 
@@ -949,96 +987,87 @@ and the client can authentic the server the same way as in Strict TLS. This
 provides a defense for both parties against active surveillance, providing
 bi-directional authentication and end-to-end channel confidentiality.
 
+Properties: Channel confidentiality and mutual authentication.
+
 ## IP Based ACL on the Primary
 
 Most DNS server implementations offer an option to configure an IP based Access
 Control List (ACL), which is often used in combination with TSIG based ACLs to
-restrict access to zone transfers on primary servers.
+restrict access to zone transfers on primary servers on a per message basis.
 
-This is also possible with XoT but it must be noted that as with TCP the
-implementation of such an ACL cannot be enforced on the primary until a XFR
+This is also possible with XoT but it must be noted that, as with TCP, the
+implementation of such an ACL cannot be enforced on the primary until an XFR
 request is received on an established connection.
 
-If control were to be any more fine-grained than this then a separate, dedicated
-port would need to be agreed between primary and secondary for XoT such that
-implementations would be able to refuse connections on that port to all clients
-except those configured as secondaries.
+As discussed (#xot -server-connection-handling) an IP based per connection ACL
+could also be implemented where only TLS connections from recognized
+secondaries are accepted.
+
+Properties: Channel authentication of the client.
 
 ## ZONEMD
 
-Message Digest for DNS Zones (ZONEMD) [@?I-D.ietf-dnsop-dns-zone-digest] digest
+For completeness, we also describe Message Digest for DNS Zones (ZONEMD)
+[@?I-D.ietf-dnsop-dns-zone-digest] here. The message digest
 is a mechanism that can be used to verify the content of a standalone zone. It
 is designed to be independent of the transmission channel or mechanism, allowing
 a general consumer of a zone to do origin authentication of the entire zone
 contents. Note that the current version of [@?I-D.ietf-dnsop-dns-zone-digest]
 states:
 
-`As specified at this time, ZONEMD is not designed for use in large, dynamic
-zones due to the time and resources required for digest calculation. The ZONEMD
-record described in this document includes fields reserved for future work to
-support large, dynamic zones.`
+`As specified herein, ZONEMD is impractical for large, dynamic zones due to the
+time and resources required for digest calculation. However, The ZONEMD record
+is extensible so that new digest schemes may be added in the future to support
+large, dynamic zones.`
 
-It is complementary the above mechanisms and can be used in conjunction with
-XoT but is not considered further.
+It is complementary but orthogonal the above mechanisms; and can be used in
+conjunction with XoT but is not considered further here.
 
-## Comparison of Authentication Methods
-
-The Table below compares the properties of a selection of the above methods in
-terms of what protection they provide to the secondary and primary servers
-during XoT in terms of:
-
-* 'Data Auth': Authentication that the DNS message data is signed by the party
-  with whom credentials were shared (the signing party may or may not be party
-  operating the far end of a TCP/TLS connection in a 'proxy' scenario). For the
-  primary the TSIG on the XFR request confirms that the requesting party is
-  authorized to request zone data, for the secondary it authenticates the zone
-  data that is received.
-
-* 'Channel Conf': Confidentiality of the communication channel between the
-  client and server (i.e. the two end points of a TCP/TLS connection).
-
-* Channel Auth: Authentication of the identity of party to whom a TCP/TLS
-  connection is made (this might not be a direct connection between the primary
-  and secondary in a proxy scenario).
+# XoT authentication
 
 It is noted that zone transfer scenarios can vary from a simple single
 primary/secondary relationship where both servers are under the control of a
 single operator to a complex hierarchical structure which includes proxies and
 multiple operators. Each deployment scenario will require specific analysis to
-determine which authentication methods are best suited to the deployment model
-in question.
+determine which combination of authentication methods are best suited to the
+deployment model in question.
 
-Method               |  DA(S) | CC(S) | CA(S) |  DA(P) | CC(P) | CA(P)
-:----------------------|:---------:|:--------:|:--------:|:---------:|:----------:|:--
-TSIG                  |        Y   |           |            |      Y    |             |
-Oppo TLS           |            |    Y      |      Y    |          |      Y      |
-Strict TLS           |            |      Y    |      Y    |           |      Y      |
-m TLS                 |            |     Y     |      Y    |           |      Y      | Y
-ACL on primary  |            |           |            |           |            | Y
+The XoT authentication requirement specified in (#xot-transfers) addresses the
+issue of ensuring that the transfers is encrypted between the two endpoints
+directly involved in the current transfers. The following table summarized this:
+
+Method               |  DO(S) | CC(S) | CA(S) |  DO(P) | CC(P) | CA(P)
+:----------------------|:---------:|:--------:|:--------:|:---------:|:-----------:|:--:
+Strict TLS            |             |    Y     |     Y    |             |      Y      |
+m TLS                 |             |     Y    |     Y    |             |      Y      |   Y
+ACL on primary   |             |           |            |            |               |   Y
+TSIG                   |        Y   |           |            |     Y     |               |
 
 Table 1: Properties of Authentication methods for XoT
 
 Based on this analysis it can be seen that:
 
-* A combination of Opportunistic TLS and TSIG provides both data authentication
-  and channel confidentiality for both parties. However this does not stop a
-  MitM attack on the channel which could be used to gather zone data.
-
-* Using just mutual TLS can be considered a standalone solution if the
-  secondary has reason to place equivalent trust in channel authentication as
-  data authentication, e.g., the same operator runs both the primary and
-  secondary.
+* Using just mutual TLS can be considered a standalone solution since both end points are authenticated
   
-* Using TSIG, Strict TLS and an ACL on the primary provides all 3 properties for
-  both parties with probably the lowest operational overhead.
+* Using Strict TLS and an IP based ACL on the primary also provides authentication of both end points
+
+* Additional use of TSIG (or equally SIG(0)) can also provide data origin
+  authentication which might be desirable for deployments that include a proxy
+  between the secondary and primary, but is not part of the XoT requirement
+  because it does nothing to guarantee channel confidentiality or
+  authentication.
 
 # Policies for Both AXoT and IXoT
+
+Whilst the protection of the zone contents in a transfer between two end points
+can be provided by the XoT protocol, the protection of all the transfers of a
+given zone requires operational administration and policy management.
 
 We call the entire group of servers involved in XFR for a particular set of
 zones (all the primaries and all the secondaries) the 'transfer group'.
 
-Within any transfer group both AXFRs and IXFRs for a zone SHOULD all use the
-same policy, e.g., if AXFRs use AXoT all IXFRs SHOULD use IXoT.
+Within any transfer group both AXFRs and IXFRs for a zone MUST all use the
+same policy, e.g., if AXFRs use AXoT all IXFRs MUST use IXoT.
 
 In order to assure the confidentiality of the zone information, the entire
 transfer group MUST have a consistent policy of requiring confidentiality. If
@@ -1046,9 +1075,9 @@ any do not, this is a weak link for attackers to exploit.
 
 A XoT policy should specify
 
-* If TSIG or SIG(0) is required
-* What kind of TLS is required (Opportunistic, Strict or Mutual TLS)
-* If IP based ACLs should also be used.
+* What kind of TLS is required (Strict or Mutual TLS)
+* or if an IP based ACL is required.
+* (optionally) if TSIG/SIG(0) is required
 
 Since this may require configuration of a number of servers who may be under
 the control of different operators the desired consistency could be hard to
@@ -1080,20 +1109,6 @@ It is noted that use of a TLS proxy in front of the primary server is a simple
 deployment solution that can enable server side XoT.
 
 # IANA Considerations
-
-## Registration of XoT Identification String
-
-   This document creates a new registration for the identification of
-   XoT in the "Application Layer Protocol Negotiation (ALPN) Protocol
-   IDs" registry [RFC7301].
-
-   The "xot" string identifies XoT:
-
-   Protocol: XoT
-
-   Identification Sequence: 0x64 0x6F 0x72 ("xot")
-
-   Specification: This document
 
 # Security Considerations
 
@@ -1217,10 +1232,10 @@ observing traffic to potentially abuse this mechanism. ECH.....
 
 ##  TLS specific response policies
 
-Some primaries will rely solely on TSIG/SIG(0) to authenticate secondaries, since
-this requires less maintenance at the primary if the pool of secondaries
-changes over time. In this case the primary must accept all incoming TLS
-connections and then apply a TLS specific response policy on a per message basis.
+Some primaries might rely on TSIG/SIG(0) combined with per-message IP based
+ACLs to authenticate secondaries. In this case the primary must accept all
+incoming TLS connections and then apply a TLS specific response policy on a per
+message basis.
 
 As an aside, whilst [@RFC7766] makes a general purpose distinction to clients
 in the usage of connections (between regular queries and zone transfers) this
@@ -1232,12 +1247,12 @@ those queries.
 
 Example policies a XoT server might implement are:
 
-* strict: REFUSE all queries on TLS connections except SOA and XFR requests 
+* strict: REFUSE all queries on TLS connections except SOA and authorized XFR requests 
 * moderate: REFUSE all queries on TLS connections until one is received that is
   signed by a recognized TSIG/SIG(0) key, then answer all queries on the
   connection after that
 * complex: apply a heuristic to determine which queries on a TLS connections to REFUSE
-* relaxed: answer all queries on all TLS connections with the same policy applied to TCP queries
+* relaxed: answer all non-XoT queries on all TLS connections with the same policy applied to TCP queries
 
 Pros: Allows for flexible behavior by the server that could be changed over time. 
 
