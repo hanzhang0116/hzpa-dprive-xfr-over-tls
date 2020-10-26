@@ -90,7 +90,7 @@
 <uri></uri>
 </address>
 </author>
-<date year="2020" month="July" day="13"/>
+<date year="2020" month="October" day="26"/>
 
 <area>Internet</area>
 <workgroup>dprive</workgroup>
@@ -105,7 +105,9 @@ opportunity to collect the content of a zone by eavesdropping on network
 connections. The DNS Transaction Signature (TSIG) mechanism is specified to
 restrict direct zone transfer to authorized clients only, but it does not add
 confidentiality. This document specifies use of TLS, rather then clear text, to
-prevent zone content collection via passive monitoring of zone transfers: XFR-over-TLS (XoT).
+prevent zone content collection via passive monitoring of zone transfers:
+XFR-over-TLS (XoT). Additionally, this specification updates RFC1995,
+RFC5936 and RFC7766.
 </t>
 </abstract>
 
@@ -209,6 +211,8 @@ for two servers engaged in zone transfers.
 </t>
 <t>DoT: DNS-over-TLS as specified in <xref target="RFC7858"/>
 </t>
+<t>XFR-over-TCP: Used to mean both IXFR-over-TCP <xref target="RFC1995"/> and AXFR-over-TCP <xref target="RFC5936"/>.
+</t>
 <t>XoT: Generic XFR-over-TLS mechanisms as specified in this document
 </t>
 <t>AXoT: AXFR-over-TLS
@@ -222,7 +226,7 @@ for two servers engaged in zone transfers.
 <list style="symbols">
 <t>Confidentiality. Clearly using an encrypted transport for zone transfers will
 defeat zone content leakage that can occur via passive surveillance.</t>
-<t>Authentication. Use of single or mutual TLS authentication (in combination
+<t>Authentication. Use of single or mutual TLS (mTLS) authentication (in combination
 with ACLs) can complement and potentially be an alternative to TSIG.</t>
 <t>Performance. Existing AXFR and IXFR mechanisms have the burden of backwards
 compatibility with older implementations based on the original specifications
@@ -254,8 +258,8 @@ does not attempt to obscure such information. The reasons for this include:
 nameservers simply from traffic patterns, even when some or all of the traffic is encrypted</t>
 </list>
 </t>
-<t>We note that the use of XoT will indicate a desire by the zone owner that the contents of the zone
-remain confidential and could be subject to blocking (e.g. via blocking of port 853) if an attacker had
+<t>It is noted that simply using XoT will indicate a desire by the zone owner that the contents of the zone
+remain confidential and so could be subject to blocking (e.g. via blocking of port 853) if an attacker had
 such capabilities. However this threat is likely true of any such mechanism that attempts to encrypt data
 passed between nameservers e.g. IPsec.
 </t>
@@ -300,8 +304,8 @@ request/response exchange.
    Secondary                            Primary
 
        |              NOTIFY               |
-       | --------------------------------&gt; |  UPD
-       | &lt;-------------------------------- |
+       | &lt;-------------------------------- |  UPD
+       | --------------------------------&gt; |
        |          NOTIFY Response          |
        |                                   |
        |                                   |
@@ -368,8 +372,8 @@ connection.
    Secondary                            Primary
 
        |              NOTIFY               |
-       | --------------------------------&gt; |  UPD
-       | &lt;-------------------------------- |
+       | &lt;-------------------------------- |  UPD
+       | --------------------------------&gt; |
        |          NOTIFY Response          |
        |                                   |
        |                                   |
@@ -410,29 +414,27 @@ primary after the primary sends an IXFR response.</t>
 </t>
 <t><xref target="RFC1995"/> specifies that Incremental Transfer may use UDP if the entire IXFR
 response can be contained in a single DNS packet, otherwise, TCP is used. In
-fact is says:
+fact it says:
 </t>
 
 <figure align="center"><artwork align="center">
 "Thus, a client should first make an IXFR query using UDP."
 </artwork></figure>
 <t>So there may be a fourth step above where the client falls back to IXFR-over-TCP.
-There may also be a forth step where the secondary must fall back to AXFR
+There may also be a fourth step where the secondary must fall back to AXFR
 because, e.g., the primary does not support IXFR.
 </t>
-<t>However it is noted that at least two widely used open source authoritative
-nameserver implementations (<eref target="https://www.isc.org/bind/">BIND</eref> and
+<t>However it is noted that most widely used open source authoritative
+nameserver implementations (including both <eref target="https://www.isc.org/bind/">BIND</eref> and
 <eref target="https://www.nlnetlabs.nl/projects/nsd/about/">NSD</eref>) do IXFR using TCP by
 default in their latest releases. For BIND TCP connections are sometimes used
 for SOA queries but in general they are not used persistently and close after
 an IXFR is completed.
 </t>
-<t>TODO: Look at packet captures from NSD and Knot Auth to see what they do
-</t>
 </section>
 
 <section anchor="data-leakage-of-notify-and-soa-message-exchanges" title="Data Leakage of NOTIFY and SOA Message Exchanges">
-<t>This section attempts to presents a rationale for also encrypting the other
+<t>This section attempts to presents a rationale for considering encrypting the other
 messages in the XFR mechanism.
 </t>
 <t>Since the SOA of the published zone can be trivially discovered by simply
@@ -456,7 +458,7 @@ potential leak.
 </section>
 
 <section anchor="soa" title="SOA">
-<t>For hidden primaries or secondaries the SOA response leaks the degree of lag of
+<t>For hidden primaries or secondaries the SOA response leaks only the degree of lag of
 any downstream secondary.
 </t>
 </section>
@@ -464,9 +466,9 @@ any downstream secondary.
 </section>
 
 <section anchor="updates-to-existing-specifications" title="Updates to existing specifications">
-<t>For convenience, phrase 'XFR-over-TCP' is used in this document to mean both
+<t>For convenience, the phrase 'XFR-over-TCP' is used in this document to mean both
 IXFR-over-TCP and AXFR-over-TCP and therefore statements that use it update
-both <xref target="RFC1995"/> and <xref target="RFC5936"/>, and implicitly also apply to XFRs-over-TLS.
+both <xref target="RFC1995"/> and <xref target="RFC5936"/>, and implicitly also apply to XoT.
 Differences in behavior specific to XoT are discussed in
 <xref target="xot-specification"/>.
 </t>
@@ -478,7 +480,7 @@ implicit assumption (probably unintentional) that a TCP connection is used for
 one and only one IXFR request. Indeed, several open source implementations
 currently take this approach. And whilst <xref target="RFC5936"/> gives guidance on
 connection re-use for AXFR, it pre-dates more recent specifications describing
-persistent TCP connections e.g. <xref target="RFC7828"/> and AXFR implementations again,
+persistent TCP connections e.g. <xref target="RFC7626"/>, <xref target="RFC7828"/> and AXFR implementations again
 often make less than optimal use of open connections.
 </t>
 <t>Given this, new implementations of XoT will clearly benefit from specific guidance on
@@ -491,22 +493,21 @@ TCP/TLS connection usage for XFR because this will:
 XFR-over-TCP implementations have historically often supported</t>
 </list>
 </t>
-<t>Therefore this document updates the previous specifications for XFR-over-TCP to clarify
-that implementations MUST use <xref target="RFC7766"/> to optimize the use of TCP
-connections and SHOULD use <xref target="RFC7858"/> to manage persistent connections.
+<t>Therefore this document updates both the previous specifications for
+XFR-over-TCP to clarify that implementations MUST use <xref target="RFC7766"/> (DNS
+Transport over TCP - Implementation Requirements) to optimize the use of TCP
+connections and SHOULD use <xref target="RFC7828"/> (The edns-tcp-keepalive EDNS0 Option) to
+manage persistent connections.
 </t>
 <t>The following sections include detailed clarifications on the updates to XFR behavior implied in
-<xref target="RFC7766"/> and how the use of <xref target="RFC7858"/> applies specifically to XFR
-exchanges. It also discusses how IXFR and XAFR can reuse the same TCP connection.
+<xref target="RFC7766"/> and how the use of <xref target="RFC7828"/> applies specifically to XFR
+exchanges. It also discusses how IXFR and AXFR can reuse the same TCP connection.
 </t>
 <t>For completeness, we also mention here the recent specification of extended DNS
 error (EDE) codes. For zone transfers, when returning REFUSED to a zone transfer
 request to an 'unauthorized' client (e.g. where the client is not listed in an
 ACL for zone transfers or does not sign the request with the correct TSIG key),
 the extended DNS error code 18 (Prohibited) can also be sent.
-</t>
-<t>[QUESTION FOR AUTHORS] Should we move the rest of this section later i.e. after
-the XoT discussion so the draft feels less TCP centric?
 </t>
 
 <section anchor="update-to-rfc1995-for-ixfrovertcp" title="Update to RFC1995 for IXFR-over-TCP">
@@ -524,8 +525,6 @@ able to handle multiple concurrent AXoT sessions on a single TCP connection
 MAY be intermingled and AXFR-over-TCP clients compliant with this specification
 MUST be able to handle this.
 </t>
-<t>TODO: What is the behavior of existing implementations (both client and server)?
-</t>
 </section>
 
 <section anchor="updates-to-rfc1995-and-rfc5936-for-xfrovertcp" title="Updates to RFC1995 and RFC5936 for XFR-over-TCP">
@@ -534,7 +533,7 @@ MUST be able to handle this.
 <t>As specified, XFR-over-TCP clients SHOULD re-use any existing open TCP connection when
 starting any new XFR request to the same primary, and for issuing SOA queries,
 instead of opening a new connection. The number of TCP connections between a
-secondary and primary SHOULD be minimized (also see #update-to-rfc7766).
+secondary and primary SHOULD be minimized (also see <xref target="update-to-rfc7766"/>).
 </t>
 <t>Valid reasons for not re-using existing connections might include:
 </t>
@@ -545,14 +544,12 @@ single TCP connection</t>
 <t>the message ID pool has already been exhausted on an open connection</t>
 <t>a large number of timeouts or slow responses have occurred on an open
 connection</t>
-<t>an EDNS0 Keepalive option with a timeout of 0 has been received from the
-server and the client is in the process of closing the connection (see <xref target="edns0-keepalive-option"/>)</t>
+<t>an edns-tcp-keepalive EDNS0 option with a timeout of 0 has been received from the
+server and the client is in the process of closing the connection (see <xref target="the-ednstcpkeepalive-edns0-option"/>)</t>
 </list>
 </t>
 <t>If no TCP connections are currently open, XFR clients MAY send SOA queries over
 UDP or a new TCP connection.
-</t>
-<t>Also see section <xref target="update-to-rfc7766"/> for more details of connection sharing.
 </t>
 </section>
 
@@ -564,7 +561,7 @@ connection for both IXFR and AXFR requests. <xref target="RFC5936"/> does make t
 <figure align="center"><artwork align="center">
 "Non-AXFR session traffic can also use an open TCP connection."
 </artwork></figure>
-<t>We clarify here that implementations capable of both AXFR and IXFR compliant with this specification SHOULD
+<t>We clarify here that implementations capable of both AXFR and IXFR and compliant with this specification SHOULD
 </t>
 <t>
 <list style="symbols">
@@ -582,13 +579,17 @@ the total number of IXFRs, AXFRs or total XFR transfers on a single connection
 if local policy dictates. The server MAY decline concurrent IXFRs or AXFRs
 requests for the same zone if local policy dictates.
 </t>
-<t>For both XFR mechanisms, if a server returns REFUSED to a zone transfer request
-because one of the limits above is reached, if possible, the server can also
-return the extended DNS error code 18 - Prohibited
-[I-D.ietf-dnsop-extended-error] on the basis the request was declined based on
+<t>For both XFR-over-TCP mechanisms, if a server returns REFUSED to a zone
+transfer request because one of the limits above is reached, if possible, the
+server should also return the extended DNS error code 18 - Prohibited
+<xref target="RFC8914"/> on the basis the request was declined based on
 local policy.
 </t>
-<t>[OPEN QUESTION] A server that implements EDE codes is also likely to
+<t>[OPEN QUESTION] Testing has shown that BIND returns SERVFAIL if the limit on
+concurrent transfers is reached. Should there be a specific recommendation here
+about what is returned re: SERVFAIL vs REFUSED?
+</t>
+<t>[OPEN QUESTION] A server that implements EDE codes might also
 return Prohibited for cases where the zone transfer is refused because the
 client is not authorized for the zone transfer. Is there a desire to define
 additional XFR specific EDE codes so that a client can determine
@@ -598,12 +599,12 @@ on this connection, etc.
 </t>
 </section>
 
-<section anchor="edns0-keepalive-option" title="EDNS0 Keepalive option">
-<t>XFR clients that send the EDNS0 Keepalive option on every XFR request provide the
-server with maximum opportunity to update the Keepalive timeout. The XFR server
+<section anchor="the-ednstcpkeepalive-edns0-option" title="The edns-tcp-keepalive EDNS0 Option">
+<t>XFR clients that send the edns-tcp-keepalive EDNS0 option on every XFR request provide the
+server with maximum opportunity to update the edns-tcp-keepalive timeout. The XFR server
 may use the frequency of recent XFRs to calculate an average update rate as
-input to the decision of what EDNS0 Keepalive timeout to use. If the server
-does not support EDNS0 Keepalive the client MAY keep the connection open for a
+input to the decision of what edns-tcp-keepalive timeout to use. If the server
+does not support edns-tcp-keepalive the client MAY keep the connection open for a
 few seconds (<xref target="RFC7766"/> recommends that servers use timeouts of at least a few
 seconds).
 </t>
@@ -617,24 +618,22 @@ responses."
 </artwork></figure>
 <t>We clarify here that if an OPT record is present in a received AXFR request,
 compliant responders MUST include an OPT record in each of the subsequent AXFR
-responses. Note that this requirement, combined with the use of EDNS0
-Keepalive, enables AXFR servers to signal the desire to close a connection
-(when existing transactions have competed) due to low resources by sending an
-EDNS0 Keepalive option with a timeout of 0 on any AXFR response. This does not
-signal that the AXFR is aborted, just that the server wishes to close the
-connection as soon as possible.
+responses. Note that this requirement, combined with the use of
+edns-tcp-keepalive, enables AXFR servers to signal the desire to close a
+connection (when existing transactions have competed) due to low resources by
+sending an edns-tcp-keepalive EDNS0 option with a timeout of 0 on any AXFR
+response. This does not signal that the AXFR is aborted, just that the server
+wishes to close the connection as soon as possible.
 </t>
 </section>
 
 <section anchor="backwards-compatibility" title="Backwards compatibility">
-<t>TODO: This section needs more work
-</t>
 <t>Certain legacy behaviors were noted in <xref target="RFC5936"/>, with provisos that
 implementations may want to offer options to fallback to legacy behavior when
 interoperating with servers known not to support <xref target="RFC5936"/>. For purposes of
-interoperability IXFR and AXFR implementations may want to continue offering
-such configuration options as well as supporting some behaviors that were
-previously underspecified (e.g. performing IXFR and AXFRs on separate
+interoperability, IXFR and AXFR implementations may want to continue offering
+such configuration options, as well as supporting some behaviors that were
+underspecified prior to this work (e.g. performing IXFR and AXFRs on separate
 connections). However, XoT implementations should have no need to do so.
 </t>
 </section>
@@ -669,7 +668,7 @@ same separation of connection purpose (regular queries and zone transfers) for
 all transports being used on top of TCP. Therefore, it is RECOMMENDED that for
 each protocol used on top of TCP in any given client/server interaction there
 SHOULD be no more than one connection for regular queries and one for zone
-transfers. As an illustration it could be imagined that in future such an
+transfers. As an illustration, it could be imagined that in future such an
 interaction could hypothetically include one or all of the following:
 </t>
 <t>
@@ -692,7 +691,7 @@ a particular client.
 <section anchor="xot-specification" title="XoT specification">
 
 <section anchor="tls-versions" title="TLS versions">
-<t>For improved security all implementations of this specification MUST use only TLS 1.3 [RFC8446] or later.
+<t>For improved security all implementations of this specification MUST use only TLS 1.3 <xref target="RFC8446"/> or later.
 </t>
 </section>
 
@@ -700,11 +699,15 @@ a particular client.
 <t>The connection for XoT SHOULD be established using port 853, as specified in
 <xref target="RFC7858"/>, unless there is mutual agreement between the secondary and primary
 to use a port other than port 853 for XoT. There MAY be agreement to use
-different ports for AXoT and IXoT.
+different ports for AXoT and IXoT, or for different zones.
 </t>
 </section>
 
 <section anchor="high-level-xot-descriptions" title="High level XoT descriptions">
+<t>It is useful to note that in XoT it is the secondary that initiates
+the TLS connection to the primary for a XFR request, so that in terms of
+connectivity the secondary is the TLS client and the primary the TLS server.
+</t>
 <t>The figure below provides an outline of the AXoT mechanism including NOTIFYs.
 </t>
 
@@ -712,14 +715,14 @@ different ports for AXoT and IXoT.
    Secondary                            Primary
 
        |              NOTIFY               |
-       | --------------------------------&gt; |  UPD
-       | &lt;-------------------------------- |
+       | &lt;-------------------------------- |  UPD
+       | --------------------------------&gt; |
        |          NOTIFY Response          |
        |                                   |
        |                                   |
        |            SOA Request            |
        | --------------------------------&gt; |  UDP (or part of
-       | &lt;-------------------------------- |  a TCP session)
+       | &lt;-------------------------------- |  a TCP/TLS session)
        |           SOA Response            |
        |                                   |
        |                                   |
@@ -749,14 +752,14 @@ different ports for AXoT and IXoT.
    Secondary                            Primary
 
        |              NOTIFY               |
-       | --------------------------------&gt; |  UPD
-       | &lt;-------------------------------- |
+       | &lt;-------------------------------- |  UPD
+       | --------------------------------&gt; |
        |          NOTIFY Response          |
        |                                   |
        |                                   |
        |            SOA Request            |
        | --------------------------------&gt; |  UDP (or part of
-       | &lt;-------------------------------- |  a TLS session)
+       | &lt;-------------------------------- |  a TCP/TLS session)
        |           SOA Response            |
        |                                   |
        |                                   |
@@ -777,10 +780,6 @@ different ports for AXoT and IXoT.
               Figure 1. IXoT Mechanism
               
 </artwork></figure>
-<t>It is useful to note that in XoT it is the secondary that initiates
-the TLS connection to the primary for a XFR request, so that in terms of
-connectivity the secondary is the TLS client and the primary the TLS server.
-</t>
 </section>
 
 <section anchor="xot-transfers" title="XoT transfers">
@@ -801,10 +800,11 @@ using one or both of the following:
 </list>
 </t>
 <t>The server MAY also require a valid TSIG/SIG(0) signature, but this alone is
-not sufficient to authenticate the client or server. Authentication mechanisms are
-discussed in full in <xref target="authentication-mechanisms"/> and the rationale for the above
-requirement in <xref target="xot-authentication"/>. Transfer group policies are discussed in
-<xref target="policies-for-both-axot-and-ixot"/>.
+not sufficient to authenticate the client or server.
+</t>
+<t>Authentication mechanisms are discussed in full in <xref target="authentication-mechanisms"/>
+and the rationale for the above requirement in <xref target="xot-authentication"/>. Transfer
+group policies are discussed in <xref target="policies-for-both-axot-and-ixot"/>.
 </t>
 </section>
 
@@ -819,21 +819,19 @@ UDP or TCP, or TLS.
 </section>
 
 <section anchor="xot-vs-adot" title="XoT vs ADoT">
-<t>TODO - this section needs work
-</t>
 <t>As noted earlier, there is currently no specification for encryption of
 connections from recursive resolvers to authoritative servers. Some
 authoritatives are experimenting with ADoT and opportunistic encryption has
 also been raised as a possibility; it is therefore highly likely that use of
 encryption by authoritative servers will evolve in the coming years.
 </t>
-<t>This raises questions in the short term with regard to TLS connection and
-message handling for authoritative servers. In particular there is likely to be
+<t>This raises questions in the short term,§§ with regard to TLS connection and
+message handling for authoritative servers. In particular, there is likely to be
 a class of authoritatives that wish to use XoT in the near future with a small
 number of configured secondaries but that do wish to support DoT for regular
 queries from recursive in that same time frame. These servers have to
 potentially cope with probing and direct queries from recursives and from test
-servers and also potential attacks that might wish to make use of TLS to
+servers, and also potential attacks that might wish to make use of TLS to
 overload the server.
 </t>
 <t><xref target="RFC5936"/> clearly states that non-AXFR session traffic can use an open TCP
@@ -842,12 +840,12 @@ applying the same model to XoT. Proposing that a server should also start
 responding to all queries received over TLS just because it has enabled XoT
 would be equivalent to defining a form of authoritative DoT. This specification
 does not propose that, but it also does not prohibit servers from answering
-queries other than those directly related to XFR exchanges over TLS. Rather we
-simply outline in later sections:
+queries unrelated to XFR exchanges over TLS. Rather, this specification
+simply outlines in later sections:
 </t>
 <t>
 <list style="symbols">
-<t>how XoT implementations should utilize EDE codes for queries on TLS
+<t>how XoT implementations should utilize EDE codes in response to queries on TLS
 connections they are not willing to answer (see <xref target="response-rcodes"/>)</t>
 <t>the operational and policy options that a XoT server operator has
 with regard to managing TLS connections and messages (see <xref target="xot-server-connection-handling"/>)</t>
@@ -859,20 +857,21 @@ with regard to managing TLS connections and messages (see <xref target="xot-serv
 <t>XoT clients and servers MUST implement EDE codes. If a XoT server receives
 non-XoT traffic it is not willing to answer on a TLS connection it SHOULD
 respond with the extended DNS error code 21 - Not Supported
-<xref target="I-D.ietf-dnsop-extended-error"/>. XoT clients should not send any further
+<xref target="RFC8914"/>. XoT clients should not send any further
 queries of this type to the server for a reasonable period of time (for
 example, one hour) i.e., long enough that the server configuration or policy
 might be updated.
 </t>
-<t>TODO: Is this right, or should it be Prohibited (by policy), or should we create a new code?
+<t>[OPEN QUESTION] Should this instead be Prohibited (by policy), or should a new
+EDE be created for this case?
 </t>
 <t>Historically servers have used the REFUSED RCODE for many situations, and so
 clients often had no detailed information on which to base an error or fallback
 path when queries were refused. As a result the client behavior could vary
 significantly. XoT severs that refuse queries must cater for the fact that
 client behavior might vary from continually retrying queries regardless of
-receiving REFUSED to every query, or at the other extreme they may decide to
-stop using the server over any transport. This is because those servers are
+receiving REFUSED to every query, or at the other extreme clients may decide to
+stop using the server over any transport. This might be because those clients are
 either non-XoT clients or do not implement EDE codes.
 </t>
 </section>
@@ -894,7 +893,7 @@ minimize information leakage about zone update activity and growth.</t>
 zones complicates any attempt to analyze the traffic size and timing to
 extract information.
 </t>
-<t>We note here that, depending on the padding policies eventually developed for XoT,
+<t>It is noted here that, depending on the padding policies eventually developed for XoT,
 the requirement to obfuscate the total zone size might
 require a server to create 'empty' AXoT responses. That is, AXoT responses that
 contain no RR's apart from an OPT RR containing the EDNS(0) option for padding.
@@ -972,7 +971,7 @@ trade-offs involved are expected to be the subject of future work.
 </section>
 
 <section anchor="name-compression-and-maximum-payload-sizes" title="Name compression and maximum payload sizes">
-<t>We note here that many DNS implementations make use of name compression
+<t>It is noted here that many DNS implementations make use of name compression
 <xref target="RFC1035"/> in XFR responses to reduce the size of the payload. For a simple
 implementation this will limit the size of an individual payload to something
 around 16Kb since this is the maximum value of the offset that can be used in
@@ -1023,10 +1022,11 @@ operators to make choices about this behavior.
 </section>
 
 <section anchor="authentication-mechanisms" title="Authentication mechanisms">
-<t>To provide context, this section provides a brief summary of some of the
-existing authentication and validation mechanisms (both transport independent
-and TLS specific) that are available when performing zone transfers. The
-following section <xref target="xot-authentication"/> then discusses in more details specifically how a
+<t>To provide context to the requirements in section <xref target="xot-transfers"/>, this
+section provides a brief summary of some of the existing authentication and
+validation mechanisms (both transport independent and TLS specific) that are
+available when performing zone transfers.
+<xref target="xot-authentication"/> then discusses in more details specifically how a
 combination of TLS authentication, TSIG and IP based ACLs interact for XoT.
 </t>
 <t>We classify the mechanisms based on the following properties:
@@ -1067,8 +1067,8 @@ DNS as KEY RRs and a private key is stored at the signer.
 
 <section anchor="tls" title="TLS">
 
-<section anchor="opportunistic" title="Opportunistic">
-<t>Opportunistic TLS is defined in <xref target="RFC8310"/> and can provide a defense against passive
+<section anchor="opportunistic-tls" title="Opportunistic TLS">
+<t>Opportunistic TLS for DoT is defined in <xref target="RFC8310"/> and can provide a defense against passive
 surveillance, providing on-the-wire confidentiality. Essentially
 </t>
 <t>
@@ -1085,8 +1085,8 @@ on the connection from client to server), and is not considered as useful for Xo
 </t>
 </section>
 
-<section anchor="strict" title="Strict">
-<t>Strict TLS <xref target="RFC8310"/> requires that a client is configured with an
+<section anchor="strict-tls" title="Strict TLS">
+<t>Strict TLS for DoT <xref target="RFC8310"/> requires that a client is configured with an
 authentication domain name (and/or SPKI pinset) that MUST be used to
 authenticate the TLS handshake with the server. If authentication of the server
 fails, the client will not proceed with the connection. This provides a defense
@@ -1097,7 +1097,7 @@ authentication and end-to-end channel confidentiality.
 </t>
 </section>
 
-<section anchor="mutual" title="Mutual">
+<section anchor="mutual-tls" title="Mutual TLS">
 <t>This is an extension to Strict TLS <xref target="RFC8310"/> which requires that a client is
 configured with an authentication domain name (and/or SPKI pinset) and a client
 certificate. The client offers the certificate for authentication by the server
@@ -1113,13 +1113,13 @@ bi-directional authentication and end-to-end channel confidentiality.
 <section anchor="ip-based-acl-on-the-primary" title="IP Based ACL on the Primary">
 <t>Most DNS server implementations offer an option to configure an IP based Access
 Control List (ACL), which is often used in combination with TSIG based ACLs to
-restrict access to zone transfers on primary servers on a per message basis.
+restrict access to zone transfers on primary servers on a per query basis.
 </t>
 <t>This is also possible with XoT but it must be noted that, as with TCP, the
 implementation of such an ACL cannot be enforced on the primary until an XFR
 request is received on an established connection.
 </t>
-<t>As discussed (#xot -server-connection-handling) an IP based per connection ACL
+<t>As discussed in <xref target="xot-server-connection-handling"/> an IP based per connection ACL
 could also be implemented where only TLS connections from recognized
 secondaries are accepted.
 </t>
@@ -1173,7 +1173,7 @@ the primary.
 <ttcol align="center">CA(P)</ttcol>
 
 <c>Strict TLS</c><c></c><c>Y</c><c>Y</c><c></c><c>Y</c><c></c>
-<c>m TLS</c><c></c><c>Y</c><c>Y</c><c></c><c>Y</c><c>Y</c>
+<c>Mutual TLS</c><c></c><c>Y</c><c>Y</c><c></c><c>Y</c><c>Y</c>
 <c>ACL on primary</c><c></c><c></c><c></c><c></c><c></c><c>Y</c>
 <c>TSIG</c><c>Y</c><c></c><c></c><c>Y</c><c></c><c></c>
 </texttable>
@@ -1241,10 +1241,13 @@ of this document but may be the subject of future operational guidance.
 <section anchor="implementation-considerations" title="Implementation Considerations">
 <t>Server implementations may want to also offer options that allow ACLs on a zone
 to specify that a specific client can use either XoT or TCP. This would allow
-for a flexibility while clients are migrating to XoT. Client implementations
-may similarly want to offer such options to cater for the multi-primary case
-where the primaries are migrating to XoT. Such configuration options MUST
-only be used in a 'migration mode' though and should be used with care.
+for flexibility while clients are migrating to XoT.
+</t>
+<t>Client implementations may similarly want to offer options to cater for the
+multi-primary case where the primaries are migrating to XoT.
+</t>
+<t>Such configuration options MUST only be used in a 'migration mode' though and
+therefore should be used with care.
 </t>
 </section>
 
@@ -1286,8 +1289,8 @@ observation of encrypted connections.</t>
 </section>
 
 <section anchor="acknowledgements" title="Acknowledgements">
-<t>The authors thank Benno Overeinder, Shumon Huque and Tim Wicinski for review
-and discussions.
+<t>The authors thank Tony Finch, Peter van Dijk, Benno Overeinder, Shumon Huque
+and Tim Wicinski for review and discussions.
 </t>
 </section>
 
@@ -1307,6 +1310,20 @@ and discussions.
 </section>
 
 <section anchor="changelog" title="Changelog">
+<t>draft-ietf-dprive-xfr-over-tls-03
+</t>
+<t>
+<list style="symbols">
+<t>Remove propose to use ALPN</t>
+<t>Clarify updates to both RFC1995 and RFC5936 by adding specific sections on this</t>
+<t>Add a section on the threat model</t>
+<t>Convert all SVG diagrams to ASCII art</t>
+<t>Add discussions on concurrency limits</t>
+<t>Add discussions on Extended DNS error codes</t>
+<t>Re-work authentication requirements and discussion</t>
+<t>Add appendix discussion TLS connection management</t>
+</list>
+</t>
 <t>draft-ietf-dprive-xfr-over-tls-02
 </t>
 <t>
@@ -1375,22 +1392,24 @@ handling</t>
 <?rfc include="https://xml2rfc.tools.ietf.org/public/rfc/bibxml/reference.RFC.6973.xml"?>
 <?rfc include="https://xml2rfc.tools.ietf.org/public/rfc/bibxml/reference.RFC.7626.xml"?>
 <?rfc include="https://xml2rfc.tools.ietf.org/public/rfc/bibxml/reference.RFC.7766.xml"?>
+<?rfc include="https://xml2rfc.tools.ietf.org/public/rfc/bibxml/reference.RFC.7828.xml"?>
 <?rfc include="https://xml2rfc.tools.ietf.org/public/rfc/bibxml/reference.RFC.7858.xml"?>
 <?rfc include="https://xml2rfc.tools.ietf.org/public/rfc/bibxml/reference.RFC.8174.xml"?>
 <?rfc include="https://xml2rfc.tools.ietf.org/public/rfc/bibxml/reference.RFC.8310.xml"?>
+<?rfc include="https://xml2rfc.tools.ietf.org/public/rfc/bibxml/reference.RFC.8446.xml"?>
 <?rfc include="https://xml2rfc.tools.ietf.org/public/rfc/bibxml/reference.RFC.8499.xml"?>
+<?rfc include="https://xml2rfc.tools.ietf.org/public/rfc/bibxml/reference.RFC.8914.xml"?>
 </references>
 <references title="Informative References">
 <?rfc include="https://xml2rfc.tools.ietf.org/public/rfc/bibxml3/reference.I-D.ietf-dnsop-dns-zone-digest.xml"?>
-<?rfc include="https://xml2rfc.tools.ietf.org/public/rfc/bibxml3/reference.I-D.ietf-dnsop-extended-error.xml"?>
 <?rfc include="https://xml2rfc.tools.ietf.org/public/rfc/bibxml3/reference.I-D.ietf-dprive-dnsoquic.xml"?>
 <?rfc include="https://xml2rfc.tools.ietf.org/public/rfc/bibxml3/reference.I-D.ietf-dprive-phase2-requirements.xml"?>
+<?rfc include="https://xml2rfc.tools.ietf.org/public/rfc/bibxml3/reference.I-D.ietf-tls-esni.xml"?>
 <?rfc include="https://xml2rfc.tools.ietf.org/public/rfc/bibxml3/reference.I-D.vandijk-dprive-ds-dot-signal-and-pin.xml"?>
 <?rfc include="https://xml2rfc.tools.ietf.org/public/rfc/bibxml/reference.RFC.1982.xml"?>
 <?rfc include="https://xml2rfc.tools.ietf.org/public/rfc/bibxml/reference.RFC.2535.xml"?>
 <?rfc include="https://xml2rfc.tools.ietf.org/public/rfc/bibxml/reference.RFC.5155.xml"?>
 <?rfc include="https://xml2rfc.tools.ietf.org/public/rfc/bibxml/reference.RFC.6891.xml"?>
-<?rfc include="https://xml2rfc.tools.ietf.org/public/rfc/bibxml/reference.RFC.7828.xml"?>
 <?rfc include="https://xml2rfc.tools.ietf.org/public/rfc/bibxml/reference.RFC.8484.xml"?>
 <reference anchor='nist-guide'
  target='https://nvlpubs.nist.gov/nistpubs/SpecialPublications/NIST.SP.800-81-2.pdf'>
@@ -1408,15 +1427,28 @@ handling</t>
 </references>
 
 <section anchor="xot-server-connection-handling" title="XoT server connection handling">
-<t>For completeness, we note that an earlier version of the specification
+<t>For completeness, it is noted that an earlier version of the specification
 suggested using a XoT specific ALPN to negotiate TLS connections that supported
 only a limited set of queries (SOA, XRFs) however this did not gain support.
 Reasons given included additional code complexity and proxies having no natural
 way to forward the ALPN signal to DNS nameservers over TCP connections.
 </t>
 
+<section anchor="only-listen-on-tls-on-a-specific-ip-address" title="Only listen on TLS on a specific IP address">
+<t>Obviously a nameserver which hosts a zone and services queries for the zone on
+an IP address published in an NS record may wish to use a separate IP address
+for listening on TLS for XoT, only publishing that address to its secondaries.
+</t>
+<t>Pros: Probing of the public IP address will show no support for TLS. ACLs will
+prevent zone transfer on all transports on a per query basis.
+</t>
+<t>Cons: Attackers passively observing traffic will still be able to observe TLS
+connections to the separate address.
+</t>
+</section>
+
 <section anchor="client-specific-tls-acceptance" title="Client specific TLS acceptance">
-<t>Primaries that include IP based ACLs and/or mTLS in their authentication models
+<t>Primaries that include IP based ACLs and/or mutual TLS in their authentication models
 have the option of only accepting TLS connections from authorized clients. This
 could be implemented using a proxy or directly in DNS implementation.
 </t>
@@ -1437,23 +1469,24 @@ was published only to their secondaries.
 </t>
 <t>Pros: Reduces the number of accepted connections.
 </t>
-<t>Cons: As above. For SNIs sent in the clear, this would still allow attackers passively
-observing traffic to potentially abuse this mechanism. ECH.....
+<t>Cons: As above. For SNIs sent in the clear, this would still allow attackers
+passively observing traffic to potentially abuse this mechanism. The use of
+Encrypted Client Hello <xref target="I-D.ietf-tls-esni"/> may be of use here.
 </t>
 </section>
 
 <section anchor="tls-specific-response-policies" title="TLS specific response policies">
-<t>Some primaries might rely on TSIG/SIG(0) combined with per-message IP based
+<t>Some primaries might rely on TSIG/SIG(0) combined with per-query IP based
 ACLs to authenticate secondaries. In this case the primary must accept all
 incoming TLS connections and then apply a TLS specific response policy on a per
-message basis.
+query basis.
 </t>
 <t>As an aside, whilst <xref target="RFC7766"/> makes a general purpose distinction to clients
-in the usage of connections (between regular queries and zone transfers) this
+in the usage of connections (between regular queries and zone transfers) this is
 not strict and nothing in the DNS protocol prevents using the same connection
 for both types of traffic. Hence a server cannot know the intention of any
 client that connects to it, it can only inspect the messages it receives on
-such a connection and make per message decisions about whether or not to answer
+such a connection and make per query decisions about whether or not to answer
 those queries.
 </t>
 <t>Example policies a XoT server might implement are:
