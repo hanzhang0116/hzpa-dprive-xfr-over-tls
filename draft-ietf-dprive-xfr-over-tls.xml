@@ -504,10 +504,10 @@ manage persistent connections.
 exchanges. It also discusses how IXFR and AXFR can reuse the same TCP connection.
 </t>
 <t>For completeness, we also mention here the recent specification of extended DNS
-error (EDE) codes. For zone transfers, when returning REFUSED to a zone transfer
-request to an 'unauthorized' client (e.g. where the client is not listed in an
-ACL for zone transfers or does not sign the request with the correct TSIG key),
-the extended DNS error code 18 (Prohibited) can also be sent.
+error (EDE) codes <xref target="RFC8914"/>. For zone transfers, when returning REFUSED to a
+zone transfer request to an 'unauthorized' client (e.g. where the client is not
+listed in an ACL for zone transfers or does not sign the request with the
+correct TSIG key), the extended DNS error code 18 (Prohibited) can also be sent.
 </t>
 
 <section anchor="update-to-rfc1995-for-ixfrovertcp" title="Update to RFC1995 for IXFR-over-TCP">

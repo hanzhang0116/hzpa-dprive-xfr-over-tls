@@ -654,11 +654,11 @@ Internet-Draft                XFR-over-TLS                  October 2020
    and AXFR can reuse the same TCP connection.
 
    For completeness, we also mention here the recent specification of
-   extended DNS error (EDE) codes.  For zone transfers, when returning
-   REFUSED to a zone transfer request to an 'unauthorized' client (e.g.
-   where the client is not listed in an ACL for zone transfers or does
-   not sign the request with the correct TSIG key), the extended DNS
-   error code 18 (Prohibited) can also be sent.
+   extended DNS error (EDE) codes [RFC8914].  For zone transfers, when
+   returning REFUSED to a zone transfer request to an 'unauthorized'
+   client (e.g. where the client is not listed in an ACL for zone
+   transfers or does not sign the request with the correct TSIG key),
+   the extended DNS error code 18 (Prohibited) can also be sent.
 
 5.1.  Update to RFC1995 for IXFR-over-TCP
 
