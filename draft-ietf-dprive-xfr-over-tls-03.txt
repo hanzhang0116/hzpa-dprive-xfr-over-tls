@@ -93,7 +93,7 @@ Table of Contents
    6.  XoT specification . . . . . . . . . . . . . . . . . . . . . .  16
      6.1.  TLS versions  . . . . . . . . . . . . . . . . . . . . . .  16
      6.2.  Port selection  . . . . . . . . . . . . . . . . . . . . .  16
-     6.3.  High level XoT descriptions . . . . . . . . . . . . . . .  17
+     6.3.  High level XoT descriptions . . . . . . . . . . . . . . .  16
      6.4.  XoT transfers . . . . . . . . . . . . . . . . . . . . . .  18
      6.5.  XoT connections . . . . . . . . . . . . . . . . . . . . .  19
      6.6.  XoT vs ADoT . . . . . . . . . . . . . . . . . . . . . . .  19
@@ -744,29 +744,17 @@ Internet-Draft                XFR-over-TLS                  October 2020
 5.3.3.  XFR limits
 
    The server MAY limit the number of concurrent IXFRs, AXFRs or total
-   XFR transfers on a single connection if local policy dictates.  The
-   server MAY limit the total number of IXFRs, AXFRs or total XFR
-   transfers on a single connection if local policy dictates.  The
-   server MAY decline concurrent IXFRs or AXFRs requests for the same
-   zone if local policy dictates.
-
-   For both XFR-over-TCP mechanisms, if a server returns REFUSED to a
-   zone transfer request because one of the limits above is reached, if
-   possible, the server should also return the extended DNS error code
-   18 - Prohibited [RFC8914] on the basis the request was declined based
-   on local policy.
+   XFR transfers in progress, or from a given secondary, to protect
+   server resources.
 
    [OPEN QUESTION] Testing has shown that BIND returns SERVFAIL if the
    limit on concurrent transfers is reached.  Should there be a specific
    recommendation here about what is returned re: SERVFAIL vs REFUSED?
 
-   [OPEN QUESTION] A server that implements EDE codes might also return
-   Prohibited for cases where the zone transfer is refused because the
-   client is not authorized for the zone transfer.  Is there a desire to
-   define additional XFR specific EDE codes so that a client can
-   determine precisely why a specific XFR request was denied e.g., Max
-   concurrent XFR: too may concurrent transfers in progress, Max total
-   XFR: no more requests accepted on this connection, etc.
+   [OPEN QUESTION] Is there a desire to define additional XFR specific
+   EDE codes so that a client can determine precisely why a specific XFR
+   request was denied in this case e.g., Max concurrent XFR: too may
+   concurrent transfers in progress.
 
 5.3.4.  The edns-tcp-keepalive EDNS0 Option
 
@@ -779,13 +767,6 @@ Internet-Draft                XFR-over-TLS                  October 2020
    connection open for a few seconds ([RFC7766] recommends that servers
    use timeouts of at least a few seconds).
 
-
-
-Toorop, et al.           Expires April 29, 2021                [Page 14]
-
-Internet-Draft                XFR-over-TLS                  October 2020
-
-
    Whilst the specification for EDNS0 [RFC6891]  does not specifically
    mention AXFRs, it does say
 
@@ -797,6 +778,14 @@ Internet-Draft                XFR-over-TLS                  October 2020
    request, compliant responders MUST include an OPT record in each of
    the subsequent AXFR responses.  Note that this requirement, combined
    with the use of edns-tcp-keepalive, enables AXFR servers to signal
+
+
+
+Toorop, et al.           Expires April 29, 2021                [Page 14]
+
+Internet-Draft                XFR-over-TLS                  October 2020
+
+
    the desire to close a connection (when existing transactions have
    competed) due to low resources by sending an edns-tcp-keepalive EDNS0
    option with a timeout of 0 on any AXFR response.  This does not
@@ -834,14 +823,6 @@ Internet-Draft                XFR-over-TLS                  October 2020
 
    Whilst this recommends a particular behavior for the clients using
    TCP, it does not relax the requirement for servers to handle 'mixed'
-
-
-
-Toorop, et al.           Expires April 29, 2021                [Page 15]
-
-Internet-Draft                XFR-over-TLS                  October 2020
-
-
    traffic (regular queries and zone transfers) on any open TCP/TLS
    connection.  It also overlooks the potential that other transports
    might want to take the same approach with regard to using separate
@@ -853,6 +834,14 @@ Internet-Draft                XFR-over-TLS                  October 2020
    Therefore, it is RECOMMENDED that for each protocol used on top of
    TCP in any given client/server interaction there SHOULD be no more
    than one connection for regular queries and one for zone transfers.
+
+
+
+Toorop, et al.           Expires April 29, 2021                [Page 15]
+
+Internet-Draft                XFR-over-TLS                  October 2020
+
+
    As an illustration, it could be imagined that in future such an
    interaction could hypothetically include one or all of the following:
 
@@ -887,6 +876,17 @@ Internet-Draft                XFR-over-TLS                  October 2020
    There MAY be agreement to use different ports for AXoT and IXoT, or
    for different zones.
 
+6.3.  High level XoT descriptions
+
+   It is useful to note that in XoT it is the secondary that initiates
+   the TLS connection to the primary for a XFR request, so that in terms
+   of connectivity the secondary is the TLS client and the primary the
+   TLS server.
+
+   The figure below provides an outline of the AXoT mechanism including
+   NOTIFYs.
+
+
 
 
 
@@ -897,16 +897,6 @@ Toorop, et al.           Expires April 29, 2021                [Page 16]
 
 Internet-Draft                XFR-over-TLS                  October 2020
 
-
-6.3.  High level XoT descriptions
-
-   It is useful to note that in XoT it is the secondary that initiates
-   the TLS connection to the primary for a XFR request, so that in terms
-   of connectivity the secondary is the TLS client and the primary the
-   TLS server.
-
-   The figure below provides an outline of the AXoT mechanism including
-   NOTIFYs.
 
         Secondary                            Primary
 
@@ -943,6 +933,16 @@ Internet-Draft                XFR-over-TLS                  October 2020
 
    The figure below provides an outline of the IXoT mechanism including
    NOTIFYs.
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -1204,14 +1204,14 @@ Internet-Draft                XFR-over-TLS                  October 2020
 
 6.10.  Name compression and maximum payload sizes
 
-   It is noted here that many DNS implementations make use of name
-   compression [RFC1035] in XFR responses to reduce the size of the
-   payload.  For a simple implementation this will limit the size of an
-   individual payload to something around 16Kb since this is the maximum
+   It is noted here that name compression [RFC1035] can be used in XFR
+   responses to reduce the size of the payload, however the maximum
    value of the offset that can be used in the name compression pointer
-   structure.  (A more sophisticated implementation might use sequential
-   'sets' of offsets throughout the message to support a larger payload
-   size.)
+   structure is 16384.  For some DNS implementations this limits the
+   size of an individual XFR response used in practice to something
+   around the order of 16kB.  In principle, larger payload sizes can be
+   supported for some responses with more sophisticated approaches (e.g.
+   by pre-calculating the maximum offset required).
 
    Implementations may wish to offer options to disable name compression
    for XoT responses to enable larger payloads.  This might be

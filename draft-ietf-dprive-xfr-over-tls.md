@@ -503,29 +503,17 @@ We clarify here that implementations capable of both AXFR and IXFR and compliant
 
 ### XFR limits
 
-The server MAY limit the number of concurrent IXFRs, AXFRs or total XFR
-transfers on a single connection if local policy dictates. The server MAY limit
-the total number of IXFRs, AXFRs or total XFR transfers on a single connection
-if local policy dictates. The server MAY decline concurrent IXFRs or AXFRs
-requests for the same zone if local policy dictates.
-
-For both XFR-over-TCP mechanisms, if a server returns REFUSED to a zone
-transfer request because one of the limits above is reached, if possible, the
-server should also return the extended DNS error code 18 - Prohibited
-[@!RFC8914] on the basis the request was declined based on
-local policy.
+The server MAY limit the number of concurrent IXFRs, AXFRs or total XFR transfers
+in progress, or from a given secondary, to protect server resources.
 
 [OPEN QUESTION] Testing has shown that BIND returns SERVFAIL if the limit on
 concurrent transfers is reached. Should there be a specific recommendation here
 about what is returned re: SERVFAIL vs REFUSED?
 
-[OPEN QUESTION] A server that implements EDE codes might also
-return Prohibited for cases where the zone transfer is refused because the
-client is not authorized for the zone transfer. Is there a desire to define
+[OPEN QUESTION] Is there a desire to define
 additional XFR specific EDE codes so that a client can determine
-precisely why a specific XFR request was denied e.g., Max concurrent XFR: too
-may concurrent transfers in progress, Max total XFR: no more requests accepted
-on this connection, etc.
+precisely why a specific XFR request was denied in this case e.g., Max concurrent XFR: too
+may concurrent transfers in progress.
 
 ### The edns-tcp-keepalive EDNS0 Option
 
@@ -866,13 +854,13 @@ trade-offs involved are expected to be the subject of future work.
 
 ## Name compression and maximum payload sizes
 
-It is noted here that many DNS implementations make use of name compression
-[@RFC1035] in XFR responses to reduce the size of the payload. For a simple
-implementation this will limit the size of an individual payload to something
-around 16Kb since this is the maximum value of the offset that can be used in
-the name compression pointer structure. (A more sophisticated implementation
-might use sequential 'sets' of offsets throughout the message to support a
-larger payload size.) 
+It is noted here that name compression [@RFC1035] can be used in XFR responses
+to reduce the size of the payload, however the maximum value of the offset that
+can be used in the name compression pointer structure is 16384. For some DNS
+implementations this limits the size of an individual XFR response used in
+practice to something around the order of 16kB. In principle, larger
+payload sizes can be supported for some responses with more sophisticated
+approaches (e.g. by pre-calculating the maximum offset required).
 
 Implementations may wish to offer options to disable name compression for XoT
 responses to enable larger payloads. This might be particularly helpful when
