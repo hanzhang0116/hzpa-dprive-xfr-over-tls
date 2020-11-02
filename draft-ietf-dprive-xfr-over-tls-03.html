@@ -445,7 +445,7 @@
 
   <meta name="dct.creator" content="Toorop, W., Dickinson, S., Sahib, S., Aras, P., and A. Mankin" />
   <meta name="dct.identifier" content="urn:ietf:id:draft-ietf-dprive-xfr-over-tls-03" />
-  <meta name="dct.issued" scheme="ISO8601" content="2020-10-26" />
+  <meta name="dct.issued" scheme="ISO8601" content="2020-11-2" />
   <meta name="dct.abstract" content="DNS zone transfers are transmitted in clear text, which gives attackers the opportunity to collect the content of a zone by eavesdropping on network connections. The DNS Transaction Signature (TSIG) mechanism is specified to restrict direct zone transfer to authorized clients only, but it does not add confidentiality. This document specifies use of TLS, rather then clear text, to prevent zone content collection via passive monitoring of zone transfers: XFR-over-TLS (XoT). Additionally, this specification updates RFC1995, RFC5936 and RFC7766.  " />
   <meta name="description" content="DNS zone transfers are transmitted in clear text, which gives attackers the opportunity to collect the content of a zone by eavesdropping on network connections. The DNS Transaction Signature (TSIG) mechanism is specified to restrict direct zone transfer to authorized clients only, but it does not add confidentiality. This document specifies use of TLS, rather then clear text, to prevent zone content collection via passive monitoring of zone transfers: XFR-over-TLS (XoT). Additionally, this specification updates RFC1995, RFC5936 and RFC7766.  " />
 
@@ -473,7 +473,7 @@
   <td class="right">Sinodun IT</td>
 </tr>
 <tr>
-  <td class="left">Expires: April 29, 2021</td>
+  <td class="left">Expires: May 6, 2021</td>
   <td class="right">S. Sahib</td>
 </tr>
 <tr>
@@ -490,7 +490,7 @@
 </tr>
 <tr>
   <td class="left"></td>
-  <td class="right">October 26, 2020</td>
+  <td class="right">November 2, 2020</td>
 </tr>
 
     	
@@ -510,7 +510,7 @@
 <p>This Internet-Draft is submitted in full conformance with the provisions of BCP 78 and BCP 79.</p>
 <p>Internet-Drafts are working documents of the Internet Engineering Task Force (IETF).  Note that other groups may also distribute working documents as Internet-Drafts.  The list of current Internet-Drafts is at http://datatracker.ietf.org/drafts/current/.</p>
 <p>Internet-Drafts are draft documents valid for a maximum of six months and may be updated, replaced, or obsoleted by other documents at any time.  It is inappropriate to use Internet-Drafts as reference material or to cite them other than as "work in progress."</p>
-<p>This Internet-Draft will expire on April 29, 2021.</p>
+<p>This Internet-Draft will expire on May 6, 2021.</p>
 <h1 id="rfc.copyrightnotice">
   <a href="#rfc.copyrightnotice">Copyright Notice</a>
 </h1>
@@ -823,8 +823,8 @@ unsecure hint at the new RRset for this (QNAME,QCLASS,QTYPE).
 <p> </p>
 <h1 id="rfc.section.5.3.3"><a href="#rfc.section.5.3.3">5.3.3.</a> <a href="#xfr-limits" id="xfr-limits">XFR limits</a></h1>
 <p id="rfc.section.5.3.3.p.1">The server MAY limit the number of concurrent IXFRs, AXFRs or total XFR transfers in progress, or from a given secondary, to protect server resources.  </p>
-<p id="rfc.section.5.3.3.p.2">[OPEN QUESTION] Testing has shown that BIND returns SERVFAIL if the limit on concurrent transfers is reached. Should there be a specific recommendation here about what is returned re: SERVFAIL vs REFUSED? </p>
-<p id="rfc.section.5.3.3.p.3">[OPEN QUESTION] Is there a desire to define additional XFR specific EDE codes so that a client can determine precisely why a specific XFR request was denied in this case e.g., Max concurrent XFR: too may concurrent transfers in progress.  </p>
+<p id="rfc.section.5.3.3.p.2">[OPEN QUESTION] Testing has shown that BIND returns SERVFAIL if the limit on concurrent transfers is reached since this is regarded as a soft limit and a retry can/should succeed. Should there be a specific recommendation here about what is returned re: SERVFAIL vs REFUSED? </p>
+<p id="rfc.section.5.3.3.p.3">[OPEN QUESTION] Is there a desire to define an additional XFR specific EDE code so that a client can determine why a specific XFR request was declined in this case e.g., Max concurrent XFR: too may concurrent transfers in progress. It could potentially contain a retry delay, or at least clients can apply a reasonable back-off for the retry. This could avoid retry storms which have been observed to actually increase the load on primaries in certain scenarios.  </p>
 <h1 id="rfc.section.5.3.4"><a href="#rfc.section.5.3.4">5.3.4.</a> <a href="#the-ednstcpkeepalive-edns0-option" id="the-ednstcpkeepalive-edns0-option">The edns-tcp-keepalive EDNS0 Option</a></h1>
 <p id="rfc.section.5.3.4.p.1">XFR clients that send the edns-tcp-keepalive EDNS0 option on every XFR request provide the server with maximum opportunity to update the edns-tcp-keepalive timeout. The XFR server may use the frequency of recent XFRs to calculate an average update rate as input to the decision of what edns-tcp-keepalive timeout to use. If the server does not support edns-tcp-keepalive the client MAY keep the connection open for a few seconds (<a href="#RFC7766">[RFC7766]</a> recommends that servers use timeouts of at least a few seconds).  </p>
 <p id="rfc.section.5.3.4.p.2">Whilst the specification for EDNS0  <a href="#RFC6891">[RFC6891]</a>  does not specifically mention AXFRs, it does say </p>

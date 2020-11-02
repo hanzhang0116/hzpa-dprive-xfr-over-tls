@@ -90,7 +90,7 @@
 <uri></uri>
 </address>
 </author>
-<date year="2020" month="October" day="26"/>
+<date year="2020" month="November" day="2"/>
 
 <area>Internet</area>
 <workgroup>dprive</workgroup>
@@ -577,13 +577,16 @@ connection for both IXFR and AXFR requests. <xref target="RFC5936"/> does make t
 in progress, or from a given secondary, to protect server resources.
 </t>
 <t>[OPEN QUESTION] Testing has shown that BIND returns SERVFAIL if the limit on
-concurrent transfers is reached. Should there be a specific recommendation here
-about what is returned re: SERVFAIL vs REFUSED?
+concurrent transfers is reached since this is regarded as a soft limit and a
+retry can/should succeed. Should there be a specific recommendation here about what is
+returned re: SERVFAIL vs REFUSED?
 </t>
-<t>[OPEN QUESTION] Is there a desire to define
-additional XFR specific EDE codes so that a client can determine
-precisely why a specific XFR request was denied in this case e.g., Max concurrent XFR: too
-may concurrent transfers in progress.
+<t>[OPEN QUESTION] Is there a desire to define an additional XFR specific EDE code
+so that a client can determine why a specific XFR request was declined in this
+case e.g., Max concurrent XFR: too may concurrent transfers in progress. It
+could potentially contain a retry delay, or at least clients can apply a
+reasonable back-off for the retry. This could avoid retry storms which have
+been observed to actually increase the load on primaries in certain scenarios.
 </t>
 </section>
 

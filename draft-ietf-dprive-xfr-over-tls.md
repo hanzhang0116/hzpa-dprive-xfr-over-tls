@@ -8,7 +8,7 @@
     workgroup = "dprive"
     keyword = ["DNS", "operations", "privacy"]
     updates = [1995, 5936, 7766]
-    date = 2020-10-26T00:00:00Z
+    date = 2020-11-02T00:00:00Z
     [pi]
     [[author]]
      initials="W."
@@ -507,13 +507,16 @@ The server MAY limit the number of concurrent IXFRs, AXFRs or total XFR transfer
 in progress, or from a given secondary, to protect server resources.
 
 [OPEN QUESTION] Testing has shown that BIND returns SERVFAIL if the limit on
-concurrent transfers is reached. Should there be a specific recommendation here
-about what is returned re: SERVFAIL vs REFUSED?
+concurrent transfers is reached since this is regarded as a soft limit and a
+retry can/should succeed. Should there be a specific recommendation here about what is
+returned re: SERVFAIL vs REFUSED?
 
-[OPEN QUESTION] Is there a desire to define
-additional XFR specific EDE codes so that a client can determine
-precisely why a specific XFR request was denied in this case e.g., Max concurrent XFR: too
-may concurrent transfers in progress.
+[OPEN QUESTION] Is there a desire to define an additional XFR specific EDE code
+so that a client can determine why a specific XFR request was declined in this
+case e.g., Max concurrent XFR: too may concurrent transfers in progress. It
+could potentially contain a retry delay, or at least clients can apply a
+reasonable back-off for the retry. This could avoid retry storms which have
+been observed to actually increase the load on primaries in certain scenarios.
 
 ### The edns-tcp-keepalive EDNS0 Option
 

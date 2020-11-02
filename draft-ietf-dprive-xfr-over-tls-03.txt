@@ -6,11 +6,11 @@ dprive                                                         W. Toorop
 Internet-Draft                                                NLnet Labs
 Updates: 1995, 5936, 7766 (if approved)                     S. Dickinson
 Intended status: Standards Track                              Sinodun IT
-Expires: April 29, 2021                                         S. Sahib
+Expires: May 6, 2021                                            S. Sahib
                                                                  P. Aras
                                                                A. Mankin
                                                               Salesforce
-                                                        October 26, 2020
+                                                        November 2, 2020
 
 
                        DNS Zone Transfer-over-TLS
@@ -43,7 +43,7 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on April 29, 2021.
+   This Internet-Draft will expire on May 6, 2021.
 
 Copyright Notice
 
@@ -53,9 +53,9 @@ Copyright Notice
 
 
 
-Toorop, et al.           Expires April 29, 2021                 [Page 1]
+Toorop, et al.             Expires May 6, 2021                  [Page 1]
 
-Internet-Draft                XFR-over-TLS                  October 2020
+Internet-Draft                XFR-over-TLS                 November 2020
 
 
    This document is subject to BCP 78 and the IETF Trust's Legal
@@ -109,9 +109,9 @@ Table of Contents
 
 
 
-Toorop, et al.           Expires April 29, 2021                 [Page 2]
+Toorop, et al.             Expires May 6, 2021                  [Page 2]
 
-Internet-Draft                XFR-over-TLS                  October 2020
+Internet-Draft                XFR-over-TLS                 November 2020
 
 
    8.  Authentication mechanisms . . . . . . . . . . . . . . . . . .  23
@@ -165,9 +165,9 @@ Internet-Draft                XFR-over-TLS                  October 2020
 
 
 
-Toorop, et al.           Expires April 29, 2021                 [Page 3]
+Toorop, et al.             Expires May 6, 2021                  [Page 3]
 
-Internet-Draft                XFR-over-TLS                  October 2020
+Internet-Draft                XFR-over-TLS                 November 2020
 
 
       "Privacy risks for the holder of a zone (the risk that someone
@@ -221,9 +221,9 @@ Internet-Draft                XFR-over-TLS                  October 2020
 
 
 
-Toorop, et al.           Expires April 29, 2021                 [Page 4]
+Toorop, et al.             Expires May 6, 2021                  [Page 4]
 
-Internet-Draft                XFR-over-TLS                  October 2020
+Internet-Draft                XFR-over-TLS                 November 2020
 
 
    Section 8 of the NIST guide on 'Secure Domain Name System (DNS)
@@ -277,9 +277,9 @@ Internet-Draft                XFR-over-TLS                  October 2020
 
 
 
-Toorop, et al.           Expires April 29, 2021                 [Page 5]
+Toorop, et al.             Expires May 6, 2021                  [Page 5]
 
-Internet-Draft                XFR-over-TLS                  October 2020
+Internet-Draft                XFR-over-TLS                 November 2020
 
 
    o  Authentication.  Use of single or mutual TLS (mTLS) authentication
@@ -333,9 +333,9 @@ Internet-Draft                XFR-over-TLS                  October 2020
 
 
 
-Toorop, et al.           Expires April 29, 2021                 [Page 6]
+Toorop, et al.             Expires May 6, 2021                  [Page 6]
 
-Internet-Draft                XFR-over-TLS                  October 2020
+Internet-Draft                XFR-over-TLS                 November 2020
 
 
 4.  Connection and Data Flows in Existing XFR Mechanisms
@@ -389,9 +389,9 @@ Internet-Draft                XFR-over-TLS                  October 2020
 
 
 
-Toorop, et al.           Expires April 29, 2021                 [Page 7]
+Toorop, et al.             Expires May 6, 2021                  [Page 7]
 
-Internet-Draft                XFR-over-TLS                  October 2020
+Internet-Draft                XFR-over-TLS                 November 2020
 
 
           Secondary                            Primary
@@ -445,9 +445,9 @@ Internet-Draft                XFR-over-TLS                  October 2020
 
 
 
-Toorop, et al.           Expires April 29, 2021                 [Page 8]
+Toorop, et al.             Expires May 6, 2021                  [Page 8]
 
-Internet-Draft                XFR-over-TLS                  October 2020
+Internet-Draft                XFR-over-TLS                 November 2020
 
 
        an AXFR query message and the sequence of AXFR response messages
@@ -501,9 +501,9 @@ Internet-Draft                XFR-over-TLS                  October 2020
 
 
 
-Toorop, et al.           Expires April 29, 2021                 [Page 9]
+Toorop, et al.             Expires May 6, 2021                  [Page 9]
 
-Internet-Draft                XFR-over-TLS                  October 2020
+Internet-Draft                XFR-over-TLS                 November 2020
 
 
           Secondary                            Primary
@@ -557,9 +557,9 @@ Internet-Draft                XFR-over-TLS                  October 2020
 
 
 
-Toorop, et al.           Expires April 29, 2021                [Page 10]
+Toorop, et al.             Expires May 6, 2021                 [Page 10]
 
-Internet-Draft                XFR-over-TLS                  October 2020
+Internet-Draft                XFR-over-TLS                 November 2020
 
 
         "Thus, a client should first make an IXFR query using UDP."
@@ -613,9 +613,9 @@ Internet-Draft                XFR-over-TLS                  October 2020
 
 
 
-Toorop, et al.           Expires April 29, 2021                [Page 11]
+Toorop, et al.             Expires May 6, 2021                 [Page 11]
 
-Internet-Draft                XFR-over-TLS                  October 2020
+Internet-Draft                XFR-over-TLS                 November 2020
 
 
    Both [RFC1995] and [RFC5936] were published sometime before TCP was
@@ -669,9 +669,9 @@ Internet-Draft                XFR-over-TLS                  October 2020
 
 
 
-Toorop, et al.           Expires April 29, 2021                [Page 12]
+Toorop, et al.             Expires May 6, 2021                 [Page 12]
 
-Internet-Draft                XFR-over-TLS                  October 2020
+Internet-Draft                XFR-over-TLS                 November 2020
 
 
    zones) and SHOULD send the responses as soon as they are available,
@@ -725,9 +725,9 @@ Internet-Draft                XFR-over-TLS                  October 2020
 
 
 
-Toorop, et al.           Expires April 29, 2021                [Page 13]
+Toorop, et al.             Expires May 6, 2021                 [Page 13]
 
-Internet-Draft                XFR-over-TLS                  October 2020
+Internet-Draft                XFR-over-TLS                 November 2020
 
 
    We clarify here that implementations capable of both AXFR and IXFR
@@ -748,13 +748,18 @@ Internet-Draft                XFR-over-TLS                  October 2020
    server resources.
 
    [OPEN QUESTION] Testing has shown that BIND returns SERVFAIL if the
-   limit on concurrent transfers is reached.  Should there be a specific
-   recommendation here about what is returned re: SERVFAIL vs REFUSED?
+   limit on concurrent transfers is reached since this is regarded as a
+   soft limit and a retry can/should succeed.  Should there be a
+   specific recommendation here about what is returned re: SERVFAIL vs
+   REFUSED?
 
-   [OPEN QUESTION] Is there a desire to define additional XFR specific
-   EDE codes so that a client can determine precisely why a specific XFR
-   request was denied in this case e.g., Max concurrent XFR: too may
-   concurrent transfers in progress.
+   [OPEN QUESTION] Is there a desire to define an additional XFR
+   specific EDE code so that a client can determine why a specific XFR
+   request was declined in this case e.g., Max concurrent XFR: too may
+   concurrent transfers in progress.  It could potentially contain a
+   retry delay, or at least clients can apply a reasonable back-off for
+   the retry.  This could avoid retry storms which have been observed to
+   actually increase the load on primaries in certain scenarios.
 
 5.3.4.  The edns-tcp-keepalive EDNS0 Option
 
@@ -774,18 +779,17 @@ Internet-Draft                XFR-over-TLS                  October 2020
        responders MUST include an OPT record in their respective
        responses."
 
+
+
+Toorop, et al.             Expires May 6, 2021                 [Page 14]
+
+Internet-Draft                XFR-over-TLS                 November 2020
+
+
    We clarify here that if an OPT record is present in a received AXFR
    request, compliant responders MUST include an OPT record in each of
    the subsequent AXFR responses.  Note that this requirement, combined
    with the use of edns-tcp-keepalive, enables AXFR servers to signal
-
-
-
-Toorop, et al.           Expires April 29, 2021                [Page 14]
-
-Internet-Draft                XFR-over-TLS                  October 2020
-
-
    the desire to close a connection (when existing transactions have
    competed) due to low resources by sending an edns-tcp-keepalive EDNS0
    option with a timeout of 0 on any AXFR response.  This does not
@@ -830,18 +834,18 @@ Internet-Draft                XFR-over-TLS                  October 2020
 
    This specification for XoT updates the guidance in [RFC7766] to
    provide the same separation of connection purpose (regular queries
+
+
+
+Toorop, et al.             Expires May 6, 2021                 [Page 15]
+
+Internet-Draft                XFR-over-TLS                 November 2020
+
+
    and zone transfers) for all transports being used on top of TCP.
    Therefore, it is RECOMMENDED that for each protocol used on top of
    TCP in any given client/server interaction there SHOULD be no more
    than one connection for regular queries and one for zone transfers.
-
-
-
-Toorop, et al.           Expires April 29, 2021                [Page 15]
-
-Internet-Draft                XFR-over-TLS                  October 2020
-
-
    As an illustration, it could be imagined that in future such an
    interaction could hypothetically include one or all of the following:
 
@@ -889,13 +893,9 @@ Internet-Draft                XFR-over-TLS                  October 2020
 
 
 
-
-
-
-
-Toorop, et al.           Expires April 29, 2021                [Page 16]
+Toorop, et al.             Expires May 6, 2021                 [Page 16]
 
-Internet-Draft                XFR-over-TLS                  October 2020
+Internet-Draft                XFR-over-TLS                 November 2020
 
 
         Secondary                            Primary
@@ -949,9 +949,9 @@ Internet-Draft                XFR-over-TLS                  October 2020
 
 
 
-Toorop, et al.           Expires April 29, 2021                [Page 17]
+Toorop, et al.             Expires May 6, 2021                 [Page 17]
 
-Internet-Draft                XFR-over-TLS                  October 2020
+Internet-Draft                XFR-over-TLS                 November 2020
 
 
         Secondary                            Primary
@@ -1005,9 +1005,9 @@ Internet-Draft                XFR-over-TLS                  October 2020
 
 
 
-Toorop, et al.           Expires April 29, 2021                [Page 18]
+Toorop, et al.             Expires May 6, 2021                 [Page 18]
 
-Internet-Draft                XFR-over-TLS                  October 2020
+Internet-Draft                XFR-over-TLS                 November 2020
 
 
    The server MAY also require a valid TSIG/SIG(0) signature, but this
@@ -1061,9 +1061,9 @@ Internet-Draft                XFR-over-TLS                  October 2020
 
 
 
-Toorop, et al.           Expires April 29, 2021                [Page 19]
+Toorop, et al.             Expires May 6, 2021                 [Page 19]
 
-Internet-Draft                XFR-over-TLS                  October 2020
+Internet-Draft                XFR-over-TLS                 November 2020
 
 
    o  the operational and policy options that a XoT server operator has
@@ -1117,9 +1117,9 @@ Internet-Draft                XFR-over-TLS                  October 2020
 
 
 
-Toorop, et al.           Expires April 29, 2021                [Page 20]
+Toorop, et al.             Expires May 6, 2021                 [Page 20]
 
-Internet-Draft                XFR-over-TLS                  October 2020
+Internet-Draft                XFR-over-TLS                 November 2020
 
 
    the EDNS(0) option for padding.  For example, without this capability
@@ -1173,9 +1173,9 @@ Internet-Draft                XFR-over-TLS                  October 2020
 
 
 
-Toorop, et al.           Expires April 29, 2021                [Page 21]
+Toorop, et al.             Expires May 6, 2021                 [Page 21]
 
-Internet-Draft                XFR-over-TLS                  October 2020
+Internet-Draft                XFR-over-TLS                 November 2020
 
 
    Just as with IXFR-over-TCP, after a failed IXFR a IXoT client SHOULD
@@ -1229,9 +1229,9 @@ Internet-Draft                XFR-over-TLS                  October 2020
 
 
 
-Toorop, et al.           Expires April 29, 2021                [Page 22]
+Toorop, et al.             Expires May 6, 2021                 [Page 22]
 
-Internet-Draft                XFR-over-TLS                  October 2020
+Internet-Draft                XFR-over-TLS                 November 2020
 
 
    configured primaries.  It can then choose to send an XFR request to
@@ -1285,9 +1285,9 @@ Internet-Draft                XFR-over-TLS                  October 2020
 
 
 
-Toorop, et al.           Expires April 29, 2021                [Page 23]
+Toorop, et al.             Expires May 6, 2021                 [Page 23]
 
-Internet-Draft                XFR-over-TLS                  October 2020
+Internet-Draft                XFR-over-TLS                 November 2020
 
 
    o  'Channel Confidentiality' (CC): Confidentiality of the
@@ -1341,9 +1341,9 @@ Internet-Draft                XFR-over-TLS                  October 2020
 
 
 
-Toorop, et al.           Expires April 29, 2021                [Page 24]
+Toorop, et al.             Expires May 6, 2021                 [Page 24]
 
-Internet-Draft                XFR-over-TLS                  October 2020
+Internet-Draft                XFR-over-TLS                 November 2020
 
 
    Properties: None guaranteed.
@@ -1397,9 +1397,9 @@ Internet-Draft                XFR-over-TLS                  October 2020
 
 
 
-Toorop, et al.           Expires April 29, 2021                [Page 25]
+Toorop, et al.             Expires May 6, 2021                 [Page 25]
 
-Internet-Draft                XFR-over-TLS                  October 2020
+Internet-Draft                XFR-over-TLS                 November 2020
 
 
 8.5.  ZONEMD
@@ -1453,9 +1453,9 @@ Internet-Draft                XFR-over-TLS                  October 2020
 
 
 
-Toorop, et al.           Expires April 29, 2021                [Page 26]
+Toorop, et al.             Expires May 6, 2021                 [Page 26]
 
-Internet-Draft                XFR-over-TLS                  October 2020
+Internet-Draft                XFR-over-TLS                 November 2020
 
 
    o  Using just mutual TLS can be considered a standalone solution
@@ -1509,9 +1509,9 @@ Internet-Draft                XFR-over-TLS                  October 2020
 
 
 
-Toorop, et al.           Expires April 29, 2021                [Page 27]
+Toorop, et al.             Expires May 6, 2021                 [Page 27]
 
-Internet-Draft                XFR-over-TLS                  October 2020
+Internet-Draft                XFR-over-TLS                 November 2020
 
 
    Certain aspects of the Policies can be relatively easily tested
@@ -1565,9 +1565,9 @@ Internet-Draft                XFR-over-TLS                  October 2020
 
 
 
-Toorop, et al.           Expires April 29, 2021                [Page 28]
+Toorop, et al.             Expires May 6, 2021                 [Page 28]
 
-Internet-Draft                XFR-over-TLS                  October 2020
+Internet-Draft                XFR-over-TLS                 November 2020
 
 
    o  the risk that hidden primaries might be inferred or identified via
@@ -1621,9 +1621,9 @@ Internet-Draft                XFR-over-TLS                  October 2020
 
 
 
-Toorop, et al.           Expires April 29, 2021                [Page 29]
+Toorop, et al.             Expires May 6, 2021                 [Page 29]
 
-Internet-Draft                XFR-over-TLS                  October 2020
+Internet-Draft                XFR-over-TLS                 November 2020
 
 
    o  Significantly update descriptions for both AXoT and IXoT for
@@ -1677,9 +1677,9 @@ Internet-Draft                XFR-over-TLS                  October 2020
 
 
 
-Toorop, et al.           Expires April 29, 2021                [Page 30]
+Toorop, et al.             Expires May 6, 2021                 [Page 30]
 
-Internet-Draft                XFR-over-TLS                  October 2020
+Internet-Draft                XFR-over-TLS                 November 2020
 
 
    [I-D.vcelak-nsec5]
@@ -1733,9 +1733,9 @@ Internet-Draft                XFR-over-TLS                  October 2020
 
 
 
-Toorop, et al.           Expires April 29, 2021                [Page 31]
+Toorop, et al.             Expires May 6, 2021                 [Page 31]
 
-Internet-Draft                XFR-over-TLS                  October 2020
+Internet-Draft                XFR-over-TLS                 November 2020
 
 
    [RFC7766]  Dickinson, J., Dickinson, S., Bellis, R., Mankin, A., and
@@ -1789,9 +1789,9 @@ Internet-Draft                XFR-over-TLS                  October 2020
 
 
 
-Toorop, et al.           Expires April 29, 2021                [Page 32]
+Toorop, et al.             Expires May 6, 2021                 [Page 32]
 
-Internet-Draft                XFR-over-TLS                  October 2020
+Internet-Draft                XFR-over-TLS                 November 2020
 
 
    [I-D.ietf-dprive-phase2-requirements]
@@ -1845,9 +1845,9 @@ Internet-Draft                XFR-over-TLS                  October 2020
 
 
 
-Toorop, et al.           Expires April 29, 2021                [Page 33]
+Toorop, et al.             Expires May 6, 2021                 [Page 33]
 
-Internet-Draft                XFR-over-TLS                  October 2020
+Internet-Draft                XFR-over-TLS                 November 2020
 
 
 18.3.  URIs
@@ -1901,9 +1901,9 @@ A.2.  Client specific TLS acceptance
 
 
 
-Toorop, et al.           Expires April 29, 2021                [Page 34]
+Toorop, et al.             Expires May 6, 2021                 [Page 34]
 
-Internet-Draft                XFR-over-TLS                  October 2020
+Internet-Draft                XFR-over-TLS                 November 2020
 
 
 A.3.  SNI based TLS acceptance
@@ -1957,9 +1957,9 @@ A.4.  TLS specific response policies
 
 
 
-Toorop, et al.           Expires April 29, 2021                [Page 35]
+Toorop, et al.             Expires May 6, 2021                 [Page 35]
 
-Internet-Draft                XFR-over-TLS                  October 2020
+Internet-Draft                XFR-over-TLS                 November 2020
 
 
    Client behavior to REFUSED response is not clearly defined (see
@@ -2013,9 +2013,9 @@ Authors' Addresses
 
 
 
-Toorop, et al.           Expires April 29, 2021                [Page 36]
+Toorop, et al.             Expires May 6, 2021                 [Page 36]
 
-Internet-Draft                XFR-over-TLS                  October 2020
+Internet-Draft                XFR-over-TLS                 November 2020
 
 
    Pallavi Aras
@@ -2069,4 +2069,4 @@ Internet-Draft                XFR-over-TLS                  October 2020
 
 
 
-Toorop, et al.           Expires April 29, 2021                [Page 37]
+Toorop, et al.             Expires May 6, 2021                 [Page 37]
