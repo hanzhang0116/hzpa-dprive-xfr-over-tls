@@ -425,7 +425,7 @@ implicit assumption (probably unintentional) that a TCP connection is used for
 one and only one IXFR request. Indeed, several open source implementations
 currently take this approach. And whilst [@RFC5936] gives guidance on
 connection re-use for AXFR, it pre-dates more recent specifications describing
-persistent TCP connections e.g. [@!RFC7626], [@!RFC7828] and AXFR implementations again
+persistent TCP connections e.g. [@!RFC7766], [@!RFC7828] and AXFR implementations again
 often make less than optimal use of open connections.
 
 Given this, new implementations of XoT will clearly benefit from specific guidance on
@@ -578,10 +578,14 @@ using separate connections for different purposes.
 
 This specification for XoT updates the guidance in [@RFC7766] to provide the
 same separation of connection purpose (regular queries and zone transfers) for
-all transports being used on top of TCP. Therefore, it is RECOMMENDED that for
+all transports being used on top of TCP. 
+
+Therefore, it is RECOMMENDED that for
 each protocol used on top of TCP in any given client/server interaction there
 SHOULD be no more than one connection for regular queries and one for zone
-transfers. As an illustration, it could be imagined that in future such an 
+transfers. 
+
+As an illustration, it could be imagined that in future such an 
 interaction could hypothetically include one or all of the following:
 
 * one TCP connection for regular queries
