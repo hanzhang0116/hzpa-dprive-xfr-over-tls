@@ -2,13 +2,13 @@
     Title = "DNS Zone Transfer-over-TLS"
     abbrev = "XFR-over-TLS"
     category = "std"
-    docName= "draft-ietf-dprive-xfr-over-tls-03"
+    docName= "draft-ietf-dprive-xfr-over-tls-04"
     ipr = "trust200902"
     area = "Internet"
     workgroup = "dprive"
     keyword = ["DNS", "operations", "privacy"]
     updates = [1995, 5936, 7766]
-    date = 2020-11-02T00:00:00Z
+    date = 2020-11-23T00:00:00Z
     [pi]
     [[author]]
      initials="W."
@@ -157,6 +157,13 @@ from authoritative DNS protocol implementations, encrypting zone transfers
 using TLS, based closely on DoT [@!RFC7858], seems like a simple step forward.
 This document specifies how to use TLS as a transport to prevent zone
 collection from zone transfers.
+
+# Document work via GitHub
+
+[THIS SECTION TO BE REMOVED BEFORE PUBLICATION] The Github repository for this
+document is at https://github.com/hanzhang0116/hzpa-dprive-xfr-over-tls.
+Proposed text and editorial changes are very much welcomed there, but any
+functional changes should always first be discussed on the IETF DPRIVE WG (dns-privacy) mailing list.
 
 
 # Terminology
@@ -768,7 +775,7 @@ EDE be created for this case?
 Historically servers have used the REFUSED RCODE for many situations, and so
 clients often had no detailed information on which to base an error or fallback
 path when queries were refused. As a result the client behavior could vary
-significantly. XoT severs that refuse queries must cater for the fact that
+significantly. XoT servers that refuse queries must cater for the fact that
 client behavior might vary from continually retrying queries regardless of
 receiving REFUSED to every query, or at the other extreme clients may decide to
 stop using the server over any transport. This might be because those clients are
@@ -942,7 +949,7 @@ Properties: Data origin authentication
 
 ## SIG(0)
 
-SIG(0) [@RFC2535] similarly also provides a mechanism to digitally sign a DNS
+SIG(0) [@RFC2931] similarly also provides a mechanism to digitally sign a DNS
 message but uses public key authentication, where the public keys are stored in
 DNS as KEY RRs and a private key is stored at the signer. 
 
@@ -957,7 +964,7 @@ surveillance, providing on-the-wire confidentiality. Essentially
 
 * clients that know authentication information for a server SHOULD try to authenticate the server
 * however they MAY fallback to using TLS without authentication and 
-* they MAY fallback to using cleartext is TLS is not available.
+* they MAY fallback to using cleartext if TLS is not available.
 
 As such it does not offer a defense against active attacks (e.g. a MitM attack
 on the connection from client to server), and is not considered as useful for XoT.
@@ -1159,6 +1166,11 @@ Significant contributions to the document were made by:
    Email: hzhang@salesforce.com
 
 # Changelog
+
+draft-ietf-dprive-xfr-over-tls-04
+
+* Add Github repository
+* Fix typos and references and improve layout.
 
 draft-ietf-dprive-xfr-over-tls-03
 
