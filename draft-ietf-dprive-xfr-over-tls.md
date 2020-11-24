@@ -265,7 +265,7 @@ The figure below provides an outline of an AXFR mechanism including NOTIFYs.
    Secondary                            Primary
 
        |              NOTIFY               |
-       | <-------------------------------- |  UPD
+       | <-------------------------------- |  UDP
        | --------------------------------> |
        |          NOTIFY Response          |
        |                                   |
@@ -332,7 +332,7 @@ The figure below provides an outline of the IXFR mechanism including NOTIFYs.
    Secondary                            Primary
 
        |              NOTIFY               |
-       | <-------------------------------- |  UPD
+       | <-------------------------------- |  UDP
        | --------------------------------> |
        |          NOTIFY Response          |
        |                                   |
@@ -632,7 +632,7 @@ The figure below provides an outline of the AXoT mechanism including NOTIFYs.
    Secondary                            Primary
 
        |              NOTIFY               |
-       | <-------------------------------- |  UPD
+       | <-------------------------------- |  UDP
        | --------------------------------> |
        |          NOTIFY Response          |
        |                                   |
@@ -669,7 +669,7 @@ The figure below provides an outline of the IXoT mechanism including NOTIFYs.
    Secondary                            Primary
 
        |              NOTIFY               |
-       | <-------------------------------- |  UPD
+       | <-------------------------------- |  UDP
        | --------------------------------> |
        |          NOTIFY Response          |
        |                                   |
