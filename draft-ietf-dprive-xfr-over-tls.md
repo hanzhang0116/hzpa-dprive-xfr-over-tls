@@ -552,7 +552,7 @@ wishes to close the connection as soon as possible.
 
 ### Backwards compatibility
 
-Certain legacy behaviors were noted in [@RFC5936], with provisos that
+Certain legacy behaviors were noted in [@RFC5936], with provisions that
 implementations may want to offer options to fallback to legacy behavior when
 interoperating with servers known not to support [@RFC5936]. For purposes of
 interoperability, IXFR and AXFR implementations may want to continue offering
