@@ -265,7 +265,7 @@ The figure below provides an outline of an AXFR mechanism including NOTIFYs.
    Secondary                            Primary
 
        |              NOTIFY               |
-       | <-------------------------------- |  UPD
+       | <-------------------------------- |  UDP
        | --------------------------------> |
        |          NOTIFY Response          |
        |                                   |
@@ -332,7 +332,7 @@ The figure below provides an outline of the IXFR mechanism including NOTIFYs.
    Secondary                            Primary
 
        |              NOTIFY               |
-       | <-------------------------------- |  UPD
+       | <-------------------------------- |  UDP
        | --------------------------------> |
        |          NOTIFY Response          |
        |                                   |
@@ -552,7 +552,7 @@ wishes to close the connection as soon as possible.
 
 ### Backwards compatibility
 
-Certain legacy behaviors were noted in [@RFC5936], with provisos that
+Certain legacy behaviors were noted in [@RFC5936], with provisions that
 implementations may want to offer options to fallback to legacy behavior when
 interoperating with servers known not to support [@RFC5936]. For purposes of
 interoperability, IXFR and AXFR implementations may want to continue offering
@@ -632,7 +632,7 @@ The figure below provides an outline of the AXoT mechanism including NOTIFYs.
    Secondary                            Primary
 
        |              NOTIFY               |
-       | <-------------------------------- |  UPD
+       | <-------------------------------- |  UDP
        | --------------------------------> |
        |          NOTIFY Response          |
        |                                   |
@@ -669,7 +669,7 @@ The figure below provides an outline of the IXoT mechanism including NOTIFYs.
    Secondary                            Primary
 
        |              NOTIFY               |
-       | <-------------------------------- |  UPD
+       | <-------------------------------- |  UDP
        | --------------------------------> |
        |          NOTIFY Response          |
        |                                   |
