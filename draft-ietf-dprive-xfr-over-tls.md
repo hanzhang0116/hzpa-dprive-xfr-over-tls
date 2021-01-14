@@ -2,13 +2,13 @@
     Title = "DNS Zone Transfer-over-TLS"
     abbrev = "XFR-over-TLS"
     category = "std"
-    docName= "draft-ietf-dprive-xfr-over-tls-04"
+    docName= "draft-ietf-dprive-xfr-over-tls-05"
     ipr = "trust200902"
     area = "Internet"
     workgroup = "dprive"
     keyword = ["DNS", "operations", "privacy"]
     updates = [1995, 5936, 7766]
-    date = 2020-11-23T00:00:00Z
+    date = 2021-01-14T00:00:00Z
     [pi]
     [[author]]
      initials="W."
