@@ -510,20 +510,10 @@ We clarify here that implementations capable of both AXFR and IXFR and compliant
 
 ### XFR limits
 
-The server MAY limit the number of concurrent IXFRs, AXFRs or total XFR transfers
-in progress, or from a given secondary, to protect server resources.
-
-[OPEN QUESTION] Testing has shown that BIND returns SERVFAIL if the limit on
-concurrent transfers is reached since this is regarded as a soft limit and a
-retry can/should succeed. Should there be a specific recommendation here about what is
-returned re: SERVFAIL vs REFUSED?
-
-[OPEN QUESTION] Is there a desire to define an additional XFR specific EDE code
-so that a client can determine why a specific XFR request was declined in this
-case e.g., Max concurrent XFR: too may concurrent transfers in progress. It
-could potentially contain a retry delay, or at least clients can apply a
-reasonable back-off for the retry. This could avoid retry storms which have
-been observed to actually increase the load on primaries in certain scenarios.
+The server MAY limit the number of concurrent IXFRs, AXFRs or total XFR
+transfers in progress, or from a given secondary, to protect server resources.
+Servers SHOULD return SERVFAIL if this limit is hit, since it is a
+transient error and a retry at a later time might succeed.
 
 ### The edns-tcp-keepalive EDNS0 Option
 
@@ -768,9 +758,6 @@ respond with the extended DNS error code 21 - Not Supported
 queries of this type to the server for a reasonable period of time (for
 example, one hour) i.e., long enough that the server configuration or policy
 might be updated.
-
-[OPEN QUESTION] Should this instead be Prohibited (by policy), or should a new
-EDE be created for this case?
 
 Historically servers have used the REFUSED RCODE for many situations, and so
 clients often had no detailed information on which to base an error or fallback
@@ -1114,21 +1101,31 @@ for flexibility while clients are migrating to XoT.
 Client implementations may similarly want to offer options to cater for the
 multi-primary case where the primaries are migrating to XoT. 
 
-Such configuration options MUST only be used in a 'migration mode' though and
+Such configuration options MUST only be used in a 'migration mode' though, and
 therefore should be used with care.
 
 # Implementation Status
 
-The 1.9.2 version of
+1. The 1.9.2 version of
 [Unbound](https://github.com/NLnetLabs/unbound/blob/release-1.9.2/doc/Changelog)
- includes an option to perform AXoT (instead of AXFR-over-TCP). This requires
-the client (secondary) to authenticate the server (primary) using a configured
-authentication domain name.
+ includes an option to perform AXoT (instead of AXFR-over-TCP). 
+
+2. There are currently open pull requests against NSD to implement
+    1. Connection re-use by default during [XFR-over-TCP](https://github.com/NLnetLabs/nsd/pull/145)
+    2. Client side [XFR-over-TLS](https://github.com/NLnetLabs/nsd/pull/149)
+    
+3. Version 9.17.7 of BIND contained an initial implementation of DoT, implementation of XoT is planned for early [2021](https://gitlab.isc.org/isc-projects/bind9/-/issues/1784)
+
+Both items 1. and 2.2. listed above require the client (secondary) to
+authenticate the server (primary) using a configured authentication domain name
+if XoT is used.
 
 It is noted that use of a TLS proxy in front of the primary server is a simple
 deployment solution that can enable server side XoT.
 
 # IANA Considerations
+
+None.
 
 # Security Considerations
 
@@ -1166,6 +1163,12 @@ Significant contributions to the document were made by:
    Email: hzhang@salesforce.com
 
 # Changelog
+
+draft-ietf-dprive-xfr-over-tls-05
+
+* Remove the open questions that received no comments.
+* Add more detail to the implementation section
+
 
 draft-ietf-dprive-xfr-over-tls-04
 
