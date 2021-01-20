@@ -8,7 +8,7 @@
     workgroup = "dprive"
     keyword = ["DNS", "operations", "privacy"]
     updates = [1995, 5936, 7766]
-    date = 2021-01-14T00:00:00Z
+    date = 2021-01-20T00:00:00Z
     [pi]
     [[author]]
      initials="W."
