@@ -498,7 +498,7 @@ UDP or a new TCP connection.
 ### AXFRs and IXFRs on the same connection
 
 Neither [@RFC1995] nor [@RFC5936] explicitly discuss the use of a single TCP
-connection for both IXFR and AXFR requests. [@RFC5936] does make the general state:
+connection for both IXFR and AXFR requests. [@RFC5936] does make the general statement:
 
     "Non-AXFR session traffic can also use an open TCP connection."
 
