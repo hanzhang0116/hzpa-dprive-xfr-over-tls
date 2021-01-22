@@ -77,7 +77,7 @@ DNS zone transfers are transmitted in clear text, which gives attackers the
 opportunity to collect the content of a zone by eavesdropping on network
 connections. The DNS Transaction Signature (TSIG) mechanism is specified to
 restrict direct zone transfer to authorized clients only, but it does not add
-confidentiality. This document specifies use of TLS, rather then clear text, to
+confidentiality. This document specifies the use of TLS, rather than clear text, to
 prevent zone content collection via passive monitoring of zone transfers:
 XFR-over-TLS (XoT). Additionally, this specification updates RFC1995,
 RFC5936 and RFC7766.
@@ -498,7 +498,7 @@ UDP or a new TCP connection.
 ### AXFRs and IXFRs on the same connection
 
 Neither [@RFC1995] nor [@RFC5936] explicitly discuss the use of a single TCP
-connection for both IXFR and AXFR requests. [@RFC5936] does make the general state:
+connection for both IXFR and AXFR requests. [@RFC5936] does make the general statement:
 
     "Non-AXFR session traffic can also use an open TCP connection."
 
