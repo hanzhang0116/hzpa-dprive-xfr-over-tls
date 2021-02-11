@@ -1170,7 +1170,7 @@ Security concerns of DoT are outlined in [@RFC7858] and [@RFC8310].
 The authors thank Tony Finch, Benno Overeinder, Shumon Huque
 and Tim Wicinski and many other members of DPRIVE for review and discussions.
 
-The authors particularly thank Peter van Dikj, Ondrey Sury, Peter Dickson and
+The authors particularly thank Peter van Dikj, Ondrey Sury, Brian Dickson and
 several other open source DNS implementors for valuable discussion and
 clarification on the issue associated with pipelining XFR queries and handling
 out-of-order/intermingled responses.

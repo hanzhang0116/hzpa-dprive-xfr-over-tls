@@ -1318,7 +1318,7 @@ observation of encrypted connections.</t>
 <t>The authors thank Tony Finch, Benno Overeinder, Shumon Huque
 and Tim Wicinski and many other members of DPRIVE for review and discussions.
 </t>
-<t>The authors particularly thank Peter van Dikj, Ondrey Sury, Peter Dickson and
+<t>The authors particularly thank Peter van Dikj, Ondrey Sury, Brian Dickson and
 several other open source DNS implementors for valuable discussion and
 clarification on the issue associated with pipelining XFR queries and handling
 out-of-order/intermingled responses.
