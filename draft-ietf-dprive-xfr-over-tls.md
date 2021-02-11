@@ -2,13 +2,13 @@
     Title = "DNS Zone Transfer-over-TLS"
     abbrev = "XFR-over-TLS"
     category = "std"
-    docName= "draft-ietf-dprive-xfr-over-tls-05"
+    docName= "draft-ietf-dprive-xfr-over-tls-06"
     ipr = "trust200902"
     area = "Internet"
     workgroup = "dprive"
     keyword = ["DNS", "operations", "privacy"]
     updates = [1995, 5936, 7766]
-    date = 2021-01-20T00:00:00Z
+    date = 2021-02-11T00:00:00Z
     [pi]
     [[author]]
      initials="W."
@@ -244,7 +244,7 @@ zones.
 [@RFC5936] subsequently redefined the specification of AXFR to improve
 performance and interoperability.
 
-In this document we use the phrase "XFR mechanism" to describe the entire set of
+In this document we use the term "XFR mechanism" to describe the entire set of
 message exchanges between a secondary and a primary that concludes in a
 successful AXFR or IXFR request/response. This set may or may not include
 
@@ -418,8 +418,8 @@ any downstream secondary.
 
 # Updates to existing specifications
 
-For convenience, the phrase 'XFR-over-TCP' is used in this document to mean both
-IXFR-over-TCP and AXFR-over-TCP and therefore statements that use it update
+For convenience, the term 'XFR-over-TCP' is used in this document to mean both
+IXFR-over-TCP and AXFR-over-TCP and therefore statements that use that term update
 both [@RFC1995] and [@RFC5936], and implicitly also apply to XoT.
 Differences in behavior specific to XoT are discussed in
 (#xot-specification).
@@ -429,7 +429,7 @@ considered a first class transport for DNS. [@RFC1995], in fact, says nothing
 with respect to optimizing IXFRs over TCP or re-using already open TCP
 connections to perform IXFRs or other queries. Therefore, there arguably is an
 implicit assumption (probably unintentional) that a TCP connection is used for
-one and only one IXFR request. Indeed, several open source implementations
+one and only one IXFR request. Indeed, many major open source implementations
 currently take this approach. And whilst [@RFC5936] gives guidance on
 connection re-use for AXFR, it pre-dates more recent specifications describing
 persistent TCP connections e.g. [@!RFC7766], [@!RFC7828] and AXFR implementations again
@@ -443,14 +443,30 @@ TCP/TLS connection usage for XFR because this will:
   XFR-over-TCP implementations have historically often supported
 
 Therefore this document updates both the previous specifications for
-XFR-over-TCP to clarify that implementations MUST use [@!RFC7766] (DNS
-Transport over TCP - Implementation Requirements) to optimize the use of TCP
-connections and SHOULD use [@!RFC7828] (The edns-tcp-keepalive EDNS0 Option) to
-manage persistent connections.
+XFR-over-TCP to clarify that
 
-The following sections include detailed clarifications on the updates to XFR behavior implied in
-[@RFC7766] and how the use of [@!RFC7828] applies specifically to XFR
-exchanges. It also discusses how IXFR and AXFR can reuse the same TCP connection.
+* Implementations MUST use [@!RFC7766] (DNS Transport over TCP - Implementation
+  Requirements) to optimize the use of TCP connections.
+
+* Whilst RFC7766 states that 'DNS clients SHOULD pipeline their queries’ on TCP
+  connections, it did not distinguish between XFRs and other queries for this
+  behavior. It is now recognized that XFRs are not as latency sensitive as
+  other queries, and can be significantly more complex for clients to handle
+  both because of the large amount of state that must be kept and because there
+  may be multiple messages in the responses. For these reasons it is clarified
+  here that a valid reason for not pipelining queries is when they are all XFR
+  queries i.e. clients sending multiple XFRs MAY choose not to pipeline those
+  queries. Clients that do not pipeline XFR queries, therefore, have no
+  additional requirements to handle out-of-order or intermingled responses (as
+  described later) since they will never receive them.
+
+* Implementations SHOULD use [@!RFC7828] (The edns-tcp-keepalive EDNS0 Option)
+  to manage persistent connections.
+
+The following sections include detailed clarifications on the updates to XFR
+behavior implied in [@RFC7766] and how the use of [@!RFC7828] applies
+specifically to XFR exchanges. It also discusses how IXFR and AXFR can reuse
+the same TCP connection.
 
 For completeness, we also mention here the recent specification of extended DNS
 error (EDE) codes [@!RFC8914]. For zone transfers, when returning REFUSED to a
@@ -471,7 +487,7 @@ For clarity - an AXFR-over-TCP server compliant with this specification MUST be
 able to handle multiple concurrent AXoT sessions on a single TCP connection
 (for the same and different zones). The response streams for concurrent AXFRs
 MAY be intermingled and AXFR-over-TCP clients compliant with this specification
-MUST be able to handle this.
+which pipeline AXFR requests MUST be able to handle this.
 
 ## Updates to RFC1995 and RFC5936 for XFR-over-TCP
 
@@ -484,8 +500,8 @@ secondary and primary SHOULD be minimized (also see (#update-to-rfc7766)).
 
 Valid reasons for not re-using existing connections might include:
 
-* reaching a configured limit for the number of outstanding queries or XFR requests allowed on a
-  single TCP connection
+* as already noted in [@RFC7766], separate connections for different zones might be preferred for operational reasons. In this case the number of concurrent connections for zone transfers SHOULD be limited to the total number of zones transferred between the client and server.
+* reaching a configured limit for the number of outstanding queries or XFR requests allowed on a single TCP connection
 * the message ID pool has already been exhausted on an open connection
 * a large number of timeouts or slow responses have occurred on an open
   connection
@@ -505,7 +521,7 @@ connection for both IXFR and AXFR requests. [@RFC5936] does make the general sta
 We clarify here that implementations capable of both AXFR and IXFR and compliant with this specification SHOULD
 
 *  use the same TCP connection for both AXFR and IXFR requests to the same primary
-*  pipeline such request and MAY intermingle them
+*  pipeline such requests (if they pipeline XFR requests in general) and MAY intermingle them
 *  send the response(s) for each request as soon as they are available i.e. responses MAY be sent intermingled
 
 ### XFR limits
@@ -592,7 +608,7 @@ interaction could hypothetically include one or all of the following:
 * one DoH connection for regular queries
 * one DoH connection for zone transfers
 
-We provide specific details in the later sections of reasons where more than
+(#connection-reuse) has provided specific details of reasons where more than
 one connection for a given transport might be required for zone transfers from
 a particular client.
 
@@ -1106,6 +1122,10 @@ therefore should be used with care.
 
 # Implementation Status
 
+A summary of current behavior and implementation status can be found here: [XoT implementation status](https://dnsprivacy.org/wiki/display/DP/DNS+Privacy+Implementation+Status#DNSPrivacyImplementationStatus-XFR/XoTImplementationstatus)
+
+Specific recent activity includes:
+
 1. The 1.9.2 version of
 [Unbound](https://github.com/NLnetLabs/unbound/blob/release-1.9.2/doc/Changelog)
  includes an option to perform AXoT (instead of AXFR-over-TCP). 
@@ -1147,9 +1167,13 @@ Security concerns of DoT are outlined in [@RFC7858] and [@RFC8310].
 
 # Acknowledgements
 
-The authors thank Tony Finch, Peter van Dijk, Benno Overeinder, Shumon Huque
-and Tim Wicinski for review and discussions.
+The authors thank Tony Finch, Benno Overeinder, Shumon Huque
+and Tim Wicinski and many other members of DPRIVE for review and discussions.
 
+The authors particularly thank Peter van Dikj, Ondrey Sury, Peter Dickson and
+several other open source DNS implementors for valuable discussion and
+clarification on the issue associated with pipelining XFR queries and handling
+out-of-order/intermingled responses.
 
 # Contributors
 
@@ -1163,6 +1187,12 @@ Significant contributions to the document were made by:
    Email: hzhang@salesforce.com
 
 # Changelog
+
+draft-ietf-dprive-xfr-over-tls-06
+
+* Update text relating to pipelining and connection reuse after WGLC comments.
+* Add link to implementation status matrix
+* Various typos
 
 draft-ietf-dprive-xfr-over-tls-05
 
