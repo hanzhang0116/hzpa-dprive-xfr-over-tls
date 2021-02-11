@@ -6,11 +6,11 @@ dprive                                                         W. Toorop
 Internet-Draft                                                NLnet Labs
 Updates: 1995, 5936, 7766 (if approved)                     S. Dickinson
 Intended status: Standards Track                              Sinodun IT
-Expires: August 12, 2021                                        S. Sahib
+Expires: August 15, 2021                                        S. Sahib
                                                                  P. Aras
                                                                A. Mankin
                                                               Salesforce
-                                                        February 8, 2021
+                                                       February 11, 2021
 
 
                        DNS Zone Transfer-over-TLS
@@ -43,7 +43,7 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on August 12, 2021.
+   This Internet-Draft will expire on August 15, 2021.
 
 Copyright Notice
 
@@ -53,7 +53,7 @@ Copyright Notice
 
 
 
-Toorop, et al.           Expires August 12, 2021                [Page 1]
+Toorop, et al.           Expires August 15, 2021                [Page 1]
 
 Internet-Draft                XFR-over-TLS                 February 2021
 
@@ -109,7 +109,7 @@ Table of Contents
 
 
 
-Toorop, et al.           Expires August 12, 2021                [Page 2]
+Toorop, et al.           Expires August 15, 2021                [Page 2]
 
 Internet-Draft                XFR-over-TLS                 February 2021
 
@@ -136,7 +136,7 @@ Internet-Draft                XFR-over-TLS                 February 2021
    19. References  . . . . . . . . . . . . . . . . . . . . . . . . .  32
      19.1.  Normative References . . . . . . . . . . . . . . . . . .  32
      19.2.  Informative References . . . . . . . . . . . . . . . . .  34
-     19.3.  URIs . . . . . . . . . . . . . . . . . . . . . . . . . .  35
+     19.3.  URIs . . . . . . . . . . . . . . . . . . . . . . . . . .  36
    Appendix A.  XoT server connection handling . . . . . . . . . . .  36
      A.1.  Only listen on TLS on a specific IP address . . . . . . .  36
      A.2.  Client specific TLS acceptance  . . . . . . . . . . . . .  36
@@ -165,7 +165,7 @@ Internet-Draft                XFR-over-TLS                 February 2021
 
 
 
-Toorop, et al.           Expires August 12, 2021                [Page 3]
+Toorop, et al.           Expires August 15, 2021                [Page 3]
 
 Internet-Draft                XFR-over-TLS                 February 2021
 
@@ -221,7 +221,7 @@ Internet-Draft                XFR-over-TLS                 February 2021
 
 
 
-Toorop, et al.           Expires August 12, 2021                [Page 4]
+Toorop, et al.           Expires August 15, 2021                [Page 4]
 
 Internet-Draft                XFR-over-TLS                 February 2021
 
@@ -277,7 +277,7 @@ Internet-Draft                XFR-over-TLS                 February 2021
 
 
 
-Toorop, et al.           Expires August 12, 2021                [Page 5]
+Toorop, et al.           Expires August 15, 2021                [Page 5]
 
 Internet-Draft                XFR-over-TLS                 February 2021
 
@@ -333,7 +333,7 @@ Internet-Draft                XFR-over-TLS                 February 2021
 
 
 
-Toorop, et al.           Expires August 12, 2021                [Page 6]
+Toorop, et al.           Expires August 15, 2021                [Page 6]
 
 Internet-Draft                XFR-over-TLS                 February 2021
 
@@ -389,7 +389,7 @@ Internet-Draft                XFR-over-TLS                 February 2021
 
 
 
-Toorop, et al.           Expires August 12, 2021                [Page 7]
+Toorop, et al.           Expires August 15, 2021                [Page 7]
 
 Internet-Draft                XFR-over-TLS                 February 2021
 
@@ -445,7 +445,7 @@ Internet-Draft                XFR-over-TLS                 February 2021
 
 
 
-Toorop, et al.           Expires August 12, 2021                [Page 8]
+Toorop, et al.           Expires August 15, 2021                [Page 8]
 
 Internet-Draft                XFR-over-TLS                 February 2021
 
@@ -501,7 +501,7 @@ Internet-Draft                XFR-over-TLS                 February 2021
 
 
 
-Toorop, et al.           Expires August 12, 2021                [Page 9]
+Toorop, et al.           Expires August 15, 2021                [Page 9]
 
 Internet-Draft                XFR-over-TLS                 February 2021
 
@@ -557,7 +557,7 @@ Internet-Draft                XFR-over-TLS                 February 2021
 
 
 
-Toorop, et al.           Expires August 12, 2021               [Page 10]
+Toorop, et al.           Expires August 15, 2021               [Page 10]
 
 Internet-Draft                XFR-over-TLS                 February 2021
 
@@ -613,7 +613,7 @@ Internet-Draft                XFR-over-TLS                 February 2021
 
 
 
-Toorop, et al.           Expires August 12, 2021               [Page 11]
+Toorop, et al.           Expires August 15, 2021               [Page 11]
 
 Internet-Draft                XFR-over-TLS                 February 2021
 
@@ -669,7 +669,7 @@ Internet-Draft                XFR-over-TLS                 February 2021
 
 
 
-Toorop, et al.           Expires August 12, 2021               [Page 12]
+Toorop, et al.           Expires August 15, 2021               [Page 12]
 
 Internet-Draft                XFR-over-TLS                 February 2021
 
@@ -725,7 +725,7 @@ Internet-Draft                XFR-over-TLS                 February 2021
 
 
 
-Toorop, et al.           Expires August 12, 2021               [Page 13]
+Toorop, et al.           Expires August 15, 2021               [Page 13]
 
 Internet-Draft                XFR-over-TLS                 February 2021
 
@@ -781,7 +781,7 @@ Internet-Draft                XFR-over-TLS                 February 2021
 
 
 
-Toorop, et al.           Expires August 12, 2021               [Page 14]
+Toorop, et al.           Expires August 15, 2021               [Page 14]
 
 Internet-Draft                XFR-over-TLS                 February 2021
 
@@ -837,7 +837,7 @@ Internet-Draft                XFR-over-TLS                 February 2021
 
 
 
-Toorop, et al.           Expires August 12, 2021               [Page 15]
+Toorop, et al.           Expires August 15, 2021               [Page 15]
 
 Internet-Draft                XFR-over-TLS                 February 2021
 
@@ -893,7 +893,7 @@ Internet-Draft                XFR-over-TLS                 February 2021
 
 
 
-Toorop, et al.           Expires August 12, 2021               [Page 16]
+Toorop, et al.           Expires August 15, 2021               [Page 16]
 
 Internet-Draft                XFR-over-TLS                 February 2021
 
@@ -949,7 +949,7 @@ Internet-Draft                XFR-over-TLS                 February 2021
 
 
 
-Toorop, et al.           Expires August 12, 2021               [Page 17]
+Toorop, et al.           Expires August 15, 2021               [Page 17]
 
 Internet-Draft                XFR-over-TLS                 February 2021
 
@@ -1005,7 +1005,7 @@ Internet-Draft                XFR-over-TLS                 February 2021
 
 
 
-Toorop, et al.           Expires August 12, 2021               [Page 18]
+Toorop, et al.           Expires August 15, 2021               [Page 18]
 
 Internet-Draft                XFR-over-TLS                 February 2021
 
@@ -1061,7 +1061,7 @@ Internet-Draft                XFR-over-TLS                 February 2021
 
 
 
-Toorop, et al.           Expires August 12, 2021               [Page 19]
+Toorop, et al.           Expires August 15, 2021               [Page 19]
 
 Internet-Draft                XFR-over-TLS                 February 2021
 
@@ -1117,7 +1117,7 @@ Internet-Draft                XFR-over-TLS                 February 2021
 
 
 
-Toorop, et al.           Expires August 12, 2021               [Page 20]
+Toorop, et al.           Expires August 15, 2021               [Page 20]
 
 Internet-Draft                XFR-over-TLS                 February 2021
 
@@ -1173,7 +1173,7 @@ Internet-Draft                XFR-over-TLS                 February 2021
 
 
 
-Toorop, et al.           Expires August 12, 2021               [Page 21]
+Toorop, et al.           Expires August 15, 2021               [Page 21]
 
 Internet-Draft                XFR-over-TLS                 February 2021
 
@@ -1229,7 +1229,7 @@ Internet-Draft                XFR-over-TLS                 February 2021
 
 
 
-Toorop, et al.           Expires August 12, 2021               [Page 22]
+Toorop, et al.           Expires August 15, 2021               [Page 22]
 
 Internet-Draft                XFR-over-TLS                 February 2021
 
@@ -1285,7 +1285,7 @@ Internet-Draft                XFR-over-TLS                 February 2021
 
 
 
-Toorop, et al.           Expires August 12, 2021               [Page 23]
+Toorop, et al.           Expires August 15, 2021               [Page 23]
 
 Internet-Draft                XFR-over-TLS                 February 2021
 
@@ -1341,7 +1341,7 @@ Internet-Draft                XFR-over-TLS                 February 2021
 
 
 
-Toorop, et al.           Expires August 12, 2021               [Page 24]
+Toorop, et al.           Expires August 15, 2021               [Page 24]
 
 Internet-Draft                XFR-over-TLS                 February 2021
 
@@ -1397,7 +1397,7 @@ Internet-Draft                XFR-over-TLS                 February 2021
 
 
 
-Toorop, et al.           Expires August 12, 2021               [Page 25]
+Toorop, et al.           Expires August 15, 2021               [Page 25]
 
 Internet-Draft                XFR-over-TLS                 February 2021
 
@@ -1453,7 +1453,7 @@ Internet-Draft                XFR-over-TLS                 February 2021
 
 
 
-Toorop, et al.           Expires August 12, 2021               [Page 26]
+Toorop, et al.           Expires August 15, 2021               [Page 26]
 
 Internet-Draft                XFR-over-TLS                 February 2021
 
@@ -1509,7 +1509,7 @@ Internet-Draft                XFR-over-TLS                 February 2021
 
 
 
-Toorop, et al.           Expires August 12, 2021               [Page 27]
+Toorop, et al.           Expires August 15, 2021               [Page 27]
 
 Internet-Draft                XFR-over-TLS                 February 2021
 
@@ -1565,7 +1565,7 @@ Internet-Draft                XFR-over-TLS                 February 2021
 
 
 
-Toorop, et al.           Expires August 12, 2021               [Page 28]
+Toorop, et al.           Expires August 15, 2021               [Page 28]
 
 Internet-Draft                XFR-over-TLS                 February 2021
 
@@ -1596,35 +1596,38 @@ Internet-Draft                XFR-over-TLS                 February 2021
 
 13.  Implementation Status
 
-   1.  The 1.9.2 version of Unbound [3] includes an option to perform
+   A summary of current behavior and implementation status can be found
+   here: XoT implementation status [3]
+
+   Specific recent activity includes:
+
+   1.  The 1.9.2 version of Unbound [4] includes an option to perform
        AXoT (instead of AXFR-over-TCP).
 
    2.  There are currently open pull requests against NSD to implement
 
-       1.  Connection re-use by default during XFR-over-TCP [4]
+       1.  Connection re-use by default during XFR-over-TCP [5]
 
-       2.  Client side XFR-over-TLS [5]
+       2.  Client side XFR-over-TLS [6]
 
    3.  Version 9.17.7 of BIND contained an initial implementation of
-       DoT, implementation of XoT is planned for early 2021 [6]
+       DoT, implementation of XoT is planned for early 2021 [7]
 
    Both items 1. and 2.2. listed above require the client (secondary) to
    authenticate the server (primary) using a configured authentication
    domain name if XoT is used.
 
-   It is noted that use of a TLS proxy in front of the primary server is
-   a simple deployment solution that can enable server side XoT.
 
 
 
 
-
-
-
-Toorop, et al.           Expires August 12, 2021               [Page 29]
+Toorop, et al.           Expires August 15, 2021               [Page 29]
 
 Internet-Draft                XFR-over-TLS                 February 2021
 
+
+   It is noted that use of a TLS proxy in front of the primary server is
+   a simple deployment solution that can enable server side XoT.
 
 14.  IANA Considerations
 
@@ -1674,10 +1677,7 @@ Internet-Draft                XFR-over-TLS                 February 2021
 
 
 
-
-
-
-Toorop, et al.           Expires August 12, 2021               [Page 30]
+Toorop, et al.           Expires August 15, 2021               [Page 30]
 
 Internet-Draft                XFR-over-TLS                 February 2021
 
@@ -1689,7 +1689,9 @@ Internet-Draft                XFR-over-TLS                 February 2021
    o  Update text relating to pipelining and connection reuse after WGLC
       comments.
 
-   o  Various typos.
+   o  Add link to implementation status matrix
+
+   o  Various typos
 
    draft-ietf-dprive-xfr-over-tls-05
 
@@ -1728,15 +1730,15 @@ Internet-Draft                XFR-over-TLS                 February 2021
       message and connection handling taking into account previous
       specifications in more detail
 
-   o  Add use of APLN and limitations on traffic on XoT connections.
 
 
 
-
-Toorop, et al.           Expires August 12, 2021               [Page 31]
+Toorop, et al.           Expires August 15, 2021               [Page 31]
 
 Internet-Draft                XFR-over-TLS                 February 2021
 
+
+   o  Add use of APLN and limitations on traffic on XoT connections.
 
    o  Add new discussions of padding for both AXoT and IXoT
 
@@ -1783,16 +1785,18 @@ Internet-Draft                XFR-over-TLS                 February 2021
               Existence", draft-vcelak-nsec5-08 (work in progress),
               December 2018.
 
-   [RFC1034]  Mockapetris, P., "Domain names - concepts and facilities",
-              STD 13, RFC 1034, DOI 10.17487/RFC1034, November 1987,
-              <https://www.rfc-editor.org/info/rfc1034>.
 
 
 
-Toorop, et al.           Expires August 12, 2021               [Page 32]
+
+Toorop, et al.           Expires August 15, 2021               [Page 32]
 
 Internet-Draft                XFR-over-TLS                 February 2021
 
+
+   [RFC1034]  Mockapetris, P., "Domain names - concepts and facilities",
+              STD 13, RFC 1034, DOI 10.17487/RFC1034, November 1987,
+              <https://www.rfc-editor.org/info/rfc1034>.
 
    [RFC1035]  Mockapetris, P., "Domain names - implementation and
               specification", STD 13, RFC 1035, DOI 10.17487/RFC1035,
@@ -1835,20 +1839,21 @@ Internet-Draft                XFR-over-TLS                 February 2021
               Requirements", RFC 7766, DOI 10.17487/RFC7766, March 2016,
               <https://www.rfc-editor.org/info/rfc7766>.
 
+
+
+
+
+
+
+Toorop, et al.           Expires August 15, 2021               [Page 33]
+
+Internet-Draft                XFR-over-TLS                 February 2021
+
+
    [RFC7828]  Wouters, P., Abley, J., Dickinson, S., and R. Bellis, "The
               edns-tcp-keepalive EDNS0 Option", RFC 7828,
               DOI 10.17487/RFC7828, April 2016, <https://www.rfc-
               editor.org/info/rfc7828>.
-
-
-
-
-
-
-Toorop, et al.           Expires August 12, 2021               [Page 33]
-
-Internet-Draft                XFR-over-TLS                 February 2021
-
 
    [RFC7858]  Hu, Z., Zhu, L., Heidemann, J., Mankin, A., Wessels, D.,
               and P. Hoffman, "Specification for DNS over Transport
@@ -1889,22 +1894,23 @@ Internet-Draft                XFR-over-TLS                 February 2021
               of DNS over Dedicated QUIC Connections", draft-ietf-
               dprive-dnsoquic-01 (work in progress), October 2020.
 
+
+
+
+
+
+
+
+Toorop, et al.           Expires August 15, 2021               [Page 34]
+
+Internet-Draft                XFR-over-TLS                 February 2021
+
+
    [I-D.ietf-dprive-phase2-requirements]
               Livingood, J., Mayrhofer, A., and B. Overeinder, "DNS
               Privacy Requirements for Exchanges between Recursive
               Resolvers and Authoritative Servers", draft-ietf-dprive-
               phase2-requirements-02 (work in progress), November 2020.
-
-
-
-
-
-
-
-Toorop, et al.           Expires August 12, 2021               [Page 34]
-
-Internet-Draft                XFR-over-TLS                 February 2021
-
 
    [I-D.ietf-tls-esni]
               Rescorla, E., Oku, K., Sullivan, N., and C. Wood, "TLS
@@ -1945,28 +1951,35 @@ Internet-Draft                XFR-over-TLS                 February 2021
               (DoH)", RFC 8484, DOI 10.17487/RFC8484, October 2018,
               <https://www.rfc-editor.org/info/rfc8484>.
 
+
+
+
+
+
+
+Toorop, et al.           Expires August 15, 2021               [Page 35]
+
+Internet-Draft                XFR-over-TLS                 February 2021
+
+
 19.3.  URIs
 
    [1] https://www.isc.org/bind/
 
    [2] https://www.nlnetlabs.nl/projects/nsd/about/
 
-   [3] https://github.com/NLnetLabs/unbound/blob/release-1.9.2/doc/
+   [3] https://dnsprivacy.org/wiki/display/DP/
+       DNS+Privacy+Implementation+Status#DNSPrivacyImplementationStatus-
+       XFR/XoTImplementationstatus
+
+   [4] https://github.com/NLnetLabs/unbound/blob/release-1.9.2/doc/
        Changelog
 
+   [5] https://github.com/NLnetLabs/nsd/pull/145
 
+   [6] https://github.com/NLnetLabs/nsd/pull/149
 
-
-Toorop, et al.           Expires August 12, 2021               [Page 35]
-
-Internet-Draft                XFR-over-TLS                 February 2021
-
-
-   [4] https://github.com/NLnetLabs/nsd/pull/145
-
-   [5] https://github.com/NLnetLabs/nsd/pull/149
-
-   [6] https://gitlab.isc.org/isc-projects/bind9/-/issues/1784
+   [7] https://gitlab.isc.org/isc-projects/bind9/-/issues/1784
 
 Appendix A.  XoT server connection handling
 
@@ -1998,6 +2011,13 @@ A.2.  Client specific TLS acceptance
    connections from authorized clients.  This could be implemented using
    a proxy or directly in DNS implementation.
 
+
+
+Toorop, et al.           Expires August 15, 2021               [Page 36]
+
+Internet-Draft                XFR-over-TLS                 February 2021
+
+
    Pros: Connection management happens at setup time.  The maximum
    number of TLS connections a server will have to support can be easily
    assessed.  Once the connection is accepted the server might well be
@@ -2007,16 +2027,6 @@ A.2.  Client specific TLS acceptance
 
    Cons: Currently, none of the major open source DNS authoritative
    implementations support such an option.
-
-
-
-
-
-
-Toorop, et al.           Expires August 12, 2021               [Page 36]
-
-Internet-Draft                XFR-over-TLS                 February 2021
-
 
 A.3.  SNI based TLS acceptance
 
@@ -2055,6 +2065,15 @@ A.4.  TLS specific response policies
       received that is signed by a recognized TSIG/SIG(0) key, then
       answer all queries on the connection after that
 
+
+
+
+
+Toorop, et al.           Expires August 15, 2021               [Page 37]
+
+Internet-Draft                XFR-over-TLS                 February 2021
+
+
    o  complex: apply a heuristic to determine which queries on a TLS
       connections to REFUSE
 
@@ -2066,14 +2085,6 @@ A.4.  TLS specific response policies
 
    Cons: The server must handle the burden of accepting all TLS
    connections just to perform XFRs with a small number of secondaries.
-
-
-
-Toorop, et al.           Expires August 12, 2021               [Page 37]
-
-Internet-Draft                XFR-over-TLS                 February 2021
-
-
    Client behavior to REFUSED response is not clearly defined (see
    below).  Currently, none of the major open source DNS authoritative
    implementations offer an option for different response policies in
@@ -2113,21 +2124,18 @@ Authors' Addresses
    Email: sara@sinodun.com
 
 
+
+Toorop, et al.           Expires August 15, 2021               [Page 38]
+
+Internet-Draft                XFR-over-TLS                 February 2021
+
+
    Shivan Sahib
    Salesforce
    Vancouver, BC
    Canada
 
    Email: ssahib@salesforce.com
-
-
-
-
-
-
-Toorop, et al.           Expires August 12, 2021               [Page 38]
-
-Internet-Draft                XFR-over-TLS                 February 2021
 
 
    Pallavi Aras
@@ -2173,12 +2181,4 @@ Internet-Draft                XFR-over-TLS                 February 2021
 
 
 
-
-
-
-
-
-
-
-
-Toorop, et al.           Expires August 12, 2021               [Page 39]
+Toorop, et al.           Expires August 15, 2021               [Page 39]

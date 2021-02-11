@@ -90,7 +90,7 @@
 <uri></uri>
 </address>
 </author>
-<date year="2021" month="February" day="8"/>
+<date year="2021" month="February" day="11"/>
 
 <area>Internet</area>
 <workgroup>dprive</workgroup>
@@ -1259,6 +1259,10 @@ therefore should be used with care.
 </section>
 
 <section anchor="implementation-status" title="Implementation Status">
+<t>A summary of current behavior and implementation status can be found here: <eref target="https://dnsprivacy.org/wiki/display/DP/DNS+Privacy+Implementation+Status#DNSPrivacyImplementationStatus-XFR/XoTImplementationstatus">XoT implementation status</eref>
+</t>
+<t>Specific recent activity includes:
+</t>
 <t>
 <list style="numbers">
 <t>The 1.9.2 version of
@@ -1342,7 +1346,8 @@ out-of-order/intermingled responses.
 <t>
 <list style="symbols">
 <t>Update text relating to pipelining and connection reuse after WGLC comments.</t>
-<t>Various typos.</t>
+<t>Add link to implementation status matrix</t>
+<t>Various typos</t>
 </list>
 </t>
 <t>draft-ietf-dprive-xfr-over-tls-05

@@ -8,7 +8,7 @@
     workgroup = "dprive"
     keyword = ["DNS", "operations", "privacy"]
     updates = [1995, 5936, 7766]
-    date = 2021-02-08T00:00:00Z
+    date = 2021-02-11T00:00:00Z
     [pi]
     [[author]]
      initials="W."
@@ -1122,6 +1122,10 @@ therefore should be used with care.
 
 # Implementation Status
 
+A summary of current behavior and implementation status can be found here: [XoT implementation status](https://dnsprivacy.org/wiki/display/DP/DNS+Privacy+Implementation+Status#DNSPrivacyImplementationStatus-XFR/XoTImplementationstatus)
+
+Specific recent activity includes:
+
 1. The 1.9.2 version of
 [Unbound](https://github.com/NLnetLabs/unbound/blob/release-1.9.2/doc/Changelog)
  includes an option to perform AXoT (instead of AXFR-over-TCP). 
@@ -1187,7 +1191,8 @@ Significant contributions to the document were made by:
 draft-ietf-dprive-xfr-over-tls-06
 
 * Update text relating to pipelining and connection reuse after WGLC comments.
-* Various typos.
+* Add link to implementation status matrix
+* Various typos
 
 draft-ietf-dprive-xfr-over-tls-05
 
