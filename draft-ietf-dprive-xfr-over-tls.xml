@@ -432,12 +432,11 @@ fact it says:
 There may also be a fourth step where the secondary must fall back to AXFR
 because, e.g., the primary does not support IXFR.
 </t>
-<t>However it is noted that most widely used open source authoritative
-nameserver implementations (including both <eref target="https://www.isc.org/bind/">BIND</eref> and
-<eref target="https://www.nlnetlabs.nl/projects/nsd/about/">NSD</eref>) do IXFR using TCP by
-default in their latest releases. For BIND TCP connections are sometimes used
-for SOA queries but in general they are not used persistently and close after
-an IXFR is completed.
+<t>However it is noted that most widely used open source authoritative nameserver
+implementations (including both <xref target="BIND"/> and <xref target="NSD"/> do IXFR using TCP by default
+in their latest releases. For BIND TCP connections are sometimes used for SOA
+queries but in general they are not used persistently and close after an IXFR
+is completed.
 </t>
 </section>
 
@@ -1256,9 +1255,22 @@ multi-primary case where the primaries are migrating to XoT.
 <t>Such configuration options MUST only be used in a 'migration mode' though, and
 therefore should be used with care.
 </t>
+<t>It is noted that use of a TLS proxy in front of the primary server is a simple
+deployment solution that can enable server side XoT.
+</t>
+</section>
+
+<section anchor="iana-considerations" title="IANA Considerations">
+<t>None.
+</t>
 </section>
 
 <section anchor="implementation-status" title="Implementation Status">
+<t>[THIS SECTION TO BE REMOVED BEFORE PUBLICATION] This section records the status
+of known implementations of the protocol defined by this specification at the
+time of posting of this Internet-Draft, and is based on a proposal described in
+<xref target="RFC7942"/>.
+</t>
 <t>A summary of current behavior and implementation status can be found here: <eref target="https://dnsprivacy.org/wiki/display/DP/DNS+Privacy+Implementation+Status#DNSPrivacyImplementationStatus-XFR/XoTImplementationstatus">XoT implementation status</eref>
 </t>
 <t>Specific recent activity includes:
@@ -1281,14 +1293,6 @@ includes an option to perform AXoT (instead of AXFR-over-TCP).</t>
 <t>Both items 1. and 2.2. listed above require the client (secondary) to
 authenticate the server (primary) using a configured authentication domain name
 if XoT is used.
-</t>
-<t>It is noted that use of a TLS proxy in front of the primary server is a simple
-deployment solution that can enable server side XoT.
-</t>
-</section>
-
-<section anchor="iana-considerations" title="IANA Considerations">
-<t>None.
 </t>
 </section>
 
@@ -1345,7 +1349,9 @@ out-of-order/intermingled responses.
 </t>
 <t>
 <list style="symbols">
-<t>Correct typos in acknowledgments.</t>
+<t>Reference RFC7942 in the implementation status section</t>
+<t>Convert the URIs that will remain on publication to references</t>
+<t>Correct typos in acknowledgments</t>
 </list>
 </t>
 <t>draft-ietf-dprive-xfr-over-tls-06
@@ -1464,15 +1470,31 @@ handling</t>
 <?rfc include="https://xml2rfc.tools.ietf.org/public/rfc/bibxml/reference.RFC.8914.xml"?>
 </references>
 <references title="Informative References">
+<reference anchor='BIND' target='https://www.isc.org/bind/'>
+    <front>
+        <title>BIND 9</title>
+            <author><organization>ISC</organization></author>
+        <date year='2021'/>
+    </front>
+</reference>
 <?rfc include="https://xml2rfc.tools.ietf.org/public/rfc/bibxml3/reference.I-D.ietf-dnsop-dns-zone-digest.xml"?>
 <?rfc include="https://xml2rfc.tools.ietf.org/public/rfc/bibxml3/reference.I-D.ietf-dprive-dnsoquic.xml"?>
 <?rfc include="https://xml2rfc.tools.ietf.org/public/rfc/bibxml3/reference.I-D.ietf-dprive-phase2-requirements.xml"?>
 <?rfc include="https://xml2rfc.tools.ietf.org/public/rfc/bibxml3/reference.I-D.ietf-tls-esni.xml"?>
 <?rfc include="https://xml2rfc.tools.ietf.org/public/rfc/bibxml3/reference.I-D.vandijk-dprive-ds-dot-signal-and-pin.xml"?>
+<reference anchor='NSD'
+ target='https://www.nlnetlabs.nl/projects/nsd/about/'>
+    <front>
+        <title>NSD</title>
+            <author><organization>NLnet Labs</organization></author>
+        <date year='2021'/>
+    </front>
+</reference>
 <?rfc include="https://xml2rfc.tools.ietf.org/public/rfc/bibxml/reference.RFC.1982.xml"?>
 <?rfc include="https://xml2rfc.tools.ietf.org/public/rfc/bibxml/reference.RFC.2931.xml"?>
 <?rfc include="https://xml2rfc.tools.ietf.org/public/rfc/bibxml/reference.RFC.5155.xml"?>
 <?rfc include="https://xml2rfc.tools.ietf.org/public/rfc/bibxml/reference.RFC.6891.xml"?>
+<?rfc include="https://xml2rfc.tools.ietf.org/public/rfc/bibxml/reference.RFC.7942.xml"?>
 <?rfc include="https://xml2rfc.tools.ietf.org/public/rfc/bibxml/reference.RFC.8484.xml"?>
 <reference anchor='nist-guide'
  target='https://nvlpubs.nist.gov/nistpubs/SpecialPublications/NIST.SP.800-81-2.pdf'>

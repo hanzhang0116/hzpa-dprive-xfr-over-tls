@@ -423,8 +423,8 @@
 <link href="#rfc.section.10" rel="Chapter" title="10 XoT authentication"/>
 <link href="#rfc.section.11" rel="Chapter" title="11 Policies for Both AXoT and IXoT"/>
 <link href="#rfc.section.12" rel="Chapter" title="12 Implementation Considerations"/>
-<link href="#rfc.section.13" rel="Chapter" title="13 Implementation Status"/>
-<link href="#rfc.section.14" rel="Chapter" title="14 IANA Considerations"/>
+<link href="#rfc.section.13" rel="Chapter" title="13 IANA Considerations"/>
+<link href="#rfc.section.14" rel="Chapter" title="14 Implementation Status"/>
 <link href="#rfc.section.15" rel="Chapter" title="15 Security Considerations"/>
 <link href="#rfc.section.16" rel="Chapter" title="16 Acknowledgements"/>
 <link href="#rfc.section.17" rel="Chapter" title="17 Contributors"/>
@@ -572,8 +572,8 @@
 </ul><li>10.   <a href="#rfc.section.10">XoT authentication</a></li>
 <li>11.   <a href="#rfc.section.11">Policies for Both AXoT and IXoT</a></li>
 <li>12.   <a href="#rfc.section.12">Implementation Considerations</a></li>
-<li>13.   <a href="#rfc.section.13">Implementation Status</a></li>
-<li>14.   <a href="#rfc.section.14">IANA Considerations</a></li>
+<li>13.   <a href="#rfc.section.13">IANA Considerations</a></li>
+<li>14.   <a href="#rfc.section.14">Implementation Status</a></li>
 <li>15.   <a href="#rfc.section.15">Security Considerations</a></li>
 <li>16.   <a href="#rfc.section.16">Acknowledgements</a></li>
 <li>17.   <a href="#rfc.section.17">Contributors</a></li>
@@ -762,7 +762,7 @@ gets the data) are discussed in [RFC5936] and [RFC5155]."
 "Thus, a client should first make an IXFR query using UDP."
 </pre>
 <p id="rfc.section.5.2.p.4">So there may be a fourth step above where the client falls back to IXFR-over-TCP.  There may also be a fourth step where the secondary must fall back to AXFR because, e.g., the primary does not support IXFR.  </p>
-<p id="rfc.section.5.2.p.5">However it is noted that most widely used open source authoritative nameserver implementations (including both <a href="https://www.isc.org/bind/">BIND</a> and <a href="https://www.nlnetlabs.nl/projects/nsd/about/">NSD</a>) do IXFR using TCP by default in their latest releases. For BIND TCP connections are sometimes used for SOA queries but in general they are not used persistently and close after an IXFR is completed.  </p>
+<p id="rfc.section.5.2.p.5">However it is noted that most widely used open source authoritative nameserver implementations (including both <a href="#BIND">[BIND]</a> and <a href="#NSD">[NSD]</a> do IXFR using TCP by default in their latest releases. For BIND TCP connections are sometimes used for SOA queries but in general they are not used persistently and close after an IXFR is completed.  </p>
 <h1 id="rfc.section.5.3"><a href="#rfc.section.5.3">5.3.</a> <a href="#data-leakage-of-notify-and-soa-message-exchanges" id="data-leakage-of-notify-and-soa-message-exchanges">Data Leakage of NOTIFY and SOA Message Exchanges</a></h1>
 <p id="rfc.section.5.3.p.1">This section attempts to presents a rationale for considering encrypting the other messages in the XFR mechanism.  </p>
 <p id="rfc.section.5.3.p.2">Since the SOA of the published zone can be trivially discovered by simply querying the publicly available authoritative servers leakage of this RR is not discussed in the following sections.  </p>
@@ -1164,9 +1164,13 @@ described below)."
 <p id="rfc.section.12.p.1">Server implementations may want to also offer options that allow ACLs on a zone to specify that a specific client can use either XoT or TCP. This would allow for flexibility while clients are migrating to XoT.  </p>
 <p id="rfc.section.12.p.2">Client implementations may similarly want to offer options to cater for the multi-primary case where the primaries are migrating to XoT.  </p>
 <p id="rfc.section.12.p.3">Such configuration options MUST only be used in a 'migration mode' though, and therefore should be used with care.  </p>
-<h1 id="rfc.section.13"><a href="#rfc.section.13">13.</a> <a href="#implementation-status" id="implementation-status">Implementation Status</a></h1>
-<p id="rfc.section.13.p.1">A summary of current behavior and implementation status can be found here: <a href="https://dnsprivacy.org/wiki/display/DP/DNS+Privacy+Implementation+Status#DNSPrivacyImplementationStatus-XFR/XoTImplementationstatus">XoT implementation status</a> </p>
-<p id="rfc.section.13.p.2">Specific recent activity includes: </p>
+<p id="rfc.section.12.p.4">It is noted that use of a TLS proxy in front of the primary server is a simple deployment solution that can enable server side XoT.  </p>
+<h1 id="rfc.section.13"><a href="#rfc.section.13">13.</a> <a href="#iana-considerations" id="iana-considerations">IANA Considerations</a></h1>
+<p id="rfc.section.13.p.1">None.  </p>
+<h1 id="rfc.section.14"><a href="#rfc.section.14">14.</a> <a href="#implementation-status" id="implementation-status">Implementation Status</a></h1>
+<p id="rfc.section.14.p.1">[THIS SECTION TO BE REMOVED BEFORE PUBLICATION] This section records the status of known implementations of the protocol defined by this specification at the time of posting of this Internet-Draft, and is based on a proposal described in <a href="#RFC7942">[RFC7942]</a>.  </p>
+<p id="rfc.section.14.p.2">A summary of current behavior and implementation status can be found here: <a href="https://dnsprivacy.org/wiki/display/DP/DNS+Privacy+Implementation+Status#DNSPrivacyImplementationStatus-XFR/XoTImplementationstatus">XoT implementation status</a> </p>
+<p id="rfc.section.14.p.3">Specific recent activity includes: </p>
 <p/>
 
 <ol>
@@ -1176,10 +1180,7 @@ described below)."
 </ol>
 
 <p> </p>
-<p id="rfc.section.13.p.4">Both items 1. and 2.2. listed above require the client (secondary) to authenticate the server (primary) using a configured authentication domain name if XoT is used.  </p>
-<p id="rfc.section.13.p.5">It is noted that use of a TLS proxy in front of the primary server is a simple deployment solution that can enable server side XoT.  </p>
-<h1 id="rfc.section.14"><a href="#rfc.section.14">14.</a> <a href="#iana-considerations" id="iana-considerations">IANA Considerations</a></h1>
-<p id="rfc.section.14.p.1">None.  </p>
+<p id="rfc.section.14.p.5">Both items 1. and 2.2. listed above require the client (secondary) to authenticate the server (primary) using a configured authentication domain name if XoT is used.  </p>
 <h1 id="rfc.section.15"><a href="#rfc.section.15">15.</a> <a href="#security-considerations" id="security-considerations">Security Considerations</a></h1>
 <p id="rfc.section.15.p.1">This document specifies a security measure against a DNS risk: the risk that an attacker collects entire DNS zones through eavesdropping on clear text DNS zone transfers.  </p>
 <p id="rfc.section.15.p.2">This does not mitigate: </p>
@@ -1205,7 +1206,9 @@ described below)."
 <p/>
 
 <ul>
-  <li>Correct typos in acknowledgments.</li>
+  <li>Reference RFC7942 in the implementation status section</li>
+  <li>Convert the URIs that will remain on publication to references</li>
+  <li>Correct typos in acknowledgments</li>
 </ul>
 
 <p> </p>
@@ -1427,6 +1430,12 @@ described below)."
   <tbody>
     <tr>
       <td class="reference">
+        <b id="BIND">[BIND]</b>
+      </td>
+      <td class="top"><a>ISC</a>, "<a href="https://www.isc.org/bind/">BIND 9</a>", 2021.</td>
+    </tr>
+    <tr>
+      <td class="reference">
         <b id="I-D.ietf-dnsop-dns-zone-digest">[I-D.ietf-dnsop-dns-zone-digest]</b>
       </td>
       <td class="top"><a>Wessels, D.</a>, <a>Barber, P.</a>, <a>Weinberg, M.</a>, <a>Kumari, W.</a> and <a>W. Hardaker</a>, "<a href="http://tools.ietf.org/html/draft-ietf-dnsop-dns-zone-digest-14">Message Digest for DNS Zones</a>", Internet-Draft draft-ietf-dnsop-dns-zone-digest-14, October 2020.</td>
@@ -1463,6 +1472,12 @@ described below)."
     </tr>
     <tr>
       <td class="reference">
+        <b id="NSD">[NSD]</b>
+      </td>
+      <td class="top"><a>NLnet Labs</a>, "<a href="https://www.nlnetlabs.nl/projects/nsd/about/">NSD</a>", 2021.</td>
+    </tr>
+    <tr>
+      <td class="reference">
         <b id="RFC1982">[RFC1982]</b>
       </td>
       <td class="top"><a>Elz, R.</a> and <a>R. Bush</a>, "<a href="http://tools.ietf.org/html/rfc1982">Serial Number Arithmetic</a>", RFC 1982, DOI 10.17487/RFC1982, August 1996.</td>
@@ -1484,6 +1499,12 @@ described below)."
         <b id="RFC6891">[RFC6891]</b>
       </td>
       <td class="top"><a>Damas, J.</a>, <a>Graff, M.</a> and <a>P. Vixie</a>, "<a href="http://tools.ietf.org/html/rfc6891">Extension Mechanisms for DNS (EDNS(0))</a>", STD 75, RFC 6891, DOI 10.17487/RFC6891, April 2013.</td>
+    </tr>
+    <tr>
+      <td class="reference">
+        <b id="RFC7942">[RFC7942]</b>
+      </td>
+      <td class="top"><a>Sheffer, Y.</a> and <a>A. Farrel</a>, "<a href="http://tools.ietf.org/html/rfc7942">Improving Awareness of Running Code: The Implementation Status Section</a>", BCP 205, RFC 7942, DOI 10.17487/RFC7942, July 2016.</td>
     </tr>
     <tr>
       <td class="reference">

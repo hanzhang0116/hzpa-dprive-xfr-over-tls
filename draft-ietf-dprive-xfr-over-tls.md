@@ -383,12 +383,12 @@ So there may be a fourth step above where the client falls back to IXFR-over-TCP
 There may also be a fourth step where the secondary must fall back to AXFR
 because, e.g., the primary does not support IXFR.
 
-However it is noted that most widely used open source authoritative
-nameserver implementations (including both [BIND](https://www.isc.org/bind/) and
-[NSD](https://www.nlnetlabs.nl/projects/nsd/about/)) do IXFR using TCP by
-default in their latest releases. For BIND TCP connections are sometimes used
-for SOA queries but in general they are not used persistently and close after
-an IXFR is completed.
+However it is noted that most widely used open source authoritative nameserver
+implementations (including both [@BIND] and [@NSD] do IXFR using TCP by default
+in their latest releases. For BIND TCP connections are sometimes used for SOA
+queries but in general they are not used persistently and close after an IXFR
+is completed.
+
 
 ## Data Leakage of NOTIFY and SOA Message Exchanges
 
@@ -1120,7 +1120,19 @@ multi-primary case where the primaries are migrating to XoT.
 Such configuration options MUST only be used in a 'migration mode' though, and
 therefore should be used with care.
 
+It is noted that use of a TLS proxy in front of the primary server is a simple
+deployment solution that can enable server side XoT.
+
+# IANA Considerations
+
+None.
+
 # Implementation Status
+
+[THIS SECTION TO BE REMOVED BEFORE PUBLICATION] This section records the status
+of known implementations of the protocol defined by this specification at the
+time of posting of this Internet-Draft, and is based on a proposal described in
+[@RFC7942].
 
 A summary of current behavior and implementation status can be found here: [XoT implementation status](https://dnsprivacy.org/wiki/display/DP/DNS+Privacy+Implementation+Status#DNSPrivacyImplementationStatus-XFR/XoTImplementationstatus)
 
@@ -1139,13 +1151,6 @@ Specific recent activity includes:
 Both items 1. and 2.2. listed above require the client (secondary) to
 authenticate the server (primary) using a configured authentication domain name
 if XoT is used.
-
-It is noted that use of a TLS proxy in front of the primary server is a simple
-deployment solution that can enable server side XoT.
-
-# IANA Considerations
-
-None.
 
 # Security Considerations
 
@@ -1190,7 +1195,9 @@ Significant contributions to the document were made by:
 
 draft-ietf-dprive-xfr-over-tls-07
 
-* Correct typos in acknowledgments. 
+* Reference RFC7942 in the implementation status section
+* Convert the URIs that will remain on publication to references
+* Correct typos in acknowledgments
 
 draft-ietf-dprive-xfr-over-tls-06
 
@@ -1268,6 +1275,25 @@ draft-hzpa-dprive-xfr-over-tls-00
         <date year='2013'/>
     </front>
 </reference>
+
+<reference anchor='BIND' target='https://www.isc.org/bind/'>
+    <front>
+        <title>BIND 9</title>
+            <author><organization>ISC</organization></author>
+        <date year='2021'/>
+    </front>
+</reference>
+
+<reference anchor='NSD'
+ target='https://www.nlnetlabs.nl/projects/nsd/about/'>
+    <front>
+        <title>NSD</title>
+            <author><organization>NLnet Labs</organization></author>
+        <date year='2021'/>
+    </front>
+</reference>
+
+
 
 <!--These lines are needed to generate references for citations that appear only
 in the appendix-->
