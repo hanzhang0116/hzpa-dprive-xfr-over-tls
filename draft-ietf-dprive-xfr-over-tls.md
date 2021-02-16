@@ -2,13 +2,13 @@
     Title = "DNS Zone Transfer-over-TLS"
     abbrev = "XFR-over-TLS"
     category = "std"
-    docName= "draft-ietf-dprive-xfr-over-tls-06"
+    docName= "draft-ietf-dprive-xfr-over-tls-07"
     ipr = "trust200902"
     area = "Internet"
     workgroup = "dprive"
     keyword = ["DNS", "operations", "privacy"]
     updates = [1995, 5936, 7766]
-    date = 2021-02-11T00:00:00Z
+    date = 2021-02-16T00:00:00Z
     [pi]
     [[author]]
      initials="W."
@@ -1170,7 +1170,7 @@ Security concerns of DoT are outlined in [@RFC7858] and [@RFC8310].
 The authors thank Tony Finch, Benno Overeinder, Shumon Huque
 and Tim Wicinski and many other members of DPRIVE for review and discussions.
 
-The authors particularly thank Peter van Dikj, Ondrey Sury, Brian Dickson and
+The authors particularly thank Peter van Dijk, Ondrej Sury, Brian Dickson and
 several other open source DNS implementors for valuable discussion and
 clarification on the issue associated with pipelining XFR queries and handling
 out-of-order/intermingled responses.
@@ -1187,6 +1187,10 @@ Significant contributions to the document were made by:
    Email: hzhang@salesforce.com
 
 # Changelog
+
+draft-ietf-dprive-xfr-over-tls-07
+
+* Correct typos in acknowledgments. 
 
 draft-ietf-dprive-xfr-over-tls-06
 
