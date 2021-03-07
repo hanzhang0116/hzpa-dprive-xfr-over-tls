@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE rfc SYSTEM 'rfc2629.dtd' []>
-<rfc ipr="trust200902" category="std" docName="draft-ietf-dprive-xfr-over-tls-07" updates="1995, 5936, 7766">
+<rfc ipr="trust200902" category="std" docName="draft-ietf-dprive-xfr-over-tls-08" updates="1995, 5936, 7766">
 <?rfc toc="yes"?>
 <?rfc symrefs="yes"?>
 <?rfc sortrefs="yes"?>
@@ -56,7 +56,7 @@
 <region></region>
 </postal>
 <phone></phone>
-<email>ssahib@salesforce.com</email>
+<email>shivankaulsahib@gmail.com</email>
 <uri></uri>
 </address>
 </author>
@@ -90,7 +90,7 @@
 <uri></uri>
 </address>
 </author>
-<date year="2021" month="February" day="16"/>
+<date year="2021" month="March" day="8"/>
 
 <area>Internet</area>
 <workgroup>dprive</workgroup>
@@ -176,7 +176,7 @@ mechanism.
 is orthogonal to preventing zone enumeration, though they aim to protect the
 same information.
 </t>
-<t><xref target="RFC5936"/> specifies using TSIG <xref target="RFC2845"/> for authorization of the clients
+<t><xref target="RFC5936"/> specifies using TSIG <xref target="RFC8945"/> for authorization of the clients
 of a zone transfer and for data integrity, but does not express any need for
 confidentiality, and TSIG does not offer encryption. Some operators use SSH
 tunneling or IPSec to encrypt the transfer data.
@@ -405,7 +405,7 @@ connection.
        |            IXFR Response          |    | required
        |             (Zone data)           | ---
 
-              Figure 1. IXFR Mechanism
+              Figure 2. IXFR Mechanism
               
 </artwork></figure>
 <t>
@@ -417,7 +417,7 @@ refresh timer or scheduled/triggered zone maintenance.</t>
 to obtain the serial number of the zone held by the primary.</t>
 <t>If the primary serial is higher than the secondaries serial (using Serial
 Number Arithmetic <xref target="RFC1982"/>), the secondary makes an IXFR request to the
-primary after the primary sends an IXFR response.</t>
+primary after which the primary sends an IXFR response.</t>
 </list>
 </t>
 <t><xref target="RFC1995"/> specifies that Incremental Transfer may use UDP if the entire IXFR
@@ -786,7 +786,7 @@ connectivity the secondary is the TLS client and the primary the TLS server.
        |            IXFR Response          |    |
        |             (Zone data)           | ---
 
-              Figure 1. IXoT Mechanism
+              Figure 4. IXoT Mechanism
               
 </artwork></figure>
 </section>
@@ -1052,7 +1052,7 @@ and secondary in a proxy scenario).</t>
 </t>
 
 <section anchor="tsig" title="TSIG">
-<t>TSIG <xref target="RFC2845"/> provides a mechanism for two or more parties to use shared
+<t>TSIG <xref target="RFC8945"/> provides a mechanism for two or more parties to use shared
 secret keys which can then be used to create a message digest to protect
 individual DNS messages. This allows each party to authenticate that a request
 or response (and the data in it) came from the other party, even if it was
@@ -1135,11 +1135,11 @@ secondaries are accepted.
 
 <section anchor="zonemd" title="ZONEMD">
 <t>For completeness, we also describe Message Digest for DNS Zones (ZONEMD)
-<xref target="I-D.ietf-dnsop-dns-zone-digest"/> here. The message digest
+<xref target="RFC8976"/> here. The message digest
 is a mechanism that can be used to verify the content of a standalone zone. It
 is designed to be independent of the transmission channel or mechanism, allowing
 a general consumer of a zone to do origin authentication of the entire zone
-contents. Note that the current version of <xref target="I-D.ietf-dnsop-dns-zone-digest"/>
+contents. Note that the current version of <xref target="RFC8976"/>
 states:
 </t>
 <t><spanx style="verb">As specified herein, ZONEMD is impractical for large, dynamic zones due to the
@@ -1323,7 +1323,7 @@ observation of encrypted connections.</t>
 and Tim Wicinski and many other members of DPRIVE for review and discussions.
 </t>
 <t>The authors particularly thank Peter van Dijk, Ondrej Sury, Brian Dickson and
-several other open source DNS implementors for valuable discussion and
+several other open source DNS implementers for valuable discussion and
 clarification on the issue associated with pipelining XFR queries and handling
 out-of-order/intermingled responses.
 </t>
@@ -1345,6 +1345,11 @@ out-of-order/intermingled responses.
 </section>
 
 <section anchor="changelog" title="Changelog">
+<t>draft-ietf-dprive-xfr-over-tls-08
+* RFC2845 -&gt; (obsoleted by) RFC8945
+* I-D.ietf-dnsop-dns-zone-digest -&gt; RFC8976
+* Minor editorial changes + email update
+</t>
 <t>draft-ietf-dprive-xfr-over-tls-07
 </t>
 <t>
@@ -1450,13 +1455,11 @@ handling</t>
 </middle>
 <back>
 <references title="Normative References">
-<?rfc include="https://xml2rfc.tools.ietf.org/public/rfc/bibxml3/reference.I-D.vcelak-nsec5.xml"?>
 <?rfc include="https://xml2rfc.tools.ietf.org/public/rfc/bibxml/reference.RFC.1034.xml"?>
 <?rfc include="https://xml2rfc.tools.ietf.org/public/rfc/bibxml/reference.RFC.1035.xml"?>
 <?rfc include="https://xml2rfc.tools.ietf.org/public/rfc/bibxml/reference.RFC.1995.xml"?>
 <?rfc include="https://xml2rfc.tools.ietf.org/public/rfc/bibxml/reference.RFC.1996.xml"?>
 <?rfc include="https://xml2rfc.tools.ietf.org/public/rfc/bibxml/reference.RFC.2119.xml"?>
-<?rfc include="https://xml2rfc.tools.ietf.org/public/rfc/bibxml/reference.RFC.2845.xml"?>
 <?rfc include="https://xml2rfc.tools.ietf.org/public/rfc/bibxml/reference.RFC.5936.xml"?>
 <?rfc include="https://xml2rfc.tools.ietf.org/public/rfc/bibxml/reference.RFC.6973.xml"?>
 <?rfc include="https://xml2rfc.tools.ietf.org/public/rfc/bibxml/reference.RFC.7626.xml"?>
@@ -1468,6 +1471,7 @@ handling</t>
 <?rfc include="https://xml2rfc.tools.ietf.org/public/rfc/bibxml/reference.RFC.8446.xml"?>
 <?rfc include="https://xml2rfc.tools.ietf.org/public/rfc/bibxml/reference.RFC.8499.xml"?>
 <?rfc include="https://xml2rfc.tools.ietf.org/public/rfc/bibxml/reference.RFC.8914.xml"?>
+<?rfc include="https://xml2rfc.tools.ietf.org/public/rfc/bibxml/reference.RFC.8945.xml"?>
 </references>
 <references title="Informative References">
 <reference anchor='BIND' target='https://www.isc.org/bind/'>
@@ -1477,11 +1481,11 @@ handling</t>
         <date year='2021'/>
     </front>
 </reference>
-<?rfc include="https://xml2rfc.tools.ietf.org/public/rfc/bibxml3/reference.I-D.ietf-dnsop-dns-zone-digest.xml"?>
 <?rfc include="https://xml2rfc.tools.ietf.org/public/rfc/bibxml3/reference.I-D.ietf-dprive-dnsoquic.xml"?>
 <?rfc include="https://xml2rfc.tools.ietf.org/public/rfc/bibxml3/reference.I-D.ietf-dprive-phase2-requirements.xml"?>
 <?rfc include="https://xml2rfc.tools.ietf.org/public/rfc/bibxml3/reference.I-D.ietf-tls-esni.xml"?>
 <?rfc include="https://xml2rfc.tools.ietf.org/public/rfc/bibxml3/reference.I-D.vandijk-dprive-ds-dot-signal-and-pin.xml"?>
+<?rfc include="https://xml2rfc.tools.ietf.org/public/rfc/bibxml3/reference.I-D.vcelak-nsec5.xml"?>
 <reference anchor='NSD'
  target='https://www.nlnetlabs.nl/projects/nsd/about/'>
     <front>
@@ -1496,6 +1500,7 @@ handling</t>
 <?rfc include="https://xml2rfc.tools.ietf.org/public/rfc/bibxml/reference.RFC.6891.xml"?>
 <?rfc include="https://xml2rfc.tools.ietf.org/public/rfc/bibxml/reference.RFC.7942.xml"?>
 <?rfc include="https://xml2rfc.tools.ietf.org/public/rfc/bibxml/reference.RFC.8484.xml"?>
+<?rfc include="https://xml2rfc.tools.ietf.org/public/rfc/bibxml/reference.RFC.8976.xml"?>
 <reference anchor='nist-guide'
  target='https://nvlpubs.nist.gov/nistpubs/SpecialPublications/NIST.SP.800-81-2.pdf'>
     <front>

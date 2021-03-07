@@ -2,7 +2,7 @@
     Title = "DNS Zone Transfer-over-TLS"
     abbrev = "XFR-over-TLS"
     category = "std"
-    docName= "draft-ietf-dprive-xfr-over-tls-07"
+    docName= "draft-ietf-dprive-xfr-over-tls-08"
     ipr = "trust200902"
     area = "Internet"
     workgroup = "dprive"
@@ -357,7 +357,7 @@ The figure below provides an outline of the IXFR mechanism including NOTIFYs.
        |            IXFR Response          |    | required
        |             (Zone data)           | ---
 
-              Figure 1. IXFR Mechanism
+              Figure 2. IXFR Mechanism
               
 ~~~~
 
@@ -370,7 +370,7 @@ to obtain the serial number of the zone held by the primary.
 
 3. If the primary serial is higher than the secondaries serial (using Serial
 Number Arithmetic [@RFC1982]), the secondary makes an IXFR request to the
-primary after the primary sends an IXFR response.
+primary after which the primary sends an IXFR response.
 
 
 [@!RFC1995] specifies that Incremental Transfer may use UDP if the entire IXFR
@@ -700,7 +700,7 @@ The figure below provides an outline of the IXoT mechanism including NOTIFYs.
        |            IXFR Response          |    |
        |             (Zone data)           | ---
 
-              Figure 1. IXoT Mechanism
+              Figure 4. IXoT Mechanism
               
 ~~~~
 
