@@ -3,7 +3,7 @@
 # - xml2rfc (https://xml2rfc.tools.ietf.org/)
 
 DRAFT=draft-ietf-dprive-xfr-over-tls
-VERSION=07
+VERSION=08
 
 XML=$(DRAFT).xml
 HTML=$(DRAFT)-$(VERSION).html

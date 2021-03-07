@@ -2,13 +2,13 @@
     Title = "DNS Zone Transfer-over-TLS"
     abbrev = "XFR-over-TLS"
     category = "std"
-    docName= "draft-ietf-dprive-xfr-over-tls-07"
+    docName= "draft-ietf-dprive-xfr-over-tls-08"
     ipr = "trust200902"
     area = "Internet"
     workgroup = "dprive"
     keyword = ["DNS", "operations", "privacy"]
     updates = [1995, 5936, 7766]
-    date = 2021-02-16T00:00:00Z
+    date = 2021-03-08T00:00:00Z
     [pi]
     [[author]]
      initials="W."
@@ -40,7 +40,7 @@
      fullname="Shivan Sahib"
      organization = "Salesforce"
        [author.address]
-       email = "ssahib@salesforce.com"
+       email = "shivankaulsahib@gmail.com"
        [author.address.postal]
        city = "Vancouver, BC"
        country = "Canada"
@@ -132,15 +132,15 @@ was to make it as hard to enumerate an DNSSEC signed zone as an unsigned zone).
 Whilst this is widely used, zone walking is now possible with NSEC3 due to
 crypto-breaking advances. This has prompted further work on an alternative
 mechanism for DNSSEC authenticated denial of existence - NSEC5
-[@!I-D.vcelak-nsec5] - however questions remain over the practicality of this
+[@?I-D.vcelak-nsec5] - however questions remain over the practicality of this
 mechanism.
 
 [@RFC5155] does not address data obtained outside zone enumeration (nor does
-[@!I-D.vcelak-nsec5]). Preventing eavesdropping of zone transfers (this draft)
+[@?I-D.vcelak-nsec5]). Preventing eavesdropping of zone transfers (this draft)
 is orthogonal to preventing zone enumeration, though they aim to protect the
 same information.
 
-[@!RFC5936] specifies using TSIG [@!RFC2845] for authorization of the clients
+[@!RFC5936] specifies using TSIG [@!RFC8945] for authorization of the clients
 of a zone transfer and for data integrity, but does not express any need for
 confidentiality, and TSIG does not offer encryption. Some operators use SSH
 tunneling or IPSec to encrypt the transfer data.
@@ -357,7 +357,7 @@ The figure below provides an outline of the IXFR mechanism including NOTIFYs.
        |            IXFR Response          |    | required
        |             (Zone data)           | ---
 
-              Figure 1. IXFR Mechanism
+              Figure 2. IXFR Mechanism
               
 ~~~~
 
@@ -370,7 +370,7 @@ to obtain the serial number of the zone held by the primary.
 
 3. If the primary serial is higher than the secondaries serial (using Serial
 Number Arithmetic [@RFC1982]), the secondary makes an IXFR request to the
-primary after the primary sends an IXFR response.
+primary after which the primary sends an IXFR response.
 
 
 [@!RFC1995] specifies that Incremental Transfer may use UDP if the entire IXFR
@@ -700,7 +700,7 @@ The figure below provides an outline of the IXoT mechanism including NOTIFYs.
        |            IXFR Response          |    |
        |             (Zone data)           | ---
 
-              Figure 1. IXoT Mechanism
+              Figure 4. IXoT Mechanism
               
 ~~~~
 
@@ -942,7 +942,7 @@ We classify the mechanisms based on the following properties:
 
 ## TSIG
 
-TSIG [@RFC2845] provides a mechanism for two or more parties to use shared
+TSIG [@RFC8945] provides a mechanism for two or more parties to use shared
 secret keys which can then be used to create a message digest to protect
 individual DNS messages. This allows each party to authenticate that a request
 or response (and the data in it) came from the other party, even if it was
@@ -1015,11 +1015,11 @@ Properties: Channel authentication of the client.
 ## ZONEMD
 
 For completeness, we also describe Message Digest for DNS Zones (ZONEMD)
-[@?I-D.ietf-dnsop-dns-zone-digest] here. The message digest
+[@RFC8976] here. The message digest
 is a mechanism that can be used to verify the content of a standalone zone. It
 is designed to be independent of the transmission channel or mechanism, allowing
 a general consumer of a zone to do origin authentication of the entire zone
-contents. Note that the current version of [@?I-D.ietf-dnsop-dns-zone-digest]
+contents. Note that the current version of [@RFC8976]
 states:
 
 `As specified herein, ZONEMD is impractical for large, dynamic zones due to the
@@ -1176,7 +1176,7 @@ The authors thank Tony Finch, Benno Overeinder, Shumon Huque
 and Tim Wicinski and many other members of DPRIVE for review and discussions.
 
 The authors particularly thank Peter van Dijk, Ondrej Sury, Brian Dickson and
-several other open source DNS implementors for valuable discussion and
+several other open source DNS implementers for valuable discussion and
 clarification on the issue associated with pipelining XFR queries and handling
 out-of-order/intermingled responses.
 
@@ -1192,6 +1192,13 @@ Significant contributions to the document were made by:
    Email: hzhang@salesforce.com
 
 # Changelog
+
+draft-ietf-dprive-xfr-over-tls-08
+
+* RFC2845 -> (obsoleted by) RFC8945
+* I-D.ietf-dnsop-dns-zone-digest -> RFC8976
+* Minor editorial changes + email update
+
 
 draft-ietf-dprive-xfr-over-tls-07
 
