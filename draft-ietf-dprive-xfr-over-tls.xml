@@ -1346,9 +1346,13 @@ out-of-order/intermingled responses.
 
 <section anchor="changelog" title="Changelog">
 <t>draft-ietf-dprive-xfr-over-tls-08
-* RFC2845 -&gt; (obsoleted by) RFC8945
-* I-D.ietf-dnsop-dns-zone-digest -&gt; RFC8976
-* Minor editorial changes + email update
+</t>
+<t>
+<list style="symbols">
+<t>RFC2845 -&gt; (obsoleted by) RFC8945</t>
+<t>I-D.ietf-dnsop-dns-zone-digest -&gt; RFC8976</t>
+<t>Minor editorial changes + email update</t>
+</list>
 </t>
 <t>draft-ietf-dprive-xfr-over-tls-07
 </t>

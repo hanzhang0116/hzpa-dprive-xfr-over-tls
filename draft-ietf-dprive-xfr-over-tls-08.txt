@@ -138,7 +138,7 @@ Internet-Draft                XFR-over-TLS                    March 2021
      19.2.  Informative References . . . . . . . . . . . . . . . . .  34
      19.3.  URIs . . . . . . . . . . . . . . . . . . . . . . . . . .  36
    Appendix A.  XoT server connection handling . . . . . . . . . . .  36
-     A.1.  Only listen on TLS on a specific IP address . . . . . . .  36
+     A.1.  Only listen on TLS on a specific IP address . . . . . . .  37
      A.2.  Client specific TLS acceptance  . . . . . . . . . . . . .  37
      A.3.  SNI based TLS acceptance  . . . . . . . . . . . . . . . .  37
      A.4.  TLS specific response policies  . . . . . . . . . . . . .  37
@@ -1689,9 +1689,13 @@ Internet-Draft                XFR-over-TLS                    March 2021
 
 18.  Changelog
 
-   draft-ietf-dprive-xfr-over-tls-08 * RFC2845 -> (obsoleted by) RFC8945
-   * I-D.ietf-dnsop-dns-zone-digest -> RFC8976 * Minor editorial changes
-   + email update
+   draft-ietf-dprive-xfr-over-tls-08
+
+   o  RFC2845 -> (obsoleted by) RFC8945
+
+   o  I-D.ietf-dnsop-dns-zone-digest -> RFC8976
+
+   o  Minor editorial changes + email update
 
    draft-ietf-dprive-xfr-over-tls-07
 
@@ -1726,10 +1730,6 @@ Internet-Draft                XFR-over-TLS                    March 2021
 
    o  Remove propose to use ALPN
 
-   o  Clarify updates to both RFC1995 and RFC5936 by adding specific
-      sections on this
-
-   o  Add a section on the threat model
 
 
 
@@ -1737,6 +1737,11 @@ Toorop, et al.          Expires September 9, 2021              [Page 31]
 
 Internet-Draft                XFR-over-TLS                    March 2021
 
+
+   o  Clarify updates to both RFC1995 and RFC5936 by adding specific
+      sections on this
+
+   o  Add a section on the threat model
 
    o  Convert all SVG diagrams to ASCII art
 
@@ -1781,11 +1786,6 @@ Internet-Draft                XFR-over-TLS                    March 2021
 
    draft-hzpa-dprive-xfr-over-tls-02
 
-   o  Substantial re-work of the document.
-
-   draft-hzpa-dprive-xfr-over-tls-01
-
-   o  Editorial changes, updates to references.
 
 
 
@@ -1793,6 +1793,12 @@ Toorop, et al.          Expires September 9, 2021              [Page 32]
 
 Internet-Draft                XFR-over-TLS                    March 2021
 
+
+   o  Substantial re-work of the document.
+
+   draft-hzpa-dprive-xfr-over-tls-01
+
+   o  Editorial changes, updates to references.
 
    draft-hzpa-dprive-xfr-over-tls-00
 
@@ -1837,18 +1843,17 @@ Internet-Draft                XFR-over-TLS                    March 2021
               DOI 10.17487/RFC7626, August 2015, <https://www.rfc-
               editor.org/info/rfc7626>.
 
-   [RFC7766]  Dickinson, J., Dickinson, S., Bellis, R., Mankin, A., and
-              D. Wessels, "DNS Transport over TCP - Implementation
-              Requirements", RFC 7766, DOI 10.17487/RFC7766, March 2016,
-              <https://www.rfc-editor.org/info/rfc7766>.
-
-
 
 
 Toorop, et al.          Expires September 9, 2021              [Page 33]
 
 Internet-Draft                XFR-over-TLS                    March 2021
 
+
+   [RFC7766]  Dickinson, J., Dickinson, S., Bellis, R., Mankin, A., and
+              D. Wessels, "DNS Transport over TCP - Implementation
+              Requirements", RFC 7766, DOI 10.17487/RFC7766, March 2016,
+              <https://www.rfc-editor.org/info/rfc7766>.
 
    [RFC7828]  Wouters, P., Abley, J., Dickinson, S., and R. Bellis, "The
               edns-tcp-keepalive EDNS0 Option", RFC 7828,
@@ -1892,11 +1897,6 @@ Internet-Draft                XFR-over-TLS                    March 2021
 
    [BIND]     ISC, "BIND 9", 2021, <https://www.isc.org/bind/>.
 
-   [I-D.ietf-dprive-dnsoquic]
-              Huitema, C., Mankin, A., and S. Dickinson, "Specification
-              of DNS over Dedicated QUIC Connections", draft-ietf-
-              dprive-dnsoquic-01 (work in progress), October 2020.
-
 
 
 
@@ -1905,6 +1905,11 @@ Toorop, et al.          Expires September 9, 2021              [Page 34]
 
 Internet-Draft                XFR-over-TLS                    March 2021
 
+
+   [I-D.ietf-dprive-dnsoquic]
+              Huitema, C., Mankin, A., and S. Dickinson, "Specification
+              of DNS over Dedicated QUIC Connections", draft-ietf-
+              dprive-dnsoquic-01 (work in progress), October 2020.
 
    [I-D.ietf-dprive-phase2-requirements]
               Livingood, J., Mayrhofer, A., and B. Overeinder, "DNS
@@ -1946,11 +1951,6 @@ Internet-Draft                XFR-over-TLS                    March 2021
               ( SIG(0)s )", RFC 2931, DOI 10.17487/RFC2931, September
               2000, <https://www.rfc-editor.org/info/rfc2931>.
 
-   [RFC5155]  Laurie, B., Sisson, G., Arends, R., and D. Blacka, "DNS
-              Security (DNSSEC) Hashed Authenticated Denial of
-              Existence", RFC 5155, DOI 10.17487/RFC5155, March 2008,
-              <https://www.rfc-editor.org/info/rfc5155>.
-
 
 
 
@@ -1961,6 +1961,11 @@ Toorop, et al.          Expires September 9, 2021              [Page 35]
 
 Internet-Draft                XFR-over-TLS                    March 2021
 
+
+   [RFC5155]  Laurie, B., Sisson, G., Arends, R., and D. Blacka, "DNS
+              Security (DNSSEC) Hashed Authenticated Denial of
+              Existence", RFC 5155, DOI 10.17487/RFC5155, March 2008,
+              <https://www.rfc-editor.org/info/rfc5155>.
 
    [RFC6891]  Damas, J., Graff, M., and P. Vixie, "Extension Mechanisms
               for DNS (EDNS(0))", STD 75, RFC 6891,
@@ -2005,11 +2010,6 @@ Appendix A.  XoT server connection handling
    code complexity and proxies having no natural way to forward the ALPN
    signal to DNS nameservers over TCP connections.
 
-A.1.  Only listen on TLS on a specific IP address
-
-   Obviously a nameserver which hosts a zone and services queries for
-   the zone on an IP address published in an NS record may wish to use a
-
 
 
 
@@ -2018,6 +2018,10 @@ Toorop, et al.          Expires September 9, 2021              [Page 36]
 Internet-Draft                XFR-over-TLS                    March 2021
 
 
+A.1.  Only listen on TLS on a specific IP address
+
+   Obviously a nameserver which hosts a zone and services queries for
+   the zone on an IP address published in an NS record may wish to use a
    separate IP address for listening on TLS for XoT, only publishing
    that address to its secondaries.
 
@@ -2061,11 +2065,7 @@ A.4.  TLS specific response policies
 
    Some primaries might rely on TSIG/SIG(0) combined with per-query IP
    based ACLs to authenticate secondaries.  In this case the primary
-   must accept all incoming TLS connections and then apply a TLS
-   specific response policy on a per query basis.
 
-   As an aside, whilst [RFC7766] makes a general purpose distinction to
-   clients in the usage of connections (between regular queries and zone
 
 
 
@@ -2074,6 +2074,11 @@ Toorop, et al.          Expires September 9, 2021              [Page 37]
 Internet-Draft                XFR-over-TLS                    March 2021
 
 
+   must accept all incoming TLS connections and then apply a TLS
+   specific response policy on a per query basis.
+
+   As an aside, whilst [RFC7766] makes a general purpose distinction to
+   clients in the usage of connections (between regular queries and zone
    transfers) this is not strict and nothing in the DNS protocol
    prevents using the same connection for both types of traffic.  Hence
    a server cannot know the intention of any client that connects to it,
@@ -2117,11 +2122,6 @@ A.4.1.  SNI based response policies
    XoT service and any future DoT based service for answering recursive
    queries.
 
-   Cons: As above.
-
-
-
-
 
 
 
@@ -2129,6 +2129,8 @@ Toorop, et al.          Expires September 9, 2021              [Page 38]
 
 Internet-Draft                XFR-over-TLS                    March 2021
 
+
+   Cons: As above.
 
 Authors' Addresses
 
@@ -2173,8 +2175,6 @@ Authors' Addresses
    United States
 
    Email: allison.mankin@gmail.com
-
-
 
 
 
