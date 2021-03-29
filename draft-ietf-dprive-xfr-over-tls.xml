@@ -1350,6 +1350,13 @@ out-of-order/intermingled responses.
 </section>
 
 <section anchor="changelog" title="Changelog">
+<t>draft-ietf-dprive-xfr-over-tls-09
+</t>
+<t>
+<list style="symbols">
+<t>Address issued raised in the AD review</t>
+</list>
+</t>
 <t>draft-ietf-dprive-xfr-over-tls-08
 </t>
 <t>

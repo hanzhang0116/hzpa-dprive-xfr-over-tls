@@ -1201,7 +1201,7 @@ Significant contributions to the document were made by:
 
 draft-ietf-dprive-xfr-over-tls-09
 
-* Address issued raised in the AD review
+* Address issued raised in the AD review 
 
 draft-ietf-dprive-xfr-over-tls-08
 
