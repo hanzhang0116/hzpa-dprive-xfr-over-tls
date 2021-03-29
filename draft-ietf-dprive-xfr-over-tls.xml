@@ -90,7 +90,7 @@
 <uri></uri>
 </address>
 </author>
-<date year="2021" month="March" day="24"/>
+<date year="2021" month="March" day="29"/>
 
 <area>Internet</area>
 <workgroup>dprive</workgroup>
@@ -466,8 +466,8 @@ potential leak.
 </section>
 
 <section anchor="soa" title="SOA">
-<t>For hidden primaries or secondaries the SOA response leaks only the degree of SOA lag of
-any downstream secondary.
+<t>For hidden primaries or secondaries the SOA response leaks only the degree of
+SOA serial number lag of any downstream secondary.
 </t>
 </section>
 </section>
@@ -530,7 +530,7 @@ the same TCP connection.
 </t>
 <t>For completeness, we also mention here the recent specification of extended DNS
 error (EDE) codes <xref target="RFC8914"/>. For zone transfers, when returning REFUSED to a
-zone transfer request to an 'unauthorized' client (e.g., where the client is not
+zone transfer request from an 'unauthorized' client (e.g., where the client is not
 listed in an ACL for zone transfers or does not sign the request with the
 correct TSIG key), the extended DNS error code 18 (Prohibited) can also be sent.
 </t>
@@ -1085,7 +1085,7 @@ surveillance, providing on-the-wire confidentiality. Essentially
 <t>they MAY fallback to using cleartext if TLS is not available.</t>
 </list>
 </t>
-<t>As such it does not offer a defense against active attacks (e.g,. an on path active attacker
+<t>As such it does not offer a defense against active attacks (e.g., an on path active attacker
 on the connection from client to server), and is not considered as useful for XoT.
 </t>
 <t>Properties: None guaranteed.

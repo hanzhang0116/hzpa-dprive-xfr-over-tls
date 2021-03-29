@@ -8,7 +8,7 @@
     workgroup = "dprive"
     keyword = ["DNS", "operations", "privacy"]
     updates = [1995, 5936, 7766]
-    date = 2021-03-24T00:00:00Z
+    date = 2021-03-29T00:00:00Z
     [pi]
     [[author]]
      initials="W."
@@ -416,8 +416,8 @@ potential leak.
 
 ### SOA
 
-For hidden primaries or secondaries the SOA response leaks only the degree of SOA lag of
-any downstream secondary.
+For hidden primaries or secondaries the SOA response leaks only the degree of
+SOA serial number lag of any downstream secondary.
 
 # Updates to existing specifications
 
@@ -473,7 +473,7 @@ the same TCP connection.
 
 For completeness, we also mention here the recent specification of extended DNS
 error (EDE) codes [@!RFC8914]. For zone transfers, when returning REFUSED to a
-zone transfer request to an 'unauthorized' client (e.g., where the client is not
+zone transfer request from an 'unauthorized' client (e.g., where the client is not
 listed in an ACL for zone transfers or does not sign the request with the
 correct TSIG key), the extended DNS error code 18 (Prohibited) can also be sent.
 
@@ -972,7 +972,7 @@ surveillance, providing on-the-wire confidentiality. Essentially
 * however they MAY fallback to using TLS without authentication and 
 * they MAY fallback to using cleartext if TLS is not available.
 
-As such it does not offer a defense against active attacks (e.g,. an on path active attacker
+As such it does not offer a defense against active attacks (e.g., an on path active attacker
 on the connection from client to server), and is not considered as useful for XoT.
 
 Properties: None guaranteed. 
@@ -1198,6 +1198,10 @@ Significant contributions to the document were made by:
    Email: hzhang@salesforce.com
 
 # Changelog
+
+draft-ietf-dprive-xfr-over-tls-09
+
+* Address issued raised in the AD review
 
 draft-ietf-dprive-xfr-over-tls-08
 
