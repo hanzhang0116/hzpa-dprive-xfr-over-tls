@@ -2,13 +2,13 @@
     Title = "DNS Zone Transfer-over-TLS"
     abbrev = "XFR-over-TLS"
     category = "std"
-    docName= "draft-ietf-dprive-xfr-over-tls-08"
+    docName= "draft-ietf-dprive-xfr-over-tls-09"
     ipr = "trust200902"
     area = "Internet"
     workgroup = "dprive"
     keyword = ["DNS", "operations", "privacy"]
     updates = [1995, 5936, 7766]
-    date = 2021-03-08T00:00:00Z
+    date = 2021-03-29T00:00:00Z
     [pi]
     [[author]]
      initials="W."
@@ -87,17 +87,16 @@ RFC5936 and RFC7766.
 # Introduction
 
 DNS has a number of privacy vulnerabilities, as discussed in detail in
-[@!RFC7626]. Stub client to recursive resolver query privacy has received the
+[@!I-D.ietf-dprive-rfc7626-bis]. Stub client to recursive resolver query privacy has received the
 most attention to date, with standards track documents for both DNS-over-TLS
 (DoT) [@!RFC7858] and DNS-over-HTTPS (DoH) [@RFC8484], and a proposal for
 DNS-over-QUIC [@I-D.ietf-dprive-dnsoquic]. There is ongoing work on DNS privacy
 requirements for exchanges between recursive resolvers and authoritative
 servers [@I-D.ietf-dprive-phase2-requirements] and some suggestions for how
-signaling of DoT support by authoritatives might work, e.g.,
-[@I-D.vandijk-dprive-ds-dot-signal-and-pin]. However there is currently no RFC
+signaling of DoT support by authoritatives might work. However there is currently no RFC
 that specifically defines recursive to authoritative DNS-over-TLS (ADoT).
 
-[@!RFC7626] established that stub client DNS query
+[@!I-D.ietf-dprive-rfc7626-bis] established that stub client DNS query
 transactions are not public and needed protection, but on zone transfer
 [@!RFC1995] [@!RFC5936] it says only:
 
@@ -116,10 +115,12 @@ include references to other organizations. Examples of this could be:
    * MX-for-Location.example.org
    * Service-tenant-from-another-org.example.org
 
-There may also be regulatory, policy or other reasons why the zone contents in
-full must be treated as private.
+Additionally, the full zone contents expose all the IP addresses of endpoints
+held in the DNS records which can make reconnaissance trivial, particularly for
+IPv6 addresses. There may also be regulatory, policy or other reasons why the
+zone contents in full must be treated as private.
 
-Neither of the RFCs mentioned in [@!RFC7626]
+Neither of the RFCs mentioned in [@!I-D.ietf-dprive-rfc7626-bis]
 contemplates the risk that someone gets the data through eavesdropping on
 network connections, only via enumeration or unauthorized transfer as described
 in the following paragraphs.
@@ -142,12 +143,14 @@ same information.
 
 [@!RFC5936] specifies using TSIG [@!RFC8945] for authorization of the clients
 of a zone transfer and for data integrity, but does not express any need for
-confidentiality, and TSIG does not offer encryption. Some operators use SSH
-tunneling or IPSec to encrypt the transfer data.
+confidentiality, and TSIG does not offer encryption.
 
 Section 8 of the NIST guide on 'Secure Domain Name System (DNS) Deployment'
-[@nist-guide] discusses restricting access for zone transfers using ACLs and TSIG
-in more detail. It is noted that in all the common open source implementations
+[@nist-guide] discusses restricting access for zone transfers using ACLs and
+TSIG in more detail. It also discusses the possibility that specific deployments
+might choose to use a lower level network layer to protect zone transfers, e.g., IPSec.
+
+It is noted that in all the common open source implementations
 such ACLs are applied on a per query basis. Since requests typically occur on
 TCP connections authoritatives must cater for accepting any TCP connection and
 then handling the authentication of each XFR request individually.
@@ -175,10 +178,8 @@ document are to be interpreted as described in BCP 14 [@!RFC2119] and
 
 Privacy terminology is as described in Section 3 of [@!RFC6973].
 
-Note that in this document we choose to use the terms 'primary' and 'secondary'
-for two servers engaged in zone transfers.
-
-DNS terminology is as described in [@!RFC8499].
+DNS terminology is as described in [@!RFC8499]. Note that as in [@!RFC8499], the
+terms 'primary' and 'secondary' are used for two servers engaged in zone transfers.
 
 DoT: DNS-over-TLS as specified in [@!RFC7858]
 
@@ -190,27 +191,7 @@ AXoT: AXFR-over-TLS
 
 IXoT: IXFR over-TLS
 
-# Use Cases for XFR-over-TLS
-
-* Confidentiality. Clearly using an encrypted transport for zone transfers will
-  defeat zone content leakage that can occur via passive surveillance.
-
-* Authentication. Use of single or mutual TLS (mTLS) authentication (in combination 
-  with ACLs) can complement and potentially be an alternative to TSIG.
-
-* Performance. Existing AXFR and IXFR mechanisms have the burden of backwards
-  compatibility with older implementations based on the original specifications
-  in [@!RFC1034] and [@!RFC1035]. For example, some older AXFR servers don’t
-  support using a TCP connection for multiple AXFR sessions or XFRs of different
-  zones because they have not been updated to follow the guidance in [@!RFC5936].
-  Any implementation of XFR-over-TLS (XoT) would obviously be required to
-  implement optimized and interoperable transfers as described in [@RFC5936],
-  e.g., transfer of multiple zones over one connection.
-  
-* Performance. Current usage of TCP for IXFR is sub-optimal in some cases i.e.
-  connections are frequently closed after a single IXFR.
-  
-## Threat model
+# Threat Model
 
 The threat model considered here is one where the current contents and size of the zone are considered
 sensitive and should be protected during transfer.
@@ -226,9 +207,31 @@ does not attempt to obscure such information. The reasons for this include:
    nameservers simply from traffic patterns, even when some or all of the traffic is encrypted
 
 It is noted that simply using XoT will indicate a desire by the zone owner that the contents of the zone 
-remain confidential and so could be subject to blocking (e.g. via blocking of port 853) if an attacker had 
+remain confidential and so could be subject to blocking (e.g., via blocking of port 853) if an attacker had 
 such capabilities. However this threat is likely true of any such mechanism that attempts to encrypt data 
-passed between nameservers e.g. IPsec.
+passed between nameservers, e.g., IPsec.
+
+
+# Design Considerations for XoT
+
+* Confidentiality. Clearly using an encrypted transport for zone transfers will
+  defeat zone content leakage that can occur via passive surveillance.
+
+* Authentication. Use of single or mutual TLS (mTLS) authentication (in combination 
+  with ACLs) can complement and potentially be an alternative to TSIG.
+
+* Performance. Existing AXFR and IXFR mechanisms have the burden of backwards
+  compatibility with older implementations based on the original specifications
+  in [@!RFC1034] and [@!RFC1035]. For example, some older AXFR servers don’t
+  support using a TCP connection for multiple AXFR sessions or XFRs of different
+  zones because they have not been updated to follow the guidance in [@!RFC5936].
+  Any implementation of XoT would obviously be required to
+  implement optimized and interoperable transfers as described in [@RFC5936],
+  e.g., transfer of multiple zones over one connection.
+  
+* Performance. Current usage of TCP for IXFR is sub-optimal in some cases i.e.
+  connections are frequently closed after a single IXFR.
+  
 
 # Connection and Data Flows in Existing XFR Mechanisms
 
@@ -384,7 +387,7 @@ There may also be a fourth step where the secondary must fall back to AXFR
 because, e.g., the primary does not support IXFR.
 
 However it is noted that most widely used open source authoritative nameserver
-implementations (including both [@BIND] and [@NSD] do IXFR using TCP by default
+implementations (including both [@BIND] and [@NSD]) do IXFR using TCP by default
 in their latest releases. For BIND TCP connections are sometimes used for SOA
 queries but in general they are not used persistently and close after an IXFR
 is completed.
@@ -413,8 +416,8 @@ potential leak.
 
 ### SOA
 
-For hidden primaries or secondaries the SOA response leaks only the degree of lag of
-any downstream secondary.
+For hidden primaries or secondaries the SOA response leaks only the degree of
+SOA serial number lag of any downstream secondary.
 
 # Updates to existing specifications
 
@@ -428,11 +431,11 @@ Both [@RFC1995] and [@RFC5936] were published sometime before TCP was
 considered a first class transport for DNS. [@RFC1995], in fact, says nothing
 with respect to optimizing IXFRs over TCP or re-using already open TCP
 connections to perform IXFRs or other queries. Therefore, there arguably is an
-implicit assumption (probably unintentional) that a TCP connection is used for
+implicit assumption that a TCP connection is used for
 one and only one IXFR request. Indeed, many major open source implementations
 currently take this approach. And whilst [@RFC5936] gives guidance on
 connection re-use for AXFR, it pre-dates more recent specifications describing
-persistent TCP connections e.g. [@!RFC7766], [@!RFC7828] and AXFR implementations again
+persistent TCP connections, e.g., [@!RFC7766], [@!RFC7828] and AXFR implementations again
 often make less than optimal use of open connections.
 
 Given this, new implementations of XoT will clearly benefit from specific guidance on
@@ -470,7 +473,7 @@ the same TCP connection.
 
 For completeness, we also mention here the recent specification of extended DNS
 error (EDE) codes [@!RFC8914]. For zone transfers, when returning REFUSED to a
-zone transfer request to an 'unauthorized' client (e.g. where the client is not
+zone transfer request from an 'unauthorized' client (e.g., where the client is not
 listed in an ACL for zone transfers or does not sign the request with the
 correct TSIG key), the extended DNS error code 18 (Prohibited) can also be sent.
 
@@ -563,7 +566,7 @@ implementations may want to offer options to fallback to legacy behavior when
 interoperating with servers known not to support [@RFC5936]. For purposes of
 interoperability, IXFR and AXFR implementations may want to continue offering
 such configuration options, as well as supporting some behaviors that were
-underspecified prior to this work (e.g. performing IXFR and AXFRs on separate
+underspecified prior to this work (e.g., performing IXFR and AXFRs on separate
 connections). However, XoT implementations should have no need to do so.
 
 ## Update to RFC7766
@@ -727,7 +730,7 @@ group policies are discussed in (#policies-for-both-axot-and-ixot).
 
 ## XoT connections 
 
-The details in (#updates-to-existing-specifications) about e.g., persistent
+The details in (#updates-to-existing-specifications) about, e.g., persistent
 connections and XFR message handling are fully applicable to XoT connections as
 well. However any behavior specified here takes precedence for XoT.
 
@@ -742,7 +745,7 @@ authoritatives are experimenting with ADoT and opportunistic encryption has
 also been raised as a possibility; it is therefore highly likely that use of
 encryption by authoritative servers will evolve in the coming years. 
 
-This raises questions in the short term,§§ with regard to TLS connection and
+This raises questions in the short term with regard to TLS connection and
 message handling for authoritative servers. In particular, there is likely to be
 a class of authoritatives that wish to use XoT in the near future with a small
 number of configured secondaries but that do wish to support DoT for regular
@@ -877,7 +880,7 @@ can be used in the name compression pointer structure is 16384. For some DNS
 implementations this limits the size of an individual XFR response used in
 practice to something around the order of 16kB. In principle, larger
 payload sizes can be supported for some responses with more sophisticated
-approaches (e.g. by pre-calculating the maximum offset required).
+approaches (e.g., by pre-calculating the maximum offset required).
 
 Implementations may wish to offer options to disable name compression for XoT
 responses to enable larger payloads. This might be particularly helpful when
@@ -902,7 +905,7 @@ it already)?
 Two extremes can be envisaged here. The first one can be considered a 'preferred
 primary connection' model. In this case the secondary continues to use one
 persistent connection to a single primary until it has reason not to. Reasons
-not to might include the primary repeatedly closing the connection, long RTTs on
+not to might include the primary repeatedly closing the connection, long query/response RTTs on
 transfers or the SOA of the primary being an unacceptable lag behind the SOA of
 an alternative primary.
 
@@ -969,7 +972,7 @@ surveillance, providing on-the-wire confidentiality. Essentially
 * however they MAY fallback to using TLS without authentication and 
 * they MAY fallback to using cleartext if TLS is not available.
 
-As such it does not offer a defense against active attacks (e.g. a MitM attack
+As such it does not offer a defense against active attacks (e.g., an on path active attacker
 on the connection from client to server), and is not considered as useful for XoT.
 
 Properties: None guaranteed. 
@@ -990,7 +993,7 @@ Properties: Channel confidentiality and authentication (of the server).
 This is an extension to Strict TLS [@RFC8310] which requires that a client is
 configured with an authentication domain name (and/or SPKI pinset) and a client
 certificate. The client offers the certificate for authentication by the server
-and the client can authentic the server the same way as in Strict TLS. This
+and the client can authenticate the server the same way as in Strict TLS. This
 provides a defense for both parties against active surveillance, providing
 bi-directional authentication and end-to-end channel confidentiality.
 
@@ -1078,7 +1081,7 @@ We call the entire group of servers involved in XFR for a particular set of
 zones (all the primaries and all the secondaries) the 'transfer group'.
 
 Within any transfer group both AXFRs and IXFRs for a zone MUST all use the
-same policy, e.g., if AXFRs use AXoT all IXFRs MUST use IXoT.
+same policy, e.g., if AXFRs use AXoT then all IXFRs MUST use IXoT.
 
 In order to assure the confidentiality of the zone information, the entire
 transfer group MUST have a consistent policy of requiring confidentiality. If
@@ -1117,8 +1120,11 @@ for flexibility while clients are migrating to XoT.
 Client implementations may similarly want to offer options to cater for the
 multi-primary case where the primaries are migrating to XoT. 
 
-Such configuration options MUST only be used in a 'migration mode' though, and
-therefore should be used with care.
+# Operational Considerations
+
+If the options described in (#implementation-considerations) are available,
+such configuration options MUST only be used in a 'migration mode', and
+therefore should be used with great care.
 
 It is noted that use of a TLS proxy in front of the primary server is a simple
 deployment solution that can enable server side XoT.
@@ -1144,7 +1150,7 @@ Specific recent activity includes:
 
 2. There are currently open pull requests against NSD to implement
     1. Connection re-use by default during [XFR-over-TCP](https://github.com/NLnetLabs/nsd/pull/145)
-    2. Client side [XFR-over-TLS](https://github.com/NLnetLabs/nsd/pull/149)
+    2. Client side [XoT](https://github.com/NLnetLabs/nsd/pull/149)
     
 3. Version 9.17.7 of BIND contained an initial implementation of DoT, implementation of XoT is planned for early [2021](https://gitlab.isc.org/isc-projects/bind9/-/issues/1784)
 
@@ -1192,6 +1198,10 @@ Significant contributions to the document were made by:
    Email: hzhang@salesforce.com
 
 # Changelog
+
+draft-ietf-dprive-xfr-over-tls-09
+
+* Address issued raised in the AD review
 
 draft-ietf-dprive-xfr-over-tls-08
 
