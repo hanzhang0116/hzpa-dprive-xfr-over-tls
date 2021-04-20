@@ -2,7 +2,7 @@
     Title = "DNS Zone Transfer-over-TLS"
     abbrev = "XFR-over-TLS"
     category = "std"
-    docName= "draft-ietf-dprive-xfr-over-tls-10"
+    docName= "draft-ietf-dprive-xfr-over-tls-11"
     ipr = "trust200902"
     area = "Internet"
     workgroup = "dprive"
@@ -185,7 +185,7 @@ DoT: DNS-over-TLS as specified in [@!RFC7858]
 
 XFR-over-TCP: Used to mean both IXFR-over-TCP [@!RFC1995] and AXFR-over-TCP [@!RFC5936].
 
-XoT: Generic XFR-over-TLS mechanisms as specified in this document
+XoT: XFR-over-TLS mechanisms as specified in this document which apply to both AXFR-over-TLS and IXFR-over-TLS
 
 AXoT: AXFR-over-TLS
 
