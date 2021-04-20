@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE rfc SYSTEM 'rfc2629.dtd' []>
-<rfc ipr="trust200902" category="std" docName="draft-ietf-dprive-xfr-over-tls-09" updates="1995, 5936, 7766">
+<rfc ipr="trust200902" category="std" docName="draft-ietf-dprive-xfr-over-tls-10" updates="1995, 5936, 7766">
 <?rfc toc="yes"?>
 <?rfc symrefs="yes"?>
 <?rfc sortrefs="yes"?>
@@ -90,7 +90,7 @@
 <uri></uri>
 </address>
 </author>
-<date year="2021" month="April" day="6"/>
+<date year="2021" month="April" day="20"/>
 
 <area>Internet</area>
 <workgroup>dprive</workgroup>
@@ -194,7 +194,7 @@ then handling the authentication of each XFR request individually.
 <t>Because both AXFR and IXFR zone transfers are typically carried out over TCP
 from authoritative DNS protocol implementations, encrypting zone transfers
 using TLS, based closely on DoT <xref target="RFC7858"/>, seems like a simple step forward.
-This document specifies how to use TLS as a transport to prevent zone
+This document specifies how to use TLS (1.3 or later) as a transport to prevent zone
 collection from zone transfers.
 </t>
 </section>
@@ -261,7 +261,9 @@ passed between nameservers, e.g., IPsec.
 defeat zone content leakage that can occur via passive surveillance.</t>
 <t>Authentication. Use of single or mutual TLS (mTLS) authentication (in combination
 with ACLs) can complement and potentially be an alternative to TSIG.</t>
-<t>Performance. Existing AXFR and IXFR mechanisms have the burden of backwards
+<t>Performance.
+<list style="symbols">
+<t>Existing AXFR and IXFR mechanisms have the burden of backwards
 compatibility with older implementations based on the original specifications
 in <xref target="RFC1034"/> and <xref target="RFC1035"/>. For example, some older AXFR servers don’t
 support using a TCP connection for multiple AXFR sessions or XFRs of different
@@ -269,8 +271,11 @@ zones because they have not been updated to follow the guidance in <xref target=
 Any implementation of XoT would obviously be required to
 implement optimized and interoperable transfers as described in <xref target="RFC5936"/>,
 e.g., transfer of multiple zones over one connection.</t>
-<t>Performance. Current usage of TCP for IXFR is sub-optimal in some cases i.e.
-connections are frequently closed after a single IXFR.</t>
+<t>Current usage of TCP for IXFR is sub-optimal in some cases i.e.
+connections are frequently closed after a single IXFR.
+
+<vspace/></t>
+</list></t>
 </list>
 </t>
 </section>
@@ -996,7 +1001,7 @@ resources required to construct the payload.
 </section>
 
 <section anchor="multiprimary-configurations" title="Multi-primary Configurations">
-<t>Also known as multi-master configurations this model can provide flexibility
+<t>This model can provide flexibility
 and redundancy particularly for IXFR. A secondary will receive one or more
 NOTIFY messages and can send an SOA to all of the configured primaries. It can
 then choose to send an XFR request to the primary with the highest SOA (or
@@ -1350,6 +1355,15 @@ out-of-order/intermingled responses.
 </section>
 
 <section anchor="changelog" title="Changelog">
+<t>[THIS SECTION TO BE REMOVED BEFORE PUBLICATION]
+</t>
+<t>draft-ietf-dprive-xfr-over-tls-10
+</t>
+<t>
+<list style="symbols">
+<t>Address issued raised from IETF Last Call</t>
+</list>
+</t>
 <t>draft-ietf-dprive-xfr-over-tls-09
 </t>
 <t>

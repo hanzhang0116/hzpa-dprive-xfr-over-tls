@@ -2,13 +2,13 @@
     Title = "DNS Zone Transfer-over-TLS"
     abbrev = "XFR-over-TLS"
     category = "std"
-    docName= "draft-ietf-dprive-xfr-over-tls-09"
+    docName= "draft-ietf-dprive-xfr-over-tls-10"
     ipr = "trust200902"
     area = "Internet"
     workgroup = "dprive"
     keyword = ["DNS", "operations", "privacy"]
     updates = [1995, 5936, 7766]
-    date = 2021-04-06T00:00:00Z
+    date = 2021-04-20T00:00:00Z
     [pi]
     [[author]]
      initials="W."
@@ -158,7 +158,7 @@ then handling the authentication of each XFR request individually.
 Because both AXFR and IXFR zone transfers are typically carried out over TCP
 from authoritative DNS protocol implementations, encrypting zone transfers
 using TLS, based closely on DoT [@!RFC7858], seems like a simple step forward.
-This document specifies how to use TLS as a transport to prevent zone
+This document specifies how to use TLS (1.3 or later) as a transport to prevent zone
 collection from zone transfers.
 
 # Document work via GitHub
@@ -220,7 +220,8 @@ passed between nameservers, e.g., IPsec.
 * Authentication. Use of single or mutual TLS (mTLS) authentication (in combination 
   with ACLs) can complement and potentially be an alternative to TSIG.
 
-* Performance. Existing AXFR and IXFR mechanisms have the burden of backwards
+* Performance. 
+    * Existing AXFR and IXFR mechanisms have the burden of backwards
   compatibility with older implementations based on the original specifications
   in [@!RFC1034] and [@!RFC1035]. For example, some older AXFR servers don’t
   support using a TCP connection for multiple AXFR sessions or XFRs of different
@@ -228,8 +229,7 @@ passed between nameservers, e.g., IPsec.
   Any implementation of XoT would obviously be required to
   implement optimized and interoperable transfers as described in [@RFC5936],
   e.g., transfer of multiple zones over one connection.
-  
-* Performance. Current usage of TCP for IXFR is sub-optimal in some cases i.e.
+    * Current usage of TCP for IXFR is sub-optimal in some cases i.e.
   connections are frequently closed after a single IXFR.
   
 
@@ -890,7 +890,7 @@ resources required to construct the payload.
 
 # Multi-primary Configurations
 
-Also known as multi-master configurations this model can provide flexibility
+This model can provide flexibility
 and redundancy particularly for IXFR. A secondary will receive one or more
 NOTIFY messages and can send an SOA to all of the configured primaries. It can
 then choose to send an XFR request to the primary with the highest SOA (or
@@ -1198,6 +1198,13 @@ Significant contributions to the document were made by:
    Email: hzhang@salesforce.com
 
 # Changelog
+
+[THIS SECTION TO BE REMOVED BEFORE PUBLICATION] 
+
+
+draft-ietf-dprive-xfr-over-tls-10
+
+* Address issued raised from IETF Last Call 
 
 draft-ietf-dprive-xfr-over-tls-09
 
