@@ -93,7 +93,7 @@ most attention to date, with standards track documents for both DNS-over-TLS
 DNS-over-QUIC [@I-D.ietf-dprive-dnsoquic]. There is ongoing work on DNS privacy
 requirements for exchanges between recursive resolvers and authoritative
 servers [@I-D.ietf-dprive-phase2-requirements] and some suggestions for how
-signaling of DoT support by authoritatives might work. However there is currently no RFC
+signaling of DoT support by authoritatives might work. However, there is currently no RFC
 that specifically defines recursive to authoritative DNS-over-TLS (ADoT).
 
 [@!I-D.ietf-dprive-rfc7626-bis] established that stub client DNS query
@@ -129,7 +129,7 @@ Zone enumeration is trivially possible for DNSSEC zones which use NSEC; i.e.
 queries for the authenticated denial of existences records allow a client to
 walk through the entire zone contents. [@RFC5155] specifies NSEC3, a mechanism
 to provide measures against zone enumeration for DNSSEC signed zones (a goal
-was to make it as hard to enumerate an DNSSEC signed zone as an unsigned zone).
+was to make it as hard to enumerate a DNSSEC signed zone as an unsigned zone).
 Whilst this is widely used, zone walking is now possible with NSEC3 due to
 crypto-breaking advances. This has prompted further work on an alternative
 mechanism for DNSSEC authenticated denial of existence - NSEC5
@@ -411,7 +411,8 @@ Unencrypted NOTIFY messages identify configured secondaries on the primary.
     "If ANCOUNT>0, then the answer section represents an
     unsecure hint at the new RRset for this (QNAME,QCLASS,QTYPE).
 
-But since the only supported QTYPE for NOTIFY is SOA, this does not pose a
+But since the only QTYPE for NOTIFY defined at the time of this writing
+is SOA, this does not pose a
 potential leak.
 
 ### SOA
@@ -433,9 +434,9 @@ with respect to optimizing IXFRs over TCP or re-using already open TCP
 connections to perform IXFRs or other queries. Therefore, there arguably is an
 implicit assumption that a TCP connection is used for
 one and only one IXFR request. Indeed, many major open source implementations
-currently take this approach. And whilst [@RFC5936] gives guidance on
+take this approach (at the time of this writing). And whilst [@RFC5936] gives guidance on
 connection re-use for AXFR, it pre-dates more recent specifications describing
-persistent TCP connections, e.g., [@!RFC7766], [@!RFC7828] and AXFR implementations again
+persistent TCP connections (e.g., [@!RFC7766], [@!RFC7828]), and AXFR implementations again
 often make less than optimal use of open connections.
 
 Given this, new implementations of XoT will clearly benefit from specific guidance on
@@ -474,8 +475,8 @@ the same TCP connection.
 For completeness, we also mention here the recent specification of extended DNS
 error (EDE) codes [@!RFC8914]. For zone transfers, when returning REFUSED to a
 zone transfer request from an 'unauthorized' client (e.g., where the client is not
-listed in an ACL for zone transfers or does not sign the request with the
-correct TSIG key), the extended DNS error code 18 (Prohibited) can also be sent.
+listed in an ACL for zone transfers or does not sign the request with a
+valid TSIG key), the extended DNS error code 18 (Prohibited) can also be sent.
 
 ## Update to RFC1995 for IXFR-over-TCP
 
@@ -748,8 +749,8 @@ encryption by authoritative servers will evolve in the coming years.
 This raises questions in the short term with regard to TLS connection and
 message handling for authoritative servers. In particular, there is likely to be
 a class of authoritatives that wish to use XoT in the near future with a small
-number of configured secondaries but that do wish to support DoT for regular
-queries from recursive in that same time frame. These servers have to
+number of configured secondaries but that do not wish to support DoT for regular
+queries from recursives in that same time frame. These servers have to
 potentially cope with probing and direct queries from recursives and from test
 servers, and also potential attacks that might wish to make use of TLS to
 overload the server.
@@ -875,7 +876,7 @@ trade-offs involved are expected to be the subject of future work.
 ## Name compression and maximum payload sizes
 
 It is noted here that name compression [@RFC1035] can be used in XFR responses
-to reduce the size of the payload, however the maximum value of the offset that
+to reduce the size of the payload, however, the maximum value of the offset that
 can be used in the name compression pointer structure is 16384. For some DNS
 implementations this limits the size of an individual XFR response used in
 practice to something around the order of 16kB. In principle, larger
@@ -894,7 +895,7 @@ This model can provide flexibility
 and redundancy particularly for IXFR. A secondary will receive one or more
 NOTIFY messages and can send an SOA to all of the configured primaries. It can
 then choose to send an XFR request to the primary with the highest SOA (or
-other criteria, e.g., RTT).
+based on other criteria, e.g., RTT).
 
 When using persistent connections the secondary may have a XoT connection
 already open to one or more primaries. Should a secondary preferentially
@@ -986,7 +987,7 @@ fails, the client will not proceed with the connection. This provides a defense
 for the client against active surveillance, providing client-to-server
 authentication and end-to-end channel confidentiality.  
 
-Properties: Channel confidentiality and authentication (of the server).
+Properties: Channel confidentiality and channel authentication (of the server).
 
 ### Mutual TLS
 
@@ -997,7 +998,7 @@ and the client can authenticate the server the same way as in Strict TLS. This
 provides a defense for both parties against active surveillance, providing
 bi-directional authentication and end-to-end channel confidentiality.
 
-Properties: Channel confidentiality and mutual authentication.
+Properties: Channel confidentiality and mutual channel authentication.
 
 ## IP Based ACL on the Primary
 
@@ -1329,7 +1330,7 @@ in the appendix-->
 
 For completeness, it is noted that an earlier version of the specification
 suggested using a XoT specific ALPN to negotiate TLS connections that supported
-only a limited set of queries (SOA, XRFs) however this did not gain support.
+only a limited set of queries (SOA, XRFs), however, this did not gain support.
 Reasons given included additional code complexity and proxies having no natural
 way to forward the ALPN signal to DNS nameservers over TCP connections.
 
@@ -1375,7 +1376,7 @@ Encrypted Client Hello [@I-D.ietf-tls-esni] may be of use here.
 
 Some primaries might rely on TSIG/SIG(0) combined with per-query IP based
 ACLs to authenticate secondaries. In this case the primary must accept all
-incoming TLS connections and then apply a TLS specific response policy on a per
+incoming TLS connections and then apply a TLS-specific response policy on a per
 query basis.
 
 As an aside, whilst [@RFC7766] makes a general purpose distinction to clients
@@ -1383,7 +1384,7 @@ in the usage of connections (between regular queries and zone transfers) this is
 not strict and nothing in the DNS protocol prevents using the same connection
 for both types of traffic. Hence a server cannot know the intention of any
 client that connects to it, it can only inspect the messages it receives on
-such a connection and make per query decisions about whether or not to answer
+such a connection and make per-query decisions about whether or not to answer
 those queries.
 
 Example policies a XoT server might implement are:
@@ -1401,7 +1402,7 @@ Cons: The server must handle the burden of accepting all TLS connections just
 to perform XFRs with a small number of secondaries. Client behavior to REFUSED
 response is not clearly defined (see below). Currently, none of the major open
 source DNS authoritative implementations offer an option for different response
-policies in different transports (but could potentially be implemented using a proxy).
+policies in different transports (but such functionality could potentially be implemented using a proxy).
 
 ### SNI based response policies
 
