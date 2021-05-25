@@ -730,19 +730,19 @@ where at a minimum:
 * the client MUST authenticate the server by use of an authentication domain
   name using a Strict Privacy Profile, as described in [@!RFC8310]
 * the server MUST validate the client is authorized to request or proxy a zone transfer by
-  using one or both of the following:
-      * an IP based ACL (which can be either per-message or per-connection)
+  using one or both of the following methods:
       * Mutual TLS (mTLS)
+      * an IP based ACL (which can be either per-message or per-connection)
+        combined with a valid TSIG/SIG(0) signature on the XFR request
 
-The server MAY also require a valid TSIG/SIG(0) signature, but this alone is
-not sufficient to authenticate the client or server. 
+If only one method is selected then mTLS is preferred because it provides strong cryptographic
+protection at both endpoints.
 
 Authentication mechanisms are discussed in full in (#authentication-mechanisms)
 and the rationale for the above requirement in (#xot-authentication). Transfer
 group policies are discussed in (#policies-for-both-axot-and-ixot).
 
-
-## XoT connections 
+## XoT connections
 
 The details in (#updates-to-existing-specifications) about, e.g., persistent
 connections and XFR message handling are fully applicable to XoT connections as
@@ -1076,15 +1076,15 @@ Table 1: Properties of Authentication methods for XoT
 
 Based on this analysis it can be seen that:
 
-* Using just mutual TLS can be considered a standalone solution since both end points are authenticated
+* Using just mutual TLS can be considered a standalone solution since both end points are 
+   cryptographically authenticated
   
-* Using Strict TLS and an IP based ACL on the primary also provides authentication of both end points
+* Using secondary side Strict TLS with a primary side IP ACL and TSIG/SIG(0) combination provides
+   sufficient protection to be acceptable. 
 
-* Additional use of TSIG (or equally SIG(0)) can also provide data origin
-  authentication which might be desirable for deployments that include a proxy
-  between the secondary and primary, but is not part of the XoT requirement
-  because it does nothing to guarantee channel confidentiality or
-  authentication.
+Using just an IP ACL could be susceptible to attacks that can spoof TCP IP
+addresses, using TSIG/SIG(0) alone could be susceptible to attacks that were
+able to capture such messages should they be accidentally sent in clear text by any server with the key.
 
 # Policies for Both AXoT and IXoT
 
@@ -1107,11 +1107,10 @@ both the client and server are configured to use only XoT and the overall zone
 transfer is not considered protected until all members of the transfer group
 are configured to use only XoT with all other transfers servers (see (#implementation-considerations)). 
 
-A XoT policy MUST specify
+A XoT policy MUST specify if
 
-* What kind of TLS is required (Strict or Mutual TLS)
-* or if an IP based ACL is required.
-* (optionally) if TSIG/SIG(0) is required
+* mutual TLS is used and/or
+* a IP ACL and TSIG/SIG(0) combination is used
 
 Since this may require configuration of a number of servers who may be under
 the control of different operators the desired consistency could be hard to
