@@ -6,7 +6,7 @@
     workgroup = "dprive"
     keyword = ["DNS", "operations", "privacy"]
     updates = [1995, 5936, 7766]
-    date = 2021-05-24T00:00:00Z
+    date = 2021-05-25T00:00:00Z
     [seriesInfo]
     status = "standard"
     name = "Internet-Draft"
@@ -121,7 +121,7 @@ include references to other organizations. Examples of this could be:
 
 Additionally, the full zone contents expose all the IP addresses of endpoints
 held in the DNS records which can make reconnaissance and attack targeting easier, particularly for
-IPv6 addresses. There may also be regulatory, policy or other reasons why the
+IPv6 addresses or private networks. There may also be regulatory, policy or other reasons why the
 zone contents in full must be treated as private.
 
 Neither of the RFCs mentioned in [@I-D.ietf-dprive-rfc7626-bis]
@@ -134,8 +134,9 @@ queries for the authenticated denial of existence records allow a client to
 walk through the entire zone contents. [@RFC5155] specifies NSEC3, a mechanism
 to provide measures against zone enumeration for DNSSEC signed zones (a goal
 was to make it as hard to enumerate a DNSSEC signed zone as an unsigned zone).
-Whilst this is widely used, zone walking is now possible with NSEC3 due to
-crypto-breaking advances [@NSEC3-attacks]. This prompted further work on an alternative
+Whilst this is widely used, it has been demonstrated that zone walking is
+possible for precomputed NSEC3 using attacks such as those described in
+[@NSEC3-attacks]. This prompted further work on an alternative
 mechanism for DNSSEC authenticated denial of existence - NSEC5
 [@?I-D.vcelak-nsec5] - however questions remain over the practicality of this
 mechanism.
@@ -161,9 +162,18 @@ then handling the authentication of each zone transfer (XFR) request individuall
 
 Because both AXFR (authoritative transfer) and IXFR (incremental transfer) are typically carried out over TCP
 from authoritative DNS protocol implementations, encrypting zone transfers
-using TLS, based closely on DoT [@!RFC7858], seems like a simple step forward.
+using TLS [@!RFC8499], based closely on DoT [@!RFC7858], seems like a simple step forward.
 This document specifies how to use TLS (1.3 or later) as a transport to prevent zone
 collection from zone transfers.
+
+This document also updates the previous specifications for zone transfers to
+clarify and extend them, mainly with respect to TCP usage:
+
+* [RFC1995] (IXFR) and [RFC5936] (AXFR) are both updated to add further
+  specification on efficient use of TCP connections
+* Section 6.2.2 of [RFC7766] (DNS Transport over TCP - Implementation
+  Requirements) is updated with a new recommendation about the number of
+  connections between a client and server for each transport.
 
 # Document work via GitHub
 
@@ -177,7 +187,7 @@ functional changes should always first be discussed on the IETF DPRIVE WG (dns-p
 
 The key words "MUST", "MUST NOT", "REQUIRED", "SHALL", "SHALL NOT", "SHOULD",
 "SHOULD NOT", "RECOMMENDED", "NOT RECOMMENDED", "MAY", and "OPTIONAL" in this
-document are to be interpreted as described in BCP 14 [@!RFC2119] and
+document are to be interpreted as described in BCP 14 [@!RFC2119] 
 [@!RFC8174] when, and only when, they appear in all capitals, as shown here.
 
 Privacy terminology is as described in Section 3 of [@!RFC6973].
@@ -209,8 +219,9 @@ does not attempt to obscure such information. The reasons for this include:
 *  much of this information can be obtained by various methods, including active scanning of the DNS
 *  an attacker who can monitor network traffic can relatively easily infer relations between
    nameservers simply from traffic patterns, even when some or all of the traffic is encrypted
+   (in terms of current deployments)
 
-The model does not consider attacks on the mechanisms that trigger a zone transfer, e.g., NOTIFY message.
+The model does not consider attacks on the mechanisms that trigger a zone transfer, e.g., NOTIFY messages.
 
 It is noted that simply using XoT will indicate a desire by the zone owner that the contents of the zone 
 remain confidential and so could be subject to blocking (e.g., via blocking of port 853) if an attacker had 
@@ -219,6 +230,8 @@ passed between nameservers, e.g., IPsec.
 
 
 # Design Considerations for XoT
+
+The following principles were considered in the design for XoT:
 
 * Confidentiality. Clearly using an encrypted transport for zone transfers will
   defeat zone content leakage that can occur via passive surveillance.
@@ -233,7 +246,7 @@ passed between nameservers, e.g., IPsec.
   support using a TCP connection for multiple AXFR sessions or XFRs of different
   zones because they have not been updated to follow the guidance in [@!RFC5936].
   Any implementation of XoT would obviously be required to
-  implement optimized and interoperable transfers as described in [@RFC5936],
+  implement optimized and interoperable transfers as described in [@!RFC5936],
   e.g., transfer of multiple zones over one connection.
     * Current usage of TCP for IXFR is sub-optimal in some cases i.e.
   connections are frequently closed after a single IXFR.
@@ -241,16 +254,16 @@ passed between nameservers, e.g., IPsec.
 
 # Connection and Data Flows in Existing XFR Mechanisms
 
-The original specification for zone transfers in [@RFC1034] and [@RFC1035] was
+The original specification for zone transfers in [@!RFC1034] and [@!RFC1035] was
 based on a polling mechanism: a secondary performed a periodic query for the SOA (start of zone authority) record (based
 on the refresh timer) to determine if an AXFR was required.
 
-[@RFC1995] and [@!RFC1996] introduced the concepts of IXFR and NOTIFY
+[@!RFC1995] and [@!RFC1996] introduced the concepts of IXFR and NOTIFY
 respectively, to provide for prompt propagation of zone updates. This has
 largely replaced AXFR where possible, particularly for dynamically updated
 zones.
 
-[@RFC5936] subsequently redefined the specification of AXFR to improve
+[@!RFC5936] subsequently redefined the specification of AXFR to improve
 performance and interoperability.
 
 In this document we use the term "XFR mechanism" to describe the entire set of
@@ -316,17 +329,17 @@ to obtain the serial number of the zone held by the primary.
 3. If the primary serial is higher than the secondary's serial (using Serial
 Number Arithmetic [@RFC1982]), the secondary makes an AXFR request (over TCP)
 to the primary after which the AXFR data flows in one or more AXFR responses on
-the TCP connection. [@RFC5936] defines this specific step as an 'AXFR session'
+the TCP connection. [@!RFC5936] defines this specific step as an 'AXFR session'
 i.e. as an AXFR query message and the sequence of AXFR response messages
 returned for it.
 
-[@RFC5936] re-specified AXFR providing additional guidance beyond that provided
-in [@RFC1034] and [@RFC1035] and importantly specified that AXFR must use TCP
+[@!RFC5936] re-specified AXFR providing additional guidance beyond that provided
+in [@!RFC1034] and [@!RFC1035] and importantly specified that AXFR must use TCP
 as the transport protocol.
 
-Additionally, sections 4.1, 4.1.1 and 4.1.2 of [@RFC5936] provide improved
+Additionally, sections 4.1, 4.1.1 and 4.1.2 of [@!RFC5936] provide improved
 guidance for AXFR clients and servers with regard to re-use of TCP connections
-for multiple AXFRs and AXFRs of different zones. However [@RFC5936] was
+for multiple AXFRs and AXFRs of different zones. However [@!RFC5936] was
 constrained by having to be backwards compatible with some very early basic
 implementations of AXFR. For example, it outlines that the SOA query can also
 happen on this connection. However, this can cause interoperability problems
@@ -405,14 +418,14 @@ This section presents a rationale for considering encrypting the other
 messages in the XFR mechanism.
 
 Since the SOA of the published zone can be trivially discovered by simply
-querying the publicly available authoritative servers, leakage of this resource record (RR) is not
-discussed in the following sections.
+querying the publicly available authoritative servers, leakage of this resource record (RR) via such a
+directly query is not discussed in the following sections.
 
 ### NOTIFY
 
 Unencrypted NOTIFY messages identify configured secondaries on the primary.
 
-[@RFC1996] also states: 
+[@!RFC1996] also states: 
 
     "If ANCOUNT>0, then the answer section represents an
     unsecure hint at the new RRset for this (QNAME,QCLASS,QTYPE).
@@ -431,17 +444,17 @@ number lag of any downstream secondary of that server.
 
 For convenience, the term 'XFR-over-TCP' is used in this document to mean both
 IXFR-over-TCP and AXFR-over-TCP and therefore statements that use that term update
-both [@RFC1995] and [@RFC5936], and implicitly also apply to XoT.
+both [@!RFC1995] and [@!RFC5936], and implicitly also apply to XoT.
 Differences in behavior specific to XoT are discussed in
 (#xot-specification).
 
-Both [@RFC1995] and [@RFC5936] were published sometime before TCP was
-considered a first class transport for DNS. [@RFC1995], in fact, says nothing
+Both [@!RFC1995] and [@!RFC5936] were published sometime before TCP was
+considered a first class transport for DNS. [@!RFC1995], in fact, says nothing
 with respect to optimizing IXFRs over TCP or re-using already open TCP
 connections to perform IXFRs or other queries. Therefore, there arguably is an
 implicit assumption that a TCP connection is used for
 one and only one IXFR request. Indeed, many major open source implementations
-take this approach (at the time of this writing). And whilst [@RFC5936] gives guidance on
+take this approach (at the time of this writing). And whilst [@!RFC5936] gives guidance on
 connection re-use for AXFR, it pre-dates more recent specifications describing
 persistent TCP connections (e.g., [@!RFC7766], [@!RFC7828]), and AXFR implementations again
 often make less than optimal use of open connections.
@@ -450,7 +463,7 @@ Given this, new implementations of XoT will clearly benefit from specific guidan
 TCP/TLS connection usage for XFR, because this will:
 
 * result in more consistent XoT implementations with better interoperability 
-* remove any need for XoT implementations to support legacy behavior that
+* remove any need for XoT implementations to support legacy behavior for XoT connections that
   XFR-over-TCP implementations have historically often supported
 
 Therefore this document updates both the previous specifications for
@@ -475,7 +488,7 @@ XFR-over-TCP ([RFC1995] and [RFC5936]) to clarify that
   to manage persistent connections (which is more flexible than using just fixed timeouts).
 
 The following sections include detailed clarifications on the updates to XFR
-behavior implied in [@RFC7766] and how the use of [@!RFC7828] applies
+behavior implied in [@!RFC7766] and how the use of [@!RFC7828] applies
 specifically to XFR exchanges. They also discusses how IXFR and AXFR can reuse
 the same TCP connection.
 
@@ -511,7 +524,7 @@ secondary and primary SHOULD be minimized (also see (#update-to-rfc7766)).
 
 Valid reasons for not re-using existing connections might include:
 
-* as already noted in [@RFC7766], separate connections for different zones might be preferred for operational reasons. In this case, the number of concurrent connections for zone transfers SHOULD be limited to the total number of zones transferred between the client and server.
+* as already noted in [@!RFC7766], separate connections for different zones might be preferred for operational reasons. In this case, the number of concurrent connections for zone transfers SHOULD be limited to the total number of zones transferred between the client and server.
 * reaching a configured limit for the number of outstanding queries or XFR requests allowed on a single TCP connection
 * the message ID pool has already been exhausted on an open connection
 * a large number of timeouts or slow responses have occurred on an open
@@ -524,8 +537,8 @@ UDP or a new TCP connection.
 
 ### AXFRs and IXFRs on the same connection
 
-Neither [@RFC1995] nor [@RFC5936] explicitly discuss the use of a single TCP
-connection for both IXFR and AXFR requests. [@RFC5936] does make the general statement:
+Neither [@!RFC1995] nor [@!RFC5936] explicitly discuss the use of a single TCP
+connection for both IXFR and AXFR requests. [@!RFC5936] does make the general statement:
 
     "Non-AXFR session traffic can also use an open TCP connection."
 
@@ -535,7 +548,9 @@ We clarify here that implementations capable of both AXFR and IXFR and compliant
 *  pipeline such requests (if they pipeline XFR requests in general) and MAY intermingle them
 *  send the response(s) for each request as soon as they are available i.e. responses MAY be sent intermingled
 
-Significant code complexity may be an issue for some implementations, which is therefore a trade-off against the performance benefits of the above.
+For some current implementations adding all the above functionality would introduce significant 
+code complexity. In such a case, there will need to be an assessment of the trade-off between that 
+and the performance benefits for XFR of the above.
 
 ### XFR limits
 
@@ -551,7 +566,7 @@ server with maximum opportunity to update the edns-tcp-keepalive timeout. The XF
 may use the frequency of recent XFRs to calculate an average update rate as
 input to the decision of what edns-tcp-keepalive timeout to use. If the server
 does not support edns-tcp-keepalive, the client MAY keep the connection open for a
-few seconds ([@RFC7766] recommends that servers use timeouts of at least a few
+few seconds ([@!RFC7766] recommends that servers use timeouts of at least a few
 seconds).
 
 Whilst the specification for EDNS0  [@RFC6891]  does not specifically mention AXFRs, it does say
@@ -571,17 +586,17 @@ wishes to close the connection as soon as possible.
 
 ### Backwards compatibility
 
-Certain legacy behaviors were noted in [@RFC5936], with provisions that
+Certain legacy behaviors were noted in [@!RFC5936], with provisions that
 implementations may want to offer options to fallback to legacy behavior when
-interoperating with servers known to not support [@RFC5936]. For purposes of
+interoperating with servers known to not support [@!RFC5936]. For purposes of
 interoperability, IXFR and AXFR implementations may want to continue offering
 such configuration options, as well as supporting some behaviors that were
 underspecified prior to this work (e.g., performing IXFR and AXFRs on separate
-connections). However, XoT implementations should have no need to do so.
+connections). However, XoT connections should have no need to do so.
 
 ## Update to RFC7766
 
-[@RFC7766] made general implementation
+[@!RFC7766] made general implementation
 recommendations with regard to TCP/TLS connection handling:
 
     "To mitigate the risk of unintentional server overload, DNS
@@ -602,7 +617,7 @@ queries and zone transfers) on any open TCP/TLS connection. It also overlooks th
 potential that other transports might want to take the same approach with regard to
 using separate connections for different purposes.
 
-This specification updates the guidance in [@RFC7766] to provide the
+This specification updates the above general guidance in [@!RFC7766] to provide the
 same separation of connection purpose (regular queries and zone transfers) for
 all transports being used on top of TCP. 
 
@@ -630,7 +645,7 @@ a particular client.
 
 ## Connection establishment
 
-During connection establishment the Application-Layer Protocol Negotiation (ALPN) token “dot” [@ALPN] MUST be selected in the TLS handshake.
+During connection establishment the Application-Layer Protocol Negotiation (ALPN) token “dot” [@!DoT-ALPN] MUST be selected in the TLS handshake.
 
 ## TLS versions
 
@@ -768,7 +783,7 @@ potentially cope with probing and direct queries from recursives and from test
 servers, and also potential attacks that might wish to make use of TLS to
 overload the server.
 
-[@RFC5936] clearly states that non-AXFR session traffic can use an open TCP
+[@!RFC5936] clearly states that non-AXFR session traffic can use an open TCP
 connection, however, this requirement needs to be re-evaluated when considering
 applying the same model to XoT. Proposing that a server should also start
 responding to all queries received over TLS just because it has enabled XoT
@@ -786,7 +801,7 @@ simply outlines in later sections:
 
 XoT clients and servers MUST implement EDE codes. If a XoT server receives
 non-XoT traffic it is not willing to answer on a TLS connection, it SHOULD
-respond with the extended DNS error code 21 - Not Supported
+respond with REFUSED and the extended DNS error code 21 - Not Supported
 [@!RFC8914]. XoT clients should not send any further
 queries of this type to the server for a reasonable period of time (for
 example, one hour) i.e., long enough that the server configuration or policy
@@ -813,9 +828,9 @@ The goal of padding AXoT responses is two fold:
   minimize information leakage about zone update activity and growth.
 
 Note that the re-use of XoT connections for transfers of multiple different
-zones complicates any attempt to analyze the traffic size and timing to
+zones slightly complicates any attempt to analyze the traffic size and timing to
 extract information. Also, effective padding may require state to be kept
-as zone may grow and/or shrink over time.
+as zones may grow and/or shrink over time.
 
 It is noted here that, depending on the padding policies eventually developed for XoT,
 the requirement to obfuscate the total zone size might
@@ -828,7 +843,7 @@ However, as with existing AXFR, the last AXoT response message sent MUST
 contain the same SOA that was in the first message of the AXoT response series
 in order to signal the conclusion of the zone transfer.
 
-[@RFC5936] says:
+[@!RFC5936] says:
 
     "Each AXFR response message SHOULD contain a sufficient number
     of RRs to reasonably amortize the per-message overhead, up to
@@ -852,7 +867,7 @@ trade-offs involved are expected to be the subject of future work.
 
 ### Condensation of responses
 
-[@RFC1995] says condensation of responses is optional and MAY be done. Whilst
+[@!RFC1995] says condensation of responses is optional and MAY be done. Whilst
 it does add complexity to generating responses, it can significantly reduce the
 size of responses. However any such reduction might be offset by increased
 message size due to padding. This specification does not update the optionality
@@ -884,12 +899,13 @@ In order to guarantee support for future padding policies, we state here that
 secondary implementations MUST be resilient to receiving padded IXoT responses.
 
 Recommendation of specific policies for padding IXoT responses are out of scope
-for this specification. Detailed considerations of such policies and the
+for this specification. Detailed considerations of such padding policies, the
+use of traffic obfuscation techniques (such as ‘dummy' traffic), and the
 trade-offs involved are expected to be the subject of future work.
 
 ## Name compression and maximum payload sizes
 
-It is noted here that name compression [@RFC1035] can be used in XFR responses
+It is noted here that name compression [@!RFC1035] can be used in XFR responses
 to reduce the size of the payload, however, the maximum value of the offset that
 can be used in the name compression pointer structure is 16384. For some DNS
 implementations this limits the size of an individual XFR response used in
@@ -960,7 +976,7 @@ We classify the mechanisms based on the following properties:
 
 ## TSIG
 
-TSIG [@RFC8945] provides a mechanism for two or more parties to use shared
+TSIG [@!RFC8945] provides a mechanism for two or more parties to use shared
 secret keys which can then be used to create a message digest to protect
 individual DNS messages. This allows each party to authenticate that a request
 or response (and the data in it) came from the other party, even if it was
@@ -970,7 +986,7 @@ Properties: Data origin authentication
 
 ## SIG(0)
 
-SIG(0) [@RFC2931] similarly provides a mechanism to digitally sign a DNS
+SIG(0) [@!RFC2931] similarly provides a mechanism to digitally sign a DNS
 message but uses public key authentication, where the public keys are stored in
 DNS as KEY RRs and a private key is stored at the signer. 
 
@@ -980,7 +996,7 @@ Properties: Data origin authentication
 
 ### Opportunistic TLS
 
-Opportunistic TLS for DoT is defined in [@RFC8310] and can provide a defense against passive
+Opportunistic TLS for DoT is defined in [@!RFC8310] and can provide a defense against passive
 surveillance, providing on-the-wire confidentiality. Essentially
 
 * clients that know authentication information for a server SHOULD try to authenticate the server
@@ -994,7 +1010,7 @@ Properties: None guaranteed.
 
 ### Strict TLS
 
-Strict TLS for DoT [@RFC8310] requires that a client is configured with an
+Strict TLS for DoT [@!RFC8310] requires that a client is configured with an
 authentication domain name (and/or SPKI pinset) that MUST be used to
 authenticate the TLS handshake with the server. If authentication of the server
 fails, the client will not proceed with the connection. This provides a defense
@@ -1005,7 +1021,7 @@ Properties: Channel confidentiality and channel authentication (of the server).
 
 ### Mutual TLS
 
-This is an extension to Strict TLS [@RFC8310] which requires that a client is
+This is an extension to Strict TLS [@!RFC8310] which requires that a client is
 configured with an authentication domain name (and/or SPKI pinset) and a client
 certificate. The client offers the certificate for authentication by the server
 and the client can authenticate the server the same way as in Strict TLS. This
@@ -1095,12 +1111,10 @@ given zone requires operational administration and policy management.
 We call the entire group of servers involved in XFR for a particular set of
 zones (all the primaries and all the secondaries) the 'transfer group'.
 
-Within any transfer group both AXFRs and IXFRs for a zone MUST all use the
-same policy, e.g., if AXFRs use AXoT then all IXFRs MUST use IXoT.
-
 In order to assure the confidentiality of the zone information, the entire
-transfer group MUST have a consistent policy of requiring confidentiality. If
-any do not, this is a weak link for attackers to exploit.
+transfer group MUST have a consistent policy of using XoT. If any do not, this
+is a weak link for attackers to exploit. For clarification, this means that
+within any transfer group both AXFRs and IXFRs for a zone MUST all use XoT.
 
 An individual zone transfer is not considered protected by XoT unless
 both the client and server are configured to use only XoT and the overall zone
@@ -1188,7 +1202,7 @@ This does not mitigate:
   observation of encrypted connections.
 * the risk of zone contents being obtained via zone enumeration techniques.
 
-Security concerns of DoT are outlined in [@RFC7858] and [@RFC8310].
+Security concerns of DoT are outlined in [@!RFC7858] and [@!RFC8310].
 
 # Acknowledgements
 
@@ -1215,6 +1229,22 @@ Significant contributions to the document were made by:
 
 [THIS SECTION TO BE REMOVED BEFORE PUBLICATION] 
 
+draft-ietf-dprive-xfr-over-tls-12
+
+* Changes from IESG review
+* Add section 8.1 on the requirement to use the DoT ALPN
+* Modify the one of the options for validation of a client from just an IP ACL to a combination of
+  IP ACL and TSIG/SIG(0)
+ * Update Abstract and Introduction with clear descriptions of how earlier specifications are updated
+ * Add reference on NSEC3 attacks
+ * Justify use of SHOULD in sections 7.3.2 and 7.3.3.
+ * Clarify the Appendix is non-normative
+ * Numerous typos and editorial improvements.
+ * Use xml2rfc v3 (some format changes occur as a result)
+
+draft-ietf-dprive-xfr-over-tls-11
+
+* Fix definition update missed in -10
 
 draft-ietf-dprive-xfr-over-tls-10
 
@@ -1339,7 +1369,7 @@ Efficient Zone Enumeration Attacks on NSEC3 Variants</title>
         <date year='2015'/>
     </front>
 </reference>
-<reference anchor='ALPN'
+<reference anchor='DoT-ALPN'
  target='https://www.iana.org/assignments/tls-extensiontype-values/tls-extensiontype-values.xhtml#alpn-protocol-ids'>
     <front>
         <title>TLS Application-Layer Protocol Negotiation (ALPN) Protocol IDs</title>
@@ -1420,18 +1450,19 @@ was published only to their secondaries.
 
 Pros: Reduces the number of accepted connections.
 
-Cons: As above. For SNIs sent in the clear, this would still allow attackers
-passively observing traffic to potentially abuse this mechanism. The use of
-Encrypted Client Hello [@I-D.ietf-tls-esni] may be of use here.
+Cons: As above. Also, this is not a recommended use of SNI. For SNIs sent in the
+clear, this would still allow attackers passively observing traffic to
+potentially abuse this mechanism. The use of Encrypted Client Hello
+[@I-D.ietf-tls-esni] may be of use here.
 
-##  TLS specific response policies
+##  Transport specific response policies
 
 Some primaries might rely on TSIG/SIG(0) combined with per-query IP based
 ACLs to authenticate secondaries. In this case the primary must accept all
-incoming TLS connections and then apply a TLS-specific response policy on a per
+incoming TLS/TCP connections and then apply a transport-specific response policy on a per
 query basis.
 
-As an aside, whilst [@RFC7766] makes a general purpose distinction in the advice to clients
+As an aside, whilst [@!RFC7766] makes a general purpose distinction in the advice to clients
 about their usage of connections (between regular queries and zone transfers) this is
 not strict and nothing in the DNS protocol prevents using the same connection
 for both types of traffic. Hence a server cannot know the intention of any
