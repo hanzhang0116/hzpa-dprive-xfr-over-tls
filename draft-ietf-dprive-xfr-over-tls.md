@@ -40,7 +40,7 @@
      initials="S."
      surname="Sahib"
      fullname="Shivan Sahib"
-     organization = "Salesforce"
+     organization = "Brave Software"
        [author.address]
        email = "shivankaulsahib@gmail.com"
        [author.address.postal]
