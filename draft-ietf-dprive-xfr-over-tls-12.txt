@@ -6,11 +6,12 @@ dprive                                                         W. Toorop
 Internet-Draft                                                NLnet Labs
 Updates: 1995, 5936, 7766 (if approved)                     S. Dickinson
 Intended status: Standards Track                              Sinodun IT
-Expires: 26 November 2021                                       S. Sahib
+Expires: 27 November 2021                                       S. Sahib
+                                                          Brave Software
                                                                  P. Aras
                                                                A. Mankin
                                                               Salesforce
-                                                             25 May 2021
+                                                             26 May 2021
 
 
                        DNS Zone Transfer-over-TLS
@@ -45,15 +46,14 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on 26 November 2021.
+   This Internet-Draft will expire on 27 November 2021.
 
 
 
 
 
 
-
-Toorop, et al.          Expires 26 November 2021                [Page 1]
+Toorop, et al.          Expires 27 November 2021                [Page 1]
 
 Internet-Draft                XFR-over-TLS                      May 2021
 
@@ -109,7 +109,7 @@ Table of Contents
 
 
 
-Toorop, et al.          Expires 26 November 2021                [Page 2]
+Toorop, et al.          Expires 27 November 2021                [Page 2]
 
 Internet-Draft                XFR-over-TLS                      May 2021
 
@@ -165,7 +165,7 @@ Internet-Draft                XFR-over-TLS                      May 2021
 
 
 
-Toorop, et al.          Expires 26 November 2021                [Page 3]
+Toorop, et al.          Expires 27 November 2021                [Page 3]
 
 Internet-Draft                XFR-over-TLS                      May 2021
 
@@ -221,7 +221,7 @@ Internet-Draft                XFR-over-TLS                      May 2021
 
 
 
-Toorop, et al.          Expires 26 November 2021                [Page 4]
+Toorop, et al.          Expires 27 November 2021                [Page 4]
 
 Internet-Draft                XFR-over-TLS                      May 2021
 
@@ -277,7 +277,7 @@ Internet-Draft                XFR-over-TLS                      May 2021
 
 
 
-Toorop, et al.          Expires 26 November 2021                [Page 5]
+Toorop, et al.          Expires 27 November 2021                [Page 5]
 
 Internet-Draft                XFR-over-TLS                      May 2021
 
@@ -333,7 +333,7 @@ Internet-Draft                XFR-over-TLS                      May 2021
 
 
 
-Toorop, et al.          Expires 26 November 2021                [Page 6]
+Toorop, et al.          Expires 27 November 2021                [Page 6]
 
 Internet-Draft                XFR-over-TLS                      May 2021
 
@@ -389,7 +389,7 @@ Internet-Draft                XFR-over-TLS                      May 2021
 
 
 
-Toorop, et al.          Expires 26 November 2021                [Page 7]
+Toorop, et al.          Expires 27 November 2021                [Page 7]
 
 Internet-Draft                XFR-over-TLS                      May 2021
 
@@ -445,7 +445,7 @@ Internet-Draft                XFR-over-TLS                      May 2021
 
 
 
-Toorop, et al.          Expires 26 November 2021                [Page 8]
+Toorop, et al.          Expires 27 November 2021                [Page 8]
 
 Internet-Draft                XFR-over-TLS                      May 2021
 
@@ -501,7 +501,7 @@ Internet-Draft                XFR-over-TLS                      May 2021
 
 
 
-Toorop, et al.          Expires 26 November 2021                [Page 9]
+Toorop, et al.          Expires 27 November 2021                [Page 9]
 
 Internet-Draft                XFR-over-TLS                      May 2021
 
@@ -557,7 +557,7 @@ Internet-Draft                XFR-over-TLS                      May 2021
 
 
 
-Toorop, et al.          Expires 26 November 2021               [Page 10]
+Toorop, et al.          Expires 27 November 2021               [Page 10]
 
 Internet-Draft                XFR-over-TLS                      May 2021
 
@@ -600,8 +600,8 @@ Internet-Draft                XFR-over-TLS                      May 2021
 
    Since the SOA of the published zone can be trivially discovered by
    simply querying the publicly available authoritative servers, leakage
-   of this resource record (RR) via such a directly query is not
-   discussed in the following sections.
+   of this resource record (RR) via such a direct query is not discussed
+   in the following sections.
 
 6.3.1.  NOTIFY
 
@@ -613,7 +613,7 @@ Internet-Draft                XFR-over-TLS                      May 2021
 
 
 
-Toorop, et al.          Expires 26 November 2021               [Page 11]
+Toorop, et al.          Expires 27 November 2021               [Page 11]
 
 Internet-Draft                XFR-over-TLS                      May 2021
 
@@ -626,7 +626,7 @@ Internet-Draft                XFR-over-TLS                      May 2021
 
 6.3.2.  SOA
 
-   For hidden XFR servers (either primaries of secondaries), an SOA
+   For hidden XFR servers (either primaries or secondaries), an SOA
    response directly from that server only additionally leaks the degree
    of SOA serial number lag of any downstream secondary of that server.
 
@@ -669,7 +669,7 @@ Internet-Draft                XFR-over-TLS                      May 2021
 
 
 
-Toorop, et al.          Expires 26 November 2021               [Page 12]
+Toorop, et al.          Expires 27 November 2021               [Page 12]
 
 Internet-Draft                XFR-over-TLS                      May 2021
 
@@ -698,7 +698,7 @@ Internet-Draft                XFR-over-TLS                      May 2021
 
    The following sections include detailed clarifications on the updates
    to XFR behavior implied in [RFC7766] and how the use of [RFC7828]
-   applies specifically to XFR exchanges.  They also discusses how IXFR
+   applies specifically to XFR exchanges.  They also discuss how IXFR
    and AXFR can reuse the same TCP connection.
 
    For completeness, we also mention here the recent specification of
@@ -725,7 +725,7 @@ Internet-Draft                XFR-over-TLS                      May 2021
 
 
 
-Toorop, et al.          Expires 26 November 2021               [Page 13]
+Toorop, et al.          Expires 27 November 2021               [Page 13]
 
 Internet-Draft                XFR-over-TLS                      May 2021
 
@@ -781,7 +781,7 @@ Internet-Draft                XFR-over-TLS                      May 2021
 
 
 
-Toorop, et al.          Expires 26 November 2021               [Page 14]
+Toorop, et al.          Expires 27 November 2021               [Page 14]
 
 Internet-Draft                XFR-over-TLS                      May 2021
 
@@ -809,7 +809,7 @@ Internet-Draft                XFR-over-TLS                      May 2021
    For some current implementations adding all the above functionality
    would introduce significant code complexity.  In such a case, there
    will need to be an assessment of the trade-off between that and the
-   performance benefits for XFR of the above.
+   performance benefits of the above for XFR.
 
 7.3.3.  XFR limits
 
@@ -817,7 +817,7 @@ Internet-Draft                XFR-over-TLS                      May 2021
    XFR transfers in progress, or from a given secondary, to protect
    server resources.  Servers SHOULD return SERVFAIL if this limit is
    hit, since it is a transient error and a retry at a later time might
-   succeed (there is no previous specification for this behaviour).
+   succeed (there is no previous specification for this behavior).
 
 7.3.4.  The edns-tcp-keepalive EDNS0 Option
 
@@ -837,7 +837,7 @@ Internet-Draft                XFR-over-TLS                      May 2021
 
 
 
-Toorop, et al.          Expires 26 November 2021               [Page 15]
+Toorop, et al.          Expires 27 November 2021               [Page 15]
 
 Internet-Draft                XFR-over-TLS                      May 2021
 
@@ -893,7 +893,7 @@ Internet-Draft                XFR-over-TLS                      May 2021
 
 
 
-Toorop, et al.          Expires 26 November 2021               [Page 16]
+Toorop, et al.          Expires 27 November 2021               [Page 16]
 
 Internet-Draft                XFR-over-TLS                      May 2021
 
@@ -949,7 +949,7 @@ Internet-Draft                XFR-over-TLS                      May 2021
 
 
 
-Toorop, et al.          Expires 26 November 2021               [Page 17]
+Toorop, et al.          Expires 27 November 2021               [Page 17]
 
 Internet-Draft                XFR-over-TLS                      May 2021
 
@@ -1005,7 +1005,7 @@ Internet-Draft                XFR-over-TLS                      May 2021
 
 
 
-Toorop, et al.          Expires 26 November 2021               [Page 18]
+Toorop, et al.          Expires 27 November 2021               [Page 18]
 
 Internet-Draft                XFR-over-TLS                      May 2021
 
@@ -1061,7 +1061,7 @@ Internet-Draft                XFR-over-TLS                      May 2021
 
 
 
-Toorop, et al.          Expires 26 November 2021               [Page 19]
+Toorop, et al.          Expires 27 November 2021               [Page 19]
 
 Internet-Draft                XFR-over-TLS                      May 2021
 
@@ -1117,7 +1117,7 @@ Internet-Draft                XFR-over-TLS                      May 2021
 
 
 
-Toorop, et al.          Expires 26 November 2021               [Page 20]
+Toorop, et al.          Expires 27 November 2021               [Page 20]
 
 Internet-Draft                XFR-over-TLS                      May 2021
 
@@ -1173,7 +1173,7 @@ Internet-Draft                XFR-over-TLS                      May 2021
 
 
 
-Toorop, et al.          Expires 26 November 2021               [Page 21]
+Toorop, et al.          Expires 27 November 2021               [Page 21]
 
 Internet-Draft                XFR-over-TLS                      May 2021
 
@@ -1229,7 +1229,7 @@ Internet-Draft                XFR-over-TLS                      May 2021
 
 
 
-Toorop, et al.          Expires 26 November 2021               [Page 22]
+Toorop, et al.          Expires 27 November 2021               [Page 22]
 
 Internet-Draft                XFR-over-TLS                      May 2021
 
@@ -1285,7 +1285,7 @@ Internet-Draft                XFR-over-TLS                      May 2021
 
 
 
-Toorop, et al.          Expires 26 November 2021               [Page 23]
+Toorop, et al.          Expires 27 November 2021               [Page 23]
 
 Internet-Draft                XFR-over-TLS                      May 2021
 
@@ -1341,7 +1341,7 @@ Internet-Draft                XFR-over-TLS                      May 2021
 
 
 
-Toorop, et al.          Expires 26 November 2021               [Page 24]
+Toorop, et al.          Expires 27 November 2021               [Page 24]
 
 Internet-Draft                XFR-over-TLS                      May 2021
 
@@ -1397,7 +1397,7 @@ Internet-Draft                XFR-over-TLS                      May 2021
 
 
 
-Toorop, et al.          Expires 26 November 2021               [Page 25]
+Toorop, et al.          Expires 27 November 2021               [Page 25]
 
 Internet-Draft                XFR-over-TLS                      May 2021
 
@@ -1453,7 +1453,7 @@ Internet-Draft                XFR-over-TLS                      May 2021
 
 
 
-Toorop, et al.          Expires 26 November 2021               [Page 26]
+Toorop, et al.          Expires 27 November 2021               [Page 26]
 
 Internet-Draft                XFR-over-TLS                      May 2021
 
@@ -1509,7 +1509,7 @@ Internet-Draft                XFR-over-TLS                      May 2021
 
 
 
-Toorop, et al.          Expires 26 November 2021               [Page 27]
+Toorop, et al.          Expires 27 November 2021               [Page 27]
 
 Internet-Draft                XFR-over-TLS                      May 2021
 
@@ -1565,7 +1565,7 @@ Internet-Draft                XFR-over-TLS                      May 2021
 
 
 
-Toorop, et al.          Expires 26 November 2021               [Page 28]
+Toorop, et al.          Expires 27 November 2021               [Page 28]
 
 Internet-Draft                XFR-over-TLS                      May 2021
 
@@ -1621,7 +1621,7 @@ Internet-Draft                XFR-over-TLS                      May 2021
 
 
 
-Toorop, et al.          Expires 26 November 2021               [Page 29]
+Toorop, et al.          Expires 27 November 2021               [Page 29]
 
 Internet-Draft                XFR-over-TLS                      May 2021
 
@@ -1677,7 +1677,7 @@ Internet-Draft                XFR-over-TLS                      May 2021
 
 
 
-Toorop, et al.          Expires 26 November 2021               [Page 30]
+Toorop, et al.          Expires 27 November 2021               [Page 30]
 
 Internet-Draft                XFR-over-TLS                      May 2021
 
@@ -1733,7 +1733,7 @@ Internet-Draft                XFR-over-TLS                      May 2021
 
 
 
-Toorop, et al.          Expires 26 November 2021               [Page 31]
+Toorop, et al.          Expires 27 November 2021               [Page 31]
 
 Internet-Draft                XFR-over-TLS                      May 2021
 
@@ -1789,7 +1789,7 @@ Internet-Draft                XFR-over-TLS                      May 2021
 
 
 
-Toorop, et al.          Expires 26 November 2021               [Page 32]
+Toorop, et al.          Expires 27 November 2021               [Page 32]
 
 Internet-Draft                XFR-over-TLS                      May 2021
 
@@ -1845,7 +1845,7 @@ Internet-Draft                XFR-over-TLS                      May 2021
 
 
 
-Toorop, et al.          Expires 26 November 2021               [Page 33]
+Toorop, et al.          Expires 27 November 2021               [Page 33]
 
 Internet-Draft                XFR-over-TLS                      May 2021
 
@@ -1901,7 +1901,7 @@ Internet-Draft                XFR-over-TLS                      May 2021
 
 
 
-Toorop, et al.          Expires 26 November 2021               [Page 34]
+Toorop, et al.          Expires 27 November 2021               [Page 34]
 
 Internet-Draft                XFR-over-TLS                      May 2021
 
@@ -1957,7 +1957,7 @@ Internet-Draft                XFR-over-TLS                      May 2021
 
 
 
-Toorop, et al.          Expires 26 November 2021               [Page 35]
+Toorop, et al.          Expires 27 November 2021               [Page 35]
 
 Internet-Draft                XFR-over-TLS                      May 2021
 
@@ -2013,7 +2013,7 @@ Internet-Draft                XFR-over-TLS                      May 2021
 
 
 
-Toorop, et al.          Expires 26 November 2021               [Page 36]
+Toorop, et al.          Expires 27 November 2021               [Page 36]
 
 Internet-Draft                XFR-over-TLS                      May 2021
 
@@ -2069,7 +2069,7 @@ Internet-Draft                XFR-over-TLS                      May 2021
 
 
 
-Toorop, et al.          Expires 26 November 2021               [Page 37]
+Toorop, et al.          Expires 27 November 2021               [Page 37]
 
 Internet-Draft                XFR-over-TLS                      May 2021
 
@@ -2125,7 +2125,7 @@ Internet-Draft                XFR-over-TLS                      May 2021
 
 
 
-Toorop, et al.          Expires 26 November 2021               [Page 38]
+Toorop, et al.          Expires 27 November 2021               [Page 38]
 
 Internet-Draft                XFR-over-TLS                      May 2021
 
@@ -2181,7 +2181,7 @@ A.2.  Client specific TLS acceptance
 
 
 
-Toorop, et al.          Expires 26 November 2021               [Page 39]
+Toorop, et al.          Expires 27 November 2021               [Page 39]
 
 Internet-Draft                XFR-over-TLS                      May 2021
 
@@ -2237,7 +2237,7 @@ A.4.  Transport specific response policies
 
 
 
-Toorop, et al.          Expires 26 November 2021               [Page 40]
+Toorop, et al.          Expires 27 November 2021               [Page 40]
 
 Internet-Draft                XFR-over-TLS                      May 2021
 
@@ -2293,13 +2293,13 @@ Authors' Addresses
 
 
 
-Toorop, et al.          Expires 26 November 2021               [Page 41]
+Toorop, et al.          Expires 27 November 2021               [Page 41]
 
 Internet-Draft                XFR-over-TLS                      May 2021
 
 
    Shivan Sahib
-   Salesforce
+   Brave Software
    Vancouver, BC
    Canada
 
@@ -2349,4 +2349,4 @@ Internet-Draft                XFR-over-TLS                      May 2021
 
 
 
-Toorop, et al.          Expires 26 November 2021               [Page 42]
+Toorop, et al.          Expires 27 November 2021               [Page 42]

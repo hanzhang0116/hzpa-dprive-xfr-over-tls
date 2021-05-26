@@ -6,7 +6,7 @@
     workgroup = "dprive"
     keyword = ["DNS", "operations", "privacy"]
     updates = [1995, 5936, 7766]
-    date = 2021-05-25T00:00:00Z
+    date = 2021-05-26T00:00:00Z
     [seriesInfo]
     status = "standard"
     name = "Internet-Draft"
@@ -419,7 +419,7 @@ messages in the XFR mechanism.
 
 Since the SOA of the published zone can be trivially discovered by simply
 querying the publicly available authoritative servers, leakage of this resource record (RR) via such a
-directly query is not discussed in the following sections.
+direct query is not discussed in the following sections.
 
 ### NOTIFY
 
@@ -436,7 +436,7 @@ potential leak.
 
 ### SOA
 
-For hidden XFR servers (either primaries of secondaries), an SOA response
+For hidden XFR servers (either primaries or secondaries), an SOA response
 directly from that server only additionally leaks the degree of SOA serial
 number lag of any downstream secondary of that server.
 
@@ -489,7 +489,7 @@ XFR-over-TCP ([RFC1995] and [RFC5936]) to clarify that
 
 The following sections include detailed clarifications on the updates to XFR
 behavior implied in [@!RFC7766] and how the use of [@!RFC7828] applies
-specifically to XFR exchanges. They also discusses how IXFR and AXFR can reuse
+specifically to XFR exchanges. They also discuss how IXFR and AXFR can reuse
 the same TCP connection.
 
 For completeness, we also mention here the recent specification of extended DNS
@@ -550,14 +550,14 @@ We clarify here that implementations capable of both AXFR and IXFR and compliant
 
 For some current implementations adding all the above functionality would introduce significant 
 code complexity. In such a case, there will need to be an assessment of the trade-off between that 
-and the performance benefits for XFR of the above.
+and the performance benefits of the above for XFR.
 
 ### XFR limits
 
 The server MAY limit the number of concurrent IXFRs, AXFRs or total XFR
 transfers in progress, or from a given secondary, to protect server resources.
 Servers SHOULD return SERVFAIL if this limit is hit, since it is a
-transient error and a retry at a later time might succeed (there is no previous specification for this behaviour). 
+transient error and a retry at a later time might succeed (there is no previous specification for this behavior). 
 
 ### The edns-tcp-keepalive EDNS0 Option
 
