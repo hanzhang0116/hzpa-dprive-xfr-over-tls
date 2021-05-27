@@ -1348,7 +1348,7 @@ draft-hzpa-dprive-xfr-over-tls-00
     <front>
         <title>Stretching NSEC3 to the Limit:
 Efficient Zone Enumeration Attacks on NSEC3 Variants</title>
-        <author initials='S.' surname='Goldberf' fullname='Sharon Goldberg'>
+        <author initials='S.' surname='Goldberg' fullname='Sharon Goldberg'>
             <organization> Boston University, Department of Computer Science</organization>
         </author>
         <author initials='N.' surname='Naor' fullname='Moni Naor'>
