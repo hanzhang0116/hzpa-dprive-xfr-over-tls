@@ -1372,7 +1372,7 @@ handling</li>
 <reference anchor="NSEC3-attacks" target="https://www.cs.bu.edu/~goldbe/papers/nsec3attacks.pdf">
   <front>
     <title>Stretching NSEC3 to the Limit:&#xA;Efficient Zone Enumeration Attacks on NSEC3 Variants</title>
-    <author fullname="Sharon Goldberg" initials="S." surname="Goldberf">
+    <author fullname="Sharon Goldberg" initials="S." surname="Goldberg">
       <organization> Boston University, Department of Computer Science</organization>
     </author>
     <author fullname="Moni Naor" initials="N." surname="Naor">
